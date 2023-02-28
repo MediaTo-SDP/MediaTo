@@ -27,42 +27,42 @@ public class MainActivityTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void openDrawer() {
+    public void testOpenDrawer() {
         // Open the drawer by swiping from the left edge of the screen
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(GravityCompat.START));
         onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void closeDrawer() {
+    public void testCloseDrawer() {
         // Close the drawer by swiping from the right edge of the screen
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.close(GravityCompat.END));
         onView(withId(R.id.nav_view)).check(matches(not(isDisplayed())));
     }
 
     @Test
-    public void selectHome() {
+    public void testSelectHome() {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(GravityCompat.START));
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_home));
         onView(withId(R.id.fragment_container)).check(matches(hasDescendant(withText("Home Fragment"))));
     }
 
     @Test
-    public void selectSettings() {
+    public void testSelectSettings() {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(GravityCompat.START));
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings));
         onView(withId(R.id.fragment_container)).check(matches(hasDescendant(withText("Settings Fragment"))));
     }
 
     @Test
-    public void selectShare() {
+    public void testSelectShare() {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(GravityCompat.START));
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_share));
         onView(withId(R.id.fragment_container)).check(matches(hasDescendant(withText("Share Fragment"))));
     }
 
     @Test
-    public void selectAbout() {
+    public void testSelectAbout() {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(GravityCompat.START));
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_about));
         onView(withId(R.id.fragment_container)).check(matches(hasDescendant(withText("About Fragment"))));

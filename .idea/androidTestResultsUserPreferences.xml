@@ -23,6 +23,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Lecture_Exos" value="120" />
                   <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -38,6 +39,7 @@
                   <entry key="AQKSLVH003M51800060" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Lecture_Exos" value="120" />
                   <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -79,6 +81,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Lecture_Exos" value="120" />
                   <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
