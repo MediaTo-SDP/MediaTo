@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Bootcamp"
         tools:targetApi="31">
         <activity
+            android:name=".AuthenticationActivity"
+            android:exported="false" />
+        <activity
             android:name=".FirebaseBootcamp"
             android:exported="true" />
         <activity
