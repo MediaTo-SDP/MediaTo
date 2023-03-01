@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -36,17 +37,17 @@ public class FirebaseBootcampTest {
 
         }
         //Set
-        onView(withId(R.id.email_text)).perform(replaceText("email_test"));
-        onView(withId(R.id.phone_text)).perform(replaceText("12345"));
-        onView(withId(R.id.set_button)).perform(click());
+        email_view().perform(replaceText("email_test"));
+        phone_view().perform(replaceText("12345"));
+        set_view().perform(click());
         //Empty fields
-        onView(withId(R.id.email_text)).perform(replaceText(""));
-        onView(withId(R.id.phone_text)).perform(replaceText(""));
+        email_view().perform(replaceText(""));
+        phone_view().perform(replaceText(""));
         //Get
-        onView(withId(R.id.phone_text)).perform(replaceText("12345"));
-        onView(withId(R.id.get_button)).perform(click());
+        phone_view().perform(replaceText("12345"));
+        get_view().perform(click());
         //Check
-        onView(withId(R.id.email_text)).check(
+        email_view().check(
           matches(
                   withText("email_test")
           )
@@ -54,4 +55,9 @@ public class FirebaseBootcampTest {
         //Empty database
         database.getReference().setValue(null);
     }
+
+    private ViewInteraction email_view (){return onView(withId(R.id.email_text));}
+    private ViewInteraction phone_view (){return onView(withId(R.id.phone_text));}
+    private ViewInteraction get_view (){return onView(withId(R.id.get_button));}
+    private ViewInteraction set_view (){return onView(withId(R.id.set_button));}
 }
