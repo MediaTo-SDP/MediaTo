@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.github.sdp.apibootcamp.Storage.ActivityDatabase;
 import com.github.sdp.apibootcamp.Storage.StoredActivity;
+import com.github.sgueissa.bootcamp.R;
 
 import java.util.List;
 
@@ -18,14 +19,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private BoredAPI api = BoredAPI.createAPI();
-    private ActivityDatabase activityDB = Room.databaseBuilder(getApplicationContext(),
-            ActivityDatabase.class, "offlineDB").build();
+    private BoredAPI api;
+    private ActivityDatabase activityDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        api = BoredAPI.createAPI();
+        activityDB = Room.databaseBuilder(getApplicationContext(),
+                ActivityDatabase.class, "offlineDB").allowMainThreadQueries().build();
     }
 
     public void onButtonClick(View v) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 List<StoredActivity> activities = activityDB.getDAO().getStoredActivities();
                 String activityText = activities.get((int)(Math.random() * activities.size()))
                         .activity;
-
+                updateView(activityText);
             }
         });
     }
