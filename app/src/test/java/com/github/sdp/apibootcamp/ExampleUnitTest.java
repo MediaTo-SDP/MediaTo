@@ -1,4 +1,4 @@
-package com.github.sgueissa.bootcamp;
+package com.github.sdp.apibootcamp;
 
 import org.junit.Test;
 
