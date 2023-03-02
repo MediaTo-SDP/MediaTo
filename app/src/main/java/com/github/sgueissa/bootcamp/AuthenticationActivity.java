@@ -14,6 +14,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,6 +31,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Arrays;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
@@ -42,77 +48,43 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         btSignIn = findViewById(R.id.google_sign_in);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(String.valueOf(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        // Initialize sign in client
-        googleSignInClient = GoogleSignIn.getClient(AuthenticationActivity.this, googleSignInOptions);
-
         btSignIn.setOnClickListener((View.OnClickListener) view -> {
             // Initialize sign in intent
-            Intent intent = googleSignInClient.getSignInIntent();
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(Arrays.asList(
+                            new AuthUI.IdpConfig.GoogleBuilder().build()))
+                    .build();
             // Start activity for result
-            signInResultLauncher.launch(intent);
+            signInLauncher.launch(signInIntent);
         });
 
-        // Initialize firebase auth
-        firebaseAuth = FirebaseAuth.getInstance();
-        // Initialize firebase user
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        // Check condition
-        if (firebaseUser != null) {
-            // When user already sign in redirect to profile activity
-            displayToast("Firebase authentication successful");
+    }
+
+    // See: https://developer.android.com/training/basics/intents/result
+    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+                @Override
+                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    onSignInResult(result);
+                }
+            }
+    );
+
+    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+        IdpResponse response = result.getIdpResponse();
+        if (result.getResultCode() == RESULT_OK) {
+            // Successfully signed in
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
+            myIntent.putExtra("mainName", getIntent().getStringExtra("mainName"));
+            AuthenticationActivity.this.startActivity(myIntent);
+        } else {
+            // Sign in failed
+            System.out.println("Error while signing in: " + response.getError().getErrorCode());
         }
     }
 
-    ActivityResultLauncher<Intent> signInResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    // Check condition
-                    if (result.getResultCode() == SIGNIN_REQUEST_CODE) {
-                        // When request code is equal to 100 initialize task
-                        Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                        // check condition
-                        if (signInAccountTask.isSuccessful()) {
-                            // Display Toast
-                            displayToast("Google sign in successful\"");
-                            // Initialize sign in account
-                            try {
-                                // Initialize sign in account
-                                GoogleSignInAccount googleSignInAccount = signInAccountTask.getResult(ApiException.class);
-                                // Check condition
-                                if (googleSignInAccount != null) {
-                                    // When sign in account is not equal to null initialize auth credential
-                                    AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
-                                    // Check credential
-                                    firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(AuthenticationActivity.this, new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            // Check condition
-                                            if (task.isSuccessful()) {
-                                                // When task is successful redirect to profile activity display Toast
-                                                displayToast("Firebase authentication successful");
-                                            } else {
-                                                // When task is unsuccessful display Toast
-                                                displayToast("Authentication Failed :" + task.getException().getMessage());
-                                            }
-                                        }
-                                    });
-                                }
-                            } catch (ApiException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            });
-
-    private void displayToast(String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-    }
 }
