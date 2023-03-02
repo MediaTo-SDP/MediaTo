@@ -12,9 +12,9 @@ import retrofit2.http.GET;
 public interface BoredAPI {
     @GET("activity")
     Call<BoredActivity> getActivity();
-    static BoredAPI createAPI(){
+    static BoredAPI createAPI(String url){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.boredapi.com/api/")
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(BoredAPI.class);

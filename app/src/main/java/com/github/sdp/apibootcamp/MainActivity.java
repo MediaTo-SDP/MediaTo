@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        api = BoredAPI.createAPI();
+        api = BoredAPI.createAPI("https://www.boredapi.com/api/");
         activityDB = Room.databaseBuilder(getApplicationContext(),
                 ActivityDatabase.class, "offlineDB").allowMainThreadQueries().build();
     }
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         TextView activityText = (TextView) findViewById(R.id.boredText);
         activityText.setText(text);
     }
+
+
 
 
     private void getActivity() {
