@@ -15,9 +15,6 @@
             android:name=".AuthenticationActivity"
             android:exported="false" />
         <activity
-            android:name=".FirebaseBootcamp"
-            android:exported="true" />
-        <activity
             android:name=".GreetingActivity"
             android:exported="false" />
         <activity
