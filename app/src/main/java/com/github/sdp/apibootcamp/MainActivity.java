@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.github.sdp.apibootcamp.Storage.ActivityDatabase;
 import com.github.sdp.apibootcamp.Storage.StoredActivity;
-import com.github.sgueissa.bootcamp.R;
+import com.github.sdp.apibootcamp.R;
 
 import java.util.List;
 
