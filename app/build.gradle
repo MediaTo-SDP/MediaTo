@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.github.sgueissa.bootcamp'
+    namespace 'com.github.sdp.mediato'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.github.sgueissa.bootcamp"
+        applicationId "com.github.sdp.mediato"
         minSdk 24
         targetSdk 33
         versionCode 1

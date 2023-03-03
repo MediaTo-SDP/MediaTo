@@ -1,4 +1,4 @@
-package com.github.sgueissa.bootcamp;
+package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
