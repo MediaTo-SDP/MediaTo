@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Bootcamp"
+rootProject.name = "MediaTo"
 include ':app'
 
 ext.isCiServer = System.getenv().containsKey("CIRRUS_CI")
