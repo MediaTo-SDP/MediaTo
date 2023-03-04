@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.github.sdp.mediato'
+    namespace 'com.github.sdp.mediata'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.github.sdp.mediato"
+        applicationId "com.github.sdp.mediata"
         minSdk 24
         targetSdk 33
         versionCode 1
