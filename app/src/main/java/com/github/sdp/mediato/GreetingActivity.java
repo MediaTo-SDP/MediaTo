@@ -1,6 +1,5 @@
-package com.github.sgueissa.bootcamp;
+package com.github.sdp.mediato;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
