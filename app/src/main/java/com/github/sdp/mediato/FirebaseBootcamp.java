@@ -1,4 +1,4 @@
-package com.github.sgueissa.bootcamp;
+package com.github.sdp.mediato;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
