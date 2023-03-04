@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "900538721791",
+    "firebase_url": "https://mediato-21040-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mediato-21040",
+    "storage_bucket": "mediato-21040.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900538721791:android:c43f524e303e86a9a973ca",
+        "android_client_info": {
+          "package_name": "com.github.sdp.mediato"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900538721791-s02a29qrfl88trlqa252l3n46ek7kfh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl93NZJ96olpaa3OXtn1LEtD2oy3oiQLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900538721791-s02a29qrfl88trlqa252l3n46ek7kfh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
