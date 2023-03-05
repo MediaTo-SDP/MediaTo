@@ -1,7 +1,15 @@
 <resources>
   <string name="app_name">MediaTo</string>
 
+  <!--Navigation Bar-->
   <string name="home">Home</string>
   <string name="search">Search</string>
   <string name="profile">Profile</string>
+
+  <!--User Profile-->
+  <string name="username">Username</string>
+
+  <!--Buttons-->
+  <string name="friends">Friends</string>
+  <string name="edit">Edit</string>
 </resources>
