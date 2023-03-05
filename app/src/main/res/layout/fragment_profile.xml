@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <HorizontalScrollView
     android:id="@+id/recently_watched_scroll_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginTop="10dp"
+    android:layout_height="210dp"
+    android:layout_marginTop="12dp"
     android:layout_marginStart="30dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/text_recently_watched">
+
     <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -28,43 +28,14 @@
         android:background="@drawable/bg_movie"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white" />
-      <ImageView
-        android:id="@+id/img_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        app:srcCompat="@drawable/bg_movie" />
 
-      <ImageView
-        android:id="@+id/img_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        app:srcCompat="@drawable/bg_movie" />
-
-      <ImageView
-        android:id="@+id/img_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        app:srcCompat="@drawable/bg_movie" />
-
-      <ImageView
-        android:id="@+id/img_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        app:srcCompat="@drawable/bg_movie" />
-
-      <ImageView
-        android:id="@+id/img_5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="15dp"
-        app:srcCompat="@drawable/bg_movie" />
-
+      <include layout="@layout/layout_movie_item" />
+      <include layout="@layout/layout_movie_item" />
+      <include layout="@layout/layout_movie_item" />
+      <include layout="@layout/layout_movie_item" />
 
     </LinearLayout>
+
   </HorizontalScrollView>
 
   <ImageView
@@ -81,86 +52,19 @@
     android:id="@+id/text_recently_watched"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="15dp"
+    android:layout_marginTop="30dp"
     android:layout_marginStart="10dp"
     android:text="@string/recently_watched"
     android:textSize="16dp"
     app:layout_constraintBottom_toTopOf="@+id/recently_watched_scroll_horizontal"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
-  <androidx.constraintlayout.widget.ConstraintLayout
+
+  <include
     android:id="@+id/profile_header"
-    android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:background="@color/colorPrimary"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0">
-
-    <Button
-      android:id="@+id/friends_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="28dp"
-      android:backgroundTint="@color/white"
-      android:text="@string/friends"
-      android:textAllCaps="false"
-      android:textColor="@color/gray"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/profile_image"
-      app:layout_constraintTop_toBottomOf="@+id/text_username"
-      app:layout_constraintVertical_bias="0.361" />
-
-    <Button
-      android:id="@+id/edit_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="30dp"
-      android:layout_marginStart="60dp"
-      android:layout_marginEnd="30dp"
-      android:backgroundTint="@color/white"
-      android:text="@string/edit"
-      android:textAllCaps="false"
-      android:textColor="@color/gray"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.728"
-      app:layout_constraintStart_toEndOf="@+id/profile_image"
-      app:layout_constraintTop_toBottomOf="@+id/text_username"
-      app:layout_constraintVertical_bias="1.0" />
-    <ImageView
-      android:id="@+id/profile_image"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_marginTop="30dp"
-      android:layout_marginBottom="30dp"
-      android:layout_marginStart="30dp"
-      android:background="@drawable/bg_circle"
-      android:src="@drawable/ic_profile"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0"
-      app:tint="@color/gray" />
-    <TextView
-      android:id="@+id/text_username"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="30dp"
-      android:text="@string/username"
-      android:textColor="@color/white"
-      android:textSize="26dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toEndOf="@+id/profile_image"
-      app:layout_constraintTop_toTopOf="@+id/profile_image" />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
+    layout="@layout/layout_profile_header"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

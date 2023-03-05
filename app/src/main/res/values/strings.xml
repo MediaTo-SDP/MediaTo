@@ -9,6 +9,8 @@
   <!--User Profile-->
   <string name="username">Username</string>
   <string name="recently_watched">Recently watched</string>
+  <string name="title">Title</string>
+  <string name="rating">Rating</string>
 
   <!--Buttons-->
   <string name="friends">Friends</string>
