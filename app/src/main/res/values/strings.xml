@@ -8,8 +8,10 @@
 
   <!--User Profile-->
   <string name="username">Username</string>
+  <string name="recently_watched">Recently watched</string>
 
   <!--Buttons-->
   <string name="friends">Friends</string>
   <string name="edit">Edit</string>
+
 </resources>

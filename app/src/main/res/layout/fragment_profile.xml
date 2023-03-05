@@ -5,6 +5,90 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <HorizontalScrollView
+    android:id="@+id/recently_watched_scroll_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="30dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/text_recently_watched">
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <ImageButton
+        android:id="@+id/button_add_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_movie"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
+      <ImageView
+        android:id="@+id/img_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        app:srcCompat="@drawable/bg_movie" />
+
+      <ImageView
+        android:id="@+id/img_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        app:srcCompat="@drawable/bg_movie" />
+
+      <ImageView
+        android:id="@+id/img_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        app:srcCompat="@drawable/bg_movie" />
+
+      <ImageView
+        android:id="@+id/img_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        app:srcCompat="@drawable/bg_movie" />
+
+      <ImageView
+        android:id="@+id/img_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        app:srcCompat="@drawable/bg_movie" />
+
+
+    </LinearLayout>
+  </HorizontalScrollView>
+
+  <ImageView
+    android:id="@+id/movie_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_movie"
+    app:layout_constraintBottom_toBottomOf="@+id/text_recently_watched"
+    app:layout_constraintStart_toStartOf="@+id/recently_watched_scroll_horizontal"
+    app:layout_constraintTop_toTopOf="@+id/text_recently_watched"
+    app:tint="@color/colorPrimary" />
+
+  <TextView
+    android:id="@+id/text_recently_watched"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
+    android:layout_marginStart="10dp"
+    android:text="@string/recently_watched"
+    android:textSize="16dp"
+    app:layout_constraintBottom_toTopOf="@+id/recently_watched_scroll_horizontal"
+    app:layout_constraintStart_toEndOf="@+id/movie_icon"
+    app:layout_constraintTop_toBottomOf="@+id/profile_header" />
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/profile_header"
     android:layout_width="match_parent"
@@ -77,17 +161,6 @@
       app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
-  <ImageButton
-    android:id="@+id/button_edit"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/profile_header"
-    app:srcCompat="@drawable/ic_edit"
-    app:tint="@color/gray" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
