@@ -8,9 +8,10 @@
 
   <!-- TODO: Update blank fragment layout -->
   <TextView
+    android:id="@+id/text_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="Home"
+    android:text="@string/home"
     android:gravity="center"
     android:textSize="30sp"
     android:textColor="@color/white"/>
