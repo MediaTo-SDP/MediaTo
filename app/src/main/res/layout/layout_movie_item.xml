@@ -19,7 +19,7 @@
     android:layout_marginTop="158dp"
     android:text="@string/title"
     android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/recently_watched_scroll_horizontal"
+    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 
@@ -30,7 +30,7 @@
     android:layout_marginTop="178dp"
     android:text="@string/rating"
     android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/recently_watched_scroll_horizontal"
+    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 

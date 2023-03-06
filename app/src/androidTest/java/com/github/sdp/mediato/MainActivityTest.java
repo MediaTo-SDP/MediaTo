@@ -47,6 +47,6 @@ public class MainActivityTest {
     onView(withId(R.id.profile)).perform(click());
     onView(withId(R.id.frame_layout))
         .check(matches(isDisplayed()))
-        .check(matches(hasDescendant(withText("Profile"))));
+        .check(matches(hasDescendant(withText("Username"))));
   }
 }
