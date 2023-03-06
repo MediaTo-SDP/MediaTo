@@ -26,6 +26,7 @@ public class MainActivityTest {
   public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<MainActivity>(
       MainActivity.class);
 
+  // Test that selecting Home on the bottom bar displays the HomeFragment
   @Test
   public void testSelectHome() {
     onView(withId(R.id.home)).perform(click());
@@ -34,6 +35,7 @@ public class MainActivityTest {
         .check(matches(hasDescendant(withText("Home"))));
   }
 
+  // Test that selecting Search on the bottom bar displays the SearchFragment
   @Test
   public void testSelectSearch() {
     onView(withId(R.id.search)).perform(click());
@@ -42,6 +44,7 @@ public class MainActivityTest {
         .check(matches(hasDescendant(withText("Search"))));
   }
 
+  // Test that selecting Profile on the bottom bar displays the ProfileFragment
   @Test
   public void testSelectProfile() {
     onView(withId(R.id.profile)).perform(click());
