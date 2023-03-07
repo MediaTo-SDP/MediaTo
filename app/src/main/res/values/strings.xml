@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">MediaTo</string>
+    <string name="mt_app_name">MediaTo</string>
+    <string name="mt_hint_username">Username</string>
+    <string name="mt_button_create">Create</string>
+    <string name="mt_username_error_1">The username is null</string>
+    <string name="mt_username_error_2">The username is too short</string>
+    <string name="mt_username_error_3">The username is too long</string>
+    <string name="mt_username_helper_text">Between 4-20 characters</string>
+    <string name="mt_username_description_end_icon">Generate a username</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
