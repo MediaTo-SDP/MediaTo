@@ -4,6 +4,7 @@ import static com.github.sdp.mediato.model.Review.MAX_GRADE;
 import static com.github.sdp.mediato.model.Review.MIN_GRADE;
 import static com.github.sdp.mediato.model.User.LIMIT_LOCATION_SIZE;
 
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 
@@ -14,6 +15,19 @@ import java.util.List;
  * @TODO Corner cases, dates and email formatting to be discussed and checked
  */
 public class Preconditions {
+
+    /**
+     * Checks if mandatory user fields are valid
+     * @param user
+     */
+    public static void checkUser(User user){
+        Preconditions.checkUID(user.getId());
+        Preconditions.checkUsername(user.getUsername());
+        Preconditions.checkEmail(user.getEmail());
+        Preconditions.checkBirthDate(user.getBirthDate());
+        Preconditions.checkRegisterDate(user.getRegisterDate());
+        Preconditions.checkLocation(user.getLocation());
+    }
 
     /**
      * Checks if the user id is valid

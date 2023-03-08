@@ -1,7 +1,5 @@
 package com.github.sdp.mediato.model;
 
-import static android.text.TextUtils.isEmpty;
-
 import com.github.sdp.mediato.errorCheck.Preconditions;
 
 import java.util.ArrayList;
@@ -26,15 +24,9 @@ public class User {
     private Map<String, List<Review>> reviews = new HashMap<>();
     private User(){}
     public User(UserBuilder builder){
-        //Check mandatory fields are here
-        Preconditions.checkUID(builder.id);
-        Preconditions.checkUsername(builder.username);
-        Preconditions.checkEmail(builder.email);
-        Preconditions.checkBirthDate(builder.birthDate);
-        Preconditions.checkRegisterDate(builder.registerDate);
-        Preconditions.checkLocation(builder.location);
         this.id = builder.id;
         this.username = builder.username;
+        this.displayedName = builder.displayedName;
         this.email = builder.email;
         this.birthDate = builder.birthDate;
         this.registerDate = builder.registerDate;
@@ -121,6 +113,13 @@ public class User {
             Preconditions.checkLocation(location);
             this.location = location;
             return this;
+        }
+
+        public User build(){
+            User user = new User(this);
+            //Check mandatory fields are here
+            Preconditions.checkUser(user);
+            return user;
         }
 
     }
