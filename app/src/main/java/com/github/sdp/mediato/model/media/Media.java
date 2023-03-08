@@ -11,9 +11,7 @@ public class Media {
     private final String summary;
 
     public Media(MediaType mediaType, String title, String summary) {
-        Preconditions.checkTitle(title);
-        Preconditions.checkSummary(summary);
-        Objects.requireNonNull(mediaType);
+        Preconditions.checkMedia(mediaType,title, summary);
         this.mediaType = mediaType;
         this.title = title;
         this.summary = summary;

@@ -15,27 +15,20 @@ public class Review {
     private String comment;
 
     public Review(String username, Media media) {
-        Preconditions.checkUsername(username);
-        Preconditions.checkMedia(media);
+        Preconditions.checkReview(username, media);
         this.username = username;
         this.media = media;
     }
 
     public Review(String username, Media media, int grade) {
-        Preconditions.checkUsername(username);
-        Preconditions.checkMedia(media);
-        Preconditions.checkGrade(grade);
+        Preconditions.checkReview(username, media, grade);
         this.username = username;
         this.media = media;
         this.grade = grade;
     }
 
-
     public Review(String username, Media media, int grade, String comment) {
-        Preconditions.checkUsername(username);
-        Preconditions.checkMedia(media);
-        Preconditions.checkGrade(grade);
-        Preconditions.checkComment(comment);
+        Preconditions.checkReview(username, media, grade, comment);
         this.username = username;
         this.media = media;
         this.grade = grade;

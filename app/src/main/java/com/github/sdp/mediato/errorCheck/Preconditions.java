@@ -9,6 +9,7 @@ import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class to check preconditions on attributes
@@ -27,6 +28,51 @@ public class Preconditions {
         Preconditions.checkBirthDate(user.getBirthDate());
         Preconditions.checkRegisterDate(user.getRegisterDate());
         Preconditions.checkLocation(user.getLocation());
+    }
+
+    /**
+     * Checks if Media attributes are valid
+     * @param mediaType
+     * @param title
+     * @param summary
+     */
+    public static void checkMedia(MediaType mediaType, String title, String summary){
+        Preconditions.checkTitle(title);
+        Preconditions.checkSummary(summary);
+        Objects.requireNonNull(mediaType);
+    }
+
+    /**
+     * Checks if Review mandatory attributes are valid
+     * @param username
+     * @param media
+     */
+    public static void checkReview(String username, Media media){
+        Preconditions.checkUsername(username);
+        Preconditions.checkMedia(media);
+    }
+
+    /**
+     * Checks if Review attributes are valid when adding the grade
+     * @param username
+     * @param media
+     * @param grade
+     */
+    public static void checkReview(String username, Media media, int grade){
+        Preconditions.checkReview(username, media);
+        Preconditions.checkGrade(grade);
+    }
+
+    /**
+     * Checks if Review attributes are valid when adding the grade and a comment
+     * @param username
+     * @param media
+     * @param grade
+     * @param comment
+     */
+    public static void checkReview(String username, Media media, int grade, String comment){
+        Preconditions.checkReview(username, media, grade);
+        Preconditions.checkComment(comment);
     }
 
     /**
