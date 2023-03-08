@@ -1,5 +1,9 @@
 package com.github.sdp.mediato.model.media;
 
+import com.github.sdp.mediato.errorCheck.Preconditions;
+
+import java.util.Objects;
+
 public class Media {
 
     private final MediaType mediaType;
@@ -7,6 +11,9 @@ public class Media {
     private final String summary;
 
     public Media(MediaType mediaType, String title, String summary) {
+        Preconditions.checkTitle(title);
+        Preconditions.checkSummary(summary);
+        Objects.requireNonNull(mediaType);
         this.mediaType = mediaType;
         this.title = title;
         this.summary = summary;

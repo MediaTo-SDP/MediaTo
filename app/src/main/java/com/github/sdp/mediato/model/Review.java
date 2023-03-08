@@ -2,47 +2,77 @@ package com.github.sdp.mediato.model;
 
 import android.provider.MediaStore;
 
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Media;
 
 public class Review {
 
-    static final int MAX_GRADE = 10;
-    static final int MIN_GRADE = 0;
-    private final String userName;
+    public static final int MAX_GRADE = 10;
+    public static final int MIN_GRADE = 1;
+    private final String username;
     private final Media media;
     private int grade;
     private String comment;
 
-    public Review(String userName, Media media) {
-        this.userName = userName;
+    public Review(String username, Media media) {
+        Preconditions.checkUsername(username);
+        Preconditions.checkMedia(media);
+        this.username = username;
         this.media = media;
     }
 
-    public Review(String userName, Media media, int grade) {
-        this.userName = userName;
+    public Review(String username, Media media, int grade) {
+        Preconditions.checkUsername(username);
+        Preconditions.checkMedia(media);
+        Preconditions.checkGrade(grade);
+        this.username = username;
         this.media = media;
         this.grade = grade;
     }
 
 
-    public Review(String userName, Media media, int grade, String comment) {
-        this.userName = userName;
+    public Review(String username, Media media, int grade, String comment) {
+        Preconditions.checkUsername(username);
+        Preconditions.checkMedia(media);
+        Preconditions.checkGrade(grade);
+        Preconditions.checkComment(comment);
+        this.username = username;
         this.media = media;
         this.grade = grade;
         this.comment = comment;
     }
 
-    public String getUsername() {return userName;}
-    public Media getMedia() {return media;}
-    public int getGrade() {return grade;}
+    public String getUsername() {
+        return username;
+    }
+    public Media getMedia() {
+        return media;
+    }
+    public int getGrade() throws Exception {
+        try {
+            Preconditions.checkGrade(grade);
+            return grade;
+        }
+        catch (Exception e){
+            throw new Exception("This review does not have a grade.");
+        }
+    }
     public void setGrade(int grade) {
-        if ((grade > MAX_GRADE) || (grade < MIN_GRADE)) throw new IllegalArgumentException("Grade must be between " + MIN_GRADE + " and " + MAX_GRADE);
+        Preconditions.checkGrade(grade);
         this.grade = grade;
     }
-    public String getComment() {return comment;}
+    public String getComment() throws Exception {
+        try {
+            Preconditions.checkComment(comment);
+            return comment;
+        }
+        catch (Exception e){
+            throw new Exception("This review does not have a comment.");
+        }
+    }
 
     public void setComment(String comment) {
-        if (comment == null || comment.isEmpty()) throw new IllegalArgumentException("Comment must not be null or empty");
+        Preconditions.checkComment(comment);
         this.comment = comment;
     }
 
