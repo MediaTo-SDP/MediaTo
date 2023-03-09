@@ -2,7 +2,6 @@ package com.github.sdp.mediato.errorCheck;
 
 import static com.github.sdp.mediato.model.Review.MAX_GRADE;
 import static com.github.sdp.mediato.model.Review.MIN_GRADE;
-import static com.github.sdp.mediato.model.User.LIMIT_LOCATION_SIZE;
 
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;

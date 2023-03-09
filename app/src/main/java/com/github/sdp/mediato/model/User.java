@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.model;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.media.Collection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public class User {
-    public static final int LIMIT_LOCATION_SIZE = 2;
-    public static final String FAVOURITES_COLLECTION = "Favourites";
-    public static final String RECENTLY_WATCHED_COLLECTION = "Recently Watched";
-
     private String id = "";
     private String username = "";
     private String displayedName = "";
@@ -21,7 +18,7 @@ public class User {
 
     private Location location = new Location();
     private List<User> friends = new ArrayList<>();
-    private Map<String, List<Review>> reviews = new HashMap<>();
+    private Map<String, Collection> collections = new HashMap<>();
     private User(){}
     private User(UserBuilder builder){
         this.id = builder.id;
@@ -75,7 +72,7 @@ public class User {
 
         private Location location = new Location();
         private List<User> friends = new ArrayList<>();
-        private Map<String, List<Review>> reviews = new HashMap<>();
+        private Map<String, Collection> collections = new HashMap<>();
 
         public UserBuilder(String id){
             Preconditions.checkUID(id);
