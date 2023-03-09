@@ -35,10 +35,12 @@ public class Preconditions {
      * @param mediaType
      * @param title
      * @param summary
+     * @param imageUrl
      */
-    public static void checkMedia(MediaType mediaType, String title, String summary){
+    public static void checkMedia(MediaType mediaType, String title, String summary, String imageUrl){
         Preconditions.checkTitle(title);
         Preconditions.checkSummary(summary);
+        Preconditions.checkImageURL(imageUrl);
         Objects.requireNonNull(mediaType);
     }
 
@@ -184,6 +186,14 @@ public class Preconditions {
     public static void checkSummary(String summary){
         checkNullOrEmptyString(summary, "summary");
     }
+
+    /**
+     * Checks if image url is valid
+     * @param imageUrl to be checked
+     * @TODO determine remaining criteria: format, existence etc...
+     */
+    public static void checkImageURL(String imageUrl){ checkNullOrEmptyString(imageUrl, "image url");}
+
 
     /**
      * Checks if a string is null or empty
