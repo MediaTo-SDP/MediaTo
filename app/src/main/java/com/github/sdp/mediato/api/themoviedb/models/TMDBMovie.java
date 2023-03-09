@@ -1,10 +1,8 @@
 package com.github.sdp.mediato.api.themoviedb.models;
 
-import android.hardware.lights.LightsManager;
-
 import java.util.List;
 
-public class TMDBFilm {
+public class TMDBMovie {
     private String poster_path;
     private boolean adult;
     private String overview;
