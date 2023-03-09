@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.javafaker.Faker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -33,7 +34,10 @@ public class CreateProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 usernameTextInput.setError(null);
-                usernameEditText.setText("Random");
+                Faker faker = new Faker();
+                String username = faker.animal().name();
+                String number = faker.number().digits(5);
+                usernameEditText.setText(username + number);
             }
         });
 
