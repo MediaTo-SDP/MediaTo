@@ -6,23 +6,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CreateProfileFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/create_profile_bar"
+            style="@style/Widget.MediaTo.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:subtitleTextColor="#000000"
+            app:title="@string/mt_new_profile_topbar" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:padding="24dp"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        tools:ignore="UselessParent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="132dp"
-            android:text="@string/mt_app_name" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/plus_icon"
+                android:theme="@style/Theme.MediaTo"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="156dp"
+                android:layout_height="156dp"
+                android:src="@drawable/profile_picture_default"
+                app:civ_border_color="@color/purple_500"
+                app:civ_border_width="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Snippet from "Add text fields" section goes here. -->
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             style='@style/Theme.MediaTo'
@@ -48,19 +93,17 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <RelativeLayout
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="40dp" />
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Theme.MediaTo"
-                android:id="@+id/create_profile_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/mt_button_create" />
+        <com.google.android.material.button.MaterialButton
+            style="@style/Theme.MediaTo"
+            android:id="@+id/create_profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mt_button_create" />
 
-        </RelativeLayout>
 
 
     </LinearLayout>
