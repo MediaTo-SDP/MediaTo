@@ -51,6 +51,9 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    implementation "androidx.activity:activity-ktx:1.6.1"
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
 }
 
 tasks.withType(Test) {

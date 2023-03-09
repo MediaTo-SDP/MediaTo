@@ -1,5 +1,8 @@
 package com.github.sdp.mediato;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,9 +14,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -21,6 +27,9 @@ import com.google.android.material.textfield.TextInputLayout;
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
+
+    ImageView profileImage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,7 +37,21 @@ public class CreateProfileFragment extends Fragment {
 
         final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
         final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
-        MaterialButton createButton = view.findViewById(R.id.create_profile_button);
+        final MaterialButton createButton = view.findViewById(R.id.create_profile_button);
+        final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
+        profileImage = view.findViewById(R.id.profile_image);
+
+        profileImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.Companion.with(CreateProfileFragment.this)
+                        .crop()
+                        .cropSquare()
+                        .compress(1024)
+                        .maxResultSize(620,620)
+                        .start();
+            }
+        });
 
         usernameTextInput.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +95,14 @@ public class CreateProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
+        profileImage.setImageURI(uri);
     }
 
     // "isPasswordValid" from "Navigate to the next Fragment" section method goes here
