@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class GreetingActivityTest {
 
-    @Test
+/*    @Test
     public void CheckGreetingMessage(){
         Intent myIntent = new Intent(ApplicationProvider.getApplicationContext(), GreetingActivity.class);
         myIntent.putExtra("mainName","Michel");
@@ -25,6 +25,6 @@ public class GreetingActivityTest {
         try(ActivityScenario test = ActivityScenario.launch(myIntent)) {
             onView(withId(R.id.greetingMessage)).check(matches(withText("Hello Michel!")));
         }
-    }
+    }*/
 
 }

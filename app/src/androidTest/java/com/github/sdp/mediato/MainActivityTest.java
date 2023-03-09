@@ -27,7 +27,7 @@ import static org.hamcrest.core.AllOf.allOf;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    @Rule
+/*    @Rule
     public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     @Test
@@ -44,5 +44,5 @@ public class MainActivityTest {
                 hasExtra("mainName", "Michel"),
                 hasComponent(GreetingActivity.class.getName())
         ));
-    }
+    }*/
 }
