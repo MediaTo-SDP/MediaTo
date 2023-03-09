@@ -2,3 +2,11 @@ exclude_patterns:
 - "**/test/"
 - "**/androidTest/"
 - "**test"
+-
+checks:
+  identical-code:
+    config:
+      threshold: 25
+  similar-code:
+    config:
+      threshold: 50
