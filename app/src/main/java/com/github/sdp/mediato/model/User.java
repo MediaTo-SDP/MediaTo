@@ -19,11 +19,11 @@ public class User {
     private String birthDate = "";
     private String registerDate = "";
 
-    private List<Double> location = new ArrayList<>();
+    private Location location = new Location();
     private List<User> friends = new ArrayList<>();
     private Map<String, List<Review>> reviews = new HashMap<>();
     private User(){}
-    public User(UserBuilder builder){
+    private User(UserBuilder builder){
         this.id = builder.id;
         this.username = builder.username;
         this.displayedName = builder.displayedName;
@@ -57,7 +57,7 @@ public class User {
         return registerDate;
     }
 
-    public List<Double> getLocation() {
+    public Location getLocation() {
         return location;
     }
 
@@ -73,7 +73,7 @@ public class User {
         private String birthDate = "";
         private String registerDate = "";
 
-        private List<Double> location = new ArrayList<>();
+        private Location location = new Location();
         private List<User> friends = new ArrayList<>();
         private Map<String, List<Review>> reviews = new HashMap<>();
 
@@ -109,7 +109,7 @@ public class User {
             this.registerDate = registerDate;
             return this;
         }
-        public UserBuilder setLocation(List<Double> location) {
+        public UserBuilder setLocation(Location location) {
             Preconditions.checkLocation(location);
             this.location = location;
             return this;

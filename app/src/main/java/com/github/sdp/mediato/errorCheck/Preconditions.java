@@ -4,6 +4,7 @@ import static com.github.sdp.mediato.model.Review.MAX_GRADE;
 import static com.github.sdp.mediato.model.Review.MIN_GRADE;
 import static com.github.sdp.mediato.model.User.LIMIT_LOCATION_SIZE;
 
+import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
@@ -16,6 +17,11 @@ import java.util.Objects;
  * @TODO Corner cases, dates and email formatting to be discussed and checked
  */
 public class Preconditions {
+
+    public static final double MAX_LATITUDE = 90;
+    public static final double MAX_LONGITUDE = 180;
+    public static final double MIN_LATITUDE = -90;
+    public static final double MIN_LONGITUDE = -180;
 
     /**
      * Checks if mandatory user fields are valid
@@ -135,9 +141,18 @@ public class Preconditions {
      * Checks if the location is valid
      * @param location
      */
-    public static void checkLocation(List<Double> location) {
-        if (location == null || location.isEmpty()) throw new IllegalArgumentException("Location is unknown: list is null or empty");
-        if (location.size() != LIMIT_LOCATION_SIZE) throw new IllegalArgumentException("Location should contain exactly two doubles");
+    public static void checkLocation(Location location) {
+        if (location.isValid() && !locationWithinBounds(location)){
+            throw new IllegalArgumentException("Location mus be between -90 and 90 for latitude and -180 and 180 for longitude");
+        }
+    }
+
+    /**
+     * Checks if the latitude and longitude are within the authorised bounds
+     */
+    public static boolean locationWithinBounds(Location location){
+        return (location.getLatitude() > MIN_LATITUDE && location.getLatitude() < MAX_LATITUDE)
+                && (location.getLongitude() > MIN_LONGITUDE && location.getLongitude() < MAX_LONGITUDE);
     }
 
     /**

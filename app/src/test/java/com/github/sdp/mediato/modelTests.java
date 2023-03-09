@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 public class modelTests {
 
     @Test
+    //Tests that the user builder registers mandatory attributes correctly
     public void user_builder_registers_mandatory_attributes(){
         //Build new user
         User  user = new User.UserBuilder("uniqueId")
@@ -23,7 +25,7 @@ public class modelTests {
                 .setEmail("email")
                 .setRegisterDate("09/03/2023")
                 .setBirthDate("09/03/2023")
-                .setLocation(Arrays.asList(3.14, 3.14))
+                .setLocation(new Location(3.14, 3.14))
                 .build();
 
         //Check values
@@ -33,11 +35,12 @@ public class modelTests {
         Assert.assertEquals("email", user.getEmail());
         Assert.assertEquals("09/03/2023", user.getRegisterDate());
         Assert.assertEquals("09/03/2023", user.getBirthDate());
-        assertTrue(user.getLocation().containsAll(Arrays.asList(3.14, 3.14)));
+        assertTrue(user.getLocation().getLatitude() == 3.14 && user.getLocation().getLongitude() ==3.14);
     }
 
     @Test
-    public void user_builder_fails_with_invalid_strings(){
+    //Checks that the user builder fails when it's missing mandatory attributes
+    public void user_builder_fails_with_missing_mandatory_attributes(){
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     //Build new user with missing attributes
