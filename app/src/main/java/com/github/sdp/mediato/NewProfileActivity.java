@@ -1,20 +1,16 @@
 package com.github.sdp.mediato;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity implements NavigationHost {
+public class NewProfileActivity extends AppCompatActivity implements NavigationHost {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_new_profile);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()

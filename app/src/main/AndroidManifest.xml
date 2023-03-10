@@ -12,7 +12,7 @@
         android:theme="@style/Theme.MediaTo"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".NewProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -46,7 +46,8 @@
                 app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_image"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
-                android:contentDescription="@string/mt_profile_image_button_description" />
+                android:contentDescription="@string/mt_profile_image_button_description"
+                android:focusable="true" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"

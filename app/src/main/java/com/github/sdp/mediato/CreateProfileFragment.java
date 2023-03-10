@@ -101,6 +101,7 @@ public class CreateProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
         Uri uri = data.getData();
         profileImage.setImageURI(uri);
     }
