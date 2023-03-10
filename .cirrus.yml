@@ -6,6 +6,7 @@ container:
 
 env:
   CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
+  TMDBAPIKEY: ENCRYPTED[f69e30806b12ae5a678e8a01a9aeaf77f6982aebe82a82a2e793a0b342f9404b289d4a95c224d1ed0567443b811c934e]
 
 check_android_task:
   name: Run Android tests
@@ -24,6 +25,9 @@ check_android_task:
       -no-snapshot
       -no-window
       -camera-back none
+  imports_secrets: |
+    touch ./secret.local
+    echo "$TMDBAPIKEY" | base64 -d > ./secret.local
   assemble_instrumented_tests_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
