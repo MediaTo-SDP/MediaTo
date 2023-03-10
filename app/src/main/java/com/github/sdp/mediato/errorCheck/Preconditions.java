@@ -100,15 +100,6 @@ public class Preconditions {
     }
 
     /**
-     * Checks if displayed name is valid
-     * @param displayedName
-     * @TODO determine condition for displayed name validity (formatting, uniqueness...)
-     */
-    public static void checkDisplayedName(String displayedName){
-        checkNullOrEmptyString(displayedName, "displayed name");
-    }
-
-    /**
      * Checks if email address is valid
      * @param email
      * @TODO determine - if necessary - condition for email validity (format, existence  using google auth)
