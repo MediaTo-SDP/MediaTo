@@ -6,11 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -28,38 +28,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.regex.Matcher;
+
 /**
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
-        enum UsernameError {
-        NULL,
-        TOO_SHORT,
-        ALREADY_TAKEN,
-        GOOD
-    }
-
-    // Get the result from the photoPicker()
-    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    int resultCode = result.getResultCode();
-                    Intent data = result.getData();
-
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (data != null) {
-                            profileImageUri = data.getData();
-                            profileImage.setImageURI(profileImageUri);
-                        }
-                    } else if (resultCode == ImagePicker.RESULT_ERROR){
-                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
     private ImageView profileImage;
     private Uri profileImageUri;
@@ -104,6 +78,28 @@ public class CreateProfileFragment extends Fragment {
                 });
     }
 
+    // Get the result from the photoPicker()
+    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    int resultCode = result.getResultCode();
+                    Intent data = result.getData();
+
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (data != null) {
+                            profileImageUri = data.getData();
+                            profileImage.setImageURI(profileImageUri);
+                        }
+                    } else if (resultCode == ImagePicker.RESULT_ERROR){
+                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
     @NonNull
     private View.OnClickListener generateUsername(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
         return v -> {
@@ -125,6 +121,13 @@ public class CreateProfileFragment extends Fragment {
                 //TODO Add navigation to Add favorite page
             }
         };
+    }
+
+    private enum UsernameError {
+        NULL,
+        TOO_SHORT,
+        ALREADY_TAKEN,
+        GOOD
     }
 
     private String getUsernameErrorMsg(@Nullable Editable text) {
