@@ -25,7 +25,7 @@ check_android_task:
       -no-snapshot
       -no-window
       -camera-back none
-  imports_secrets: |
+  imports_secrets_script: |
     touch ./secret.local
     echo "$TMDBAPIKEY" | base64 -d > ./secret.local
   assemble_instrumented_tests_script: |
