@@ -1,21 +1,25 @@
 package com.github.sdp.mediato;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
-import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
@@ -29,108 +33,151 @@ import com.google.android.material.textfield.TextInputLayout;
  */
 public class CreateProfileFragment extends Fragment {
 
+    private class UsernameWatcher implements TextWatcher{
+
+        private TextInputLayout usernameTextInput;
+        private TextInputEditText usernameEditText;
+
+        UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+
+            this.usernameTextInput = usernameTextInput;
+            this.usernameEditText = usernameEditText;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(usernameEditText.getText())) {
+                usernameTextInput.setError(null);
+            }
+        }
+
+        // Useless functions
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override
+        public void afterTextChanged(Editable s) {}
+    }
+
+    enum UsernameError {
+        NULL,
+        TOO_SHORT,
+        TOO_LONG,
+        ALREADY_TAKEN,
+        GOOD
+    }
+
+    // Get the result from the photoPicker()
+    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    int resultCode = result.getResultCode();
+                    Intent data = result.getData();
+
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (data != null) {
+                            profileImageUri = data.getData();
+                            profileImage.setImageURI(profileImageUri);
+                        }
+                    } else if (resultCode == ImagePicker.RESULT_ERROR){
+                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
     private ImageView profileImage;
+    private Uri profileImageUri;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
 
         final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
         final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
-        final MaterialButton createButton = view.findViewById(R.id.create_profile_button);
+        final MaterialButton createProfileButton = view.findViewById(R.id.create_profile_button);
         final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
+
         profileImage = view.findViewById(R.id.profile_image);
 
+        // Open a photo picker to choose the profile image
         profileImageButton.setOnClickListener(photoPicker());
+
+        // Generate a username
         usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
-        usernameEditText.setOnKeyListener(removeErrorIfUsernameValid(usernameTextInput, usernameEditText));
 
-        //Set an error if the password is less than 8 characters.
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int error = 0;
-                String errorMsg;
-                if (0 != (error = isPasswordValid(usernameEditText.getText()))) {
-                    errorMsg = (error == 1) ? getString(R.string.mt_username_error_1)
-                            : (error == 2) ? getString(R.string.mt_username_error_2)
-                            : getString(R.string.mt_username_error_3);
+        // Remove the error if the user fix its username
+        usernameEditText.addTextChangedListener(new UsernameWatcher(usernameTextInput, usernameEditText));
 
-                    usernameTextInput.setError(errorMsg);
-                } else {
-                    usernameTextInput.setError(null);
-                    //((NavigationHost) getActivity()).navigateTo(new ProductGridFragment(), false);
-                }
-            }
-        });
+        // Create the profile if valid otherwise error
+        createProfileButton.setOnClickListener(tryCreateProfile(usernameTextInput, usernameEditText));
 
         // Inflate the layout for this fragment
         return view;
     }
 
     @NonNull
-    private View.OnKeyListener removeErrorIfUsernameValid(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
-        return new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (0 == isPasswordValid(usernameEditText.getText())) {
-                    usernameTextInput.setError(null);
-                }
-                return false;
-            }
-        };
+    private View.OnClickListener photoPicker() {
+        return v -> ImagePicker.Companion.with(CreateProfileFragment.this)
+                .crop()
+                .cropSquare()
+                .compress(1024)
+                .maxResultSize(620, 620)
+                .createIntent( intent -> {
+                    photoPickerResult.launch(intent);
+                    return null;
+                });
     }
 
     @NonNull
     private View.OnClickListener generateUsername(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                usernameTextInput.setError(null);
-                Faker faker = new Faker();
-                String username = faker.animal().name();
-                String number = faker.number().digits(5);
-                usernameEditText.setText(username + number);
-            }
+        return v -> {
+            usernameTextInput.setError(null);
+            Faker faker = new Faker();
+            String animal = faker.animal().name();
+            String number = faker.number().digits(5);
+            usernameEditText.setText(animal.concat(number));
         };
     }
 
     @NonNull
-    private View.OnClickListener photoPicker() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.Companion.with(CreateProfileFragment.this)
-                        .crop()
-                        .cropSquare()
-                        .compress(1024)
-                        .maxResultSize(620, 620)
-                        .start();
+    private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+        return view -> {
+            String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
+            usernameTextInput.setError(errorMsg);
+
+            if (null == errorMsg) {
+                //TODO Add navigation to Add favorite page
             }
         };
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        assert data != null;
-        Uri uri = data.getData();
-        profileImage.setImageURI(uri);
+    private String getUsernameErrorMsg(@Nullable Editable text) {
+        switch (isUsernameValid(text)) {
+            case NULL:
+                return getString(R.string.mt_username_error_null);
+            case TOO_SHORT:
+                return getString(R.string.mt_username_error_too_short);
+            case TOO_LONG:
+                return getString(R.string.mt_username_error_too_long);
+            case ALREADY_TAKEN:
+                return getString(R.string.mt_username_error_already_taken);
+            default:
+                return null;
+        }
     }
 
-    // "isPasswordValid" from "Navigate to the next Fragment" section method goes here
-    private int isPasswordValid(@Nullable Editable text) {
+    private UsernameError isUsernameValid(@Nullable Editable text) {
         if (text == null) {
-            return 1;
-        } else if (text.length() < 4) {
-            return 2;
-        } else if (text.length() > 20) {
-            return 3;
+            return UsernameError.NULL;
+        } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
+            return UsernameError.TOO_SHORT;
+        } else if (text.length() > getResources().getInteger(R.integer.mt_username_max_length)) {
+            return UsernameError.TOO_LONG;
         } else {
-            return 0;
+            return UsernameError.GOOD;
         }
-
     }
 }

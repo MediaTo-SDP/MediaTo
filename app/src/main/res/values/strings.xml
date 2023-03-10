@@ -1,14 +1,18 @@
 <resources>
     <string name="mt_app_name">MediaTo</string>
+
+    // CreateProfileFragment
+    <string name="mt_username_error_null">The username is null</string>
+    <string name="mt_username_error_too_short">The username is too short</string>
+    <string name="mt_username_error_too_long">The username is too long</string>
+    <string name="mt_username_error_already_taken">The username is already taken</string>
+
+    // fragment_create_profile.xml
     <string name="mt_new_profile_topbar">Create your profile</string>
     <string name="mt_profile_image_button_description">Select picture</string>
-    <string name="mt_hint_username">Username</string>
-    <string name="mt_button_create">Create</string>
-    <string name="mt_username_error_1">The username is null</string>
-    <string name="mt_username_error_2">The username is too short</string>
-    <string name="mt_username_error_3">The username is too long</string>
+    <string name="mt_username_hint">Username</string>
     <string name="mt_username_helper_text">Between 4-20 characters</string>
     <string name="mt_username_description_end_icon">Generate a username</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mt_button_create_profile">Create</string>
+
 </resources>
