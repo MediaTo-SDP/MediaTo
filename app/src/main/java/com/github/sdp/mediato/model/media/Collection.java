@@ -22,7 +22,7 @@ public class Collection {
             throw new IllegalArgumentException("Use constructor for Custom collections");
         }
         this.collectionType = collectionType;
-        this.collectionName = collectionName;
+        this.collectionName = collectionType.toString();
         this.reviews = reviews;
     }
 
