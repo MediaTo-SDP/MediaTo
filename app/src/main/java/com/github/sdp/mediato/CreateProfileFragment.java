@@ -32,36 +32,9 @@ import com.google.android.material.textfield.TextInputLayout;
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
-
-    private class UsernameWatcher implements TextWatcher{
-
-        private TextInputLayout usernameTextInput;
-        private TextInputEditText usernameEditText;
-
-        UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
-
-            this.usernameTextInput = usernameTextInput;
-            this.usernameEditText = usernameEditText;
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(usernameEditText.getText())) {
-                usernameTextInput.setError(null);
-            }
-        }
-
-        // Useless functions
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        @Override
-        public void afterTextChanged(Editable s) {}
-    }
-
-    enum UsernameError {
+        enum UsernameError {
         NULL,
         TOO_SHORT,
-        TOO_LONG,
         ALREADY_TAKEN,
         GOOD
     }
@@ -160,8 +133,6 @@ public class CreateProfileFragment extends Fragment {
                 return getString(R.string.mt_username_error_null);
             case TOO_SHORT:
                 return getString(R.string.mt_username_error_too_short);
-            case TOO_LONG:
-                return getString(R.string.mt_username_error_too_long);
             case ALREADY_TAKEN:
                 return getString(R.string.mt_username_error_already_taken);
             default:
@@ -174,10 +145,33 @@ public class CreateProfileFragment extends Fragment {
             return UsernameError.NULL;
         } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
             return UsernameError.TOO_SHORT;
-        } else if (text.length() > getResources().getInteger(R.integer.mt_username_max_length)) {
-            return UsernameError.TOO_LONG;
         } else {
             return UsernameError.GOOD;
         }
+    }
+
+    private class UsernameWatcher implements TextWatcher{
+
+        private TextInputLayout usernameTextInput;
+        private TextInputEditText usernameEditText;
+
+        UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+
+            this.usernameTextInput = usernameTextInput;
+            this.usernameEditText = usernameEditText;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(usernameEditText.getText())) {
+                usernameTextInput.setError(null);
+            }
+        }
+
+        // Useless functions
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override
+        public void afterTextChanged(Editable s) {}
     }
 }
