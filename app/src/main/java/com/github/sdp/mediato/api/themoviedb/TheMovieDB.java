@@ -25,8 +25,8 @@ public class TheMovieDB implements API<TMDBMovie> {
     private final HashMap<String, ArrayList<TMDBMovie>> searchCache;
     private ArrayList<TMDBMovie> trendingCache;
 
-    public TheMovieDB(){
-        apikey = "";
+    public TheMovieDB(String apikey){
+        this.apikey = apikey;
         searchCache = new HashMap<>();
         trendingCache = new ArrayList<>();
         Retrofit retrofit = new Retrofit.Builder()
