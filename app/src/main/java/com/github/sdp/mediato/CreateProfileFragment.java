@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -28,7 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
  */
 public class CreateProfileFragment extends Fragment {
 
-    ImageView profileImage;
+    private ImageView profileImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,28 +42,9 @@ public class CreateProfileFragment extends Fragment {
         final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
         profileImage = view.findViewById(R.id.profile_image);
 
-        profileImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePicker.Companion.with(CreateProfileFragment.this)
-                        .crop()
-                        .cropSquare()
-                        .compress(1024)
-                        .maxResultSize(620,620)
-                        .start();
-            }
-        });
-
-        usernameTextInput.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                usernameTextInput.setError(null);
-                Faker faker = new Faker();
-                String username = faker.animal().name();
-                String number = faker.number().digits(5);
-                usernameEditText.setText(username + number);
-            }
-        });
+        profileImageButton.setOnClickListener(photoPicker());
+        usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
+        usernameEditText.setOnKeyListener(removeErrorIfUsernameValid(usernameTextInput, usernameEditText));
 
         //Set an error if the password is less than 8 characters.
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +65,13 @@ public class CreateProfileFragment extends Fragment {
             }
         });
 
-        usernameEditText.setOnKeyListener(new View.OnKeyListener() {
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    @NonNull
+    private View.OnKeyListener removeErrorIfUsernameValid(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+        return new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (0 == isPasswordValid(usernameEditText.getText())) {
@@ -91,10 +79,36 @@ public class CreateProfileFragment extends Fragment {
                 }
                 return false;
             }
-        });
+        };
+    }
 
-        // Inflate the layout for this fragment
-        return view;
+    @NonNull
+    private View.OnClickListener generateUsername(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                usernameTextInput.setError(null);
+                Faker faker = new Faker();
+                String username = faker.animal().name();
+                String number = faker.number().digits(5);
+                usernameEditText.setText(username + number);
+            }
+        };
+    }
+
+    @NonNull
+    private View.OnClickListener photoPicker() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.Companion.with(CreateProfileFragment.this)
+                        .crop()
+                        .cropSquare()
+                        .compress(1024)
+                        .maxResultSize(620, 620)
+                        .start();
+            }
+        };
     }
 
 
