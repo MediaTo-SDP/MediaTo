@@ -11,6 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediaTo"
         tools:targetApi="31">
+
+        <activity
+            android:name=".GreetingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
         <activity
             android:name=".NewProfileActivity"
             android:exported="true">
