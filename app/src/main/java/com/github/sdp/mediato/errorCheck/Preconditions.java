@@ -30,7 +30,6 @@ public class Preconditions {
         Preconditions.checkUID(user.getId());
         Preconditions.checkUsername(user.getUsername());
         Preconditions.checkEmail(user.getEmail());
-        Preconditions.checkBirthDate(user.getBirthDate());
         Preconditions.checkRegisterDate(user.getRegisterDate());
         Preconditions.checkLocation(user.getLocation());
     }
@@ -116,15 +115,6 @@ public class Preconditions {
      */
     public static void checkEmail(String email){
         checkNullOrEmptyString(email, "email");
-    }
-
-    /**
-     * Checks if birth date is valid
-     * @param birthDate
-     * @TODO determine birth date validity (format, date)
-     */
-    public static void checkBirthDate(String birthDate){
-       checkNullOrEmptyString(birthDate, "birth date");
     }
 
     /**

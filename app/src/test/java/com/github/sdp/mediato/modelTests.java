@@ -24,7 +24,6 @@ public class modelTests {
                 .setDisplayedName("displayed name")
                 .setEmail("email")
                 .setRegisterDate("09/03/2023")
-                .setBirthDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
 
@@ -34,7 +33,6 @@ public class modelTests {
         Assert.assertEquals("displayed name", user.getDisplayedName());
         Assert.assertEquals("email", user.getEmail());
         Assert.assertEquals("09/03/2023", user.getRegisterDate());
-        Assert.assertEquals("09/03/2023", user.getBirthDate());
         assertTrue(user.getLocation().getLatitude() == 3.14 && user.getLocation().getLongitude() ==3.14);
     }
 

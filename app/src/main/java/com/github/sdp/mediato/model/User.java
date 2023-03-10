@@ -13,7 +13,6 @@ public class User {
     private String username = "";
     private String displayedName = "";
     private String email = "";
-    private String birthDate = "";
     private String registerDate = "";
 
     private Location location = new Location();
@@ -25,7 +24,6 @@ public class User {
         this.username = builder.username;
         this.displayedName = builder.displayedName;
         this.email = builder.email;
-        this.birthDate = builder.birthDate;
         this.registerDate = builder.registerDate;
         this.location = builder.location;
     }
@@ -46,10 +44,6 @@ public class User {
         return email;
     }
 
-    public String getBirthDate() {
-        return birthDate;
-    }
-
     public String getRegisterDate() {
         return registerDate;
     }
@@ -67,7 +61,6 @@ public class User {
         private String username = "";
         private String displayedName = "";
         private String email = "";
-        private String birthDate = "";
         private String registerDate = "";
 
         private Location location = new Location();
@@ -92,12 +85,6 @@ public class User {
         public UserBuilder setEmail(String email) {
             Preconditions.checkEmail(email);
             this.email = email;
-            return this;
-        }
-
-        public UserBuilder setBirthDate(String birthDate) {
-            Preconditions.checkBirthDate(birthDate);
-            this.birthDate = birthDate;
             return this;
         }
 
