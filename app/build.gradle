@@ -22,14 +22,16 @@ android {
     def secretPropertiesFile = getRootProject().file('secret.local')
     def secretProperties = new Properties()
     secretProperties.load(new FileInputStream(secretPropertiesFile))
-    resValue "string", "TMDBAPIKEY", "${secretProperties.getProperty("TMDBAPIKey")}"
+
     buildTypes {
         release {
             minifyEnabled false
+            resValue "string", "TMDBAPIKEY", "${secretProperties.getProperty("TMDBAPIKey")}"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
+            resValue "string", "TMDBAPIKEY", "${secretProperties.getProperty("TMDBAPIKey")}"
             testCoverageEnabled true
         }
     }
