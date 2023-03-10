@@ -18,6 +18,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
 
         if(s.length() > 0){
             // this.mTextView.setText("Results");
+            search(s);
             // toDO : call the search function
             // toDO : update the ViewList
         }
@@ -28,6 +29,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     public boolean onQueryTextChange(String s) {
         if(s.length() > 0){
             // this.mTextView.setText("Suggested");
+            search(s);
             // toDO : call the search function
             // toDO : update the ViewList
         }
