@@ -11,7 +11,6 @@ import java.util.Map;
 public class User {
     private String id = "";
     private String username = "";
-    private String displayedName = "";
     private String email = "";
     private String registerDate = "";
 
@@ -22,7 +21,6 @@ public class User {
     private User(UserBuilder builder){
         this.id = builder.id;
         this.username = builder.username;
-        this.displayedName = builder.displayedName;
         this.email = builder.email;
         this.registerDate = builder.registerDate;
         this.location = builder.location;
@@ -34,10 +32,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getDisplayedName() {
-        return displayedName;
     }
 
     public String getEmail() {
@@ -59,7 +53,6 @@ public class User {
     public static class UserBuilder {
         private String id = "";
         private String username = "";
-        private String displayedName = "";
         private String email = "";
         private String registerDate = "";
 
@@ -77,11 +70,7 @@ public class User {
             this.username = username;
             return this;
         }
-        public UserBuilder setDisplayedName(String displayedName) {
-            Preconditions.checkDisplayedName(displayedName);
-            this.displayedName = displayedName;
-            return this;
-        }
+
         public UserBuilder setEmail(String email) {
             Preconditions.checkEmail(email);
             this.email = email;

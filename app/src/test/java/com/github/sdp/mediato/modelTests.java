@@ -21,7 +21,6 @@ public class modelTests {
         //Build new user
         User  user = new User.UserBuilder("uniqueId")
                 .setUsername("user")
-                .setDisplayedName("displayed name")
                 .setEmail("email")
                 .setRegisterDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
@@ -30,7 +29,6 @@ public class modelTests {
         //Check values
         Assert.assertEquals("uniqueId", user.getId());
         Assert.assertEquals("user", user.getUsername());
-        Assert.assertEquals("displayed name", user.getDisplayedName());
         Assert.assertEquals("email", user.getEmail());
         Assert.assertEquals("09/03/2023", user.getRegisterDate());
         assertTrue(user.getLocation().getLatitude() == 3.14 && user.getLocation().getLongitude() ==3.14);
@@ -43,7 +41,6 @@ public class modelTests {
                 () -> {
                     //Build new user with missing attributes
                     User  user = new User.UserBuilder("uniqueId")
-                            .setUsername("user")
                             .setEmail("email")
                             .setRegisterDate("09/03/2023")
                             .build();
