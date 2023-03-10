@@ -19,10 +19,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    def secretPropertiesFile = rootProject.file('secret.local')
+    def secretPropertiesFile = getRootProject().file('secret.local')
     def secretProperties = new Properties()
     secretProperties.load(new FileInputStream(secretPropertiesFile))
-    resValue "string", "TMDBAPIKEY", "${localProperties.getProperty("TMDBAPIKey")}"
+    resValue "string", "TMDBAPIKEY", "${secretProperties.getProperty("TMDBAPIKey")}"
     buildTypes {
         release {
             minifyEnabled false
