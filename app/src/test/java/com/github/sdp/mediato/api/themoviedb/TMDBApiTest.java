@@ -85,8 +85,8 @@ public class TMDBApiTest {
 
     @Test
     public void TestSearchingMultipleList(){
-        ArrayList<TMDBMovie> movies = db.searchItems(SEARCHTERM, 30)
-                .thenCombine(db.searchItems(SEARCHTERM, 30), (a, b) -> b).join();
+        db.searchItems(SEARCHTERM, 30).join();
+        ArrayList<TMDBMovie> movies = db.searchItems(SEARCHTERM, 30).join();
         assertThat(movies.get(0).getId(), is(420564));
         assertThat(movies.get(19).getId(), is(1077647));
     }
@@ -105,16 +105,16 @@ public class TMDBApiTest {
 
     @Test
     public void TestTrendingMultipleList(){
-        ArrayList<TMDBMovie> movies = db.trending(30)
-                .thenCombine(db.trending(30), (a, b) -> b).join();
+        db.trending(30).join();
+        ArrayList<TMDBMovie> movies = db.trending(30).join();
         assertThat(movies.get(0).getId(), is(850871));
         assertThat(movies.get(19).getId(), is(1067282));
     }
 
     @Test
     public void TestTrendingCache(){
-        ArrayList<TMDBMovie> movies = db.trending(10)
-                .thenCombine(db.trending(20), (a, b) -> b).join();
+        db.trending(10).join();
+        ArrayList<TMDBMovie> movies = db.trending(20).join();
         assertThat(movies.get(0).getId(), is(631842));
         assertThat(movies.get(19).getId(), is(1081291));
     }
