@@ -1,0 +1,72 @@
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/profile_header"
+  android:layout_width="match_parent"
+  android:layout_height="160dp"
+  android:background="@color/colorPrimary"
+  app:layout_constraintBottom_toBottomOf="parent"
+  app:layout_constraintLeft_toLeftOf="parent"
+  app:layout_constraintRight_toRightOf="parent"
+  app:layout_constraintTop_toTopOf="parent"
+  app:layout_constraintVertical_bias="0.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <Button
+    android:id="@+id/friends_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:backgroundTint="@color/white"
+    android:text="@string/friends"
+    android:textAllCaps="false"
+    android:textColor="@color/gray"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/profile_img"
+    app:layout_constraintTop_toBottomOf="@+id/username_text"
+    app:layout_constraintVertical_bias="0.361" />
+
+  <Button
+    android:id="@+id/edit_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="30dp"
+    android:layout_marginStart="30dp"
+    android:backgroundTint="@color/white"
+    android:text="@string/edit"
+    android:textAllCaps="false"
+    android:textColor="@color/gray"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/friends_button"
+    app:layout_constraintTop_toBottomOf="@+id/username_text"
+    app:layout_constraintVertical_bias="1.0" />
+
+  <ImageView
+    android:id="@+id/profile_img"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="30dp"
+    android:layout_marginStart="30dp"
+    android:background="@drawable/bg_circle"
+    android:src="@drawable/ic_profile"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0"
+    app:tint="@color/gray" />
+
+  <TextView
+    android:id="@+id/username_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:text="@string/username"
+    android:textColor="@color/white"
+    android:textSize="26dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toEndOf="@+id/profile_img"
+    app:layout_constraintTop_toTopOf="@+id/profile_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,19 +7,24 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/mt_app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediaTo"
-	android:windowSoftInputMode="adjustResize"
+        android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
+
         <activity
-            android:name=".NewItemActivity"
+            android:name=".TestingActivity"
             android:exported="false" />
         <activity
             android:name=".GreetingActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NewProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,5 +33,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
