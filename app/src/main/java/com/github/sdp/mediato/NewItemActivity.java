@@ -1,6 +1,7 @@
 package com.github.sdp.mediato;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,17 +38,7 @@ public class NewItemActivity extends AppCompatActivity {
         setProgressBarIndicator();
 
         TextView errorTextView = findViewById(R.id.new_item_review_error_msg);
-        Button itemAddButton = findViewById(R.id.item_button_add);
         EditText review = findViewById(R.id.item_review_edittext);
-
-        // Set the "add" button to display an error when character limit is exceeded
-        itemAddButton.setOnClickListener(
-                v -> {
-                    if (review.getText().length() > MAX_REVIEW_LENGTH) {
-                        errorTextView.setText(
-                                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH));
-                    }
-                });
 
         // Clear the error message (if there is one) once the user edits the text
         review.setOnClickListener(v -> {
@@ -103,5 +94,21 @@ public class NewItemActivity extends AppCompatActivity {
 
         ((ImageView) findViewById(R.id.item_image)).setImageResource(image_res);
 
+    }
+
+    /**
+     * Called by "add" button onclick, displays an error when character limit is exceeded
+     * @param view: the activity view
+     */
+    public void addItem(View view) {
+
+        TextView errorTextView = findViewById(R.id.new_item_review_error_msg);
+        EditText review = findViewById(R.id.item_review_edittext);
+
+        if (review.getText().length() > MAX_REVIEW_LENGTH) {
+            runOnUiThread(  ()->          errorTextView.setText(
+                    String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
+;
+        }
     }
 }

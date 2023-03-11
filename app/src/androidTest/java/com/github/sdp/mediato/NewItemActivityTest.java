@@ -3,6 +3,7 @@ package com.github.sdp.mediato;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
@@ -14,6 +15,7 @@ import static com.github.sdp.mediato.NewItemActivity.MAX_REVIEW_LENGTH;
 import android.view.View;
 import android.widget.SeekBar;
 
+import androidx.test.annotation.UiThreadTest;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
@@ -35,6 +37,8 @@ import java.util.Locale;
  */
 @RunWith(AndroidJUnit4.class)
 public class NewItemActivityTest {
+
+    private NewItemActivity activity;
 
     @Rule
     public ActivityScenarioRule<NewItemActivity> testRule = new ActivityScenarioRule<>(NewItemActivity.class);
@@ -63,6 +67,7 @@ public class NewItemActivityTest {
     @Before
     public void setUp() {
         init();
+        testRule.getScenario().onActivity(activ -> activity = activ);
     }
 
     // Check if indicator text is well displayed when using the slide bar
@@ -91,14 +96,12 @@ public class NewItemActivityTest {
 
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
-    public void checkErrorMessageWhenAddingAIncorrectLengthComment() throws InterruptedException {
-        ViewInteraction addButton = onView(withId(R.id.item_button_add));
+    public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
-        editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)));
+        editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
-        Thread.sleep(3000);
-        addButton.perform(click());
+        activity.addItem(activity.findViewById(R.id.item_button_add));
 
         onView(withId(R.id.new_item_review_error_msg))
                 .check(matches(withText(
@@ -108,15 +111,13 @@ public class NewItemActivityTest {
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
-    public void checkErrorMessageDisappearsWhenEditing() throws InterruptedException {
-        ViewInteraction addButton = onView(withId(R.id.item_button_add));
+    public void checkErrorMessageDisappearsWhenEditing() {
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
-        editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)));
+        editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
-        Thread.sleep(3000);
 
-        addButton.perform(click());
+        activity.addItem(activity.findViewById(R.id.item_button_add));
         editText.perform(click(), closeSoftKeyboard());
 
         onView(withId(R.id.new_item_review_error_msg))
