@@ -1,8 +1,5 @@
 package com.github.sdp.mediato;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,18 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.google.android.material.button.MaterialButton;
@@ -29,16 +17,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.regex.Matcher;
-
 /**
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
 
     private ImageView profileImage;
-    private Uri profileImageUri;
-
     private PhotoPicker photoPicker;
 
     @Override
@@ -51,7 +35,6 @@ public class CreateProfileFragment extends Fragment {
         final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
 
         profileImage = view.findViewById(R.id.profile_image);
-
         photoPicker = new PhotoPicker(this, profileImage);
 
         // Open a photo picker to choose the profile image
@@ -71,41 +54,6 @@ public class CreateProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-
-    @NonNull
-    private View.OnClickListener photoPicker() {
-        return v -> ImagePicker.Companion.with(CreateProfileFragment.this)
-                .crop()
-                .cropSquare()
-                .compress(1024)
-                .maxResultSize(620, 620)
-                .createIntent( intent -> {
-                    photoPickerResult.launch(intent);
-                    return null;
-                });
-    }
-
-    // Get the result from the photoPicker()
-    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    int resultCode = result.getResultCode();
-                    Intent data = result.getData();
-
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (data != null) {
-                            profileImageUri = data.getData();
-                            profileImage.setImageURI(profileImageUri);
-                        }
-                    } else if (resultCode == ImagePicker.RESULT_ERROR){
-                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
     @NonNull
     private View.OnClickListener generateUsername(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
