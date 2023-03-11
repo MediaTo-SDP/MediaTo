@@ -28,6 +28,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Locale;
+
 /**
  * Test class for new item activity, used to add ratings and comments
  */
@@ -89,28 +91,31 @@ public class NewItemActivityTest {
 
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
-    public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
+    public void checkErrorMessageWhenAddingAIncorrectLengthComment() throws InterruptedException {
         ViewInteraction addButton = onView(withId(R.id.item_button_add));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
-        addButton.perform(click());
 
-
-        /*editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)), closeSoftKeyboard());
+        editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)));
+        editText.perform(closeSoftKeyboard());
+        Thread.sleep(3000);
         addButton.perform(click());
 
         onView(withId(R.id.new_item_review_error_msg))
                 .check(matches(withText(
-                        String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));*/
+                        String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
-    public void checkErrorMessageDisappearsWhenEditing() {
+    public void checkErrorMessageDisappearsWhenEditing() throws InterruptedException {
         ViewInteraction addButton = onView(withId(R.id.item_button_add));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
-        editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)), closeSoftKeyboard());
+        editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)));
+        editText.perform(closeSoftKeyboard());
+        Thread.sleep(3000);
+
         addButton.perform(click());
         editText.perform(click(), closeSoftKeyboard());
 
