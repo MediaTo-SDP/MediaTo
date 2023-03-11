@@ -9,4 +9,6 @@ public interface API<T> {
     Future<ArrayList<T>> searchItems(String s, int count);
 
     Future<ArrayList<T>> trending(int count);
+
+    void clearCache();
 }

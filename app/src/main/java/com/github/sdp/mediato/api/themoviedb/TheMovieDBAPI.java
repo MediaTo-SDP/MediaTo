@@ -11,7 +11,10 @@ public interface TheMovieDBAPI {
     @GET("search/movie")
     Call<PagedResult<TMDBMovie>> searchItem(@Query("api_key") String apiKey,
                                             @Query("query") String query,
-                                            @Query("language") String language);
+                                            @Query("language") String language,
+                                            @Query("page") int page);
     @GET("trending/movie/week")
-    Call<PagedResult<TMDBMovie>> trendingFilms(@Query("api_key") String apiKey);
+    Call<PagedResult<TMDBMovie>> trendingFilms(@Query("api_key") String apiKey,
+                                               @Query("language") String language,
+                                               @Query("page") int page);
 }

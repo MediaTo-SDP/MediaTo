@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MediaTo</string>
+    <string name="tmdb_url">https://api.themoviedb.org/3/</string>
 </resources>
