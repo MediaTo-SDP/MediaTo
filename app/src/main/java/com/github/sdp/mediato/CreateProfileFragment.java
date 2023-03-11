@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
+import com.github.sdp.mediato.utility.PhotoPicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -38,6 +39,8 @@ public class CreateProfileFragment extends Fragment {
     private ImageView profileImage;
     private Uri profileImageUri;
 
+    private PhotoPicker photoPicker;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
@@ -49,8 +52,12 @@ public class CreateProfileFragment extends Fragment {
 
         profileImage = view.findViewById(R.id.profile_image);
 
+        photoPicker = new PhotoPicker(this, profileImage);
+
         // Open a photo picker to choose the profile image
-        profileImageButton.setOnClickListener(photoPicker());
+        profileImageButton.setOnClickListener(v -> {
+            photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
+        });
 
         // Generate a username
         usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
