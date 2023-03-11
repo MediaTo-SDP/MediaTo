@@ -14,6 +14,7 @@ import static com.github.sdp.mediato.NewItemActivity.MAX_REVIEW_LENGTH;
 import android.view.View;
 import android.widget.SeekBar;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
@@ -22,6 +23,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,36 +61,32 @@ public class NewItemActivityTest {
     }
 
 
+    @Before
+    public void setUp() {
+        init();
+    }
+
     // Check if indicator text is well displayed when using the slide bar
     @Test
     public void checkSlideBarAndIndicator() {
-        init();
 
         ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
         ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
 
         seekBar.perform(setProgress(5));
         seekBarIndicator.check(matches(withText("5")));
-
-        release();
     }
 
     @Test
     public void checkToastDisplayedWhenAddingACorrectLengthComment() {
-        init();
-
         ViewInteraction addButton = onView(withId(R.id.item_add_button));
         addButton.perform(click());
         // TODO: add tests when functionalities are implemented
-
-        release();
 
     }
 
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
-        init();
-
         ViewInteraction addButton = onView(withId(R.id.item_add_button));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
@@ -97,16 +96,12 @@ public class NewItemActivityTest {
         onView(withId(R.id.new_item_review_error_msg))
                 .check(matches(withText(
                         String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
-        release();
-
     }
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
     public void checkErrorMessageDisappearsWhenEditing() {
-        init();
-
         ViewInteraction addButton = onView(withId(R.id.item_add_button));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
@@ -116,10 +111,12 @@ public class NewItemActivityTest {
 
         onView(withId(R.id.new_item_review_error_msg))
                 .check(matches(withText("")));
-        release();
-
     }
 
+    @After
+    public void releaseIntents() {
+        release();
+    }
 }
 
 
