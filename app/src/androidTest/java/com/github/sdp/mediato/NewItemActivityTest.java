@@ -14,7 +14,6 @@ import static com.github.sdp.mediato.NewItemActivity.MAX_REVIEW_LENGTH;
 import android.view.View;
 import android.widget.SeekBar;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
@@ -28,8 +27,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Locale;
 
 /**
  * Test class for new item activity, used to add ratings and comments
@@ -80,7 +77,7 @@ public class NewItemActivityTest {
     // Test that no error message is displayed when review is correct
     @Test
     public void checkNoErrorsWhenAddingACorrectLengthComment() {
-        ViewInteraction addButton = onView(withId(R.id.item_add_button));
+        ViewInteraction addButton = onView(withId(R.id.item_button_add));
         addButton.perform(click());
 
         onView(withId(R.id.new_item_review_error_msg))
@@ -93,7 +90,7 @@ public class NewItemActivityTest {
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
-        ViewInteraction addButton = onView(withId(R.id.item_add_button));
+        ViewInteraction addButton = onView(withId(R.id.item_button_add));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
         addButton.perform(click());
 
@@ -110,7 +107,7 @@ public class NewItemActivityTest {
     // It reappears if the length is still to long when adding the review
     @Test
     public void checkErrorMessageDisappearsWhenEditing() {
-        ViewInteraction addButton = onView(withId(R.id.item_add_button));
+        ViewInteraction addButton = onView(withId(R.id.item_button_add));
         ViewInteraction editText = onView(withId(R.id.item_review_edittext));
 
         editText.perform(typeText("A".repeat(MAX_REVIEW_LENGTH + 1)), closeSoftKeyboard());

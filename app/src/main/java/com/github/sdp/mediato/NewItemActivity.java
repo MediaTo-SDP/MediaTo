@@ -37,7 +37,7 @@ public class NewItemActivity extends AppCompatActivity {
         setProgressBarIndicator();
 
         TextView errorTextView = findViewById(R.id.new_item_review_error_msg);
-        Button itemAddButton = findViewById(R.id.item_add_button);
+        Button itemAddButton = findViewById(R.id.item_button_add);
         EditText review = findViewById(R.id.item_review_edittext);
 
         // Set the "add" button to display an error when character limit is exceeded
