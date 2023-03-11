@@ -1,4 +1,21 @@
 <resources>
-    <string name="app_name">MediaTo</string>
-    <string name="tmdb_url">https://api.themoviedb.org/3/</string>
+  <string name="app_name">MediaTo</string>
+
+  <!--Navigation Bar-->
+  <string name="home">Home</string>
+  <string name="search">Search</string>
+  <string name="profile">Profile</string>
+
+  <!--User Profile-->
+  <string name="username">Username</string>
+  <string name="recently_watched">Recently watched</string>
+  <string name="title">Title</string>
+  <string name="rating">Rating</string>
+
+  <!--Buttons-->
+  <string name="friends">Friends</string>
+  <string name="edit">Edit</string>
+
+  <!--API Urls-->
+  <string name="tmdb_url">https://api.themoviedb.org/3/</string>
 </resources>
