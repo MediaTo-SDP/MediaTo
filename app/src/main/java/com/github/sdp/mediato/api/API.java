@@ -1,14 +1,16 @@
 package com.github.sdp.mediato.api;
 
-import java.util.ArrayList;
-import java.util.concurrent.Future;
+import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface API<T> {
-    Future<T> searchItem(String s);
+    CompletableFuture<T> searchItem(String s);
 
-    Future<ArrayList<T>> searchItems(String s, int count);
+    CompletableFuture<List<TMDBMovie>> searchItems(String s, int count);
 
-    Future<ArrayList<T>> trending(int count);
+    CompletableFuture<List<TMDBMovie>> trending(int count);
 
     void clearCache();
 }

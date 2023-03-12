@@ -1,9 +1,12 @@
 package com.github.sdp.mediato.api.themoviedb.models;
 
-import java.util.Iterator;
 import java.util.List;
 
-public class PagedResult<T> {
+/**
+ * Class wrapper for the API returns of TheMovieDB
+ * @param <T> The type of the result
+ */
+public final class PagedResult<T> {
     private int page;
     private List<T> results;
     private int total_pages;

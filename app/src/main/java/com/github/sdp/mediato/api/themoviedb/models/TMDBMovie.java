@@ -2,7 +2,10 @@ package com.github.sdp.mediato.api.themoviedb.models;
 
 import java.util.List;
 
-public class TMDBMovie {
+/**
+ * Class used by the retrofit library to store the movies returned by TheMovieDB api.
+ */
+public final class TMDBMovie {
     private String poster_path;
     private boolean adult;
     private String overview;
