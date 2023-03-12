@@ -3,6 +3,7 @@ package com.github.sdp.mediato.data;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.github.javafaker.Bool;
 import com.github.sdp.mediato.model.User;
@@ -24,25 +25,47 @@ public class Database implements GenericDatabase {
 
     public static final int PROFILE_PIC_MAX_SIZE = 1024*1024; //1 Megabyte
 
-    public static DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference().child(USER_PROFILE_PICS_PATH);
 
     /**
      * Adds a new user to the database with the profile pic
      * @param user to be added
      * @uri the uri to the profile pic
+     * @return a CompletableFuture containing the username of the user that has been added
      */
-    public static void addUser(User user, Uri profilePicUri){
-        database.child(USER_PATH + user.getUsername()).setValue(user);
+    public static CompletableFuture<String> addUser(User user, Uri profilePicUri){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) future.complete(user.getUsername());
+                        else future.completeExceptionally(error.toException());
+                    }
+                }
+        );
         UploadTask uploadProfilePic = profilePics.child(user.getUsername()+".jpg")
                 .putFile(profilePicUri);
+        return future;
     }
     /**
      * Adds a new user to the database without the profile pic
      * @param user to be added
+     * @return a CompletableFuture containing the username of the user that has been added
      */
-    public static void addUser(User user){
-        database.child(USER_PATH + user.getUsername()).setValue(user);
+    public static CompletableFuture<String> addUser(User user){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) future.complete(user.getUsername());
+                        else future.completeExceptionally(error.toException());
+                    }
+                }
+        );
+        return future;
     }
 
     /**
@@ -57,11 +80,22 @@ public class Database implements GenericDatabase {
 
     /**
      * Deletes user from the database
-     * @param user to be deleted
+     * @param username of the user to be deleted
+     * @return a completable future with the username of the deleted user
      * @TODO handle cases for removing user from friends lists...
      */
-    public static void deleteUser(User user) {
-        database.child(USER_PATH + user.getUsername()).setValue(null);
+    public static CompletableFuture<String> deleteUser(String username) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference().child(USER_PATH + username).setValue(null,
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) future.complete(username);
+                        else future.completeExceptionally(error.toException());
+                    }
+                }
+        );
+        return future;
     }
 
     /**
@@ -71,7 +105,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<User> getUser(String username){
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.child(USER_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(USER_PATH + username).get().addOnSuccessListener(
                 dataSnapshot-> {
                     if (dataSnapshot.getValue() == null) future.completeExceptionally(new NoSuchFieldException());
                     else future.complete(dataSnapshot.getValue(User.class));
@@ -87,7 +121,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<Boolean> isUsernameUnique(String username){
         CompletableFuture<Boolean> unique = new CompletableFuture<>();
-        database.child(USER_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(USER_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> {unique.complete(!dataSnapshot.exists());}
         ).addOnFailureListener(e->unique.completeExceptionally(e));
         return unique;
