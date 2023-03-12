@@ -2,9 +2,15 @@ package com.github.sdp.mediato.data;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
+import com.github.javafaker.Bool;
 import com.github.sdp.mediato.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -18,16 +24,34 @@ public class Database implements GenericDatabase {
 
     public static final int PROFILE_PIC_MAX_SIZE = 1024*1024; //1 Megabyte
 
-    public final static DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-    public final static StorageReference profilePics = FirebaseStorage.getInstance().getReference().child(USER_PROFILE_PICS_PATH);
+    public static DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    public static StorageReference profilePics = FirebaseStorage.getInstance().getReference().child(USER_PROFILE_PICS_PATH);
 
     /**
-     * Adds a new user to the database
+     * Adds a new user to the database with the profile pic
      * @param user to be added
+     * @uri the uri to the profile pic
      */
-    public static void addUser(User user, Uri profilePicUri) {
+    public static void addUser(User user, Uri profilePicUri){
         database.child(USER_PATH + user.getUsername()).setValue(user);
         UploadTask uploadProfilePic = profilePics.child(user.getUsername()+".jpg")
+                .putFile(profilePicUri);
+    }
+    /**
+     * Adds a new user to the database without the profile pic
+     * @param user to be added
+     */
+    public static void addUser(User user){
+        database.child(USER_PATH + user.getUsername()).setValue(user);
+    }
+
+    /**
+     * Uploads the profile pic corresponding to username
+     * @param username
+     * @param profilePicUri
+     */
+    public static void setProfilePic(String username, Uri profilePicUri){
+        UploadTask uploadProfilePic = profilePics.child(username+".jpg")
                 .putFile(profilePicUri);
     }
 
@@ -54,6 +78,19 @@ public class Database implements GenericDatabase {
                 }).addOnFailureListener(e->future.completeExceptionally(e));
 
         return future;
+    }
+
+    /**
+     * Checks if the username is unique by looking for an already existing user that has it in the database
+     * @param username to be checked
+     * @return CompletableFuture<Boolean> containing the uniqueness value
+     */
+    public static CompletableFuture<Boolean> isUsernameUnique(String username){
+        CompletableFuture<Boolean> unique = new CompletableFuture<>();
+        database.child(USER_PATH + username).get().addOnSuccessListener(
+                dataSnapshot -> {unique.complete(!dataSnapshot.exists());}
+        ).addOnFailureListener(e->unique.completeExceptionally(e));
+        return unique;
     }
 
     /**
