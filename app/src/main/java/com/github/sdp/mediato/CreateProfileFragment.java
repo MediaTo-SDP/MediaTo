@@ -38,9 +38,9 @@ public class CreateProfileFragment extends Fragment {
         photoPicker = new PhotoPicker(this, profileImage);
 
         // Open a photo picker to choose the profile image
-        profileImageButton.setOnClickListener(v -> {
-            photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
-        });
+        profileImageButton.setOnClickListener(v ->
+            photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
+        );
 
         // Generate a username
         usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
