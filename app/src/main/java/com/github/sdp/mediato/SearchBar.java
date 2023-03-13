@@ -13,6 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SearchBar extends AppCompatActivity implements View.OnClickListener, SearchView.OnQueryTextListener {
 
+    private SearchView searchView;
+    private TextView textView;
+    private ListView listView;
+
+    private Button peopleButton;
+    private Button booksButton;
+    private Button filmButton;
+    private Button musicButton;
+
+    private SearchCategory currentCategory;
+    private Button currentHighlightedButton;
+
     @Override
     public boolean onQueryTextSubmit(String s) {
 
@@ -39,14 +51,14 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
 
-        if (view == mPeopleButton) {
-            this.currentCategorie = SearchCategorie.PEOPLE;
-        } else if (view == mBooksButton) {
-            this.currentCategorie = SearchCategorie.BOOKS;
-        } else if (view == mFilmButton) {
-            this.currentCategorie = SearchCategorie.MOVIES;
-        } else if (view == mMusicButton) {
-            this.currentCategorie = SearchCategorie.MUSIC;
+        if (view == peopleButton) {
+            this.currentCategory = SearchCategory.PEOPLE;
+        } else if (view == booksButton) {
+            this.currentCategory = SearchCategory.BOOKS;
+        } else if (view == filmButton) {
+            this.currentCategory = SearchCategory.MOVIES;
+        } else if (view == musicButton) {
+            this.currentCategory = SearchCategory.MUSIC;
         }
 
         // toDO : implement a try catch version of this (in case hte currentHighLightedButton is null for example)
@@ -58,24 +70,12 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     }
 
     /* attributes */
-    private enum SearchCategorie{
+    private enum SearchCategory{
         PEOPLE,
         MOVIES,
         BOOKS,
         MUSIC
     }
-
-    private SearchView mSearchView;
-    private TextView mTextView;
-    private ListView mListView;
-
-    private Button mPeopleButton;
-    private Button mBooksButton;
-    private Button mFilmButton;
-    private Button mMusicButton;
-
-    private SearchCategorie currentCategorie;
-    private Button currentHighlightedButton;
 
     /* methods */
     @Override
@@ -86,39 +86,39 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.search_menu);
 
         // get the categorie buttons and associate a listener to all of them
-        this.mPeopleButton = findViewById(R.id.searchactivity_setCategorie_people);
-        mPeopleButton.setOnClickListener(this);
+        this.peopleButton = findViewById(R.id.searchactivity_setCategorie_people);
+        peopleButton.setOnClickListener(this);
 
-        this.mBooksButton = findViewById(R.id.searchactivity_setCategorie_books);
-        mBooksButton.setOnClickListener(this);
+        this.booksButton = findViewById(R.id.searchactivity_setCategorie_books);
+        booksButton.setOnClickListener(this);
 
-        this.mFilmButton = findViewById(R.id.searchactivity_setCategorie_film);
-        mFilmButton.setOnClickListener(this);
+        this.filmButton = findViewById(R.id.searchactivity_setCategorie_film);
+        filmButton.setOnClickListener(this);
 
-        this.mMusicButton = findViewById(R.id.searchactivity_setCategorie_music);
-        mMusicButton.setOnClickListener(this);
+        this.musicButton = findViewById(R.id.searchactivity_setCategorie_music);
+        musicButton.setOnClickListener(this);
 
         // get the text view
-        this.mTextView = findViewById(R.id.searchactivity_textView_textDuringAfterSearch);
+        this.textView = findViewById(R.id.searchactivity_textView_textDuringAfterSearch);
 
         // get the list view
-        this.mListView = findViewById(R.id.searchactivity_listview_searchresults);
+        this.listView = findViewById(R.id.searchactivity_listview_searchresults);
 
         // get the search view and bind it to a listener
-        this.mSearchView = findViewById(R.id.searchactivity_searchview_searchbar);
-        this.mSearchView.setOnQueryTextListener(this);
+        this.searchView = findViewById(R.id.searchactivity_searchview_searchbar);
+        this.searchView.setOnQueryTextListener(this);
 
         // finally warmup the system, the activity starts by searching for peoples
-        this.currentHighlightedButton = mPeopleButton;
+        this.currentHighlightedButton = peopleButton;
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        this.currentCategorie = SearchCategorie.PEOPLE;
+        this.currentCategory = SearchCategory.PEOPLE;
     }
 
     /**
      * not implemented yet
      */
     private void search(String toBeSearched){
-        switch(this.currentCategorie){
+        switch(this.currentCategory){
             case PEOPLE:
                 break;
             case MOVIES:

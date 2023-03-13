@@ -15,5 +15,14 @@
   <!--Buttons-->
   <string name="friends">Friends</string>
   <string name="edit">Edit</string>
+    <string name="film">Film</string>
+  <string name="books">Books</string>
+
+  <!-- Search Categories -->
+  <string name="search_category_movies">Movies</string>
+  <string name="search_category_books">Books</string>
+  <string name="search_category_people">People</string>
+  <string name="search_category_music">Music</string>
+
 
 </resources>

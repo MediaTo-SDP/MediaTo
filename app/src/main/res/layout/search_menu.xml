@@ -32,43 +32,43 @@
 
             <Button
                 android:id="@+id/searchactivity_setCategorie_people"
-                android:text="People"
+                android:text="@string/search_category_people"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:textColor="#0b1a33"
                 android:padding="0dp"
-                />
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/searchactivity_setCategorie_books"
-                android:text="Books"
+                android:text="@string/search_category_books"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:textColor="#0b1a33"
                 android:padding="0dp"
-                />
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/searchactivity_setCategorie_film"
-                android:text="Film"
+                android:text="@string/search_category_movies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:textColor="#0b1a33"
                 android:padding="0dp"
-                />
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/searchactivity_setCategorie_music"
-                android:text="Music"
+                android:text="@string/search_category_music"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:textColor="#0b1a33"
                 android:padding="0dp"
-                />
+                style="?android:attr/buttonBarButtonStyle" />
         </LinearLayout>
     </LinearLayout>
 
