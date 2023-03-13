@@ -1,15 +1,13 @@
-container:
-  image: cirrusci/android-sdk:30
-  cpu: 4
-  memory: 16G
-  kvm: true
-
-env:
-  CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
-  FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
-
 check_android_task:
   name: Run Android tests
+  env:
+    CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
+    FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
+  container:
+    image: cirrusci/android-sdk:30
+    cpu: 4
+    memory: 16G
+    kvm: true
   install_emulator_script:
     sdkmanager --install "system-images;android-30;google_apis;x86"
   download_firebase_emulator_script: |
