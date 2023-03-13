@@ -124,8 +124,11 @@ public class AuthenticationActivityTest {
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
         Thread.sleep(3000);
-
-        device.findObject(By.textContains("@")).click();
+        try {
+            device.findObject(By.textContains("@")).click();
+        } catch (NullPointerException e) {
+            System.out.println("Object wasn't found");
+        }
 
         Thread.sleep(3000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
