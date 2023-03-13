@@ -50,6 +50,10 @@ public class User {
         return friends;
     }
 
+    public Map<String, Collection> getCollections() {
+        return collections;
+    }
+
     public static class UserBuilder {
         private String id = "";
         private String username = "";

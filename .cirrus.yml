@@ -1,16 +1,17 @@
-container:
-  image: cirrusci/android-sdk:30
-  cpu: 4
-  memory: 16G
-  kvm: true
-
-env:
-  CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
-
 check_android_task:
   name: Run Android tests
+  env:
+    CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
+    FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
+  container:
+    image: cirrusci/android-sdk:30
+    cpu: 4
+    memory: 16G
+    kvm: true
   install_emulator_script:
     sdkmanager --install "system-images;android-30;google_apis;x86"
+  download_firebase_emulator_script: |
+    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
   create_avd_script:
     echo no | avdmanager create avd --force
       --name emulator
@@ -39,8 +40,9 @@ check_android_task:
     ./cc-test-reporter before-build
   screen_record_background_script:
     for n in $(seq 1 20); do adb exec-out screenrecord --time-limit=180 --output-format=h264 - > $n.h264; done
-  check_script:
-    ./gradlew check connectedCheck
+  check_script: |
+    chmod +x firebase_bin
+    ./firebase_bin emulators:exec --project mediato-21040 './gradlew check connectedCheck'
   report_codeclimate_script: |
     export JACOCO_SOURCE_PATH=app/src/main/java/
     ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
