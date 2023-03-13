@@ -52,7 +52,8 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param result: firebase authentication result
      */
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        if (result.getResultCode() == RESULT_OK) {
+        throw new IllegalArgumentException(result.toString());
+        /*if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -63,7 +64,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         } else {
             // Sign in failed
             System.out.println("Error while signing in: " + result.getIdpResponse().getError().getErrorCode());
-        }
+        }*/
     }
 
     public static Intent createAuthenticationIntent(Context context, Intent post) {
