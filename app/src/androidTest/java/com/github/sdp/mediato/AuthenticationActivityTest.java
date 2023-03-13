@@ -13,8 +13,10 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
@@ -115,22 +117,18 @@ public class AuthenticationActivityTest {
      * @throws InterruptedException: for thread.sleep
      */
     @Test
-    public void testLogInButtonWorks() throws InterruptedException {
-        //login("foo@example.com");
+    public void testLogInButtonWorks() throws InterruptedException{
+
+        login("foo@example.com");
+
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
-        UiObject object = device.findObject(new UiSelector().className("android.widget.button").textContains("@"));
-        try {
-            if (object.exists()) {object.click();}
-        } catch (UiObjectNotFoundException e) {
-            System.out.print("OBJECT NOT FOUND");
-        }
+        device.findObject(By.textContains("@")).click();
 
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
-
 
         logout();
     }
