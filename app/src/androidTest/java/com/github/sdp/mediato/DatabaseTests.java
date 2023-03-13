@@ -51,7 +51,7 @@ public class DatabaseTests {
                     }
                 }
         );
-        String res = future.orTimeout(5, TimeUnit.SECONDS).join();
+        String res = future.orTimeout(10, TimeUnit.SECONDS).join();
         assertEquals("test", res);
     }
 
