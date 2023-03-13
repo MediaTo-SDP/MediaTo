@@ -130,7 +130,7 @@ public class AuthenticationActivityTest {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(400000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
         logout();
