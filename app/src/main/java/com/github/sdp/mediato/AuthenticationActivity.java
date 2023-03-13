@@ -13,6 +13,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
@@ -51,9 +52,8 @@ public class AuthenticationActivity extends AppCompatActivity {
      *
      * @param result: firebase authentication result
      */
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        throw new IllegalArgumentException(result.toString());
-        /*if (result.getResultCode() == RESULT_OK) {
+    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) throws FirebaseAuthException {
+        if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -63,8 +63,8 @@ public class AuthenticationActivity extends AppCompatActivity {
             AuthenticationActivity.this.startActivity(myIntent);
         } else {
             // Sign in failed
-            System.out.println("Error while signing in: " + result.getIdpResponse().getError().getErrorCode());
-        }*/
+           throw new FirebaseAuthException(String.valueOf(result.getIdpResponse().getError().getErrorCode()), "Error while signing in: ");
+        }
     }
 
     public static Intent createAuthenticationIntent(Context context, Intent post) {
