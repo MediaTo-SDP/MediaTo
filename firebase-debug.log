@@ -1,14 +1,54 @@
-[debug] [2023-03-13T07:37:57.813Z] ----------------------------------------------------------------------
-[debug] [2023-03-13T07:37:57.819Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marie\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js login:ci
-[debug] [2023-03-13T07:37:57.821Z] CLI Version:   11.24.1
-[debug] [2023-03-13T07:37:57.822Z] Platform:      win32
-[debug] [2023-03-13T07:37:57.822Z] Node Version:  v18.14.2
-[debug] [2023-03-13T07:37:57.830Z] Time:          Mon Mar 13 2023 08:37:57 GMT+0100 (heure normale d’Europe centrale)
-[debug] [2023-03-13T07:37:57.831Z] ----------------------------------------------------------------------
+[debug] [2023-03-13T09:24:14.592Z] ----------------------------------------------------------------------
+[debug] [2023-03-13T09:24:14.594Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\marie\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2023-03-13T09:24:14.594Z] CLI Version:   11.24.1
+[debug] [2023-03-13T09:24:14.594Z] Platform:      win32
+[debug] [2023-03-13T09:24:14.595Z] Node Version:  v18.14.2
+[debug] [2023-03-13T09:24:14.595Z] Time:          Mon Mar 13 2023 10:24:14 GMT+0100 (heure normale d’Europe centrale)
+[debug] [2023-03-13T09:24:14.595Z] ----------------------------------------------------------------------
 [debug] 
-[warn] !  Authenticating with a `login:ci` token is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[debug] [2023-03-13T09:24:14.719Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-03-13T09:24:14.720Z] > authorizing via signed-in user (mariembaccari70@gmail.com)
+[debug] [2023-03-13T09:24:14.874Z] java version "18" 2022-03-22
+
+[debug] [2023-03-13T09:24:14.875Z] Java(TM) SE Runtime Environment (build 18+36-2087)
+Java HotSpot(TM) 64-Bit Server VM (build 18+36-2087, mixed mode, sharing)
+
+[debug] [2023-03-13T09:24:14.902Z] Parsed Java major version: 18
+[info] i  emulators: Starting emulators: database {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: database"}}
+[debug] [2023-03-13T09:24:14.914Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-03-13T09:24:14.915Z] assigned listening specs for emulators {"user":{"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-03-13T09:24:14.930Z] [hub] writing locator at C:\Users\marie\AppData\Local\Temp\hub-mediato-21040.json
+[debug] [2023-03-13T09:24:14.937Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/mediato-21040 [none]
+[debug] [2023-03-13T09:24:15.552Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/mediato-21040 200
+[debug] [2023-03-13T09:24:15.553Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/mediato-21040 {"projectId":"mediato-21040","projectNumber":"900538721791","displayName":"mediaTo","name":"projects/mediato-21040","resources":{"hostingSite":"mediato-21040","realtimeDatabaseInstance":"mediato-21040-default-rtdb","storageBucket":"mediato-21040.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_96645c76-0b68-4ede-be75-d734bb2b45e0"}
+[debug] [2023-03-13T09:24:15.554Z] database rules config:  []
+[warn] !  database: Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"database"},"message":"Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2023-03-13T09:24:15.562Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2023-03-13T09:24:15.562Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-03-13T09:24:15.563Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2023-03-13T09:24:15.563Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\marie\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.11.0.jar","--host","127.0.0.1","--port",9000,"--single_project_mode","Warning"],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\marie\\\\.cache\\\\firebase\\\\emulators\\\\firebase-database-emulator-v4.11.0.jar\",\"--host\",\"127.0.0.1\",\"--port\",9000,\"--single_project_mode\",\"Warning\"],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[debug] [2023-03-13T09:24:17.720Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-03-13T09:24:17.721Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-03-13T09:24:17.721Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\marie\\.cache\\firebase\\emulators\\ui-v1.11.4\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\marie\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.11.4\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-03-13T09:24:17.878Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2023-03-13T09:24:17.879Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
 [info] 
-[info] Visit this URL on this device to log in:
-[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=177450190&redirect_uri=http%3A%2F%2Flocalhost%3A9005
-[info] 
-[info] Waiting for authentication...
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┬────────────────────────────────┐
+│ Emulator │ Host:Port      │ View in Emulator UI            │
+├──────────┼────────────────┼────────────────────────────────┤
+│ Database │ 127.0.0.1:9000 │ http://127.0.0.1:4000/database │
+└──────────┴────────────────┴────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

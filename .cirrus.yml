@@ -12,6 +12,8 @@ check_android_task:
   name: Run Android tests
   install_emulator_script:
     sdkmanager --install "system-images;android-30;google_apis;x86"
+  download_firebase_emulator_script: |
+    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
   create_avd_script:
     echo no | avdmanager create avd --force
       --name emulator
@@ -25,8 +27,6 @@ check_android_task:
       -no-snapshot
       -no-window
       -camera-back none
-  download_firebase_emulator_script: |
-    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
   assemble_instrumented_tests_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
