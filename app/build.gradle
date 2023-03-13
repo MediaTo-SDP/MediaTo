@@ -66,6 +66,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:11.0.4'
     implementation 'com.google.firebase:firebase-database:11.0.4'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'

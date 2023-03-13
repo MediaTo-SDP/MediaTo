@@ -63,7 +63,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             AuthenticationActivity.this.startActivity(myIntent);
         } else {
             // Sign in failed
-            throw new IllegalArgumentException("Error while signing in: " + String.valueOf(result.getIdpResponse().getError().getErrorCode()));
+            throw new IllegalArgumentException("Error while signing in: " + result.getIdpResponse().getError());
         }
     }
 
