@@ -44,5 +44,7 @@ public class MainActivityTest {
                 hasExtra("mainName", "Michel"),
                 hasComponent(GreetingActivity.class.getName())
         ));
+
+        release();
     }
 }

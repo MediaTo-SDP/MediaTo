@@ -104,7 +104,7 @@ public class AuthenticationActivityTest {
      */
     @Test
     public void testLogInButtonWorks() throws InterruptedException {
-        login("mediato@example.com");
+        login("foo@example.com");
         Intents.init();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
