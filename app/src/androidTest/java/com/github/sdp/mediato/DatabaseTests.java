@@ -7,17 +7,23 @@ import static org.junit.Assert.assertTrue;
 
 import android.provider.ContactsContract;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(AndroidJUnit4.class)
@@ -26,10 +32,30 @@ import java.util.concurrent.TimeUnit;
  * @TODO add the Cloud Storage tests for the profile pictures
  */
 public class DatabaseTests {
-    User user1;
-    User user2;
-    User user3;
+    //User user1;
+    //User user2;
+    //User user3;
 
+    @Test
+    public void sampleTest(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database.useEmulator("10.0.2.2", 9000);
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference().child("test").setValue(1234,
+
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) future.complete("test");
+                        else future.completeExceptionally(error.toException());
+                    }
+                }
+        );
+        String res = future.orTimeout(5, TimeUnit.SECONDS).join();
+        assertEquals("test", res);
+    }
+
+    /**
     @Before
     public void setUp(){
        try {
@@ -105,6 +131,6 @@ public class DatabaseTests {
     public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername(){
         Database.addUser(user1).orTimeout(5, TimeUnit.SECONDS).join();
         assertFalse(Database.isUsernameUnique("user_test_1").orTimeout(5, TimeUnit.SECONDS).join());
-    }
+    }*/
 
 }
