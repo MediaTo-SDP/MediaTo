@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -62,5 +63,11 @@ public class AuthenticationActivity extends AppCompatActivity {
             System.out.println("Error while signing in: " + result.getIdpResponse().getError().getErrorCode());
         }
     }
+
+    public static Intent createAuthenticationIntent(Context context, Intent post) {
+        return new Intent(context, AuthenticationActivity.class)
+                .putExtra("postAuthentication", post);
+    }
+
 
 }
