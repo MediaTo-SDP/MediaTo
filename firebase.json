@@ -1,8 +1,7 @@
 {
   "emulators": {
     "database": {
-      "port": 9000,
-      "host": "127.0.0.1"
+      "port": 9000
     },
     "ui": {
       "enabled": true
