@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent myIntent = new Intent(MainActivity.this, AuthenticationActivity.class);
+                        Intent myIntent = new Intent(MainActivity.this, GreetingActivity.class);
                         myIntent.putExtra("mainName", mainName.getText().toString());
                         MainActivity.this.startActivity(myIntent);
                     }

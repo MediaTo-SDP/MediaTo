@@ -4,8 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import android.content.Intent;
-
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
@@ -30,15 +28,36 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Tests for the authentication activity using the firebase authentication emulator
+ */
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationActivityTest {
 
 
     @Rule
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
-    private Intent doneIntent;
 
-    public static void loginSync(String email) {
+
+    /**
+     * Starts the emulator and firebase instance, signs-out if user isn't
+     */
+    @Before
+    public void startTests() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        auth.useEmulator("10.0.2.2", 9099);
+        if (auth.getCurrentUser() != null) {auth.signOut();}
+
+    }
+
+    /**
+     * Logs in the user in the firebase authentication
+     * @param email: user email
+     */
+    public static void login(String email) {
+
+        // create user json
         String userJson;
         try {
             userJson = new JSONObject()
@@ -47,44 +66,45 @@ public class AuthenticationActivityTest {
                     .put("email_verified", "true")
                     .toString();
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(userJson, null);
-        Task<AuthResult> result = FirebaseAuth.getInstance().signInWithCredential(credential);
+        // log in user and await result
+        Task<AuthResult> result = FirebaseAuth
+                .getInstance()
+                .signInWithCredential(GoogleAuthProvider
+                        .getCredential(userJson, null));
 
         try {
             AuthResult authResult = Tasks.await(result);
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void logoutSync() {
-        Task<Void> result = AuthUI.getInstance().signOut(ApplicationProvider.getApplicationContext());
+    /**
+     * Logs out the user in the firebase authentication
+     */
+    public static void logout() {
+
+        // log out user and await result
+        Task<Void> result = AuthUI.getInstance()
+                .signOut(ApplicationProvider
+                        .getApplicationContext());
         try {
             Tasks.await(result);
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Before
-    public void prepare() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        auth.useEmulator("10.0.2.2", 9099);
-
-        if (auth.getCurrentUser() != null) {
-            auth.signOut();
-        }
-
-        doneIntent = new Intent(ApplicationProvider.getApplicationContext(), GreetingActivity.class);
-    }
-
+    /**
+     * Tests the login one tap button using the emulator
+     * @throws InterruptedException: for thread.sleep
+     */
     @Test
-    public void testLoggedIn() throws InterruptedException {
-        loginSync("ph@example.com");
+    public void testLogInButtonWorks() throws InterruptedException {
+        login("mediato@example.com");
         Intents.init();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
@@ -93,7 +113,7 @@ public class AuthenticationActivityTest {
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
         Intents.release();
-        logoutSync();
+        logout();
     }
 
 }
