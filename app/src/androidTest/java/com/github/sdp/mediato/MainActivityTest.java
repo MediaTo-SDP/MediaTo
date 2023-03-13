@@ -13,6 +13,8 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +32,16 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
+    /**
+     * Initialises intents
+     */
+    @Before
+    public void initIntents(){
+        init();
+    }
+
     @Test
     public void CheckMainGoButton() {
-        init();
 
         ViewInteraction mainName = onView(withId(R.id.mainName));
         ViewInteraction mainGoButton = onView(withId(R.id.mainGoButton));
@@ -44,7 +53,11 @@ public class MainActivityTest {
                 hasExtra("mainName", "Michel"),
                 hasComponent(GreetingActivity.class.getName())
         ));
-
-        release();
     }
+
+    /**
+     * Releases the intents
+     */
+    @After
+    public void releaseIntents() {release();}
 }

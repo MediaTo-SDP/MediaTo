@@ -2,6 +2,8 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.intent.Intents.init;
+import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -21,6 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,6 +47,7 @@ public class AuthenticationActivityTest {
      */
     @Before
     public void startTests() {
+        init();
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         auth.useEmulator("10.0.2.2", 9099);
@@ -105,15 +109,20 @@ public class AuthenticationActivityTest {
     @Test
     public void testLogInButtonWorks() throws InterruptedException {
         login("foo@example.com");
-        Intents.init();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
 
-        Thread.sleep(3000);
+        Thread.sleep(6000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
-        Intents.release();
+
         logout();
     }
+
+    /**
+     * Releases the intents
+     */
+    @After
+    public void releaseIntents() {release();}
 
 }
