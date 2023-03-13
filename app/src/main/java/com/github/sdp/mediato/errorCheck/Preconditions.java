@@ -202,4 +202,15 @@ public class Preconditions {
         }
     }
 
+
+    /**
+     * Checks that a value is greater and not equal to zero
+     * @param value to be checked
+     * @throws IllegalArgumentException inicating that the @value is smaller or equal to zero
+     */
+    public static void checkStrictlyPositive(int value) {
+        if (value <= 0){
+            throw new IllegalArgumentException("The value must be strictly positive. Value : " + value);
+        }
+    }
 }
