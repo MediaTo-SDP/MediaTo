@@ -22,13 +22,13 @@ check_android_task:
     --package "system-images;android-30;google_apis;x86"
   start_avd_background_script:
     $ANDROID_HOME/emulator/emulator
-    -avd emulator
-    -no-audio
-    -no-boot-anim
-    -gpu swiftshader_indirect
-    -no-snapshot
-    -no-window
-    -camera-back none
+      -avd emulator
+      -no-audio
+      -no-boot-anim
+      -gpu swiftshader_indirect
+      -no-snapshot
+      -no-window
+      -camera-back none
   imports_secrets_script: |
     touch ./secret.local
     echo "$TMDBAPIKEY" | base64 -d > ./secret.local

@@ -28,7 +28,19 @@
   <!--Buttons-->
   <string name="friends">Friends</string>
   <string name="edit">Edit</string>
+  <string name="new_item_end_button_text">Add</string>
+  <string name="film">Film</string>
+  <string name="books">Books</string>
 
+  <!-- Search Categories -->
+  <string name="search_category_movies">Movies</string>
+  <string name="search_category_books">Books</string>
+  <string name="search_category_people">People</string>
+  <string name="search_category_music">Music</string>
+
+  <!--API Urls-->
+  <string name="tmdb_url">https://api.themoviedb.org/3/</string>
+  
   <!-- New Item Page -->
   <string name="new_item_edit_text_initial">Type your review\n</string>
   <string name="new_item_rating_section_title">Your Rating</string>
@@ -36,9 +48,6 @@
   <string name="new_item_title">Title</string>
   <string name="new_item_description">Description of the item in a few lines</string>
   <string name="new_item_image_description">Image of the currently rated and reviewed item</string>
-
-  <!--Buttons-->
-    <string name="new_item_end_button_text">Add</string>
     
   <!--Integers-->
   <integer name="max_rating">10</integer>

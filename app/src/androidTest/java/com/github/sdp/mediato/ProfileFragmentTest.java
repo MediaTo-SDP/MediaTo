@@ -50,7 +50,7 @@ public class ProfileFragmentTest {
   // Test whether the profile picture is displayed
   @Test
   public void testProfilePicture() {
-    onView(withId(R.id.profile_img)).check(matches(isDisplayed()));
+    onView(withId(R.id.profile_image)).check(matches(isDisplayed()));
   }
 
   // Test whether the username text is displayed and contains the correct text
