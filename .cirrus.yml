@@ -11,7 +11,7 @@ check_android_task:
     FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
 
   download_firebase_emulator_script: |
-    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
+    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/v7.2.2
   install_firebase_emulator_script: curl -sL https://firebase.tools | bash
   install_emulator_script: sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script: echo no | avdmanager create avd --force
