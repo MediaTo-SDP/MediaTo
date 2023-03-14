@@ -1,5 +1,8 @@
 package com.github.sdp.mediato;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,23 +10,53 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
-import com.github.sdp.mediato.utility.PhotoPicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
 
 /**
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
 
+    private static final int USERNAME_MIN_LENGTH = 4;
     private ImageView profileImage;
-    private PhotoPicker photoPicker;
+    private Uri profileImageUri;
+    // Get the result from the photoPicker()
+    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    int resultCode = result.getResultCode();
+                    Intent data = result.getData();
+
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (data != null) {
+                            profileImageUri = data.getData();
+                            profileImage.setImageURI(profileImageUri);
+                        }
+                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,12 +68,9 @@ public class CreateProfileFragment extends Fragment {
         final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
 
         profileImage = view.findViewById(R.id.profile_image);
-        photoPicker = new PhotoPicker(this, profileImage);
 
         // Open a photo picker to choose the profile image
-        profileImageButton.setOnClickListener(v ->
-            photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
-        );
+        profileImageButton.setOnClickListener(photoPicker());
 
         // Generate a username
         usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
@@ -53,6 +83,19 @@ public class CreateProfileFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @NonNull
+    private View.OnClickListener photoPicker() {
+        return v -> ImagePicker.Companion.with(CreateProfileFragment.this)
+                .crop()
+                .cropSquare()
+                .compress(1024)
+                .maxResultSize(620, 620)
+                .createIntent( intent -> {
+                    photoPickerResult.launch(intent);
+                    return null;
+                });
     }
 
     @NonNull
@@ -69,7 +112,7 @@ public class CreateProfileFragment extends Fragment {
     @NonNull
     private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
         return view -> {
-            String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
+            String errorMsg = getUsernameErrorMsg(Objects.requireNonNull(usernameEditText.getText()));
             usernameTextInput.setError(errorMsg);
 
             if (null == errorMsg) {
@@ -78,17 +121,8 @@ public class CreateProfileFragment extends Fragment {
         };
     }
 
-    private enum UsernameError {
-        NULL,
-        TOO_SHORT,
-        ALREADY_TAKEN,
-        GOOD
-    }
-
-    private String getUsernameErrorMsg(@Nullable Editable text) {
+    private String getUsernameErrorMsg(@NonNull Editable text) {
         switch (isUsernameValid(text)) {
-            case NULL:
-                return getString(R.string.mt_username_error_null);
             case TOO_SHORT:
                 return getString(R.string.mt_username_error_too_short);
             case ALREADY_TAKEN:
@@ -98,20 +132,24 @@ public class CreateProfileFragment extends Fragment {
         }
     }
 
-    private UsernameError isUsernameValid(@Nullable Editable text) {
-        if (text == null) {
-            return UsernameError.NULL;
-        } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
+    private UsernameError isUsernameValid(@NonNull Editable text) {
+        if (text.length() < USERNAME_MIN_LENGTH) {
             return UsernameError.TOO_SHORT;
         } else {
             return UsernameError.GOOD;
         }
     }
 
+    private enum UsernameError {
+        TOO_SHORT,
+        ALREADY_TAKEN,
+        GOOD
+    }
+
     private class UsernameWatcher implements TextWatcher{
 
-        private TextInputLayout usernameTextInput;
-        private TextInputEditText usernameEditText;
+        private final TextInputLayout usernameTextInput;
+        private final TextInputEditText usernameEditText;
 
         UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
 
@@ -121,7 +159,7 @@ public class CreateProfileFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(usernameEditText.getText())) {
+            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(Objects.requireNonNull(usernameEditText.getText()))) {
                 usernameTextInput.setError(null);
             }
         }
