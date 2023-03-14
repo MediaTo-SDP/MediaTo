@@ -69,7 +69,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the greeeting activity with the username when signed in
+     * Launches the greeting activity with the username when signed in
      * @param : user's name
      */
     private void launchGreetingActivity(String userName) {
