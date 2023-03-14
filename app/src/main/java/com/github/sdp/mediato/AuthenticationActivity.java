@@ -68,6 +68,10 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launches the greeeting activity with the username when signed in
+     * @param : user's name
+     */
     private void launchGreetingActivity(String userName) {
         Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
         myIntent.putExtra("mainName", userName);
