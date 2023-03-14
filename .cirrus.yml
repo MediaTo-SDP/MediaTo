@@ -9,7 +9,7 @@ check_android_task:
     memory: 16G
     kvm: true
   download_firebase_emulator_script: |
-    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/v11.19.0
+    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
   install_firebase_emulator_script: curl -sL https://firebase.tools | bash
   install_emulator_script: sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script: echo no | avdmanager create avd --force
