@@ -43,7 +43,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 // Start the intent
                 signInLauncher.launch(signInIntent);
             } else {
-                launchGreetingActivity(authUser.getDisplayName());
+                launchPostActivity(authUser);
             }
         });
 
@@ -54,27 +54,26 @@ public class AuthenticationActivity extends AppCompatActivity {
      *
      * @param result: firebase authentication result
      */
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) throws IllegalArgumentException {
+    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
 
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
 
             // launch greeting activity with user's name
-            launchGreetingActivity(user.getDisplayName());
-        } else {
-            // Sign in failed
-            System.out.println("Unable to login: " + Objects.requireNonNull(result.getIdpResponse()).getError());
+            launchPostActivity(user);
         }
     }
 
     /**
-     * Launches the greeting activity with the username when signed in
-     * @param : user's name
+     * Launches the next activity with the user signed in (GreetingActivity here)
+     *
+     * @param user: user's name
      */
-    private void launchGreetingActivity(String userName) {
+    public void launchPostActivity(FirebaseUser user) {
+        Objects.requireNonNull(user);
         Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
-        myIntent.putExtra("mainName", userName);
+        myIntent.putExtra("mainName", "TODO");
         AuthenticationActivity.this.startActivity(myIntent);
     }
 

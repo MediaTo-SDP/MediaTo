@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MediaTo</string>
+    <string name="authentication_page_welcome_title">Welcome to MediaTo</string>
+    <string name="authentication_page_login_text">Please login to continue</string>
 </resources>
