@@ -10,6 +10,7 @@ check_android_task:
     kvm: true
   download_firebase_emulator_script: |
     curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
+    system-images;android-30;google_apis_playstore;x86
   install_firebase_emulator_script: curl -sL https://firebase.tools | bash
   install_emulator_script: sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script: echo no | avdmanager create avd --force

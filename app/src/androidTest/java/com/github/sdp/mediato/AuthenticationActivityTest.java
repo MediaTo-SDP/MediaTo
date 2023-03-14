@@ -123,14 +123,14 @@ public class AuthenticationActivityTest {
         logout();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         try {
             device.findObject(By.textContains("@")).click();
         } catch (NullPointerException e) {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(400000);
+        Thread.sleep(3000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
         logout();
