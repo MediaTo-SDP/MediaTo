@@ -28,12 +28,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 /**
  * create an instance of this fragment.
  */
 public class CreateProfileFragment extends Fragment {
+
+    private static final int USERNAME_MIN_LENGTH = 4;
 
     private ImageView profileImage;
     private Uri profileImageUri;
@@ -81,7 +84,7 @@ public class CreateProfileFragment extends Fragment {
     // Get the result from the photoPicker()
     private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     int resultCode = result.getResultCode();
@@ -92,7 +95,7 @@ public class CreateProfileFragment extends Fragment {
                             profileImageUri = data.getData();
                             profileImage.setImageURI(profileImageUri);
                         }
-                    } else if (resultCode == ImagePicker.RESULT_ERROR){
+                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
                         Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
@@ -114,7 +117,7 @@ public class CreateProfileFragment extends Fragment {
     @NonNull
     private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
         return view -> {
-            String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
+            String errorMsg = getUsernameErrorMsg(Objects.requireNonNull(usernameEditText.getText()));
             usernameTextInput.setError(errorMsg);
 
             if (null == errorMsg) {
@@ -124,16 +127,13 @@ public class CreateProfileFragment extends Fragment {
     }
 
     private enum UsernameError {
-        NULL,
         TOO_SHORT,
         ALREADY_TAKEN,
         GOOD
     }
 
-    private String getUsernameErrorMsg(@Nullable Editable text) {
+    private String getUsernameErrorMsg(@NonNull Editable text) {
         switch (isUsernameValid(text)) {
-            case NULL:
-                return getString(R.string.mt_username_error_null);
             case TOO_SHORT:
                 return getString(R.string.mt_username_error_too_short);
             case ALREADY_TAKEN:
@@ -143,10 +143,8 @@ public class CreateProfileFragment extends Fragment {
         }
     }
 
-    private UsernameError isUsernameValid(@Nullable Editable text) {
-        if (text == null) {
-            return UsernameError.NULL;
-        } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
+    private UsernameError isUsernameValid(@NonNull Editable text) {
+        if (text.length() < USERNAME_MIN_LENGTH) {
             return UsernameError.TOO_SHORT;
         } else {
             return UsernameError.GOOD;
@@ -155,8 +153,8 @@ public class CreateProfileFragment extends Fragment {
 
     private class UsernameWatcher implements TextWatcher{
 
-        private TextInputLayout usernameTextInput;
-        private TextInputEditText usernameEditText;
+        private final TextInputLayout usernameTextInput;
+        private final TextInputEditText usernameEditText;
 
         UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
 
@@ -166,7 +164,7 @@ public class CreateProfileFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(usernameEditText.getText())) {
+            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(Objects.requireNonNull(usernameEditText.getText()))) {
                 usernameTextInput.setError(null);
             }
         }
