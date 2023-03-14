@@ -15,15 +15,10 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -44,35 +39,18 @@ import java.util.concurrent.ExecutionException;
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationActivityTest {
 
-    private UiDevice device;
-
-
     @Rule
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
-
-
-    /**
-     * Starts the emulator and firebase instance, signs-out if user isn't
-     */
-    @Before
-    public void startTests() {
-        init();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        auth.useEmulator("10.0.2.2", 9099);
-        if (auth.getCurrentUser() != null) {auth.signOut();}
-
-        device = UiDevice.getInstance(getInstrumentation());
-    }
+    private UiDevice device;
 
     /**
      * Logs in the user in the firebase authentication
-     * @param email: user email
      */
-    public static void login(String email) {
+    public static void login() {
 
         // create user json
         String userJson;
+        String email = "ph@mediato.ch";
         try {
             userJson = new JSONObject()
                     .put("sub", email)
@@ -88,9 +66,8 @@ public class AuthenticationActivityTest {
                 .getInstance()
                 .signInWithCredential(GoogleAuthProvider
                         .getCredential(userJson, null));
-
         try {
-            AuthResult authResult = Tasks.await(result);
+            Tasks.await(result);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
@@ -113,23 +90,41 @@ public class AuthenticationActivityTest {
     }
 
     /**
+     * Starts the emulator and firebase instance, signs-out if user isn't
+     */
+    @Before
+    public void startTests() {
+        init();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        auth.useEmulator("10.0.2.2", 9099);
+        if (auth.getCurrentUser() != null) {
+            auth.signOut();
+        }
+
+        device = UiDevice.getInstance(getInstrumentation());
+    }
+
+    /**
      * Tests the login one tap button using the emulator
+     *
      * @throws InterruptedException: for thread.sleep
      */
     @Test
-    public void testLogInButtonWorks() throws InterruptedException{
+    public void testLogInButtonWorks() throws InterruptedException {
 
-        //login("foo@example.com");
+        login();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-        Thread.sleep(10000);
+
+        Thread.sleep(5000);
         try {
             device.findObject(By.textContains("@")).click();
         } catch (NullPointerException e) {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(10000);
+        Thread.sleep(5000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
         logout();
@@ -139,6 +134,8 @@ public class AuthenticationActivityTest {
      * Releases the intents
      */
     @After
-    public void releaseIntents() {release();}
+    public void releaseIntents() {
+        release();
+    }
 
 }
