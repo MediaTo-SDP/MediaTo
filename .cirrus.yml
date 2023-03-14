@@ -11,7 +11,7 @@ check_android_task:
     FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
 
   download_firebase_emulator_script: |
-    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/v7.2.2
+    curl -Lo ./firebase_bin https://firebase.tools/bin/linux/latest
   install_firebase_emulator_script: curl -sL https://firebase.tools | bash
   install_emulator_script: sdkmanager --install "system-images;android-30;google_apis;x86"
   create_avd_script: echo no | avdmanager create avd --force
@@ -40,7 +40,7 @@ check_android_task:
   screen_record_background_script: for n in $(seq 1 20); do adb exec-out screenrecord --time-limit=180 --output-format=h264 - > $n.h264; done
   check_script: |
     chmod +x firebase_bin
-    ./firebase_bin emulators:exec --project mediato-21040 './gradlew check connectedCheck'
+    ./firebase_bin emulators:exec --project mediato-21040 --only database './gradlew check connectedCheck'
   report_codeclimate_script: |
     export JACOCO_SOURCE_PATH=app/src/main/java/
     ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
