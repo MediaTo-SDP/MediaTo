@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.javafaker.Faker;
+import com.github.sdp.mediato.utility.PhotoPicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,27 +37,7 @@ public class CreateProfileFragment extends Fragment {
     private static final int USERNAME_MIN_LENGTH = 4;
     private ImageView profileImage;
     private Uri profileImageUri;
-    // Get the result from the photoPicker()
-    private final ActivityResultLauncher<Intent> photoPickerResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    int resultCode = result.getResultCode();
-                    Intent data = result.getData();
-
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (data != null) {
-                            profileImageUri = data.getData();
-                            profileImage.setImageURI(profileImageUri);
-                        }
-                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                        Toast.makeText(getActivity(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Task Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+    private PhotoPicker photoPicker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,9 +49,12 @@ public class CreateProfileFragment extends Fragment {
         final FloatingActionButton profileImageButton = view.findViewById(R.id.profile_image_add_button);
 
         profileImage = view.findViewById(R.id.profile_image);
+        photoPicker = new PhotoPicker(this, profileImage);
 
         // Open a photo picker to choose the profile image
-        profileImageButton.setOnClickListener(photoPicker());
+        profileImageButton.setOnClickListener(v ->
+                photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
+        );
 
         // Generate a username
         usernameTextInput.setEndIconOnClickListener(generateUsername(usernameTextInput, usernameEditText));
@@ -86,24 +70,11 @@ public class CreateProfileFragment extends Fragment {
     }
 
     @NonNull
-    private View.OnClickListener photoPicker() {
-        return v -> ImagePicker.Companion.with(CreateProfileFragment.this)
-                .crop()
-                .cropSquare()
-                .compress(1024)
-                .maxResultSize(620, 620)
-                .createIntent( intent -> {
-                    photoPickerResult.launch(intent);
-                    return null;
-                });
-    }
-
-    @NonNull
     private View.OnClickListener generateUsername(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
         return v -> {
             usernameTextInput.setError(null);
             Faker faker = new Faker();
-            String animal = faker.animal().name();
+            String animal = faker.animal().name().replaceAll("\\s", "");
             String number = faker.number().digits(5);
             usernameEditText.setText(animal.concat(number));
         };
