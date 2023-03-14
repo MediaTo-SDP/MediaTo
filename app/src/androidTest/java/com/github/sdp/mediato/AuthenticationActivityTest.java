@@ -119,17 +119,17 @@ public class AuthenticationActivityTest {
     @Test
     public void testLogInButtonWorks() throws InterruptedException{
 
-        login("foo@example.com");
+        //login("foo@example.com");
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         try {
             device.findObject(By.textContains("@")).click();
         } catch (NullPointerException e) {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
 
         logout();

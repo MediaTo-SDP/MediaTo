@@ -61,6 +61,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
             myIntent.putExtra("mainName", user.getDisplayName());
             AuthenticationActivity.this.startActivity(myIntent);
+            throw new IllegalArgumentException("User is now signed in and activity started");
         } else {
             // Sign in failed
             throw new IllegalArgumentException("Error while signing in: " + result.getIdpResponse().getError());
