@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,17 +15,27 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 /**
@@ -32,30 +43,12 @@ import java.util.concurrent.TimeUnit;
  * @TODO add the Cloud Storage tests for the profile pictures
  */
 public class DatabaseTests {
-    //User user1;
-    //User user2;
-    //User user3;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    @Test
-    public void sampleTest(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.useEmulator("10.0.2.2", 9000);
-        CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child("test").setValue(1234,
+    User user1;
+    User user2;
+    User user3;
 
-                new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error == null) future.complete("test");
-                        else future.completeExceptionally(error.toException());
-                    }
-                }
-        );
-        String res = future.orTimeout(10, TimeUnit.SECONDS).join();
-        assertEquals("test", res);
-    }
-
-    /**
     @Before
     public void setUp(){
        try {
@@ -91,9 +84,9 @@ public class DatabaseTests {
 
     @Test
     //Tests that the user is properly added and retrieved from the database
-    public void addsAndGetsUserProperly() throws InterruptedException {
-        Database.addUser(user1).orTimeout(5, TimeUnit.SECONDS).join();
-        User retrievedUser = Database.getUser(user1.getUsername()).orTimeout(5, TimeUnit.SECONDS).join();
+    public void addsAndGetsUserProperly() throws InterruptedException, ExecutionException, TimeoutException {
+        Database.addUser(user1).get(5, TimeUnit.SECONDS);
+        User retrievedUser = Database.getUser(user1.getUsername()).get(5, TimeUnit.SECONDS);
         assertEquals(retrievedUser.getUsername(), user1.getUsername());
         assertEquals(retrievedUser.getLocation().getLatitude(), user1.getLocation().getLatitude(), 0);
         assertEquals(retrievedUser.getLocation().getLongitude(), user1.getLocation().getLongitude(), 0);
@@ -106,31 +99,31 @@ public class DatabaseTests {
     //Tests that trying to retrieve a non existent user throws an exception
     public void gettingNonExistentUserThrowsException(){
         assertThrows(
-                Exception.class, ()-> Database.getUser("imaginary user").orTimeout(5, TimeUnit.SECONDS).join()
+                Exception.class, ()-> Database.getUser("imaginary user").get(5, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that database properly removes a user
-    public void deletingRemovesUserFromDatabase(){
-        Database.deleteUser(user1.getUsername()).orTimeout(5, TimeUnit.SECONDS).join();
+    public void deletingRemovesUserFromDatabase() throws ExecutionException, InterruptedException, TimeoutException {
+        Database.deleteUser(user1.getUsername()).get(5, TimeUnit.SECONDS);
         assertThrows(
-                Exception.class, ()-> Database.getUser(user1.getUsername()).orTimeout(5, TimeUnit.SECONDS).join()
+                Exception.class, ()-> Database.getUser(user1.getUsername()).get(5, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that isUsernameUnique returns true when a username is unique
-    public void isUsernameUniqueReturnsTrueForUniqueUsername(){
-        Database.addUser(user1).orTimeout(5, TimeUnit.SECONDS).join();
-        assertTrue(Database.isUsernameUnique("imaginary user").orTimeout(5, TimeUnit.SECONDS).join());
+    public void isUsernameUniqueReturnsTrueForUniqueUsername() throws ExecutionException, InterruptedException, TimeoutException {
+        Database.addUser(user1).get(5, TimeUnit.SECONDS);
+        assertTrue(Database.isUsernameUnique("imaginary user").get(5, TimeUnit.SECONDS));
     }
 
     @Test
     //Tests that isUsernameUnique returns false when a username is unique
-    public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername(){
-        Database.addUser(user1).orTimeout(5, TimeUnit.SECONDS).join();
-        assertFalse(Database.isUsernameUnique("user_test_1").orTimeout(5, TimeUnit.SECONDS).join());
-    }*/
+    public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername() throws ExecutionException, InterruptedException, TimeoutException {
+        Database.addUser(user1).get(5, TimeUnit.SECONDS);
+        assertFalse(Database.isUsernameUnique("user_test_1").get(5, TimeUnit.SECONDS));
+    }
 
 }
