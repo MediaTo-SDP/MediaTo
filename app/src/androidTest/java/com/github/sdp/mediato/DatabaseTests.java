@@ -43,11 +43,9 @@ import java.util.concurrent.TimeoutException;
  * @TODO add the Cloud Storage tests for the profile pictures
  */
 public class DatabaseTests {
+    private static int STANDARD_TIMEOUT = 5;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     User user1;
-    User user2;
-    User user3;
 
     @Before
     public void setUp(){
@@ -55,22 +53,10 @@ public class DatabaseTests {
            Database.database.useEmulator("10.0.2.2", 9000);
         }
         catch(Exception e){}
-        //Create new sample users
+        //Create new sample user
         user1 = new User.UserBuilder("uniqueId1")
                 .setUsername("user_test_1")
                 .setEmail("email_test_1")
-                .setRegisterDate("09/03/2023")
-                .setLocation(new Location(3.14, 3.14))
-                .build();
-        user2 = new User.UserBuilder("uniqueId2")
-                .setUsername("user_test_2")
-                .setEmail("email_test_2")
-                .setRegisterDate("09/03/2023")
-                .setLocation(new Location(3.14, 3.14))
-                .build();
-        user3 = new User.UserBuilder("uniqueId3")
-                .setUsername("user_test_3")
-                .setEmail("email_test_3")
                 .setRegisterDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
@@ -85,8 +71,8 @@ public class DatabaseTests {
     @Test
     //Tests that the user is properly added and retrieved from the database
     public void addsAndGetsUserProperly() throws InterruptedException, ExecutionException, TimeoutException {
-        Database.addUser(user1).get(5, TimeUnit.SECONDS);
-        User retrievedUser = Database.getUser(user1.getUsername()).get(5, TimeUnit.SECONDS);
+        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        User retrievedUser = Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
         assertEquals(retrievedUser.getUsername(), user1.getUsername());
         assertEquals(retrievedUser.getLocation().getLatitude(), user1.getLocation().getLatitude(), 0);
         assertEquals(retrievedUser.getLocation().getLongitude(), user1.getLocation().getLongitude(), 0);
@@ -99,31 +85,31 @@ public class DatabaseTests {
     //Tests that trying to retrieve a non existent user throws an exception
     public void gettingNonExistentUserThrowsException(){
         assertThrows(
-                Exception.class, ()-> Database.getUser("imaginary user").get(5, TimeUnit.SECONDS)
+                Exception.class, ()-> Database.getUser("imaginary user").get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that database properly removes a user
     public void deletingRemovesUserFromDatabase() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.deleteUser(user1.getUsername()).get(5, TimeUnit.SECONDS);
+        Database.deleteUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
         assertThrows(
-                Exception.class, ()-> Database.getUser(user1.getUsername()).get(5, TimeUnit.SECONDS)
+                Exception.class, ()-> Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that isUsernameUnique returns true when a username is unique
     public void isUsernameUniqueReturnsTrueForUniqueUsername() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user1).get(5, TimeUnit.SECONDS);
-        assertTrue(Database.isUsernameUnique("imaginary user").get(5, TimeUnit.SECONDS));
+        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        assertTrue(Database.isUsernameUnique("imaginary user").get(STANDARD_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
     //Tests that isUsernameUnique returns false when a username is unique
     public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user1).get(5, TimeUnit.SECONDS);
-        assertFalse(Database.isUsernameUnique("user_test_1").get(5, TimeUnit.SECONDS));
+        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        assertFalse(Database.isUsernameUnique("user_test_1").get(STANDARD_TIMEOUT, TimeUnit.SECONDS));
     }
 
 }

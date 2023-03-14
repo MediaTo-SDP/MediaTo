@@ -37,12 +37,9 @@ public class Database implements GenericDatabase {
     public static CompletableFuture<String> addUser(User user, Uri profilePicUri){
         CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
-                new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error == null) future.complete(user.getUsername());
-                        else future.completeExceptionally(error.toException());
-                    }
+                (error, ref) -> {
+                    if (error == null) future.complete(user.getUsername());
+                    else future.completeExceptionally(error.toException());
                 }
         );
         UploadTask uploadProfilePic = profilePics.child(user.getUsername()+".jpg")
@@ -57,12 +54,9 @@ public class Database implements GenericDatabase {
     public static CompletableFuture<String> addUser(User user){
         CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
-                new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error == null) future.complete(user.getUsername());
-                        else future.completeExceptionally(error.toException());
-                    }
+                (error, ref) -> {
+                    if (error == null) future.complete(user.getUsername());
+                    else future.completeExceptionally(error.toException());
                 }
         );
         return future;
@@ -87,12 +81,9 @@ public class Database implements GenericDatabase {
     public static CompletableFuture<String> deleteUser(String username) {
         CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference().child(USER_PATH + username).setValue(null,
-                new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error == null) future.complete(username);
-                        else future.completeExceptionally(error.toException());
-                    }
+                (error, ref) -> {
+                    if(error == null) future.complete(username);
+                    else future.completeExceptionally(error.toException());
                 }
         );
         return future;
