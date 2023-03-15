@@ -2,6 +2,7 @@ package com.github.sdp.mediato;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,7 +12,6 @@ public class NewProfileActivity extends AppCompatActivity implements NavigationH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_profile);
-
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
