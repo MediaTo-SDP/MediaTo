@@ -2,10 +2,13 @@ package com.github.sdp.mediato;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-public class NewProfileActivity extends AppCompatActivity implements NavigationHost {
+
+/**
+ * This activity hosts the CreateProfileFragment. After the profile creation, it is destroyed and
+ * switched to the MainActivity.
+ */
+public class NewProfileActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -17,25 +20,5 @@ public class NewProfileActivity extends AppCompatActivity implements NavigationH
           .add(R.id.new_profile_container, new CreateProfileFragment())
           .commit();
     }
-  }
-
-  /**
-   * Navigate to the given fragment.
-   *
-   * @param fragment       Fragment to navigate to.
-   * @param addToBackstack Whether or not the current fragment should be added to the backstack.
-   */
-  @Override
-  public void navigateTo(Fragment fragment, boolean addToBackstack) {
-    FragmentTransaction transaction =
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.new_profile_container, fragment);
-
-    if (addToBackstack) {
-      transaction.addToBackStack(null);
-    }
-
-    transaction.commit();
   }
 }
