@@ -49,23 +49,17 @@ public class ProfileFragment extends Fragment {
     add_movie_button.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        switchToFragment(new SearchFragment());
+        replaceFragment(new SearchFragment());
       }
     });
 
     return view;
   }
 
-  public void switchToFragment(Fragment fragment) {
-    FragmentManager fragmentManager = getChildFragmentManager();
-    FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-    transaction.replace(R.id.fragment_container, fragment);
-
-    // Add the transaction to the back stack
-    // This ensures that on exiting the chosen fragment we get back to the profile page
-    transaction.addToBackStack(null);
-
-    transaction.commit();
+  private void replaceFragment(Fragment fragment) {
+    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.replace(R.id.main_contrainer, fragment);
+    fragmentTransaction.commit();
   }
 }
