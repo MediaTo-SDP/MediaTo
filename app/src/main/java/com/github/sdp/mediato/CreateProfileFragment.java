@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,11 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.github.javafaker.Faker;
+import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.formats.Dates;
+import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 
 /**
  * create an instance of this fragment.
@@ -24,6 +34,9 @@ public class CreateProfileFragment extends Fragment {
 
     private ImageView profileImage;
     private PhotoPicker photoPicker;
+
+    //@TODO add userId when linked with authentication
+    private User.UserBuilder userBuilder = new User.UserBuilder("userGoogleAuthId");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,9 +84,27 @@ public class CreateProfileFragment extends Fragment {
         return view -> {
             String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
             usernameTextInput.setError(errorMsg);
-
             if (null == errorMsg) {
                 //TODO Add navigation to Add favorite page
+                //Creating new user and adding it to the database
+                String username = usernameEditText.getText().toString();
+                System.out.println("username no null " + username);
+                userBuilder.setUsername(username);
+                userBuilder.setRegisterDate(Dates.getToday());
+                //@TODO get current user's email when linked with authentication activity
+                userBuilder.setEmail("set email when linked");
+                //@TODO by default the location is not set - to be changed when we implement the GPS feature
+                userBuilder.setLocation(new Location());
+                User user = userBuilder.build();
+                Uri profilePicUri = photoPicker.getProfileImageUri();
+                if(photoPicker.getProfileImageUri() == null){
+                    System.out.println("no uri");
+                    CompletableFuture<String> userAddition = Database.addUser(user);
+                    userAddition.complete("User added");
+                } else {
+                    System.out.println("valid uri");
+                    Database.addUser(user, profilePicUri);
+                }
             }
         };
     }

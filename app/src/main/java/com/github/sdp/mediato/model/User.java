@@ -70,7 +70,9 @@ public class User {
         }
 
         public UserBuilder setUsername(String username) {
+            System.out.println("checking username");
             Preconditions.checkUsername(username);
+            System.out.println("user name passes check");
             this.username = username;
             return this;
         }

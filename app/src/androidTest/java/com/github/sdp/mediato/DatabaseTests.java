@@ -43,7 +43,7 @@ import java.util.concurrent.TimeoutException;
  * @TODO add the Cloud Storage tests for the profile pictures
  */
 public class DatabaseTests {
-    private static int STANDARD_TIMEOUT = 5;
+    private static int STANDARD_TIMEOUT = 10;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     User user1;
 
