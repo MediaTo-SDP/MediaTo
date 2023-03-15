@@ -39,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
     } else if (itemId == R.id.search) {
       replaceFragment(new SearchFragment());
     } else if (itemId == R.id.profile) {
-      replaceFragment(new ProfileFragment());
+      ProfileFragment profileFragment = new ProfileFragment();
+
+      // Get the username set by the profile creation activity
+      String username = getIntent().getStringExtra("username");
+      Bundle args = new Bundle();
+
+      // Give the username as an argument to the profile page and switch to it
+      args.putString("username", username);
+      profileFragment.setArguments(args);
+      replaceFragment(profileFragment);
     }
 
     return true;
