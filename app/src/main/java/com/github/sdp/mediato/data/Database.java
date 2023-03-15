@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.github.javafaker.Bool;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Collection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +23,8 @@ import java.util.concurrent.CompletableFuture;
 public class Database implements GenericDatabase {
 
     public static final String USER_PATH = "Users/";
+
+    public static final String USER_COLLECTIONS_PATH = "/collections/";
     public static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
 
     public static final int PROFILE_PIC_MAX_SIZE = 1024*1024; //1 Megabyte
@@ -132,4 +136,18 @@ public class Database implements GenericDatabase {
                 .addOnFailureListener(e->future.completeExceptionally(e));
         return future;
     }
+
+
+    public static CompletableFuture<String> addCollection(String username, Collection collection){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference().child(USER_PATH + username + USER_COLLECTIONS_PATH + collection.getCollectionName()).setValue(collection,
+                (error, ref) -> {
+                    System.out.println("adding collection " + collection.getReviews().size());
+                    if (error == null) future.complete(collection.getCollectionName());
+                    else future.completeExceptionally(error.toException());
+                }
+        );
+        return future;
+    }
+
 }
