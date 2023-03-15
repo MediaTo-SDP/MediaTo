@@ -161,7 +161,7 @@ public class Preconditions {
      * @TODO determine remaining criteria: char limit etc...
      */
     public static void checkComment(String comment){
-        checkNullOrEmptyString(comment, "comment");
+        //checkNullOrEmptyString(comment, "comment");
     }
 
     /**
