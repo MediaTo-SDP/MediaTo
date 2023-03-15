@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
   private void replaceFragment(Fragment fragment) {
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_contrainer, fragment);
+    fragmentTransaction.replace(R.id.main_container, fragment);
     fragmentTransaction.commit();
   }
 }

@@ -30,7 +30,7 @@ public class MainActivityTest {
   @Test
   public void testSelectHome() {
     onView(withId(R.id.home)).perform(click());
-    onView(withId(R.id.main_layout))
+    onView(withId(R.id.main_container))
         .check(matches(isDisplayed()))
         .check(matches(hasDescendant(withText("Home"))));
   }
@@ -39,7 +39,7 @@ public class MainActivityTest {
   @Test
   public void testSelectSearch() {
     onView(withId(R.id.search)).perform(click());
-    onView(withId(R.id.main_layout))
+    onView(withId(R.id.main_container))
         .check(matches(isDisplayed()))
         .check(matches(hasDescendant(withText("Search"))));
   }
@@ -48,8 +48,14 @@ public class MainActivityTest {
   @Test
   public void testSelectProfile() {
     onView(withId(R.id.profile)).perform(click());
-    onView(withId(R.id.main_layout))
+    onView(withId(R.id.main_container))
         .check(matches(isDisplayed()))
-        .check(matches(hasDescendant(withText("Username"))));
+        .check(matches(hasDescendant(withId(R.id.profile_header))));
   }
 }
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
@@ -26,7 +27,13 @@ public class ProfileFragmentTest {
     // Set up the TestingActivity to display the ProfileFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, new ProfileFragment())
+      ProfileFragment profileFragment = new ProfileFragment();
+
+      // Pass the username to the fragment like at profile creation
+      Bundle bundle = new Bundle();
+      bundle.putString("username", "myUsername");
+      profileFragment.setArguments(bundle);
+      fragmentManager.beginTransaction().replace(R.id.fragment_container, profileFragment)
           .commitAllowingStateLoss();
     });
   }
@@ -58,7 +65,7 @@ public class ProfileFragmentTest {
   public void testUsername() {
     ViewInteraction userNameText = onView(withId(R.id.username_text));
     userNameText.check(matches(isDisplayed()));
-    userNameText.check(matches(withText("Username")));
+    userNameText.check(matches(withText("myUsername")));
   }
 
   // Test whether the "Recently watched" title is displayed  and contains the correct text
