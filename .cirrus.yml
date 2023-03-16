@@ -26,7 +26,9 @@ check_android_task:
   assemble_instrumented_tests_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
-  wait_for_avd_script: adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
+  wait_for_avd_script: |
+    adb wait-for-device shell 
+    'while [[ -z $(getprop sys.boot_completed) ]] do sleep 3; done; input keyevent 82'
   disable_animations_script: |
     adb shell settings put global window_animation_scale 0.0
     adb shell settings put global transition_animation_scale 0.0
@@ -35,7 +37,8 @@ check_android_task:
     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     chmod +x ./cc-test-reporter
     ./cc-test-reporter before-build
-  screen_record_background_script: for n in $(seq 1 20); do adb exec-out screenrecord --time-limit=180 --output-format=h264 - > $n.h264; done
+  screen_record_background_script: |
+    for n in $(seq 1 20); do adb exec-out screenrecord --time-limit=180 --output-format=h264 - > $n.h264; done
   check_script: |
     chmod +x firebase_bin
     ./firebase_bin emulators:exec --project mediato-21040 './gradlew check connectedCheck'
