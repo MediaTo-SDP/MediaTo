@@ -16,6 +16,7 @@
     app:layout_constraintTop_toBottomOf="@+id/recently_watched_text">
 
     <LinearLayout
+      android:id="@+id/scroll_view_content"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal">
@@ -29,11 +30,9 @@
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white" />
 
-      <include layout="@layout/layout_movie_item"
-        android:id="@+id/test_movie_item"/>
-      <include layout="@layout/layout_movie_item" />
-      <include layout="@layout/layout_movie_item" />
-      <include layout="@layout/layout_movie_item" />
+      <include
+        layout="@layout/layout_movie_item"
+        android:id="@+id/test_movie_item" />
 
     </LinearLayout>
 

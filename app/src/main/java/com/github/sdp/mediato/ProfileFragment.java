@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
@@ -56,6 +58,9 @@ public class ProfileFragment extends Fragment {
       @Override
       public void onClick(View v) {
         replaceFragment(new SearchFragment());
+        LinearLayout scrollView = view.findViewById(R.id.scroll_view_content);
+        String itemText = getArguments().getString("data_key");
+        addItemToScrollView(itemText, scrollView);
       }
     });
 
@@ -90,4 +95,19 @@ public class ProfileFragment extends Fragment {
     String arg = getArguments().getString("username");
     username.setText(arg);
   }
+
+  public void addItemToScrollView(String itemText, LinearLayout scrollViewContent) {
+    // Inflate the layout
+    LayoutInflater inflater = LayoutInflater.from(getContext());
+    FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.layout_movie_item,
+        scrollViewContent, false);
+
+    // Set the title
+    TextView titleView = layout.findViewById(R.id.text_title);
+    titleView.setText(itemText);
+
+    // Add the layout to the scroll view
+    scrollViewContent.addView(layout);
+  }
+
 }
