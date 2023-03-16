@@ -72,8 +72,9 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     public void launchPostActivity(FirebaseUser user) {
         Objects.requireNonNull(user);
-        Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
-        myIntent.putExtra("mainName", "TODO");
+        Intent myIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
+        myIntent.putExtra("uid", user.getUid());
+        myIntent.putExtra("email", user.getEmail());
         AuthenticationActivity.this.startActivity(myIntent);
     }
 
