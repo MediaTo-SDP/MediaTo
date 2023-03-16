@@ -3,14 +3,15 @@ package com.github.sdp.mediato;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.init;
+import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.By;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
@@ -42,11 +44,14 @@ public class AuthenticationActivityTest {
     @Rule
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
     private UiDevice device;
+    private AuthenticationActivity activity;
+
+    private FirebaseUser user;
 
     /**
      * Logs in the user in the firebase authentication
      */
-    public static void login() {
+    public void login() {
 
         // create user json
         String userJson;
@@ -68,6 +73,7 @@ public class AuthenticationActivityTest {
                         .getCredential(userJson, null));
         try {
             Tasks.await(result);
+            user = result.getResult().getUser();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +82,7 @@ public class AuthenticationActivityTest {
     /**
      * Logs out the user in the firebase authentication
      */
-    public static void logout() {
+    public void logout() {
 
         // log out user and await result
         Task<Void> result = AuthUI.getInstance()
@@ -103,6 +109,8 @@ public class AuthenticationActivityTest {
         }
 
         device = UiDevice.getInstance(getInstrumentation());
+
+        testRule.getScenario().onActivity(activity1 -> activity = activity1);
     }
 
     /**
@@ -118,6 +126,8 @@ public class AuthenticationActivityTest {
         loginButton.perform(click());
 
         Thread.sleep(5000);
+
+        // select the account if google account selector pops up
         try {
             device.findObject(By.textContains("@")).click();
         } catch (NullPointerException e) {
@@ -125,9 +135,27 @@ public class AuthenticationActivityTest {
         }
 
         Thread.sleep(5000);
-        Intents.intended(IntentMatchers.hasComponent(GreetingActivity.class.getName()));
+        Intents.intended(hasComponent(GreetingActivity.class.getName()));
 
         logout();
+    }
+
+    /**
+     * The post launch of the activity should throw null pointer when user is null
+     */
+    @Test(expected = NullPointerException.class) //OR any other
+    public void testLaunchingPostActivityThrowsWithNull() {
+        activity.launchPostActivity(null);
+    }
+
+    /**
+     * Test expected behavior of launching the post activity with logged in user
+     */
+    @Test
+    public void testLaunchingPostActivitySucceedsWithUser() {
+        login();
+        activity.launchPostActivity(user);
+        intended(hasComponent(GreetingActivity.class.getName()));
     }
 
     /**

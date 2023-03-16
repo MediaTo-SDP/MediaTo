@@ -2,24 +2,17 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.intent.Intents.*;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.core.AllOf.allOf;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -30,34 +23,33 @@ import static org.hamcrest.core.AllOf.allOf;
 public class MainActivityTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> testRule = new ActivityScenarioRule<MainActivity>(
+            MainActivity.class);
 
-    /**
-     * Initialises intents
-     */
-    @Before
-    public void initIntents(){
-        init();
-    }
-
+    // Test that selecting Home on the bottom bar displays the HomeFragment
     @Test
-    public void CheckMainGoButton() {
-
-        ViewInteraction mainName = onView(withId(R.id.mainName));
-        ViewInteraction mainGoButton = onView(withId(R.id.mainGoButton));
-
-        mainName.perform(typeText("Michel"), closeSoftKeyboard());
-        mainGoButton.perform(click());
-
-        intended(allOf(
-                hasExtra("mainName", "Michel"),
-                hasComponent(GreetingActivity.class.getName())
-        ));
+    public void testSelectHome() {
+        onView(withId(R.id.home)).perform(click());
+        onView(withId(R.id.frame_layout))
+                .check(matches(isDisplayed()))
+                .check(matches(hasDescendant(withText("Home"))));
     }
 
-    /**
-     * Releases the intents
-     */
-    @After
-    public void releaseIntents() {release();}
+    // Test that selecting Search on the bottom bar displays the SearchFragment
+    @Test
+    public void testSelectSearch() {
+        onView(withId(R.id.search)).perform(click());
+        onView(withId(R.id.frame_layout))
+                .check(matches(isDisplayed()))
+                .check(matches(hasDescendant(withText("Search"))));
+    }
+
+    // Test that selecting Profile on the bottom bar displays the ProfileFragment
+    @Test
+    public void testSelectProfile() {
+        onView(withId(R.id.profile)).perform(click());
+        onView(withId(R.id.frame_layout))
+                .check(matches(isDisplayed()))
+                .check(matches(hasDescendant(withText("Username"))));
+    }
 }
