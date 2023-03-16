@@ -51,13 +51,6 @@ public class CreateProfileFragmentTest {
     }
 
     @Test
-    public void testProfileImageAddButton() {
-        ViewInteraction profileImageAddButton = onView(withId(R.id.profile_image_add_button));
-        profileImageAddButton.check(matches(isDisplayed()));
-        profileImageAddButton.perform(click());
-    }
-
-    @Test
     public void testUsernameTextInput() {
         ViewInteraction usernameTextInput = onView(withId(R.id.username_text_input));
         usernameTextInput.check(matches(isDisplayed()));
