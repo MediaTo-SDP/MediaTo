@@ -7,17 +7,16 @@
 
   <ImageView
     android:id="@+id/img_2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="120dp"
+    android:layout_height="150dp"
     android:paddingRight="15dp"
-    app:srcCompat="@drawable/bg_movie" />
-
+    app:srcCompat="@drawable/movie1" />
   <TextView
     android:id="@+id/text_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="158dp"
-    android:text="@string/title"
+    android:text="Skyfall"
     android:textSize="14dp"
     app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
@@ -28,7 +27,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="178dp"
-    android:text="@string/rating"
+    android:text="Rating: 10"
     android:textSize="14dp"
     app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
