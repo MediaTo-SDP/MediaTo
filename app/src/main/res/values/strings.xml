@@ -40,7 +40,7 @@
 
   <!--API Urls-->
   <string name="tmdb_url">https://api.themoviedb.org/3/</string>
-  
+
   <!-- New Item Page -->
   <string name="new_item_edit_text_initial">Type your review\n</string>
   <string name="new_item_rating_section_title">Your Rating</string>
@@ -55,5 +55,9 @@
     
   <!--Integers-->
   <integer name="max_rating">10</integer>
+
+  <!--Toast messages-->
+  <string name="profile_creation_success">Profile creation successful!</string>
+
 
 </resources>

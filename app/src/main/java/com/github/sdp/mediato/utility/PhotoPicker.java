@@ -75,4 +75,7 @@ public class PhotoPicker {
         }
     }
 
+    public Uri getProfileImageUri() {
+        return profileImageUri;
+    }
 }

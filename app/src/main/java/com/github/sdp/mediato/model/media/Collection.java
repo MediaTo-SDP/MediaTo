@@ -5,13 +5,15 @@ import com.github.sdp.mediato.model.Review;
 import java.util.List;
 
 public class Collection {
-    private final CollectionType collectionType;
+    private CollectionType collectionType;
     private String collectionName;
     private List<Review> reviews;
 
+    private Collection(){}
+
     //Constructor for Custom Collections
-    public Collection(CollectionType collectionType, String collectionName, List<Review> reviews) {
-        this.collectionType = collectionType;
+    public Collection(String collectionName, List<Review> reviews) {
+        this.collectionType = CollectionType.CUSTOM;
         this.collectionName = collectionName;
         this.reviews = reviews;
     }
@@ -45,4 +47,6 @@ public class Collection {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
+
+    public void addReview(Review review){this.reviews.add(review);}
 }

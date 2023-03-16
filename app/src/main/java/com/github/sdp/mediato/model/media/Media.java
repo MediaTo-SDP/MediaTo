@@ -4,13 +4,15 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 
 import java.util.Objects;
 
-public abstract class Media {
+public class Media {
 
-    private final MediaType mediaType;
-    private final String title;
-    private final String summary;
-    private final String imageUrl;
+    private MediaType mediaType;
+    private String title;
+    private String summary;
+    private String imageUrl;
 
+
+    Media(){}
 
     public Media(MediaType mediaType, String title, String summary, String imageUrl) {
         Preconditions.checkMedia(mediaType,title, summary, imageUrl);
