@@ -180,6 +180,24 @@ public class ProfileFragment extends Fragment {
     Review review3 = new Review("Charlie", movie3, 8);
     reviews.add(review3);
 
+    Media movie4 = new Movie("The Dark Knight",
+        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        "https://example.com/the-dark-knight.jpg");
+    Review review4 = new Review("Charlie", movie4, 8);
+    reviews.add(review4);
+
+    Media movie5 = new Movie("The Dark Knight",
+        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        "https://example.com/the-dark-knight.jpg");
+    Review review5 = new Review("Charlie", movie5, 8);
+    reviews.add(review5);
+
+    Media movie6 = new Movie("The Dark Knight",
+        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        "https://example.com/the-dark-knight.jpg");
+    Review review6 = new Review("Charlie", movie6, 8);
+    reviews.add(review6);
+
     Collection movieCollection = new Collection(CollectionType.RECENTLY_WATCHED, reviews);
 
     return movieCollection;

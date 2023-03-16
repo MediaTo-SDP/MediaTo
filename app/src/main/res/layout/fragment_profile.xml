@@ -4,49 +4,25 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <HorizontalScrollView
-    android:id="@+id/horizontal_scroll_view"
-    android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginStart="30dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/recently_watched_text">
-
-    <LinearLayout
-      android:id="@+id/scroll_view_content"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
-
-      <ImageButton
-        android:id="@+id/add_movie_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/bg_movie"
-        app:srcCompat="@drawable/ic_add"
-        app:tint="@color/white" />
-
-      <include
-        layout="@layout/layout_movie_item"
-        android:id="@+id/test_movie_item" />
-
-    </LinearLayout>
-
-  </HorizontalScrollView>
-
   <ImageView
     android:id="@+id/movie_icon"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
     android:src="@drawable/ic_movie"
     app:layout_constraintBottom_toBottomOf="@+id/recently_watched_text"
-    app:layout_constraintStart_toStartOf="@+id/horizontal_scroll_view"
+    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@+id/recently_watched_text"
     app:tint="@color/colorPrimary" />
+
+  <LinearLayout
+    android:id="@+id/sample_collection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+  </LinearLayout>
 
   <TextView
     android:id="@+id/recently_watched_text"
@@ -56,7 +32,6 @@
     android:layout_marginStart="10dp"
     android:text="@string/recently_watched"
     android:textSize="16dp"
-    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 
@@ -66,21 +41,13 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
-
-  <LinearLayout
-    android:id="@+id/sample_collection"
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/collectionRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_constraintTop_toBottomOf="@id/horizontal_scroll_view"
-    app:layout_constraintBottom_toBottomOf="parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/collectionRecyclerView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-
-  </LinearLayout>
+    android:layout_marginStart="20dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/recently_watched_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
