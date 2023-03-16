@@ -24,7 +24,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
-import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -95,7 +94,6 @@ public class CreateProfileFragment extends Fragment {
         //TODO Add navigation to Add favorite page
         //Creating new user and adding it to the database
         String username = usernameEditText.getText().toString();
-        System.out.println("username no null " + username);
         userBuilder.setUsername(username);
         userBuilder.setRegisterDate(Dates.getToday());
         //@TODO get current user's email when linked with authentication activity
@@ -104,19 +102,14 @@ public class CreateProfileFragment extends Fragment {
         userBuilder.setLocation(new Location());
         User user = userBuilder.build();
         Uri profilePicUri = photoPicker.getProfileImageUri();
-        if (photoPicker.getProfileImageUri() == null) {
-          System.out.println("no uri");
-          CompletableFuture<String> userAddition = Database.addUser(user);
-          userAddition.complete("User added");
-        } else {
-          System.out.println("valid uri");
-          Database.addUser(user);
+        Database.addUser(user);
+        if (photoPicker.getProfileImageUri() != null) {
           uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
-          try {
-            Thread.sleep(500);
-          } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-          }
+        }
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
         }
 
         // Switch to the main activity
@@ -124,6 +117,8 @@ public class CreateProfileFragment extends Fragment {
         intent.putExtra("username", username);
         startActivity(intent);
       }
+
+
     };
   }
 
@@ -184,5 +179,10 @@ public class CreateProfileFragment extends Fragment {
     @Override
     public void afterTextChanged(Editable s) {
     }
+
+  }
+
+  private void createUser() {
+
   }
 }
