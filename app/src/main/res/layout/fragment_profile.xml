@@ -67,4 +67,20 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
+  <LinearLayout
+    android:id="@+id/sample_collection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintTop_toBottomOf="@id/horizontal_scroll_view"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/collectionRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

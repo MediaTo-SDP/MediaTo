@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
@@ -34,28 +31,8 @@ public class SearchFragment extends Fragment {
 // Notify the adapter that the data has changed
     adapter.notifyDataSetChanged();
 
-    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = (String) parent.getItemAtPosition(position);
-        Fragment fragment = new ProfileFragment();
-        replaceFragment(fragment, selectedItem);
-      }
-    });
-
     return view;
 
-  }
-
-  private void replaceFragment(Fragment fragment, String data) {
-    Bundle bundle = new Bundle();
-    bundle.putString("data_key", data);
-    fragment.setArguments(bundle);
-
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.commit();
   }
 
 }

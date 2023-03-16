@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="250dp"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:orientation="vertical">
 
   <ImageView
-    android:id="@+id/img_2"
+    android:id="@+id/movie_image"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingRight="15dp"
     app:srcCompat="@drawable/bg_movie" />
 
   <TextView
-    android:id="@+id/text_title"
+    android:id="@+id/movie_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="158dp"
@@ -24,7 +24,7 @@
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 
   <TextView
-    android:id="@+id/text_rating"
+    android:id="@+id/movie_rating"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="178dp"
@@ -34,4 +34,4 @@
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
     app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 
-</FrameLayout>
+</LinearLayout>
