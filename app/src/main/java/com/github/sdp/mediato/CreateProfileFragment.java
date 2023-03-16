@@ -154,8 +154,8 @@ public class CreateProfileFragment extends Fragment {
 
   private class UsernameWatcher implements TextWatcher {
 
-    private TextInputLayout usernameTextInput;
-    private TextInputEditText usernameEditText;
+    private final TextInputLayout usernameTextInput;
+    private final TextInputEditText usernameEditText;
 
     UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
 
@@ -179,10 +179,5 @@ public class CreateProfileFragment extends Fragment {
     @Override
     public void afterTextChanged(Editable s) {
     }
-
-  }
-
-  private void createUser() {
-
   }
 }

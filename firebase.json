@@ -1,12 +1,15 @@
 {
   "emulators": {
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    },
     "database": {
       "port": 9000,
       "host": "127.0.0.1"
     },
     "ui": {
       "enabled": true
-    },
-    "singleProjectMode": true
+    }
   }
 }

@@ -2,14 +2,10 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.hamcrest.core.AllOf.allOf;
 
 import android.content.Context;
@@ -18,7 +14,6 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.IntDef;
 import androidx.fragment.app.FragmentManager;
@@ -60,7 +55,7 @@ public class CreateProfileFragmentTest {
         // Set up the TestingActivity to display the HomeFragment
         scenario.onActivity(activity -> {
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, new CreateProfileFragment())
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, new CreateProfileFragment("0000", "fake@gmail.com"))
                     .commitAllowingStateLoss();
         });
     }
@@ -184,8 +179,7 @@ public class CreateProfileFragmentTest {
         };
     }
 
-    public static class ClickDrawableAction implements ViewAction
-    {
+    public static class ClickDrawableAction implements ViewAction {
         public static final int Left = 0;
         public static final int Top = 1;
         public static final int Right = 2;
@@ -194,62 +188,56 @@ public class CreateProfileFragmentTest {
         @Location
         private final int drawableLocation;
 
-        public ClickDrawableAction(@Location int drawableLocation)
-        {
+        public ClickDrawableAction(@Location int drawableLocation) {
             this.drawableLocation = drawableLocation;
         }
 
         @Override
-        public Matcher<View> getConstraints()
-        {
-            return allOf(isAssignableFrom(TextView.class), new BoundedMatcher<View, TextView>(TextView.class)
-            {
+        public Matcher<View> getConstraints() {
+            return allOf(isAssignableFrom(TextView.class), new BoundedMatcher<View, TextView>(TextView.class) {
                 @Override
-                protected boolean matchesSafely(final TextView tv)
-                {
+                protected boolean matchesSafely(final TextView tv) {
                     //get focus so drawables are visible and if the textview has a drawable in the position then return a match
                     return tv.requestFocusFromTouch() && tv.getCompoundDrawables()[drawableLocation] != null;
 
                 }
 
                 @Override
-                public void describeTo(Description description)
-                {
+                public void describeTo(Description description) {
                     description.appendText("has drawable");
                 }
             });
         }
 
         @Override
-        public String getDescription()
-        {
+        public String getDescription() {
             return "click drawable ";
         }
 
         @Override
-        public void perform(final UiController uiController, final View view)
-        {
-            TextView tv = (TextView)view;//we matched
-            if(tv != null && tv.requestFocusFromTouch())//get focus so drawables are visible
+        public void perform(final UiController uiController, final View view) {
+            TextView tv = (TextView) view;//we matched
+            if (tv != null && tv.requestFocusFromTouch())//get focus so drawables are visible
             {
                 //get the bounds of the drawable image
                 Rect drawableBounds = tv.getCompoundDrawables()[drawableLocation].getBounds();
 
                 //calculate the drawable click location for left, top, right, bottom
                 final Point[] clickPoint = new Point[4];
-                clickPoint[Left] = new Point(tv.getLeft() + (drawableBounds.width() / 2), (int)(tv.getPivotY() + (drawableBounds.height() / 2)));
-                clickPoint[Top] = new Point((int)(tv.getPivotX() + (drawableBounds.width() / 2)), tv.getTop() + (drawableBounds.height() / 2));
-                clickPoint[Right] = new Point(tv.getRight() + (drawableBounds.width() / 2), (int)(tv.getPivotY() + (drawableBounds.height() / 2)));
-                clickPoint[Bottom] = new Point((int)(tv.getPivotX() + (drawableBounds.width() / 2)), tv.getBottom() + (drawableBounds.height() / 2));
+                clickPoint[Left] = new Point(tv.getLeft() + (drawableBounds.width() / 2), (int) (tv.getPivotY() + (drawableBounds.height() / 2)));
+                clickPoint[Top] = new Point((int) (tv.getPivotX() + (drawableBounds.width() / 2)), tv.getTop() + (drawableBounds.height() / 2));
+                clickPoint[Right] = new Point(tv.getRight() + (drawableBounds.width() / 2), (int) (tv.getPivotY() + (drawableBounds.height() / 2)));
+                clickPoint[Bottom] = new Point((int) (tv.getPivotX() + (drawableBounds.width() / 2)), tv.getBottom() + (drawableBounds.height() / 2));
 
-                if(tv.dispatchTouchEvent(MotionEvent.obtain(android.os.SystemClock.uptimeMillis(), android.os.SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, clickPoint[drawableLocation].x, clickPoint[drawableLocation].y, 0)))
+                if (tv.dispatchTouchEvent(MotionEvent.obtain(android.os.SystemClock.uptimeMillis(), android.os.SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, clickPoint[drawableLocation].x, clickPoint[drawableLocation].y, 0)))
                     tv.dispatchTouchEvent(MotionEvent.obtain(android.os.SystemClock.uptimeMillis(), android.os.SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, clickPoint[drawableLocation].x, clickPoint[drawableLocation].y, 0));
             }
         }
 
-        @IntDef({ Left, Top, Right, Bottom })
+        @IntDef({Left, Top, Right, Bottom})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface Location{}
+        public @interface Location {
+        }
     }
 
 }

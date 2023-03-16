@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,11 @@ public class NewProfileActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_new_profile);
+
+    Intent authIntent = getIntent();
+    String uid = authIntent.getStringExtra("uid");
+    String email = authIntent.getStringExtra("email");
+
     if (savedInstanceState == null) {
       getSupportFragmentManager()
           .beginTransaction()
