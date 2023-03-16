@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Authentication activity for login in via google one tap to firebase
@@ -31,14 +32,19 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         // We assign a callback to Google sign in button
         findViewById(R.id.google_sign_in).setOnClickListener(view -> {
-            // Initialize sign in intent
-            Intent signInIntent = AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(Collections.singletonList(
-                            new AuthUI.IdpConfig.GoogleBuilder().build())) // only available login is Google
-                    .build();
-            // Start the intent
-            signInLauncher.launch(signInIntent);
+            FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (authUser == null) {
+                // Initialize sign in intent
+                Intent signInIntent = AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Collections.singletonList(
+                                new AuthUI.IdpConfig.GoogleBuilder().build())) // only available login is Google
+                        .build();
+                // Start the intent
+                signInLauncher.launch(signInIntent);
+            } else {
+                launchPostActivity(authUser);
+            }
         });
 
     }
@@ -49,18 +55,27 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param result: firebase authentication result
      */
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
 
             // launch greeting activity with user's name
-            Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
-            myIntent.putExtra("mainName", user.getDisplayName());
-            AuthenticationActivity.this.startActivity(myIntent);
-        } else {
-            // Sign in failed
-            System.out.println("Error while signing in: " + result.getIdpResponse().getError().getErrorCode());
+            launchPostActivity(user);
         }
     }
+
+    /**
+     * Launches the next activity with the user signed in (GreetingActivity here)
+     *
+     * @param user: user's name
+     */
+    public void launchPostActivity(FirebaseUser user) {
+        Objects.requireNonNull(user);
+        Intent myIntent = new Intent(AuthenticationActivity.this, GreetingActivity.class);
+        myIntent.putExtra("mainName", "TODO");
+        AuthenticationActivity.this.startActivity(myIntent);
+    }
+
 
 }
