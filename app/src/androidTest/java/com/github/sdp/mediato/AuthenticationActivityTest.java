@@ -135,7 +135,7 @@ public class AuthenticationActivityTest {
         }
 
         Thread.sleep(3000);
-        Intents.intended(hasComponent(GreetingActivity.class.getName()));
+        Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
         logout();
     }
@@ -155,7 +155,7 @@ public class AuthenticationActivityTest {
     public void testLaunchingPostActivitySucceedsWithUser() {
         login();
         activity.launchPostActivity(user);
-        intended(hasComponent(GreetingActivity.class.getName()));
+        intended(hasComponent(NewProfileActivity.class.getName()));
     }
 
     /**
