@@ -6,6 +6,7 @@ import java.util.List;
  * Class used by the retrofit library to store the movies returned by TheMovieDB api.
  */
 public final class TMDBMovie {
+    private static final String BASE_URL = "https://image.tmdb.org/t/p/original";
     private String poster_path;
     private boolean adult;
     private String overview;
@@ -34,6 +35,6 @@ public final class TMDBMovie {
     }
 
     public String getPoster_path() {
-        return "https://image.tmdb.org/t/p/original" + poster_path;
+        return BASE_URL + poster_path;
     }
 }
