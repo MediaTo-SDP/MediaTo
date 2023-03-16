@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.github.javafaker.Faker;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.formats.Dates;
@@ -123,66 +125,66 @@ public class CreateProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
-      }
-    };
-  }
-
-  private enum UsernameError {
-    NULL,
-    TOO_SHORT,
-    ALREADY_TAKEN,
-    GOOD
-  }
-
-  private String getUsernameErrorMsg(@Nullable Editable text) {
-    switch (isUsernameValid(text)) {
-      case NULL:
-        return getString(R.string.mt_username_error_null);
-      case TOO_SHORT:
-        return getString(R.string.mt_username_error_too_short);
-      case ALREADY_TAKEN:
-        return getString(R.string.mt_username_error_already_taken);
-      default:
-        return null;
-    }
-  }
-
-  private UsernameError isUsernameValid(@Nullable Editable text) {
-    if (text == null) {
-      return UsernameError.NULL;
-    } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
-      return UsernameError.TOO_SHORT;
-    } else {
-      return UsernameError.GOOD;
-    }
-  }
-
-  private class UsernameWatcher implements TextWatcher {
-
-    private TextInputLayout usernameTextInput;
-    private TextInputEditText usernameEditText;
-
-    UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
-
-      this.usernameTextInput = usernameTextInput;
-      this.usernameEditText = usernameEditText;
+            }
+        };
     }
 
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-      if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(
-          usernameEditText.getText())) {
-        usernameTextInput.setError(null);
-      }
+    private enum UsernameError {
+        NULL,
+        TOO_SHORT,
+        ALREADY_TAKEN,
+        GOOD
     }
 
-    // Useless functions
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private String getUsernameErrorMsg(@Nullable Editable text) {
+        switch (isUsernameValid(text)) {
+            case NULL:
+                return getString(R.string.mt_username_error_null);
+            case TOO_SHORT:
+                return getString(R.string.mt_username_error_too_short);
+            case ALREADY_TAKEN:
+                return getString(R.string.mt_username_error_already_taken);
+            default:
+                return null;
+        }
     }
 
-    @Override
-    public void afterTextChanged(Editable s) {
+    private UsernameError isUsernameValid(@Nullable Editable text) {
+        if (text == null) {
+            return UsernameError.NULL;
+        } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
+            return UsernameError.TOO_SHORT;
+        } else {
+            return UsernameError.GOOD;
+        }
     }
-  }
+
+    private class UsernameWatcher implements TextWatcher {
+
+        private final TextInputLayout usernameTextInput;
+        private final TextInputEditText usernameEditText;
+
+        UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+
+            this.usernameTextInput = usernameTextInput;
+            this.usernameEditText = usernameEditText;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(
+                    usernameEditText.getText())) {
+                usernameTextInput.setError(null);
+            }
+        }
+
+        // Useless functions
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    }
 }
