@@ -125,7 +125,7 @@ public class AuthenticationActivityTest {
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
 
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         // select the account if google account selector pops up
         try {
@@ -134,7 +134,7 @@ public class AuthenticationActivityTest {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         Intents.intended(hasComponent(GreetingActivity.class.getName()));
 
         logout();
