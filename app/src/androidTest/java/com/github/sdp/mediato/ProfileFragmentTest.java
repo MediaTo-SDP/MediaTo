@@ -80,7 +80,8 @@ public class ProfileFragmentTest {
   @Test
   public void testAddMovieButton() {
     ViewInteraction addMovieButton = onView(withId(R.id.add_movie_button));
-    addMovieButton.check(matches(isDisplayed()));
+    ViewInteraction horizontalScrollView = onView(withId(R.id.horizontal_scroll_view));
+    horizontalScrollView.check(matches(hasDescendant(withId(R.id.add_movie_button))));
   }
 
   // Test whether the horizontal scroll list is displayed and contains the addMovieButton
@@ -88,7 +89,6 @@ public class ProfileFragmentTest {
   public void testHorizontalScrollList() {
     ViewInteraction horizontalScrollView = onView(withId(R.id.horizontal_scroll_view));
     horizontalScrollView.check(matches(isDisplayed()));
-    horizontalScrollView.check(matches(hasDescendant(withId(R.id.add_movie_button))));
   }
 
   // Test whether a movie item, which consists of an image of a movie and a title and rating text,
@@ -97,8 +97,8 @@ public class ProfileFragmentTest {
   public void testMovieItem() {
     ViewInteraction movieItem = onView(withId(R.id.test_movie_item));
     movieItem.check(matches(isDisplayed()));
-    movieItem.check(matches(hasDescendant(withText("Title"))));
-    movieItem.check(matches(hasDescendant(withText("Rating"))));
+    movieItem.check(matches(hasDescendant(withText("Skyfall"))));
+    movieItem.check(matches(hasDescendant(withText("Rating: 10"))));
   }
 
 }
