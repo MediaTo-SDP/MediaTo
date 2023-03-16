@@ -22,6 +22,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask.TaskSnapshot;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -30,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class CreateProfileFragment extends Fragment {
 
+  private StorageTask<TaskSnapshot> uploadProfilePicTask;
   private ImageView profileImage;
   private PhotoPicker photoPicker;
 
@@ -107,7 +110,13 @@ public class CreateProfileFragment extends Fragment {
           userAddition.complete("User added");
         } else {
           System.out.println("valid uri");
-          Database.addUser(user, profilePicUri);
+          Database.addUser(user);
+          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
         }
 
         // Switch to the main activity

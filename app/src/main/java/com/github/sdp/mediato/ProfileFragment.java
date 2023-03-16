@@ -28,7 +28,6 @@ public class ProfileFragment extends Fragment {
   private PhotoPicker photoPicker;
 
   // this string is used to access the user's data in the database
-  private String username = "Username";
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,9 +40,9 @@ public class ProfileFragment extends Fragment {
     TextView username_view = view.findViewById(R.id.username_text);
     ImageView profileImage = view.findViewById(R.id.profile_image);
 
-    setUsername(username_view);
-    // This does not work yet
-    //setProfileImage(profileImage);
+    String username = getArguments().getString("username");
+    setUsername(username_view, username);
+    setProfileImage(profileImage, username);
 
     // On click on the edit button, open a photo picker to choose the profile image
     photoPicker = new PhotoPicker(this, profileImage);
@@ -69,7 +68,8 @@ public class ProfileFragment extends Fragment {
     fragmentTransaction.commit();
   }
 
-  private void setProfileImage(ImageView profileImage) {
+  private void setProfileImage(ImageView profileImage, String username) {
+    System.out.println("Username: " + username);
     CompletableFuture<byte[]> imageFuture = Database.getProfilePic(username);
 
     imageFuture.thenAccept(imageBytes -> {
@@ -86,8 +86,7 @@ public class ProfileFragment extends Fragment {
    * For now this gets the username set by the profile creation page and forwarded by the
    * MainActivity, but this might be changed in the future when the user is already logged in.
    */
-  private void setUsername(TextView username) {
-    String arg = getArguments().getString("username");
-    username.setText(arg);
+  private void setUsername(TextView username_view, String username) {
+    username_view.setText(username);
   }
 }
