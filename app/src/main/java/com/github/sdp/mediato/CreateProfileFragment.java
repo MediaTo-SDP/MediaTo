@@ -35,13 +35,21 @@ public class CreateProfileFragment extends Fragment {
   private ImageView profileImage;
   private PhotoPicker photoPicker;
 
+  private String email;
+
   //@TODO add userId when linked with authentication
-  private User.UserBuilder userBuilder = new User.UserBuilder("userGoogleAuthId");
+  private User.UserBuilder userBuilder;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
+
+    Intent profileIntent = getActivity().getIntent();
+
+    email = profileIntent.getStringExtra("email");
+    userBuilder = new User.UserBuilder(
+            profileIntent.getStringExtra("uid"));
 
     final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
     final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
@@ -96,8 +104,7 @@ public class CreateProfileFragment extends Fragment {
         String username = usernameEditText.getText().toString();
         userBuilder.setUsername(username);
         userBuilder.setRegisterDate(Dates.getToday());
-        //@TODO get current user's email when linked with authentication activity
-        userBuilder.setEmail("set email when linked");
+        userBuilder.setEmail(email);
         //@TODO by default the location is not set - to be changed when we implement the GPS feature
         userBuilder.setLocation(new Location());
         User user = userBuilder.build();

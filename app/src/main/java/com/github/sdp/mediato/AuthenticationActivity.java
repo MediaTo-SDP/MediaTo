@@ -66,7 +66,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the next activity with the user signed in (GreetingActivity here)
+     * Launches the next activity with the user signed in (NewProfileActivity here)
      *
      * @param user: user's name
      */
