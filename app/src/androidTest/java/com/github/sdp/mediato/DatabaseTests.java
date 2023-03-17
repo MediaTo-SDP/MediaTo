@@ -30,7 +30,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -72,13 +74,19 @@ public class DatabaseTests {
     //Tests that the user is properly added and retrieved from the database
     public void addsAndGetsUserProperly() throws InterruptedException, ExecutionException, TimeoutException {
         Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        User retrievedUser = Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        assertEquals(retrievedUser.getUsername(), user1.getUsername());
-        assertEquals(retrievedUser.getLocation().getLatitude(), user1.getLocation().getLatitude(), 0);
-        assertEquals(retrievedUser.getLocation().getLongitude(), user1.getLocation().getLongitude(), 0);
-        assertEquals(retrievedUser.getEmail(), user1.getEmail());
-        assertEquals(retrievedUser.getId(), user1.getId());
-        assertEquals(retrievedUser.getRegisterDate(), user1.getRegisterDate());
+
+        User retrievedUserByUsername = Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        User retrievedUserByEmail = Database.getUserByEmail(user1.getEmail()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        List<User> retrievedUsers = List.of(retrievedUserByUsername, retrievedUserByEmail);
+
+        for (User retrievedUser: retrievedUsers) {
+            assertEquals(retrievedUser.getUsername(), user1.getUsername());
+            assertEquals(retrievedUser.getLocation().getLatitude(), user1.getLocation().getLatitude(), 0);
+            assertEquals(retrievedUser.getLocation().getLongitude(), user1.getLocation().getLongitude(), 0);
+            assertEquals(retrievedUser.getEmail(), user1.getEmail());
+            assertEquals(retrievedUser.getId(), user1.getId());
+            assertEquals(retrievedUser.getRegisterDate(), user1.getRegisterDate());
+        }
     }
 
     @Test
@@ -87,6 +95,10 @@ public class DatabaseTests {
         assertThrows(
                 Exception.class, ()-> Database.getUser("imaginary user").get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
         );
+        assertThrows(
+                Exception.class, ()-> Database.getUserByEmail("imaginary email").get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
+        );
+
     }
 
     @Test

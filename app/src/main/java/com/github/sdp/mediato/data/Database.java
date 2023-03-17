@@ -1,14 +1,26 @@
 package com.github.sdp.mediato.data;
 
 import android.net.Uri;
+
+import androidx.annotation.NonNull;
+
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.snapshot.Index;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
+
+import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.HashMap;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
 public class Database implements GenericDatabase {
@@ -122,6 +134,40 @@ public class Database implements GenericDatabase {
 
     return future;
   }
+
+    /**
+     * Retrieve a CompletableFuture containing the user
+     *
+     * @param email of the user to be retrieved
+     * @return CompletableFuture<User> containing the user object
+     */
+    public static CompletableFuture<User> getUserByEmail(String email) {
+        CompletableFuture<User> future = new CompletableFuture<>();
+        database.getReference(USER_PATH)
+                .orderByChild("email")
+                .equalTo(email)
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for(DataSnapshot user : snapshot.getChildren()){
+                        future.complete(user.getValue(User.class));
+                    }
+                    throw new IllegalArgumentException("coucou1");
+                } else {
+                    future.completeExceptionally(new NoSuchFieldException());
+                    throw new IllegalArgumentException("coucou2");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                future.completeExceptionally(new CancellationException());
+            }
+        });
+        return future;
+    }
 
   /**
    * Checks if the username is unique by looking for an already existing user that has it in the

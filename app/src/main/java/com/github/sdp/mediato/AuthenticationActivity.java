@@ -9,11 +9,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Authentication activity for login in via google one tap to firebase
@@ -70,12 +76,35 @@ public class AuthenticationActivity extends AppCompatActivity {
      *
      * @param user: user's name
      */
-    public void launchPostActivity(FirebaseUser user) {
+    public void launchPostActivity(FirebaseUser user){
         Objects.requireNonNull(user);
-        Intent myIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
-        myIntent.putExtra("uid", user.getUid());
-        myIntent.putExtra("email", user.getEmail());
-        AuthenticationActivity.this.startActivity(myIntent);
+        User databaseUser;
+        Intent postIntent;
+
+        Database.database.useEmulator("10.0.2.2", 9000);
+
+        try {
+            Database.addUser(new User.UserBuilder("uniqueId1")
+                    .setUsername("user_test_1")
+                    .setEmail("email_test_1")
+                    .setRegisterDate("09/03/2023")
+                    .setLocation(new Location(3.14, 3.14))
+                    .build()).get(10, TimeUnit.SECONDS);
+            databaseUser = Database.getUser("user_test_1").get(10, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (databaseUser == null) {
+            postIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
+            postIntent.putExtra("uid", user.getUid());
+            postIntent.putExtra("email", user.getEmail());
+        } else {
+            postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
+            postIntent.putExtra("username", databaseUser.getUsername());
+        }
+        AuthenticationActivity.this.startActivity(postIntent);
+
     }
 
 
