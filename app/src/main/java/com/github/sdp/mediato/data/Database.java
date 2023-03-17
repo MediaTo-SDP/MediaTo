@@ -153,11 +153,8 @@ public class Database implements GenericDatabase {
                     for(DataSnapshot user : snapshot.getChildren()){
                         future.complete(user.getValue(User.class));
                     }
-                    throw new IllegalArgumentException("coucou1");
                 } else {
                     future.completeExceptionally(new NoSuchFieldException());
-                    throw new IllegalArgumentException("coucou2");
-
                 }
             }
 

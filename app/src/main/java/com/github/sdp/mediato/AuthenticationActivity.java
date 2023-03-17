@@ -78,31 +78,28 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     public void launchPostActivity(FirebaseUser user){
         Objects.requireNonNull(user);
-        User databaseUser;
+        User databaseUser=null;
         Intent postIntent;
 
         Database.database.useEmulator("10.0.2.2", 9000);
 
-        try {
-            Database.addUser(new User.UserBuilder("uniqueId1")
-                    .setUsername("user_test_1")
-                    .setEmail("email_test_1")
-                    .setRegisterDate("09/03/2023")
-                    .setLocation(new Location(3.14, 3.14))
-                    .build()).get(10, TimeUnit.SECONDS);
-            databaseUser = Database.getUser("user_test_1").get(10, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            throw new RuntimeException(e);
-        }
+        Database.getUserByEmail("ph.levieil123@gmail.com").thenAccept(u -> testmethod1(u)).exceptionally(e -> {
+            testmethod2(user);
+            return null;
+        });
+    }
 
-        if (databaseUser == null) {
-            postIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
-            postIntent.putExtra("uid", user.getUid());
-            postIntent.putExtra("email", user.getEmail());
-        } else {
-            postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
-            postIntent.putExtra("username", databaseUser.getUsername());
-        }
+    private void testmethod1(User databaseUser) {
+        Intent postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
+        postIntent.putExtra("username", databaseUser.getUsername());
+        AuthenticationActivity.this.startActivity(postIntent);
+
+    }
+
+    private void testmethod2(FirebaseUser user) {
+        Intent  postIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
+        postIntent.putExtra("uid", user.getUid());
+        postIntent.putExtra("email", user.getEmail());
         AuthenticationActivity.this.startActivity(postIntent);
 
     }
