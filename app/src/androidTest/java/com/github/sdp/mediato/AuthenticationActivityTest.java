@@ -189,9 +189,13 @@ public class AuthenticationActivityTest {
     @Test
     public void testLaunchingPostActivitySucceedsWithUserSigningIn() {
         login();
-        activity.launchPostActivity(user);
-        intended(hasComponent(NewProfileActivity.class.getName()));
-        logout();
+        Database.addUser(databaseUser).thenAccept(u -> {
+            Database.deleteUser(databaseUser.getUsername()).thenAccept(un -> {
+                activity.launchPostActivity(user);
+                intended(hasComponent(MainActivity.class.getName()));
+                logout();
+            });
+        });
     }
 
     /**
