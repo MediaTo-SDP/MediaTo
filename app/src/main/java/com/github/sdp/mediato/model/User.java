@@ -15,10 +15,15 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private List<User> friends = new ArrayList<>();
+    private List<User> followers = new ArrayList<>();
+    private List<User> following = new ArrayList<>();
+
     private Map<String, Collection> collections = new HashMap<>();
-    private User(){}
-    private User(UserBuilder builder){
+
+    private User() {
+    }
+
+    private User(UserBuilder builder) {
         this.id = builder.id;
         this.username = builder.username;
         this.email = builder.email;
@@ -46,8 +51,12 @@ public class User {
         return location;
     }
 
-    public List<User> getFriends() {
-        return friends;
+    public List<User> getFollowers() {
+        return followers;
+    }
+
+    public List<User> getFollowing() {
+        return following;
     }
 
     public Map<String, Collection> getCollections() {
@@ -61,10 +70,12 @@ public class User {
         private String registerDate = "";
 
         private Location location = new Location();
-        private List<User> friends = new ArrayList<>();
+        private List<User> followers = new ArrayList<>();
+        private List<User> following = new ArrayList<>();
+
         private Map<String, Collection> collections = new HashMap<>();
 
-        public UserBuilder(String id){
+        public UserBuilder(String id) {
             Preconditions.checkUID(id);
             this.id = id;
         }
@@ -86,13 +97,14 @@ public class User {
             this.registerDate = registerDate;
             return this;
         }
+
         public UserBuilder setLocation(Location location) {
             Preconditions.checkLocation(location);
             this.location = location;
             return this;
         }
 
-        public User build(){
+        public User build() {
             User user = new User(this);
             //Check mandatory fields are here
             Preconditions.checkUser(user);
