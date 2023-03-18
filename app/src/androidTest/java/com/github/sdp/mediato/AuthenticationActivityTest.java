@@ -51,12 +51,11 @@ public class AuthenticationActivityTest {
             .setRegisterDate("08/03/2023")
             .setLocation(new Location(3.15, 3.15))
             .build();
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
     @Rule
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
     private AuthenticationActivity activity;
     private FirebaseUser user;
-    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
-
 
     /**
      * Logs in the user in the firebase authentication
@@ -129,17 +128,13 @@ public class AuthenticationActivityTest {
 
     /**
      * Tests the login one tap button using the emulator
-     *
-     * @throws InterruptedException: for thread.sleep
      */
     @Test
-    public void testSignInWorks() throws InterruptedException {
+    public void testSignInWorks() {
 
         login();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-
-        Thread.sleep(3000);
 
         // select the account if google account selector pops up
         try {
@@ -147,8 +142,6 @@ public class AuthenticationActivityTest {
         } catch (NullPointerException e) {
             System.out.println("Object wasn't found");
         }
-
-        Thread.sleep(3000);
 
         Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
@@ -166,18 +159,11 @@ public class AuthenticationActivityTest {
             ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
             loginButton.perform(click());
 
+            // select the account if google account selector pops up
             try {
-                Thread.sleep(3000);
-                // select the account if google account selector pops up
-                try {
-                    device.findObject(By.textContains("@")).click();
-                } catch (NullPointerException e) {
-                    System.out.println("Object wasn't found");
-                }
-
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                device.findObject(By.textContains("@")).click();
+            } catch (NullPointerException e) {
+                System.out.println("Object wasn't found");
             }
 
             Intents.intended(hasComponent(MainActivity.class.getName()));
@@ -199,14 +185,11 @@ public class AuthenticationActivityTest {
 
     /**
      * Test expected behavior of launching the post activity with signing in user
-     *
-     * @throws InterruptedException: for thread.sleep
      */
     @Test
-    public void testLaunchingPostActivitySucceedsWithUserSigningIn() throws InterruptedException {
+    public void testLaunchingPostActivitySucceedsWithUserSigningIn() {
         login();
         activity.launchPostActivity(user);
-        Thread.sleep(2000);
         intended(hasComponent(NewProfileActivity.class.getName()));
         logout();
     }
@@ -219,11 +202,6 @@ public class AuthenticationActivityTest {
         login();
         Database.addUser(databaseUser).thenAccept(u -> {
             activity.launchPostActivity(user);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             intended(hasComponent(MainActivity.class.getName()));
             Database.deleteUser(databaseUser.getUsername());
             logout();
