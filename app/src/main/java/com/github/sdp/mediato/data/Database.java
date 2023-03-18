@@ -13,7 +13,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
 
 import java.util.concurrent.CancellationException;
@@ -22,6 +21,8 @@ import java.util.concurrent.CompletableFuture;
 public class Database implements GenericDatabase {
 
     public static final String USER_PATH = "Users/";
+    public static final String FOLLOWING_PATH = "/following/";
+    public static final String FOLLOWERS_PATH = "/followers/";
 
     public static final String USER_COLLECTIONS_PATH = "/collections/";
     public static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
@@ -35,7 +36,7 @@ public class Database implements GenericDatabase {
     /**
      * Adds a new user to the database with the profile pic
      *
-     * @param user to be added
+     * @param user          to be added
      * @param profilePicUri the uri to the profile pic
      * @return a CompletableFuture containing the username of the user that has been added
      */
@@ -196,7 +197,13 @@ public class Database implements GenericDatabase {
         return future;
     }
 
-
+    /**
+     * Adds a collection to the user
+     *
+     * @param username   the concerned user
+     * @param collection the collection to be added
+     * @return a CompletableFuture with the name of the added collection
+     */
     public static CompletableFuture<String> addCollection(String username, Collection collection) {
         CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference()
@@ -214,4 +221,45 @@ public class Database implements GenericDatabase {
         return future;
     }
 
+    /**
+     * Method to follow a user
+     *
+     * @param myUsername       the current user's username
+     * @param usernameToFollow the username of the user to follow
+     */
+    public static void followUser(String myUsername, String usernameToFollow) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference()
+                .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(true)
+                .addOnCompleteListener(task -> {
+                    System.out.println(myUsername + " is now following " + usernameToFollow);
+                });
+        database.getReference()
+                .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(true)
+                .addOnCompleteListener(
+                        task -> {
+                            System.out.println(usernameToFollow + " is now followed by " + myUsername);
+                        });
+    }
+
+    /**
+     * Method to unfollow a user
+     *
+     * @param myUsername       the current user's username
+     * @param usernameToFollow the username of the user to unfollow
+     */
+    public static void unfollowUser(String myUsername, String usernameToFollow) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        database.getReference()
+                .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(false)
+                .addOnCompleteListener(task -> {
+                    System.out.println(myUsername + " unfollowed " + usernameToFollow);
+                });
+        database.getReference()
+                .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(false)
+                .addOnCompleteListener(
+                        task -> {
+                            System.out.println(usernameToFollow + " was unfollowed by " + myUsername);
+                        });
+    }
 }
