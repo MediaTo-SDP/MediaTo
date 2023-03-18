@@ -7,12 +7,15 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
 
 import com.firebase.ui.auth.AuthUI;
 import com.github.sdp.mediato.data.Database;
@@ -52,6 +55,8 @@ public class AuthenticationActivityTest {
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
     private AuthenticationActivity activity;
     private FirebaseUser user;
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
+
 
     /**
      * Logs in the user in the firebase authentication
@@ -136,6 +141,15 @@ public class AuthenticationActivityTest {
 
         Thread.sleep(3000);
 
+        // select the account if google account selector pops up
+        try {
+            device.findObject(By.textContains("@")).click();
+        } catch (NullPointerException e) {
+            System.out.println("Object wasn't found");
+        }
+
+        Thread.sleep(3000);
+
         Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
         logout();
@@ -153,6 +167,14 @@ public class AuthenticationActivityTest {
             loginButton.perform(click());
 
             try {
+                Thread.sleep(3000);
+                // select the account if google account selector pops up
+                try {
+                    device.findObject(By.textContains("@")).click();
+                } catch (NullPointerException e) {
+                    System.out.println("Object wasn't found");
+                }
+
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
