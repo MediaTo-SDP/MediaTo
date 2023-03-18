@@ -3,9 +3,7 @@ package com.github.sdp.mediato.model;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Collection;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -15,8 +13,8 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private List<User> followers = new ArrayList<>();
-    private List<User> following = new ArrayList<>();
+    private Map<String, Boolean> followers = new HashMap<>();
+    private Map<String, Boolean> following = new HashMap<>();
 
     private Map<String, Collection> collections = new HashMap<>();
 
@@ -51,11 +49,11 @@ public class User {
         return location;
     }
 
-    public List<User> getFollowers() {
+    public Map<String, Boolean> getFollowers() {
         return followers;
     }
 
-    public List<User> getFollowing() {
+    public Map<String, Boolean> getFollowing() {
         return following;
     }
 
@@ -70,8 +68,8 @@ public class User {
         private String registerDate = "";
 
         private Location location = new Location();
-        private List<User> followers = new ArrayList<>();
-        private List<User> following = new ArrayList<>();
+        private Map<String, Boolean> followers = new HashMap<>();
+        private Map<String, Boolean> following = new HashMap<>();
 
         private Map<String, Collection> collections = new HashMap<>();
 
