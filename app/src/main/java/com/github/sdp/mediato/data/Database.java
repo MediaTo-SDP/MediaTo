@@ -10,16 +10,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.snapshot.Index;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import java.util.HashMap;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
@@ -106,7 +102,7 @@ public class Database implements GenericDatabase {
     database.getReference().child(USER_PATH + username).setValue(null,
         (error, ref) -> {
           if (error == null) {
-            future.complete(username);
+              future.complete(username);
           } else {
             future.completeExceptionally(error.toException());
           }
