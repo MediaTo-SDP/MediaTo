@@ -18,6 +18,9 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 
 import com.firebase.ui.auth.AuthUI;
+import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
@@ -41,11 +44,17 @@ import java.util.concurrent.ExecutionException;
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationActivityTest {
 
+    private final String email = "ph@mediato.ch";
+    private final User databaseUser = new User.UserBuilder("authUniqueId1")
+            .setUsername("auth_user_test_1")
+            .setEmail(email)
+            .setRegisterDate("08/03/2023")
+            .setLocation(new Location(3.15, 3.15))
+            .build();
+    private final UiDevice device = UiDevice.getInstance(getInstrumentation());
     @Rule
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
-    private UiDevice device;
     private AuthenticationActivity activity;
-
     private FirebaseUser user;
 
     /**
@@ -55,7 +64,6 @@ public class AuthenticationActivityTest {
 
         // create user json
         String userJson;
-        String email = "ph@mediato.ch";
         try {
             userJson = new JSONObject()
                     .put("sub", email)
@@ -101,31 +109,32 @@ public class AuthenticationActivityTest {
     @Before
     public void startTests() {
         init();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        auth.useEmulator("10.0.2.2", 9099);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        try {
+            auth.useEmulator("10.0.2.2", 9099);
+            Database.database.useEmulator("10.0.2.2", 9000);
+        } catch (IllegalStateException ignored) {
+        }
+
         if (auth.getCurrentUser() != null) {
             auth.signOut();
         }
 
-        device = UiDevice.getInstance(getInstrumentation());
+        Database.database.getReference().setValue(null);
 
         testRule.getScenario().onActivity(activity1 -> activity = activity1);
     }
 
     /**
      * Tests the login one tap button using the emulator
-     *
-     * @throws InterruptedException: for thread.sleep
      */
     @Test
-    public void testLogInButtonWorks() throws InterruptedException {
+    public void testSignInWorks() {
 
         login();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
         loginButton.perform(click());
-
-        Thread.sleep(3000);
 
         // select the account if google account selector pops up
         try {
@@ -134,10 +143,36 @@ public class AuthenticationActivityTest {
             System.out.println("Object wasn't found");
         }
 
-        Thread.sleep(3000);
         Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
         logout();
+    }
+
+    /**
+     * Tests the login one tap button using the emulator
+     */
+    @Test
+    public void testLogInWorks() {
+
+        login();
+        Database.addUser(databaseUser).thenAccept(u -> {
+            ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
+            loginButton.perform(click());
+
+            // select the account if google account selector pops up
+            try {
+                device.findObject(By.textContains("@")).click();
+            } catch (NullPointerException e) {
+                System.out.println("Object wasn't found");
+            }
+
+            Intents.intended(hasComponent(MainActivity.class.getName()));
+
+            Database.deleteUser(databaseUser.getUsername());
+            logout();
+        });
+
+
     }
 
     /**
@@ -149,13 +184,33 @@ public class AuthenticationActivityTest {
     }
 
     /**
-     * Test expected behavior of launching the post activity with logged in user
+     * Test expected behavior of launching the post activity with signing in user
      */
     @Test
-    public void testLaunchingPostActivitySucceedsWithUser() {
+    public void testLaunchingPostActivitySucceedsWithUserSigningIn() {
         login();
-        activity.launchPostActivity(user);
-        intended(hasComponent(NewProfileActivity.class.getName()));
+        Database.addUser(databaseUser).thenAccept(u -> {
+            Database.deleteUser(databaseUser.getUsername()).thenAccept(un -> {
+                activity.launchPostActivity(user);
+                intended(hasComponent(MainActivity.class.getName()));
+                logout();
+            });
+        });
+    }
+
+    /**
+     * Test expected behavior of launching the post activity with logging in user
+     */
+    @Test
+    public void testLaunchingPostActivitySucceedsWithUserLoggingIn() {
+        login();
+        Database.addUser(databaseUser).thenAccept(u -> {
+            activity.launchPostActivity(user);
+            intended(hasComponent(MainActivity.class.getName()));
+            Database.deleteUser(databaseUser.getUsername());
+            logout();
+        });
+
     }
 
     /**

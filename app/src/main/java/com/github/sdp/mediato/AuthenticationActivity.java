@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -58,24 +60,49 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
-            FirebaseUser user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
-
             // launch greeting activity with user's name
-            launchPostActivity(user);
+            launchPostActivity(
+                    Objects.requireNonNull(
+                            FirebaseAuth.getInstance().getCurrentUser()));
         }
     }
 
     /**
-     * Launches the next activity with the user signed in (GreetingActivity here)
+     * Launches the next activity with the user signed in, either the main if user exists in database,
+     * or the profile creation one otherwise
      *
      * @param user: user's name
      */
     public void launchPostActivity(FirebaseUser user) {
         Objects.requireNonNull(user);
-        Intent myIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
-        myIntent.putExtra("uid", user.getUid());
-        myIntent.putExtra("email", user.getEmail());
-        AuthenticationActivity.this.startActivity(myIntent);
+
+        Database.getUserByEmail(user.getEmail()).thenAccept(this::launchMainActivity).exceptionally(e -> {
+            launchProfileCreationActivity(user);
+            return null;
+        });
+    }
+
+    /**
+     * Launches the main activity when the user already has a profile
+     * @param databaseUser: the user's profile from the database
+     */
+    private void launchMainActivity(User databaseUser) {
+        Intent postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
+        postIntent.putExtra("username", databaseUser.getUsername());
+        AuthenticationActivity.this.startActivity(postIntent);
+
+    }
+
+    /**
+     * Launches the profile creation activity when the user doesn't have one
+     * @param user: the authenticated user
+     */
+    private void launchProfileCreationActivity(FirebaseUser user) {
+        Intent postIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
+        postIntent.putExtra("uid", user.getUid());
+        postIntent.putExtra("email", user.getEmail());
+        AuthenticationActivity.this.startActivity(postIntent);
+
     }
 
 

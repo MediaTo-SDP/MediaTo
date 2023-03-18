@@ -40,30 +40,30 @@ public class CreateProfileFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
 
     final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
     final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
     final MaterialButton createProfileButton = view.findViewById(R.id.create_profile_button);
     final FloatingActionButton profileImageButton = view.findViewById(
-        R.id.profile_image_add_button);
+            R.id.profile_image_add_button);
 
     profileImage = view.findViewById(R.id.profile_image);
     photoPicker = new PhotoPicker(this, profileImage);
 
     // Open a photo picker to choose the profile image
     profileImageButton.setOnClickListener(v ->
-        photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
+            photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
     );
 
     // Generate a username
     usernameTextInput.setEndIconOnClickListener(
-        generateUsername(usernameTextInput, usernameEditText));
+            generateUsername(usernameTextInput, usernameEditText));
 
     // Remove the error if the user fix its username
     usernameEditText.addTextChangedListener(
-        new UsernameWatcher(usernameTextInput, usernameEditText));
+            new UsernameWatcher(usernameTextInput, usernameEditText));
 
     // Create the profile if valid otherwise error
     createProfileButton.setOnClickListener(tryCreateProfile(usernameTextInput, usernameEditText));
@@ -74,7 +74,7 @@ public class CreateProfileFragment extends Fragment {
 
   @NonNull
   private View.OnClickListener generateUsername(TextInputLayout usernameTextInput,
-      TextInputEditText usernameEditText) {
+                                                TextInputEditText usernameEditText) {
     return v -> {
       usernameTextInput.setError(null);
       Faker faker = new Faker();
@@ -86,7 +86,7 @@ public class CreateProfileFragment extends Fragment {
 
   @NonNull
   private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput,
-      TextInputEditText usernameEditText) {
+                                                TextInputEditText usernameEditText) {
     return view -> {
       String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
       usernameTextInput.setError(errorMsg);
@@ -166,7 +166,7 @@ public class CreateProfileFragment extends Fragment {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
       if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(
-          usernameEditText.getText())) {
+              usernameEditText.getText())) {
         usernameTextInput.setError(null);
       }
     }
