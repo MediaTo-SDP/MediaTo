@@ -3,7 +3,9 @@ package com.github.sdp.mediato.model;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Collection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -49,12 +51,26 @@ public class User {
         return location;
     }
 
-    public Map<String, Boolean> getFollowers() {
-        return followers;
+    /**
+     * Returns a list of the user's followers' usernames by adapting the map attribute
+     */
+    public List<String> getFollowers() {
+        List<String> followersList = new ArrayList<>();
+        for (String follower : followers.keySet()) {
+            if (followers.get(follower)) followersList.add(follower);
+        }
+        return followersList;
     }
 
-    public Map<String, Boolean> getFollowing() {
-        return following;
+    /**
+     * Returns a list of the usernames of the users the user is following by adapting the map attribute
+     */
+    public List<String> getFollowing() {
+        List<String> followingList = new ArrayList<>();
+        for (String userFollowing : following.keySet()) {
+            if (following.get(userFollowing)) followingList.add(userFollowing);
+        }
+        return followingList;
     }
 
     public Map<String, Collection> getCollections() {
