@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,6 +68,11 @@ public class DatabaseTests {
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
+    }
+
+    @AfterClass
+    public static void cleanDatabase() {
+        Database.database.getReference().setValue(null);
     }
 
     @Test
