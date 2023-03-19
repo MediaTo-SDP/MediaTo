@@ -228,28 +228,45 @@ public class Database implements GenericDatabase {
      * @param usernameToFollow the username of the user to follow
      */
     public static void followUser(String myUsername, String usernameToFollow) {
-        database.getReference()
-                .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(true)
-                .addOnCompleteListener(task -> System.out.println(myUsername + " is now following " + usernameToFollow));
-        database.getReference()
-                .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(true)
-                .addOnCompleteListener(
-                        task -> System.out.println(usernameToFollow + " is now followed by " + myUsername));
+        setValueInFollowing(myUsername, usernameToFollow, true);
+        setValueInFollowers(myUsername, usernameToFollow, true);
     }
 
     /**
      * Method to unfollow a user
      *
-     * @param myUsername       the current user's username
-     * @param usernameToFollow the username of the user to unfollow
+     * @param myUsername         the current user's username
+     * @param usernameToUnfollow the username of the user to unfollow
      */
-    public static void unfollowUser(String myUsername, String usernameToFollow) {
-        database.getReference()
-                .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(false)
-                .addOnCompleteListener(task -> System.out.println(myUsername + " unfollowed " + usernameToFollow));
-        database.getReference()
-                .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(false)
-                .addOnCompleteListener(
-                        task -> System.out.println(usernameToFollow + " was unfollowed by " + myUsername));
+    public static void unfollowUser(String myUsername, String usernameToUnfollow) {
+        setValueInFollowing(myUsername, usernameToUnfollow, false);
+        setValueInFollowers(myUsername, usernameToUnfollow, false);
     }
+
+    /**
+     * Helper method for follow and unfollow user that sets the value of a username in the followers list
+     *
+     * @param myUsername         the current user's username
+     * @param targetUserUsername the username to follow or unfollow
+     * @param value              true if following, false if unfollowing
+     */
+    public static void setValueInFollowers(String myUsername, String targetUserUsername, boolean value) {
+        database.getReference()
+                .child(USER_PATH + myUsername + FOLLOWING_PATH + targetUserUsername).setValue(value)
+                .addOnCompleteListener(task -> System.out.println(targetUserUsername + " is now set to " + value + " in " + myUsername + " following list."));
+    }
+
+    /**
+     * Helper method for follow and unfollow user that sets the value of a username in the following list
+     *
+     * @param myUsername         the current user's username
+     * @param targetUserUsername the username to follow or unfollow
+     * @param value              true if following, false if unfollowing
+     */
+    public static void setValueInFollowing(String myUsername, String targetUserUsername, boolean value) {
+        database.getReference()
+                .child(USER_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
+                .addOnCompleteListener(task -> System.out.println(myUsername + " is now set to " + value + " in " + targetUserUsername + " followers list."));
+    }
+
 }
