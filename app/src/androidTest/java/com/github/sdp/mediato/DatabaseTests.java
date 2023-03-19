@@ -81,7 +81,7 @@ public class DatabaseTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(following.containsKey(user3.getUsername()));
+                assertTrue(following.get(user3.getUsername()));
             }
 
             @Override
@@ -96,7 +96,45 @@ public class DatabaseTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(followers.containsKey(user2.getUsername()));
+                assertTrue(followers.get(user2.getUsername()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                throw error.toException();
+            }
+        });
+    }
+
+    @Test
+    //Tests that unfollowing a user removes the right username from the following list and the followers list
+    public void unfollowUserRemovesUsernameFromFollowingAndFollowers() throws ExecutionException, InterruptedException, TimeoutException {
+        Database.addUser(user2).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user3).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.followUser(user2.getUsername(), user3.getUsername());
+        Database.unfollowUser(user2.getUsername(), user3.getUsername());
+        DatabaseReference user1FollowingRef = Database.database.getReference().child(Database.USER_PATH + user2.getUsername() + Database.FOLLOWING_PATH);
+        user1FollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
+                assertFalse(following.get(user3.getUsername()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                throw error.toException();
+            }
+        });
+
+        DatabaseReference user2FollowersRef = Database.database.getReference().child(Database.USER_PATH + user3.getUsername() + Database.FOLLOWERS_PATH);
+        user2FollowersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
+                assertFalse(followers.get(user2.getUsername()));
             }
 
             @Override
