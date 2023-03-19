@@ -15,8 +15,8 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private List<User> followers = new ArrayList<>();
-    private List<User> following = new ArrayList<>();
+    private Map<String, Boolean> followers = new HashMap<>();
+    private Map<String, Boolean> following = new HashMap<>();
 
     private Map<String, Collection> collections = new HashMap<>();
 
@@ -51,12 +51,26 @@ public class User {
         return location;
     }
 
-    public List<User> getFollowers() {
-        return followers;
+    /**
+     * Returns a list of the user's followers' usernames by adapting the map attribute
+     */
+    public List<String> getFollowers() {
+        List<String> followersList = new ArrayList<>();
+        for (String follower : followers.keySet()) {
+            if (followers.get(follower)) followersList.add(follower);
+        }
+        return followersList;
     }
 
-    public List<User> getFollowing() {
-        return following;
+    /**
+     * Returns a list of the usernames of the users the user is following by adapting the map attribute
+     */
+    public List<String> getFollowing() {
+        List<String> followingList = new ArrayList<>();
+        for (String userFollowing : following.keySet()) {
+            if (following.get(userFollowing)) followingList.add(userFollowing);
+        }
+        return followingList;
     }
 
     public Map<String, Collection> getCollections() {
@@ -70,8 +84,8 @@ public class User {
         private String registerDate = "";
 
         private Location location = new Location();
-        private List<User> followers = new ArrayList<>();
-        private List<User> following = new ArrayList<>();
+        private Map<String, Boolean> followers = new HashMap<>();
+        private Map<String, Boolean> following = new HashMap<>();
 
         private Map<String, Collection> collections = new HashMap<>();
 
