@@ -15,27 +15,20 @@ public class Media {
     private MediaType mediaType;
     private String title;
     private String summary;
-    private CompletableFuture<Bitmap> image;
+    private String imageUrl;
 
+    private int id;
 
     Media() {
     }
 
-    public Media(MediaType mediaType, String title, String summary, String imageUrl) {
+    public Media(MediaType mediaType, String title, String summary, String imageUrl, int id) {
         Preconditions.checkMedia(mediaType, title, summary, imageUrl);
         this.mediaType = mediaType;
         this.title = title;
         this.summary = summary;
-        this.image = CompletableFuture.supplyAsync(() -> {
-            try {
-                InputStream imageStream = new URL(imageUrl).openStream();
-                return BitmapFactory.decodeStream(imageStream);
-            } catch (Exception e) {
-                Bitmap image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
-                image.eraseColor(Color.GREEN);
-                return image;
-            }
-        });
+        this.imageUrl = imageUrl;
+        this.id = id;
     }
 
     public MediaType getMediaType() {
@@ -50,8 +43,10 @@ public class Media {
         return summary;
     }
 
-    public CompletableFuture<Bitmap> getImage() {
-        return image;
+    public String getImageURL() {
+        return imageUrl;
     }
+
+    public int getId() { return id; }
 
 }

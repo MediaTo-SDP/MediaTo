@@ -37,4 +37,8 @@ public final class TMDBMovie {
     public String getPoster_path() {
         return BASE_URL + poster_path;
     }
+
+    public String getOverview() {
+        return overview;
+    }
 }

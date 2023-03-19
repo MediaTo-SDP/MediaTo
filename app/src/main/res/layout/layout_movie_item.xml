@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="250dp"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+        name="movie"
+        type="com.github.sdp.mediato.model.media.Movie" />
+  </data>
 
-  <ImageView
-    android:id="@+id/img_2"
-    android:layout_width="120dp"
-    android:layout_height="150dp"
-    android:paddingRight="15dp"
-    app:srcCompat="@drawable/movie1" />
-  <TextView
-    android:id="@+id/text_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="158dp"
-    android:text="Skyfall"
-    android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
-    app:layout_constraintStart_toEndOf="@+id/movie_icon"
-    app:layout_constraintTop_toBottomOf="@+id/profile_header" />
 
-  <TextView
-    android:id="@+id/text_rating"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="178dp"
-    android:text="Rating: 10"
-    android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
-    app:layout_constraintStart_toEndOf="@+id/movie_icon"
-    app:layout_constraintTop_toBottomOf="@+id/profile_header" />
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="120dp"
+      android:layout_height="210dp">
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/media_cover"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/movie1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Placeholder"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_cover" />
+
+    <TextView
+        android:id="@+id/text_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="178dp"
+        android:text="Rating: "
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="178dp"
+        android:text="10"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_rating" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

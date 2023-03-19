@@ -32,11 +32,14 @@ public class TheMovieDB implements API<TMDBMovie> {
      * @param apikey the key provided by TheMovieDB to use their API
      */
     public TheMovieDB(String serverUrl, String apikey){
+        Preconditions.checkNullOrEmptyString(serverUrl, "serverUrl");
+        Preconditions.checkNullOrEmptyString(apikey, "apikey");
         this.trendingCache = new ArrayList<>();
         this.trendingPage = 0;
         this.searchCache = new HashMap<>();
         this.searchPage = new HashMap<>();
         this.apikey = apikey;
+        System.out.println("New retrofit API caller to server " + serverUrl + " " + apikey);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .addConverterFactory(GsonConverterFactory.create())
