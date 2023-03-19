@@ -15,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,12 +32,10 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * This class contains all the tests for database interactions
- *
  * @TODO add the Cloud Storage tests for the profile pictures
  */
 public class DatabaseTests {
-    private static int STANDARD_TIMEOUT = 10;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final static int STANDARD_TIMEOUT = 10;
     User user1;
     User user2;
     User user3;
@@ -47,7 +44,7 @@ public class DatabaseTests {
     public void setUp() {
         try {
             Database.database.useEmulator("10.0.2.2", 9000);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //Create new sample users
         user1 = new User.UserBuilder("uniqueId1")

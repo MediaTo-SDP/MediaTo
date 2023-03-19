@@ -228,18 +228,13 @@ public class Database implements GenericDatabase {
      * @param usernameToFollow the username of the user to follow
      */
     public static void followUser(String myUsername, String usernameToFollow) {
-        CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference()
                 .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(true)
-                .addOnCompleteListener(task -> {
-                    System.out.println(myUsername + " is now following " + usernameToFollow);
-                });
+                .addOnCompleteListener(task -> System.out.println(myUsername + " is now following " + usernameToFollow));
         database.getReference()
                 .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(true)
                 .addOnCompleteListener(
-                        task -> {
-                            System.out.println(usernameToFollow + " is now followed by " + myUsername);
-                        });
+                        task -> System.out.println(usernameToFollow + " is now followed by " + myUsername));
     }
 
     /**
@@ -249,17 +244,12 @@ public class Database implements GenericDatabase {
      * @param usernameToFollow the username of the user to unfollow
      */
     public static void unfollowUser(String myUsername, String usernameToFollow) {
-        CompletableFuture<String> future = new CompletableFuture<>();
         database.getReference()
                 .child(USER_PATH + myUsername + FOLLOWING_PATH + usernameToFollow).setValue(false)
-                .addOnCompleteListener(task -> {
-                    System.out.println(myUsername + " unfollowed " + usernameToFollow);
-                });
+                .addOnCompleteListener(task -> System.out.println(myUsername + " unfollowed " + usernameToFollow));
         database.getReference()
                 .child(USER_PATH + usernameToFollow + FOLLOWERS_PATH + myUsername).setValue(false)
                 .addOnCompleteListener(
-                        task -> {
-                            System.out.println(usernameToFollow + " was unfollowed by " + myUsername);
-                        });
+                        task -> System.out.println(usernameToFollow + " was unfollowed by " + myUsername));
     }
 }
