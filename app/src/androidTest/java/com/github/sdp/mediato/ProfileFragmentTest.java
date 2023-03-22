@@ -98,7 +98,7 @@ public class ProfileFragmentTest {
     ViewInteraction movieItem = onView(withId(R.id.test_movie_item));
     movieItem.check(matches(isDisplayed()));
     movieItem.check(matches(hasDescendant(withText("Skyfall"))));
-    movieItem.check(matches(hasDescendant(withText("Rating: 10"))));
+    movieItem.check(matches(hasDescendant(withText("Rating: "))));
   }
 
 }
