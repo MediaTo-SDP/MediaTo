@@ -44,6 +44,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     holder.mediaImage.setImageResource(R.drawable.bg_movie2);
 
     holder.mediaTitle.setText(media.getTitle());
+    try {
+      int grade = review.getGrade();
+      
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     /* holder.mediaRating.setText(review.getGrade());*/
     holder.mediaRating.setText("★");
 

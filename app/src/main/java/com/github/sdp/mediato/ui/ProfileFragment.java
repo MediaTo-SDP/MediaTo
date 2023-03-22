@@ -25,6 +25,7 @@ import com.github.sdp.mediato.model.media.CollectionType;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.utility.PhotoPicker;
+import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,9 @@ public class ProfileFragment extends Fragment {
     setUsername(username_view);
     setProfileImage(profileImage);
 
-    Collection sampleCollection = sampleCollection();
+    SampleReviews s = new SampleReviews();
+
+    Collection sampleCollection = new Collection("Recently watched");
     CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView, sampleCollection);
 
     // On click on the edit button, open a photo picker to choose the profile image
@@ -73,7 +76,7 @@ public class ProfileFragment extends Fragment {
       @Override
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
-        sampleCollection.addReview(newReview());
+        sampleCollection.addReview(s.getMovieReview());
         collectionAdapter.notifyDataSetChanged();
       }
     });
