@@ -20,7 +20,7 @@ import com.github.sdp.mediato.model.media.Media;
 
 
 public class MediaRecyclerViewAdapter extends ListAdapter<Media, MediaRecyclerViewAdapter.MyViewHolder> {
-    private static DiffUtil.ItemCallback<Media> MEDIA_COMPARATOR = new DiffUtil.ItemCallback<Media>() {
+    private static final DiffUtil.ItemCallback<Media> MEDIA_COMPARATOR = new DiffUtil.ItemCallback<>() {
         @Override
         public boolean areItemsTheSame(@NonNull Media oldItem, @NonNull Media newItem) {
             return oldItem.getId() == newItem.getId() && oldItem.getMediaType() == newItem.getMediaType();
@@ -60,8 +60,8 @@ public class MediaRecyclerViewAdapter extends ListAdapter<Media, MediaRecyclerVi
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.media_cover);
-            title = itemView.findViewById(R.id.text_title);
+            image = (ImageView) itemView.findViewById(R.id.media_cover);
+            title = (TextView) itemView.findViewById(R.id.text_title);
         }
     }
 }

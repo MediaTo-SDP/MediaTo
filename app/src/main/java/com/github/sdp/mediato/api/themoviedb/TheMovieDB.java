@@ -1,5 +1,7 @@
 package com.github.sdp.mediato.api.themoviedb;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
@@ -26,6 +28,8 @@ public class TheMovieDB implements API<TMDBMovie> {
     private List<TMDBMovie> trendingCache;
     private int trendingPage;
 
+    private MutableLiveData<TMDBMovie> livedata;
+
     /**
      * Default constructor
      * @param serverUrl domain name of the api (used to inject tests)
@@ -39,7 +43,6 @@ public class TheMovieDB implements API<TMDBMovie> {
         this.searchCache = new HashMap<>();
         this.searchPage = new HashMap<>();
         this.apikey = apikey;
-        System.out.println("New retrofit API caller to server " + serverUrl + " " + apikey);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -89,7 +92,7 @@ public class TheMovieDB implements API<TMDBMovie> {
         int currentPage = searchPage.getOrDefault(s, 0);
         api.searchItem(apikey, s, "en-US", ++currentPage)
                 .enqueue(new AdapterRetrofitCallback<>(future));
-        searchPage.put(s, currentPage);
+
 
         // Updates the cache when the request returns
         return future.thenApply(pagedResult -> {
