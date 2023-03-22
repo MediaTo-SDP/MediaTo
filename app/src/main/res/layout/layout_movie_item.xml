@@ -18,10 +18,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="158dp"
     android:text="@string/title"
-    android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
-    app:layout_constraintStart_toEndOf="@+id/movie_icon"
-    app:layout_constraintTop_toBottomOf="@+id/profile_header" />
+    android:textSize="14dp" />
 
   <TextView
     android:id="@+id/movie_rating"
@@ -30,8 +27,6 @@
     android:layout_marginTop="178dp"
     android:text="@string/rating"
     android:textSize="14dp"
-    app:layout_constraintBottom_toTopOf="@+id/horizontal_scroll_view"
-    app:layout_constraintStart_toEndOf="@+id/movie_icon"
-    app:layout_constraintTop_toBottomOf="@+id/profile_header" />
+    app:layout_constraintTop_toBottomOf="@+id/movie_title" />
 
 </FrameLayout>

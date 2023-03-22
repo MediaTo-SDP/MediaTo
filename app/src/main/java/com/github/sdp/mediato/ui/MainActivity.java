@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.databinding.ActivityMainBinding;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation

@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,8 +38,6 @@ import java.util.concurrent.CompletableFuture;
 public class ProfileFragment extends Fragment {
 
   private PhotoPicker photoPicker;
-  private RecyclerView collectionRecyclerView;
-  private CollectionAdapter collectionAdapter;
 
   // this string is used to access the user's data in the database
   private String username = "Username";
@@ -50,15 +49,16 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     Button edit_button = view.findViewById(R.id.edit_button);
-    AppCompatImageButton add_movie_button = view.findViewById(R.id.add_movie_button);
+    ConstraintLayout collection = view.findViewById(R.id.layout_collection);
     TextView username_view = view.findViewById(R.id.username_text);
     ImageView profileImage = view.findViewById(R.id.profile_image);
+    RecyclerView collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
 
     setUsername(username_view);
-    // This does not work yet
-    //setProfileImage(profileImage);
+    setProfileImage(profileImage);
 
     Collection sampleCollection = sampleCollection();
+    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView, sampleCollection);
 
     // On click on the edit button, open a photo picker to choose the profile image
     photoPicker = new PhotoPicker(this, profileImage);
@@ -66,27 +66,17 @@ public class ProfileFragment extends Fragment {
         photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
     );
 
+    ImageButton add_movie_button = view.findViewById(R.id.add_button);
+
     // On click on the add movie button, open a search window
     add_movie_button.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        replaceFragment(new SearchFragment());
+        /*replaceFragment(new SearchFragment());*/
+        sampleCollection.addReview(newReview());
+        collectionAdapter.notifyDataSetChanged();
       }
     });
-
-    // Set up RecyclerView and CollectionAdapter to display sampleCollection
-    RecyclerView collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
-    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(),
-        sampleCollection.getReviews());
-    collectionRecyclerView.setAdapter(collectionAdapter);
-    collectionRecyclerView.setLayoutManager(
-        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-    /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-        collectionRecyclerView.getContext(),
-        LinearLayoutManager.HORIZONTAL);
-    dividerItemDecoration.setDrawable(
-        ContextCompat.getDrawable(getContext(), R.drawable.recycler_view_divider));
-    collectionRecyclerView.addItemDecoration(dividerItemDecoration);*/
 
     return view;
   }
@@ -119,46 +109,16 @@ public class ProfileFragment extends Fragment {
     String arg = getArguments().getString("username");
     username.setText(arg);
   }
-/*
-  public void addItemToScrollView(String itemText, LinearLayout scrollViewContent) {
-    // Inflate the layout
-    LayoutInflater inflater = LayoutInflater.from(getContext());
-    FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.layout_movie_item,
-        scrollViewContent, false);
 
-    // Set the title
-    TextView titleView = layout.findViewById(R.id.text_title);
-    titleView.setText(itemText);
-
-    // Add the layout to the scroll view
-    scrollViewContent.addView(layout);
+  private CollectionAdapter setupCollection(RecyclerView recyclerView, Collection collection) {
+    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(),
+        collection);
+    recyclerView.setAdapter(collectionAdapter);
+    recyclerView.setLayoutManager(
+        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+    return collectionAdapter;
   }
 
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    // Set the RecyclerView layout manager and adapter
-    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    recyclerView.setAdapter(new CollectionAdapter(getActivity(), getSampleCollections()));
-  }
-
-  // Helper method to create sample collections for testing
-  private List<Collection> getSampleCollections() {
-    List<Collection> collections = new ArrayList<>();
-    collections.add(new Collection("Collection 1", getSampleReviews()));
-    collections.add(new Collection("Collection 2", getSampleReviews()));
-    collections.add(new Collection("Collection 3", getSampleReviews()));
-    return collections;
-  }
-
-  // Helper method to create sample reviews for testing
-  private List<Review> getSampleReviews() {
-    Media movie = new Movie("Movie 1", "Summary 1", "http://example.com/image1.jpg");
-    Review review = new Review("User1", movie, 5);
-    List<Review> reviews = new ArrayList<>();
-    reviews.add(review);
-    return reviews;
-  }*/
 
   public Collection sampleCollection() {
     List<Review> reviews = new ArrayList<>();
@@ -172,36 +132,45 @@ public class ProfileFragment extends Fragment {
     Media movie2 = new Movie("The Shawshank Redemption",
         "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
         "https://example.com/the-shawshank-redemption.jpg");
-    Review review2 = new Review("Bob", movie2, 10, "Simply amazing. The best movie ever made.");
+    Review review2 = new Review("Alice", movie2, 10, "Simply amazing. The best movie ever made.");
     reviews.add(review2);
 
     Media movie3 = new Movie("The Dark Knight",
         "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
         "https://example.com/the-dark-knight.jpg");
-    Review review3 = new Review("Charlie", movie3, 8);
+    Review review3 = new Review("Alice", movie3, 8);
     reviews.add(review3);
 
-    Media movie4 = new Movie("The Dark Knight",
-        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-        "https://example.com/the-dark-knight.jpg");
-    Review review4 = new Review("Charlie", movie4, 8);
+    Media movie4 = new Movie("Inception",
+        "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+        "https://example.com/inception.jpg");
+    Review review4 = new Review("Alice", movie4, 9);
     reviews.add(review4);
 
-    Media movie5 = new Movie("The Dark Knight",
-        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-        "https://example.com/the-dark-knight.jpg");
-    Review review5 = new Review("Charlie", movie5, 8);
+    Media movie5 = new Movie("The Lord of the Rings: The Fellowship of the Ring",
+        "A young hobbit named Frodo Baggins inherits a powerful ring from his uncle and must embark on a perilous journey to destroy it before it falls into the wrong hands.",
+        "https://example.com/fellowship-of-the-ring.jpg");
+    Review review5 = new Review("John", movie5, 10);
     reviews.add(review5);
 
-    Media movie6 = new Movie("The Dark Knight",
-        "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-        "https://example.com/the-dark-knight.jpg");
-    Review review6 = new Review("Charlie", movie6, 8);
+    Media movie6 = new Movie("Pirates of the Caribbean: Dead Man's Chest",
+        "Captain Jack Sparrow races to recover the heart of Davy Jones to avoid enslaving his soul to Jones' service, as other friends and foes seek the heart for their own agenda as well.",
+        "https://example.com/dead-mans-chest.jpg");
+    Review review6 = new Review("Jane", movie6, 8);
     reviews.add(review6);
 
     Collection movieCollection = new Collection(CollectionType.RECENTLY_WATCHED, reviews);
 
     return movieCollection;
   }
+
+
+  private Review newReview() {
+    Media movie6 = new Movie("Pirates of the Caribbean: Dead Man's Chest",
+        "Captain Jack Sparrow races to recover the heart of Davy Jones to avoid enslaving his soul to Jones' service, as other friends and foes seek the heart for their own agenda as well.",
+        "https://example.com/dead-mans-chest.jpg");
+    return new Review("Jane", movie6, 8);
+  }
+
 
 }
