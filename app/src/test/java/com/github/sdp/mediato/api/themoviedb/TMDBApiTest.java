@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import androidx.annotation.NonNull;
 
-import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
 import org.junit.After;
@@ -19,7 +18,6 @@ import mockwebserver3.Dispatcher;
 import mockwebserver3.MockResponse;
 import mockwebserver3.MockWebServer;
 import mockwebserver3.RecordedRequest;
-import themoviedb.APITestStrings;
 
 public class TMDBApiTest {
     private final String APIKEY = "apiKey";
@@ -70,12 +68,6 @@ public class TMDBApiTest {
     }
 
     @Test
-    public void customTest(){
-        TheMovieDB db = new TheMovieDB("https://api.themoviedb.org/3/", "key");
-        var future = db.trending(10);
-        assertThat(future.join().get(0).getId(), is(804150));
-    }
-    @Test
     public void TestSearchingMultipleSingleItems() {
         db.searchItem(SEARCHTERM).join();
         TMDBMovie movie = db.searchItem(SEARCHTERM).join();
@@ -103,8 +95,6 @@ public class TMDBApiTest {
         List<TMDBMovie> movies = db.searchItems(SEARCHTERM, 20).join();
         assertThat(movies.get(0).getId(), is(221166));
         assertThat(movies.get(19).getId(), is(316876));
-
-
     }
 
     @Test

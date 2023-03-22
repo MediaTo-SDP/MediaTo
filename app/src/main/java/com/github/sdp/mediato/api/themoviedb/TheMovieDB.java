@@ -92,7 +92,7 @@ public class TheMovieDB implements API<TMDBMovie> {
         int currentPage = searchPage.getOrDefault(s, 0);
         api.searchItem(apikey, s, "en-US", ++currentPage)
                 .enqueue(new AdapterRetrofitCallback<>(future));
-
+        searchPage.put(s, currentPage);
 
         // Updates the cache when the request returns
         return future.thenApply(pagedResult -> {
