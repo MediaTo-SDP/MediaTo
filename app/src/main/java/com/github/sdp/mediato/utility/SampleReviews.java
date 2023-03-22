@@ -31,10 +31,11 @@ public class SampleReviews {
   Review review4 = new Review("Alice", movie4, 9);
 
 
-  Media movie5 = new Movie("The Lord of the Rings: The Fellowship of the Ring",
-      "A young hobbit named Frodo Baggins inherits a powerful ring from his uncle and must embark on a perilous journey to destroy it before it falls into the wrong hands.",
-      "https://example.com/fellowship-of-the-ring.jpg");
-  Review review5 = new Review("Alice", movie5, 10);
+  Media movie5 = new Movie("One Flew Over the Cuckoo's Nest",
+      "A criminal who feigns insanity is admitted to a mental institution where he rebels against the oppressive nurse and rallies up the scared patients.",
+      "https://example.com/one-flew-over-the-cuckoos-nest.jpg");
+  Review review5 = new Review("Alice", movie5, 10,
+      "A thought-provoking and emotionally powerful movie that explores the human mind and its complexities.");
 
 
   Media movie6 = new Movie("Pirates of the Caribbean: Dead Man's Chest",

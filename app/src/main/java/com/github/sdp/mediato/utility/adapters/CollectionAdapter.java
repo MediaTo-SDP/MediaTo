@@ -81,9 +81,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     StringBuilder sb = new StringBuilder();
     for (int i = 1; i <= 10; i++) {
       if (i <= numDarkStars) {
-        sb.append("★");
+        sb.append("●");
       } else {
-        sb.append("☆");
+        sb.append("○");
       }
     }
     return sb.toString();
