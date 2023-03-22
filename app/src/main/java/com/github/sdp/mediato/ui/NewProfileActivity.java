@@ -1,7 +1,8 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import com.github.sdp.mediato.R;
 
 
 /**

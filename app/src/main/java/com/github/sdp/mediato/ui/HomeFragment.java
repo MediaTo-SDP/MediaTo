@@ -1,10 +1,11 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+import com.github.sdp.mediato.R;
 
 public class HomeFragment extends Fragment {
 

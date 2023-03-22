@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import com.github.sdp.mediato.ui.ProfileFragment;
+import com.github.sdp.mediato.ui.TestingActivity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
