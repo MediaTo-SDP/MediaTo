@@ -3,5 +3,6 @@
   <dimen name="profile_picture_big">156dp</dimen>
   <dimen name="profile_picture_small">100dp</dimen>
 
-  <dimen name="movie_image_width">100dp</dimen>
+  <dimen name="movie_image_width">120dp</dimen>
+  <dimen name="movie_image_hight">180dp</dimen>
 </resources>

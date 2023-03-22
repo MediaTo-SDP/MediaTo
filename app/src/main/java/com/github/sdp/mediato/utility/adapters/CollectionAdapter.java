@@ -46,12 +46,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     holder.mediaTitle.setText(media.getTitle());
     try {
       int grade = review.getGrade();
-      
+      holder.mediaRating.setText(getStarString(grade));
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
     /* holder.mediaRating.setText(review.getGrade());*/
-    holder.mediaRating.setText("★");
 
   }
 
@@ -76,6 +76,19 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
     }
   }
+
+  public static String getStarString(int numDarkStars) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 1; i <= 10; i++) {
+      if (i <= numDarkStars) {
+        sb.append("★");
+      } else {
+        sb.append("☆");
+      }
+    }
+    return sb.toString();
+  }
+
 
 }
 
