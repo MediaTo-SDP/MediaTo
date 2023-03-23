@@ -50,9 +50,9 @@ public class CollectionsTests {
     Collection collection1;
     Collection collection2;
 
-    Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url"));
-    Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url"), 9);
-    Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url"), 2, "meh");
+    Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url", 1));
+    Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url", 2), 9);
+    Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
 
     Map<String, Review> reviews1 = new HashMap<>() {
     };
@@ -94,6 +94,7 @@ public class CollectionsTests {
         assertEquals(collection1.getCollectionType(), retrievedCollection.getCollectionType());
         Review retrievedReview = retrievedCollection.getReviews().get(review1.getMedia().getTitle());
         assertEquals(review1.getMedia().getTitle(), retrievedReview.getMedia().getTitle());
+        assertEquals(review1.getMedia().getId(), retrievedReview.getMedia().getId());
         assertEquals(review1.getUsername(), retrievedReview.getUsername());
         assertEquals(review1.getComment(), retrievedReview.getComment());
         assertEquals(review1.getGrade(), retrievedReview.getGrade());
