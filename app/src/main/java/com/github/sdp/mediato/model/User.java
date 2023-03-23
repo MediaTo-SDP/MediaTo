@@ -15,10 +15,15 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private List<User> friends = new ArrayList<>();
+    private Map<String, Boolean> followers = new HashMap<>();
+    private Map<String, Boolean> following = new HashMap<>();
+
     private Map<String, Collection> collections = new HashMap<>();
-    private User(){}
-    private User(UserBuilder builder){
+
+    private User() {
+    }
+
+    private User(UserBuilder builder) {
         this.id = builder.id;
         this.username = builder.username;
         this.email = builder.email;
@@ -46,8 +51,26 @@ public class User {
         return location;
     }
 
-    public List<User> getFriends() {
-        return friends;
+    /**
+     * Returns a list of the user's followers' usernames by adapting the map attribute
+     */
+    public List<String> getFollowers() {
+        List<String> followersList = new ArrayList<>();
+        for (String follower : followers.keySet()) {
+            if (followers.get(follower)) followersList.add(follower);
+        }
+        return followersList;
+    }
+
+    /**
+     * Returns a list of the usernames of the users the user is following by adapting the map attribute
+     */
+    public List<String> getFollowing() {
+        List<String> followingList = new ArrayList<>();
+        for (String userFollowing : following.keySet()) {
+            if (following.get(userFollowing)) followingList.add(userFollowing);
+        }
+        return followingList;
     }
 
     public Map<String, Collection> getCollections() {
@@ -61,10 +84,12 @@ public class User {
         private String registerDate = "";
 
         private Location location = new Location();
-        private List<User> friends = new ArrayList<>();
+        private Map<String, Boolean> followers = new HashMap<>();
+        private Map<String, Boolean> following = new HashMap<>();
+
         private Map<String, Collection> collections = new HashMap<>();
 
-        public UserBuilder(String id){
+        public UserBuilder(String id) {
             Preconditions.checkUID(id);
             this.id = id;
         }
@@ -86,13 +111,14 @@ public class User {
             this.registerDate = registerDate;
             return this;
         }
+
         public UserBuilder setLocation(Location location) {
             Preconditions.checkLocation(location);
             this.location = location;
             return this;
         }
 
-        public User build(){
+        public User build() {
             User user = new User(this);
             //Check mandatory fields are here
             Preconditions.checkUser(user);

@@ -48,7 +48,11 @@
   <string name="new_item_title">Title</string>
   <string name="new_item_description">Description of the item in a few lines</string>
   <string name="new_item_image_description">Image of the currently rated and reviewed item</string>
-
+  
+  <!--Authentication-->
+  <string name="authentication_page_welcome_title">Welcome to MediaTo</string>
+  <string name="authentication_page_login_text">Please login to continue</string>
+    
   <!--Integers-->
   <integer name="max_rating">10</integer>
 

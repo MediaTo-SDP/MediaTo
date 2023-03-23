@@ -76,6 +76,7 @@ public class ProfileFragment extends Fragment {
     photoPicker = new PhotoPicker(this, profileImage);
     editButton.setOnClickListener(v -> {
           photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
+          //TODO Change the PhotoPicker to return a Bitmap instead
           Drawable drawable = profileImage.getDrawable();
           BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
           Bitmap bitmap = bitmapDrawable.getBitmap();
@@ -85,7 +86,8 @@ public class ProfileFragment extends Fragment {
     );
 
     CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView);
-
+    
+    //TODO connect this to the SearchFragment
     ImageButton add_movie_button = view.findViewById(R.id.add_button);
     SampleReviews s = new SampleReviews();
     add_movie_button.setOnClickListener(new View.OnClickListener() {
@@ -156,8 +158,9 @@ public class ProfileFragment extends Fragment {
   }
 
 
-  // TODO: Should to be improved so it does not need to use the hardcoded retry
+  // TODO: Should be improved so it does not need to use the hardcoded retry
   private void downloadProfilePicWithRetry(String username) {
+
     CompletableFuture<byte[]> imageFuture = Database.getProfilePic(username);
 
     // It would probably be better to do this directly in the database class
@@ -180,6 +183,5 @@ public class ProfileFragment extends Fragment {
       return null;
     });
   }
-
 
 }
