@@ -1,6 +1,10 @@
 package com.github.sdp.mediato.DatabaseTests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,42 +67,51 @@ public class CollectionsTests {
         }
         Database.addUser(user1).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         reviews1.put(review1.getMedia().getTitle(), review1);
-        reviews2.put(review1.getMedia().getTitle(), review1);
         reviews2.put(review2.getMedia().getTitle(), review2);
     }
 
-    //@AfterClass
-    //public static void cleanDatabase() {
-    //  Database.database.getReference().setValue(null);
-    //}
-
-    @Test
-    public void addsCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        Collection collection1 = new Collection("MyHighlights", reviews1);
-        Database.addCollection(user1.getUsername(), collection1);
-        Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection1.getCollectionName())
-                .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
-
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Collection collection = snapshot.getValue(Collection.class);
-                assertEquals(collection.getCollectionName(), collection1.getCollectionName());
-                countDownLatch.countDown();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
-        countDownLatch.await(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+    @AfterClass
+    public static void cleanDatabase() {
+      Database.database.getReference().setValue(null);
     }
 
     @Test
-    public void addsReviewToCollectionProperly() {
+    public void addsRetrievesAndRemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        //Adds the collection
+        Collection collection1 = new Collection("MyHighlights", reviews1);
+        Database.addCollection(user1.getUsername(), collection1);
+        Thread.sleep(1000);
+        //Test retrieving the collection
+        Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection1.getCollectionName())
+                .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+        assertEquals(collection1.getCollectionName(), retrievedCollection.getCollectionName());
+        assertEquals(collection1.getCollectionType(), retrievedCollection.getCollectionType());
+        Review retrievedReview = retrievedCollection.getReviews().get(review1.getMedia().getTitle());
+        assertEquals(review1.getMedia().getTitle(), retrievedReview.getMedia().getTitle());
+        assertEquals(review1.getUsername(), retrievedReview.getUsername());
+        assertEquals(review1.getComment(), retrievedReview.getComment());
+        assertEquals(review1.getGrade(), retrievedReview.getGrade());
+        //Test removing the collection
+        Database.removeCollection(user1.getUsername(), collection1.getCollectionName());
+        Thread.sleep(1000);
+        assertThrows(
+                Exception.class, () -> {
+                    Database.getCollection(user1.getUsername(), collection1.getCollectionName()).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+                });
+    }
 
+    @Test
+    public void addsReviewToCollectionProperly() throws InterruptedException, ExecutionException, TimeoutException {
+        Collection collection2 = new Collection("MyFavs", reviews2);
+        Database.addCollection(user1.getUsername(), collection2);
+        Thread.sleep(1000);
+        Database.addReviewToCollection(user1.getUsername(), collection2.getCollectionName(), review1);
+        Thread.sleep(1000);
+        Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection2.getCollectionName())
+                .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+        System.out.println(retrievedCollection.getReviews());
+        assertTrue(retrievedCollection.getReviews().containsKey(review1.getMedia().getTitle())
+        && retrievedCollection.getReviews().containsKey(review2.getMedia().getTitle()));
     }
 
 }

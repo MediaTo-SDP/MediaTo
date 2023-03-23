@@ -43,22 +43,6 @@ public class Collection {
         this.collectionName = collectionName;
     }
 
-    /**
-     * public List<Review> getReviews() {
-     * List<Review> reviewsList = new ArrayList<>();
-     * for (Review review : reviews.keySet()) {
-     * if (reviews.get(review)) reviewsList.add(review);
-     * }
-     * return reviewsList;
-     * }
-     * <p>
-     * public void setReviews(List<Review> reviews) {
-     * for (Review review : reviews) {
-     * this.reviews.put(review, true);
-     * }
-     * }
-     */
-
     public Map<String, Review> getReviews() {
         return reviews;
     }
