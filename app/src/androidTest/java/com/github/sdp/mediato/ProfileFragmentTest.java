@@ -100,6 +100,7 @@ public class ProfileFragmentTest {
     movieItem.check(matches(hasDescendant(withText("Rating: 10"))));
   }*/
 
+
 }
 
 

@@ -1,5 +1,7 @@
 package com.github.sdp.mediato.api.themoviedb;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
@@ -26,12 +28,16 @@ public class TheMovieDB implements API<TMDBMovie> {
     private List<TMDBMovie> trendingCache;
     private int trendingPage;
 
+    private MutableLiveData<TMDBMovie> livedata;
+
     /**
      * Default constructor
      * @param serverUrl domain name of the api (used to inject tests)
      * @param apikey the key provided by TheMovieDB to use their API
      */
     public TheMovieDB(String serverUrl, String apikey){
+        Preconditions.checkNullOrEmptyString(serverUrl, "serverUrl");
+        Preconditions.checkNullOrEmptyString(apikey, "apikey");
         this.trendingCache = new ArrayList<>();
         this.trendingPage = 0;
         this.searchCache = new HashMap<>();
