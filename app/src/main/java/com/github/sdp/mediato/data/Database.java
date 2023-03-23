@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class Database implements GenericDatabase {
 
-    public static final String USER_PATH = "Users/";
+    public static final String USERS_PATH = "Users/";
 
     public static final String REVIEWS_PATH = "reviews/";
 
@@ -48,7 +48,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<String> addUser(User user, Uri profilePicUri) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -70,7 +70,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<String> addUser(User user) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USER_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -104,7 +104,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<String> deleteUser(String username) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USER_PATH + username).setValue(null,
+        database.getReference().child(USERS_PATH + username).setValue(null,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(username);
@@ -124,7 +124,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<User> getUser(String username) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference().child(USER_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> {
                     if (dataSnapshot.getValue() == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -144,7 +144,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<User> getUserByEmail(String email) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference(USER_PATH)
+        database.getReference(USERS_PATH)
                 .orderByChild("email")
                 .equalTo(email)
                 .addValueEventListener(new ValueEventListener() {
@@ -176,7 +176,7 @@ public class Database implements GenericDatabase {
      */
     public static CompletableFuture<Boolean> isUsernameUnique(String username) {
         CompletableFuture<Boolean> unique = new CompletableFuture<>();
-        database.getReference().child(USER_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> unique.complete(!dataSnapshot.exists())
         ).addOnFailureListener(unique::completeExceptionally);
         return unique;
@@ -273,7 +273,7 @@ public class Database implements GenericDatabase {
      * @return the database reference for the collection
      */
     public static DatabaseReference getCollectionReference(String username, String collectionName) {
-        return database.getReference().child(USER_PATH + username + USER_COLLECTIONS_PATH + collectionName);
+        return database.getReference().child(USERS_PATH + username + USER_COLLECTIONS_PATH + collectionName);
     }
 
     /**
@@ -307,7 +307,7 @@ public class Database implements GenericDatabase {
      */
     public static void setValueInFollowers(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USER_PATH + myUsername + FOLLOWING_PATH + targetUserUsername).setValue(value)
+                .child(USERS_PATH + myUsername + FOLLOWING_PATH + targetUserUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(targetUserUsername + " is now set to " + value + " in " + myUsername + " following list."));
     }
 
@@ -320,7 +320,7 @@ public class Database implements GenericDatabase {
      */
     public static void setValueInFollowing(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USER_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
+                .child(USERS_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(myUsername + " is now set to " + value + " in " + targetUserUsername + " followers list."));
     }
 

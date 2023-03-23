@@ -40,25 +40,25 @@ import java.util.concurrent.TimeoutException;
  */
 public class CollectionsTests {
     private final static int STANDARD_COLLECTION_TIMEOUT = 10;
-    User user1 = new User.UserBuilder("uniqueId1")
+    private User user1 = new User.UserBuilder("uniqueId1")
             .setUsername("user_test_1")
             .setEmail("email_test_1")
             .setRegisterDate("09/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
 
-    Collection collection1;
-    Collection collection2;
+    private Collection collection1;
+    private Collection collection2;
 
-    Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url", 1));
-    Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url", 2), 9);
-    Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
+    private Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url", 1));
+    private Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url", 2), 9);
+    private Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
 
-    Map<String, Review> reviews1 = new HashMap<>() {
+    private Map<String, Review> reviews1 = new HashMap<>() {
     };
-    Map<String, Review> reviews2 = new HashMap<>() {
+    private Map<String, Review> reviews2 = new HashMap<>() {
     };
-    Map<String, Review> reviews3 = new HashMap<>() {
+    private Map<String, Review> reviews3 = new HashMap<>() {
     };
 
 
