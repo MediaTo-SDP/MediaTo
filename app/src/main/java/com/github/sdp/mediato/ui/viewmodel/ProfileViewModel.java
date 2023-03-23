@@ -51,5 +51,9 @@ public class ProfileViewModel extends ViewModel {
     profilePicLiveData.setValue(profilePic);
   }
 
+  public Collection getCollection() {
+    return collectionLiveData.getValue();
+  }
+
 }
 

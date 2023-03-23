@@ -1,7 +1,6 @@
 package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -74,10 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
-
-    // Give the user a feedback that profile creation was successful
-    Toast.makeText(getApplicationContext(), getString(R.string.profile_creation_success),
-        Toast.LENGTH_LONG).show();
+    
     replaceFragment(profileFragment);
   }
 }

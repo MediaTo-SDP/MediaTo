@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -115,6 +116,10 @@ public class CreateProfileFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
+
+        // Give the user a feedback that profile creation was successful
+        Toast.makeText(getContext(), getString(R.string.profile_creation_success),
+            Toast.LENGTH_LONG).show();
       }
     };
   }

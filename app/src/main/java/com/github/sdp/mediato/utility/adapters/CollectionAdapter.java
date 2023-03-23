@@ -77,7 +77,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
   }
 
-  public static String getStarString(int numDarkStars) {
+  private static String getStarString(int numDarkStars) {
     StringBuilder sb = new StringBuilder();
     for (int i = 1; i <= 10; i++) {
       if (i <= numDarkStars) {

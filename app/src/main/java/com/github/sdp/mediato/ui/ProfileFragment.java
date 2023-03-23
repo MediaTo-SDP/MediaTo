@@ -71,57 +71,71 @@ public class ProfileFragment extends Fragment {
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
     collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
-
-    // Observe the view model's live data to update UI components
-    // ->>> add here please the necessary code to make the fragment use the viewmodel to update the username and profilepic.
-    // For example, the usernameView should show the correct username after the creaton, aswell as the profileImage ImageView should show the profile picture and be editable later with the photopicker
-    // Observe the view model's live data to update UI components
-    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
-      @Override
-      public void onChanged(String username) {
-        usernameView.setText(username);
-      }
-    });
-
-    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
-      @Override
-      public void onChanged(Bitmap bitmap) {
-        if (bitmap != null) {
-          profileImage.setImageBitmap(bitmap);
-        }
-      }
-    });
-
+    
     // On click on the edit button, open a photo picker to choose the profile image
     photoPicker = new PhotoPicker(this, profileImage);
     editButton.setOnClickListener(v ->
         photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
     );
 
-    SampleReviews s = new SampleReviews();
     Collection sampleCollection = new Collection("Recently watched");
-    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView, sampleCollection);
+    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView,
+        sampleCollection);
+
     ImageButton add_movie_button = view.findViewById(R.id.add_button);
-    // On click on the add movie button, open a search window
     add_movie_button.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
+        SampleReviews s = new SampleReviews();
         sampleCollection.addReview(s.getMovieReview());
         collectionAdapter.notifyDataSetChanged();
       }
     });
 
+    // Observe the view model's live data to update UI components
+    observeUsername();
+    observeProfilePic();
+    observeCollection(collectionAdapter);
+
     return view;
   }
 
   private CollectionAdapter setupCollection(RecyclerView recyclerView, Collection collection) {
-    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(),
-        collection);
+    viewModel.setCollection(collection);
+    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collection);
     recyclerView.setAdapter(collectionAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     return collectionAdapter;
+  }
+
+  private void observeUsername() {
+    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+      @Override
+      public void onChanged(String username) {
+        usernameView.setText(username);
+      }
+    });
+  }
+
+  private void observeProfilePic() {
+    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+      @Override
+      public void onChanged(Bitmap bitmap) {
+        profileImage.setImageBitmap(bitmap);
+
+      }
+    });
+  }
+
+  private void observeCollection(CollectionAdapter collectionAdapter) {
+    viewModel.getCollectionLiveData().observe(getViewLifecycleOwner(), new Observer<Collection>() {
+      @Override
+      public void onChanged(Collection collection) {
+        collectionAdapter.notifyDataSetChanged();
+      }
+    });
   }
 
 
