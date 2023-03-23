@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.DatabaseTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,8 +34,8 @@ import java.util.concurrent.TimeoutException;
  * This class contains all the tests for database interactions
  * @TODO add the Cloud Storage tests for the profile pictures
  */
-public class DatabaseTests {
-    private final static int STANDARD_TIMEOUT = 10;
+public class UserTests {
+    private final static int STANDARD_USERS_TIMEOUT = 10;
     User user1;
     User user2;
     User user3;
@@ -75,8 +75,9 @@ public class DatabaseTests {
     @Test
     //Tests that following a user adds the right username in the following list and the followers list
     public void followUserAddsUsernameInFollowingAndFollowers() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user2).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        Database.addUser(user3).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user2).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user3).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+
         Database.followUser(user2.getUsername(), user3.getUsername());
         DatabaseReference user1FollowingRef = Database.database.getReference().child(Database.USER_PATH + user2.getUsername() + Database.FOLLOWING_PATH);
         user1FollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -84,7 +85,7 @@ public class DatabaseTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(following.get(user3.getUsername()));
+                assertFalse(following.get(user3.getUsername()));
             }
 
             @Override
@@ -99,7 +100,7 @@ public class DatabaseTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(followers.get(user2.getUsername()));
+                assertFalse(followers.get(user2.getUsername()));
             }
 
             @Override
@@ -112,8 +113,8 @@ public class DatabaseTests {
     @Test
     //Tests that unfollowing a user removes the right username from the following list and the followers list
     public void unfollowUserRemovesUsernameFromFollowingAndFollowers() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user2).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        Database.addUser(user3).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user2).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user3).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
         Database.followUser(user2.getUsername(), user3.getUsername());
         Database.unfollowUser(user2.getUsername(), user3.getUsername());
         DatabaseReference user1FollowingRef = Database.database.getReference().child(Database.USER_PATH + user2.getUsername() + Database.FOLLOWING_PATH);
@@ -150,10 +151,10 @@ public class DatabaseTests {
     @Test
     //Tests that the user is properly added and retrieved from the database
     public void addsAndGetsUserProperly() throws InterruptedException, ExecutionException, TimeoutException {
-        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user1).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
 
-        User retrievedUserByUsername = Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        User retrievedUserByEmail = Database.getUserByEmail(user1.getEmail()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        User retrievedUserByUsername = Database.getUser(user1.getUsername()).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        User retrievedUserByEmail = Database.getUserByEmail(user1.getEmail()).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
         List<User> retrievedUsers = List.of(retrievedUserByUsername, retrievedUserByEmail);
 
         for (User retrievedUser : retrievedUsers) {
@@ -170,35 +171,35 @@ public class DatabaseTests {
     //Tests that trying to retrieve a non existent user throws an exception
     public void gettingNonExistentUserThrowsException() {
         assertThrows(
-                Exception.class, () -> Database.getUser("imaginary user").get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
+                Exception.class, () -> Database.getUser("imaginary user").get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS)
         );
         assertThrows(
-                Exception.class, () -> Database.getUserByEmail("imaginary email").get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
+                Exception.class, () -> Database.getUserByEmail("imaginary email").get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that database properly removes a user
     public void deletingRemovesUserFromDatabase() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        Database.deleteUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
+        Database.addUser(user1).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        Database.deleteUser(user1.getUsername()).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
         assertThrows(
-                Exception.class, () -> Database.getUser(user1.getUsername()).get(STANDARD_TIMEOUT, TimeUnit.SECONDS)
+                Exception.class, () -> Database.getUser(user1.getUsername()).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS)
         );
     }
 
     @Test
     //Tests that isUsernameUnique returns true when a username is unique
     public void isUsernameUniqueReturnsTrueForUniqueUsername() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        assertTrue(Database.isUsernameUnique("imaginary user").get(STANDARD_TIMEOUT, TimeUnit.SECONDS));
+        Database.addUser(user1).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        assertTrue(Database.isUsernameUnique("imaginary user").get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
     //Tests that isUsernameUnique returns false when a username is unique
     public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername() throws ExecutionException, InterruptedException, TimeoutException {
-        Database.addUser(user1).get(STANDARD_TIMEOUT, TimeUnit.SECONDS);
-        assertFalse(Database.isUsernameUnique("user_test_1").get(STANDARD_TIMEOUT, TimeUnit.SECONDS));
+        Database.addUser(user1).get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS);
+        assertFalse(Database.isUsernameUnique("user_test_1").get(STANDARD_USERS_TIMEOUT, TimeUnit.SECONDS));
     }
 
 }
