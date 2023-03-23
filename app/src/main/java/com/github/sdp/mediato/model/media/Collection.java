@@ -12,6 +12,11 @@ public class Collection {
 
     private Collection() {
     }
+    
+    public Collection(String collectionName) {
+      this.collectionType = CollectionType.CUSTOM;
+      this.collectionName = collectionName;
+    }
 
     //Constructor for Custom Collections
     public Collection(String collectionName, Map<String, Review> reviews) {
@@ -34,9 +39,9 @@ public class Collection {
     public CollectionType getCollectionType() {
         return collectionType;
     }
-
+    
     public String getCollectionName() {
-        return collectionName;
+      return collectionName;
     }
 
     public void setCollectionName(String collectionName) {
@@ -54,4 +59,3 @@ public class Collection {
     public void addReview(Review review) {
         this.reviews.put(review.getMedia().getTitle(), review);
     }
-}
