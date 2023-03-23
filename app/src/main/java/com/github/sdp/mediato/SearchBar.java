@@ -1,4 +1,4 @@
-package com.github.sdp.mediato.ui;
+package com.github.sdp.mediato;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.github.sdp.mediato.R;
 
 public class SearchBar extends AppCompatActivity implements View.OnClickListener,
     SearchView.OnQueryTextListener {

@@ -23,8 +23,6 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.github.sdp.mediato.ui.CreateProfileFragment;
-import com.github.sdp.mediato.ui.TestingActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

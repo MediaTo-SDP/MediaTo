@@ -1,4 +1,4 @@
-package com.github.sdp.mediato.ui;
+package com.github.sdp.mediato;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.github.sdp.mediato.R;
 import java.util.Locale;
 
 /**

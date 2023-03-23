@@ -9,7 +9,7 @@ import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.github.sdp.mediato.ui.NewItemActivity.MAX_REVIEW_LENGTH;
+import static com.github.sdp.mediato.NewItemActivity.MAX_REVIEW_LENGTH;
 
 import android.view.View;
 import android.widget.SeekBar;
@@ -19,7 +19,6 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import com.github.sdp.mediato.ui.NewItemActivity;
 import java.util.Locale;
 import org.hamcrest.Matcher;
 import org.junit.After;

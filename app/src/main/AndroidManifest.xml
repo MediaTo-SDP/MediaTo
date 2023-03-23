@@ -13,20 +13,20 @@
     android:windowSoftInputMode="adjustResize"
     tools:targetApi="31">
     <activity
-      android:name=".ui.NewItemActivity"
+      android:name=".NewItemActivity"
       android:exported="false" />
     <activity
-      android:name=".ui.TestingActivity"
+      android:name=".TestingActivity"
       android:exported="false" />
     <activity
-      android:name=".ui.GreetingActivity"
+      android:name=".GreetingActivity"
       android:exported="false" />
     <activity
-      android:name=".ui.MainActivity"
+      android:name=".MainActivity"
       android:exported="false" />
 
     <activity
-      android:name=".ui.NewProfileActivity"
+      android:name=".NewProfileActivity"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

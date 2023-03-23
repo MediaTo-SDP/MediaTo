@@ -1,12 +1,13 @@
-package com.github.sdp.mediato.ui;
+package com.github.sdp.mediato;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,7 +20,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
@@ -39,57 +39,63 @@ public class ProfileFragment extends Fragment {
   private PhotoPicker photoPicker;
   private Button editButton;
   private TextView usernameView;
-
   private ImageView profileImage;
   private RecyclerView collectionRecyclerView;
+
+  // Used as a key to access the database
   private static String USERNAME;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
     // The username must be stored locally because it is used as a key to access the DB
     // For now it is passed as an argument from the profile creation.
     USERNAME = getArguments().getString("username");
-    viewModel.setUsername(USERNAME);
-
-    // This function is a temporary fix. The delay of uploading the profile picture should be
-    // handled before we create the profile fragment (like with a loading screen). Ideally we
-    // could set viewModel.setProfilePic(bitmap) here
-    downloadProfilePicWithRetry();
   }
-
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    viewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
+    viewModel.setUsername(USERNAME);
+
+    // This function is a temporary fix. The delay of uploading the profile picture should be
+    // handled before we create the profile fragment (like with a loading screen). Ideally we
+    // could set viewModel.setProfilePic(bitmap) here
+    downloadProfilePicWithRetry(USERNAME);
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
     collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
-    
+
     // On click on the edit button, open a photo picker to choose the profile image
     photoPicker = new PhotoPicker(this, profileImage);
-    editButton.setOnClickListener(v ->
-        photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
+    editButton.setOnClickListener(v -> {
+          photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
+          Drawable drawable = profileImage.getDrawable();
+          BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+          Bitmap bitmap = bitmapDrawable.getBitmap();
+          viewModel.setProfilePic(bitmap);
+        }
+
     );
 
-    Collection sampleCollection = new Collection("Recently watched");
-    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView,
-        sampleCollection);
+    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView);
 
     ImageButton add_movie_button = view.findViewById(R.id.add_button);
-    add_movie_button.setOnClickListener(new OnClickListener() {
+    SampleReviews s = new SampleReviews();
+    add_movie_button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
-        SampleReviews s = new SampleReviews();
-        sampleCollection.addReview(s.getMovieReview());
-        collectionAdapter.notifyDataSetChanged();
+
+        Collection currentCollection = viewModel.getCollectionLiveData().getValue();
+        currentCollection.addReview(s.getMovieReview());
+        viewModel.setCollection(currentCollection);
       }
     });
 
@@ -101,8 +107,12 @@ public class ProfileFragment extends Fragment {
     return view;
   }
 
-  private CollectionAdapter setupCollection(RecyclerView recyclerView, Collection collection) {
-    viewModel.setCollection(collection);
+  private CollectionAdapter setupCollection(RecyclerView recyclerView) {
+    Collection collection = viewModel.getCollection();
+    if (collection == null) {
+      collection = new Collection("Some Title");
+      viewModel.setCollection(collection);
+    }
     CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collection);
     recyclerView.setAdapter(collectionAdapter);
     recyclerView.setLayoutManager(
@@ -138,7 +148,6 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-
   private void replaceFragment(Fragment fragment) {
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -147,25 +156,25 @@ public class ProfileFragment extends Fragment {
   }
 
 
-  private CompletableFuture<Bitmap> getProfilePicFromDB(String username) {
+  // TODO: Should to be improved so it does not need to use the hardcoded retry
+  private void downloadProfilePicWithRetry(String username) {
     CompletableFuture<byte[]> imageFuture = Database.getProfilePic(username);
 
-    return imageFuture.thenApply(imageBytes -> {
+    // It would probably be better to do this directly in the database class
+    // (getProfilePic would return CompletableFuture<Bitmap>)
+    CompletableFuture<Bitmap> future = imageFuture.thenApply(imageBytes -> {
       Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
       return bitmap;
     });
-  }
-
-  private void downloadProfilePicWithRetry() {
-    CompletableFuture<Bitmap> future = getProfilePicFromDB(USERNAME);
 
     future.thenAccept(bitmap -> {
+      // Try to set the profile pic
       viewModel.setProfilePic(bitmap);
     }).exceptionally(throwable -> {
       // Could not download image, try again in 1 second
       Handler handler = new Handler();
       handler.postDelayed(() -> {
-        downloadProfilePicWithRetry();
+        downloadProfilePicWithRetry(username);
       }, 1000);
 
       return null;

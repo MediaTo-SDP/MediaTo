@@ -1,11 +1,10 @@
-package com.github.sdp.mediato.ui;
+package com.github.sdp.mediato;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.github.sdp.mediato.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,11 +30,11 @@ public class FirebaseBootcamp extends AppCompatActivity {
         .addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
           @Override
           public void onSuccess(DataSnapshot dataSnapshot) {
-              if (dataSnapshot.getValue() == null) {
-                  future.completeExceptionally(new NoSuchFieldException());
-              } else {
-                  future.complete(dataSnapshot.getValue().toString());
-              }
+            if (dataSnapshot.getValue() == null) {
+              future.completeExceptionally(new NoSuchFieldException());
+            } else {
+              future.complete(dataSnapshot.getValue().toString());
+            }
           }
         }).addOnFailureListener(
             new OnFailureListener() {

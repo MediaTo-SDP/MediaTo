@@ -4,4 +4,4 @@
   android:id="@+id/new_profile_container"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".ui.NewProfileActivity" />
+  tools:context=".NewProfileActivity" />
