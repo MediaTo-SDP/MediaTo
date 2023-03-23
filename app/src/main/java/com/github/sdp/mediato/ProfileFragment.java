@@ -131,9 +131,7 @@ public class ProfileFragment extends Fragment {
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
 
-        Collection currentCollection = viewModel.getCollectionLiveData().getValue();
-        currentCollection.addReview(s.getMovieReview());
-        viewModel.setCollection(currentCollection);
+        viewModel.addReviewToCollection(s.getMovieReview());
       }
     });
 

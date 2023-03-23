@@ -31,7 +31,8 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.layout_movie_item, parent, false);
+    View view = LayoutInflater.from(context)
+        .inflate(R.layout.layout_profile_movie_item, parent, false);
 
     return new ViewHolder(view);
 

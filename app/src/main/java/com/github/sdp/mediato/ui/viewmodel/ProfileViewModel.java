@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 
 /**
@@ -41,6 +42,11 @@ public class ProfileViewModel extends ViewModel {
     collectionLiveData.setValue(collection);
   }
 
+  public void addReviewToCollection(Review review) {
+    Collection collection = getCollection();
+    collection.addReview(review);
+    collectionLiveData.setValue(collection);
+  }
 
   public void setUsername(String username) {
     usernameLiveData.setValue(username);

@@ -21,7 +21,7 @@
     android:id="@+id/recently_watched_text"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
+    android:layout_marginStart="15dp"
     android:text="@string/recently_watched"
     android:textSize="16dp"
     app:layout_constraintStart_toEndOf="@+id/movie_icon"
