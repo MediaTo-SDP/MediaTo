@@ -109,7 +109,7 @@ public class CreateProfileFragment extends Fragment {
           uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
         }
         try {
-          Thread.sleep(500);
+          Thread.sleep(1000);
         } catch (InterruptedException e) {
           throw new RuntimeException(e);
         }
