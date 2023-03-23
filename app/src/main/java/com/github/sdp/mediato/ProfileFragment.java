@@ -38,9 +38,13 @@ public class ProfileFragment extends Fragment {
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
+
+  private ImageButton addMediaButton;
   private TextView usernameView;
   private ImageView profileImage;
   private RecyclerView collectionRecyclerView;
+  private CollectionAdapter collectionAdapter;
+
 
   // Used as a key to access the database
   private static String USERNAME;
@@ -68,38 +72,15 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
+    addMediaButton = view.findViewById(R.id.add_media_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
     collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
 
-    // On click on the edit button, open a photo picker to choose the profile image
-    photoPicker = new PhotoPicker(this, profileImage);
-    editButton.setOnClickListener(v -> {
-          photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
-          //TODO Change the PhotoPicker to return a Bitmap instead
-          Drawable drawable = profileImage.getDrawable();
-          BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-          Bitmap bitmap = bitmapDrawable.getBitmap();
-          viewModel.setProfilePic(bitmap);
-        }
-
-    );
-
-    CollectionAdapter collectionAdapter = setupCollection(collectionRecyclerView);
-    
-    //TODO connect this to the SearchFragment
-    ImageButton add_movie_button = view.findViewById(R.id.add_button);
-    SampleReviews s = new SampleReviews();
-    add_movie_button.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        /*replaceFragment(new SearchFragment());*/
-
-        Collection currentCollection = viewModel.getCollectionLiveData().getValue();
-        currentCollection.addReview(s.getMovieReview());
-        viewModel.setCollection(currentCollection);
-      }
-    });
+    // Initialize components
+    photoPicker = setupPhotoPicker();
+    collectionAdapter = setupCollection(collectionRecyclerView);
+    setupAddButton(addMediaButton);
 
     // Observe the view model's live data to update UI components
     observeUsername();
@@ -110,16 +91,52 @@ public class ProfileFragment extends Fragment {
   }
 
   private CollectionAdapter setupCollection(RecyclerView recyclerView) {
+    // Check if a collection is already in the viewModel, if not create one
     Collection collection = viewModel.getCollection();
     if (collection == null) {
       collection = new Collection("Some Title");
       viewModel.setCollection(collection);
     }
+
+    // Create an adapter to display the collection in a RecycleView
     CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collection);
     recyclerView.setAdapter(collectionAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     return collectionAdapter;
+  }
+
+  private PhotoPicker setupPhotoPicker() {
+    PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
+
+    // On click on the edit button, open a photo picker to choose the profile image
+    editButton.setOnClickListener(v -> {
+          photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
+          //TODO This does not work (does not update the viewModel), change the PhotoPicker to return a Bitmap instead
+          Drawable drawable = profileImage.getDrawable();
+          BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+          Bitmap bitmap = bitmapDrawable.getBitmap();
+          viewModel.setProfilePic(bitmap);
+        }
+
+    );
+    return photoPicker;
+  }
+
+  private void setupAddButton(ImageButton addMediaButton) {
+    //TODO connect this to the SearchFragment
+    SampleReviews s = new SampleReviews();
+    addMediaButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        /*replaceFragment(new SearchFragment());*/
+
+        Collection currentCollection = viewModel.getCollectionLiveData().getValue();
+        currentCollection.addReview(s.getMovieReview());
+        viewModel.setCollection(currentCollection);
+      }
+    });
+
   }
 
   private void observeUsername() {
