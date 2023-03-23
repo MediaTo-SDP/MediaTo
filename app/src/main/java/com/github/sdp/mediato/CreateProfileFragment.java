@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.github.javafaker.Faker;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.formats.Dates;
@@ -26,7 +25,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
-
 import java.util.Objects;
 
 
@@ -35,157 +33,160 @@ import java.util.Objects;
  */
 public class CreateProfileFragment extends Fragment {
 
-    private StorageTask<TaskSnapshot> uploadProfilePicTask;
-    private ImageView profileImage;
-    private PhotoPicker photoPicker;
-    private final User.UserBuilder userBuilder;
+  private StorageTask<TaskSnapshot> uploadProfilePicTask;
+  private ImageView profileImage;
+  private PhotoPicker photoPicker;
+  private final User.UserBuilder userBuilder;
 
-    CreateProfileFragment(String uid, String email) {
-        userBuilder = new User.UserBuilder(uid).setEmail(email);
+  CreateProfileFragment(String uid, String email) {
+    userBuilder = new User.UserBuilder(uid).setEmail(email);
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
+
+    final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
+    final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
+    final MaterialButton createProfileButton = view.findViewById(R.id.create_profile_button);
+    final FloatingActionButton profileImageButton = view.findViewById(
+        R.id.profile_image_add_button);
+
+    profileImage = view.findViewById(R.id.profile_image);
+    photoPicker = new PhotoPicker(this, profileImage);
+
+    // Open a photo picker to choose the profile image
+    profileImageButton.setOnClickListener(v ->
+        photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
+    );
+
+    // Generate a username
+    usernameTextInput.setEndIconOnClickListener(
+        generateUsername(usernameTextInput, usernameEditText));
+
+    // Remove the error if the user fix its username
+    usernameEditText.addTextChangedListener(
+        new UsernameWatcher(usernameTextInput, usernameEditText));
+
+    // Create the profile if valid otherwise error
+    createProfileButton.setOnClickListener(tryCreateProfile(usernameTextInput, usernameEditText));
+
+    // Inflate the layout for this fragment
+    return view;
+  }
+
+  @NonNull
+  private View.OnClickListener generateUsername(TextInputLayout usernameTextInput,
+      TextInputEditText usernameEditText) {
+    return v -> {
+      usernameTextInput.setError(null);
+      Faker faker = new Faker();
+      String animal = faker.animal().name();
+      String number = faker.number().digits(5);
+      usernameEditText.setText(animal.concat(number));
+    };
+  }
+
+  @NonNull
+  private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput,
+      TextInputEditText usernameEditText) {
+    return view -> {
+      String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
+      usernameTextInput.setError(errorMsg);
+      if (null == errorMsg) {
+        //TODO Add navigation to Add favorite page
+        //Creating new user and adding it to the database
+        String username = Objects.requireNonNull(usernameEditText.getText()).toString();
+        userBuilder.setUsername(username);
+        userBuilder.setRegisterDate(Dates.getToday());
+        //@TODO by default the location is not set - to be changed when we implement the GPS feature
+        userBuilder.setLocation(new Location());
+        User user = userBuilder.build();
+        Uri profilePicUri = photoPicker.getProfileImageUri();
+        Database.addUser(user);
+        if (photoPicker.getProfileImageUri() != null) {
+          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
+        }
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        }
+
+        switchToMainActivity(username);
+        makeToast(getString(R.string.profile_creation_success));
+      }
+
+    };
+  }
+
+  private void switchToMainActivity(String username) {
+    Intent intent = new Intent(getActivity(), MainActivity.class);
+    intent.putExtra("username", username);
+    startActivity(intent);
+  }
+
+  private void makeToast(String text) {
+    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+  }
+
+  private enum UsernameError {
+    NULL,
+    TOO_SHORT,
+    ALREADY_TAKEN,
+    GOOD
+  }
+
+  private String getUsernameErrorMsg(@Nullable Editable text) {
+    switch (isUsernameValid(text)) {
+      case NULL:
+        return getString(R.string.mt_username_error_null);
+      case TOO_SHORT:
+        return getString(R.string.mt_username_error_too_short);
+      case ALREADY_TAKEN:
+        return getString(R.string.mt_username_error_already_taken);
+      default:
+        return null;
+    }
+  }
+
+  private UsernameError isUsernameValid(@Nullable Editable text) {
+    if (text == null) {
+      return UsernameError.NULL;
+    } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
+      return UsernameError.TOO_SHORT;
+    } else {
+      return UsernameError.GOOD;
+    }
+  }
+
+  private class UsernameWatcher implements TextWatcher {
+
+    private final TextInputLayout usernameTextInput;
+    private final TextInputEditText usernameEditText;
+
+    UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
+
+      this.usernameTextInput = usernameTextInput;
+      this.usernameEditText = usernameEditText;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
-
-        final TextInputLayout usernameTextInput = view.findViewById(R.id.username_text_input);
-        final TextInputEditText usernameEditText = view.findViewById(R.id.username_edit_text);
-        final MaterialButton createProfileButton = view.findViewById(R.id.create_profile_button);
-        final FloatingActionButton profileImageButton = view.findViewById(
-                R.id.profile_image_add_button);
-
-        profileImage = view.findViewById(R.id.profile_image);
-        photoPicker = new PhotoPicker(this, profileImage);
-
-        // Open a photo picker to choose the profile image
-        profileImageButton.setOnClickListener(v ->
-                photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v)
-        );
-
-        // Generate a username
-        usernameTextInput.setEndIconOnClickListener(
-                generateUsername(usernameTextInput, usernameEditText));
-
-        // Remove the error if the user fix its username
-        usernameEditText.addTextChangedListener(
-                new UsernameWatcher(usernameTextInput, usernameEditText));
-
-        // Create the profile if valid otherwise error
-        createProfileButton.setOnClickListener(tryCreateProfile(usernameTextInput, usernameEditText));
-
-        // Inflate the layout for this fragment
-        return view;
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(
+          usernameEditText.getText())) {
+        usernameTextInput.setError(null);
+      }
     }
 
-    @NonNull
-    private View.OnClickListener generateUsername(TextInputLayout usernameTextInput,
-                                                  TextInputEditText usernameEditText) {
-        return v -> {
-            usernameTextInput.setError(null);
-            Faker faker = new Faker();
-            String animal = faker.animal().name();
-            String number = faker.number().digits(5);
-            usernameEditText.setText(animal.concat(number));
-        };
+    // Useless functions
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
 
-    @NonNull
-    private View.OnClickListener tryCreateProfile(TextInputLayout usernameTextInput,
-                                                  TextInputEditText usernameEditText) {
-        return view -> {
-            String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
-            usernameTextInput.setError(errorMsg);
-            if (null == errorMsg) {
-                //TODO Add navigation to Add favorite page
-                //Creating new user and adding it to the database
-                String username = Objects.requireNonNull(usernameEditText.getText()).toString();
-                userBuilder.setUsername(username);
-                userBuilder.setRegisterDate(Dates.getToday());
-                //@TODO by default the location is not set - to be changed when we implement the GPS feature
-                userBuilder.setLocation(new Location());
-                User user = userBuilder.build();
-                Uri profilePicUri = photoPicker.getProfileImageUri();
-                Database.addUser(user);
-                if (photoPicker.getProfileImageUri() != null) {
-                    uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                // Switch to the main activity
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-                
-                 // Give the user a feedback that profile creation was successful
-                 Toast.makeText(getContext(), getString(R.string.profile_creation_success),
-                 Toast.LENGTH_LONG).show();
-            }
-
-
-        };
+    @Override
+    public void afterTextChanged(Editable s) {
     }
-
-    private enum UsernameError {
-        NULL,
-        TOO_SHORT,
-        ALREADY_TAKEN,
-        GOOD
-    }
-
-    private String getUsernameErrorMsg(@Nullable Editable text) {
-        switch (isUsernameValid(text)) {
-            case NULL:
-                return getString(R.string.mt_username_error_null);
-            case TOO_SHORT:
-                return getString(R.string.mt_username_error_too_short);
-            case ALREADY_TAKEN:
-                return getString(R.string.mt_username_error_already_taken);
-            default:
-                return null;
-        }
-    }
-
-    private UsernameError isUsernameValid(@Nullable Editable text) {
-        if (text == null) {
-            return UsernameError.NULL;
-        } else if (text.length() < getResources().getInteger(R.integer.mt_username_min_length)) {
-            return UsernameError.TOO_SHORT;
-        } else {
-            return UsernameError.GOOD;
-        }
-    }
-
-    private class UsernameWatcher implements TextWatcher {
-
-        private final TextInputLayout usernameTextInput;
-        private final TextInputEditText usernameEditText;
-
-        UsernameWatcher(TextInputLayout usernameTextInput, TextInputEditText usernameEditText) {
-
-            this.usernameTextInput = usernameTextInput;
-            this.usernameEditText = usernameEditText;
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (UsernameError.GOOD == CreateProfileFragment.this.isUsernameValid(
-                    usernameEditText.getText())) {
-                usernameTextInput.setError(null);
-            }
-        }
-
-        // Useless functions
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    }
+  }
 }

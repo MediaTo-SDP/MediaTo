@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
@@ -78,8 +79,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
   }
 
   private static String getStarString(int numDarkStars) {
+    Preconditions.checkGrade(numDarkStars);
     StringBuilder sb = new StringBuilder();
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= Review.MAX_GRADE; i++) {
       if (i <= numDarkStars) {
         sb.append("●");
       } else {
