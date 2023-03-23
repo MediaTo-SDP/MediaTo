@@ -85,7 +85,7 @@ public class UserTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
-                assertFalse(following.get(user3.getUsername()));
+                assertTrue(following.get(user3.getUsername()));
             }
 
             @Override
@@ -100,7 +100,7 @@ public class UserTests {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
-                assertFalse(followers.get(user2.getUsername()));
+                assertTrue(followers.get(user2.getUsername()));
             }
 
             @Override
