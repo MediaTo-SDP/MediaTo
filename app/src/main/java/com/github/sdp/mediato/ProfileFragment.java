@@ -38,7 +38,6 @@ public class ProfileFragment extends Fragment {
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
-
   private ImageButton addMediaButton;
   private TextView usernameView;
   private ImageView profileImage;

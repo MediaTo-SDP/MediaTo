@@ -5,6 +5,11 @@ import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import java.util.List;
 
+
+/**
+ * Utility class to return some random movie reviews. For now it is used for demo purposes, but it
+ * can be deleted or used for tests later.
+ */
 public class SampleReviews {
 
   Media movie1 = new Movie("The Godfather",
