@@ -36,8 +36,7 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 
 /**
- * This class contains all the tests for database interactions
- * @TODO add the Cloud Storage tests for the profile pictures
+ * This class contains all the tests for database collections interactions
  */
 public class CollectionsTests {
     private final static int STANDARD_COLLECTION_TIMEOUT = 10;
@@ -47,6 +46,10 @@ public class CollectionsTests {
             .setRegisterDate("09/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
+
+    Collection collection1;
+    Collection collection2;
+
     Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url"));
     Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url"), 9);
     Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url"), 2, "meh");
@@ -68,6 +71,8 @@ public class CollectionsTests {
         Database.addUser(user1).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         reviews1.put(review1.getMedia().getTitle(), review1);
         reviews2.put(review2.getMedia().getTitle(), review2);
+        collection1 = new Collection("MyHighlights", reviews1);
+        collection2 = new Collection("MyFavs", reviews2);
     }
 
     @AfterClass
@@ -76,11 +81,12 @@ public class CollectionsTests {
     }
 
     @Test
+    //Tests that the collections are added, retrieved and removed properly
     public void addsRetrievesAndRemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
         //Adds the collection
-        Collection collection1 = new Collection("MyHighlights", reviews1);
         Database.addCollection(user1.getUsername(), collection1);
         Thread.sleep(1000);
+
         //Test retrieving the collection
         Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection1.getCollectionName())
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
@@ -91,6 +97,7 @@ public class CollectionsTests {
         assertEquals(review1.getUsername(), retrievedReview.getUsername());
         assertEquals(review1.getComment(), retrievedReview.getComment());
         assertEquals(review1.getGrade(), retrievedReview.getGrade());
+
         //Test removing the collection
         Database.removeCollection(user1.getUsername(), collection1.getCollectionName());
         Thread.sleep(1000);
@@ -101,15 +108,19 @@ public class CollectionsTests {
     }
 
     @Test
+    //Tests that you can add a review to an existent collection
     public void addsReviewToCollectionProperly() throws InterruptedException, ExecutionException, TimeoutException {
-        Collection collection2 = new Collection("MyFavs", reviews2);
+        //Add collection
         Database.addCollection(user1.getUsername(), collection2);
         Thread.sleep(1000);
+
+        //Add review to the collection
         Database.addReviewToCollection(user1.getUsername(), collection2.getCollectionName(), review1);
         Thread.sleep(1000);
+
+        //Retrieve collection and check that the review was added properly
         Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection2.getCollectionName())
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
-        System.out.println(retrievedCollection.getReviews());
         assertTrue(retrievedCollection.getReviews().containsKey(review1.getMedia().getTitle())
         && retrievedCollection.getReviews().containsKey(review2.getMedia().getTitle()));
     }

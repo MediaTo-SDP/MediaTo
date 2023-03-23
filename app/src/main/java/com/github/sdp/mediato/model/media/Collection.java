@@ -47,7 +47,7 @@ public class Collection {
         return reviews;
     }
 
-    public void setReviews() {
+    public void setReviews(Map<String, Review> reviews) {
         this.reviews = reviews;
     }
 
