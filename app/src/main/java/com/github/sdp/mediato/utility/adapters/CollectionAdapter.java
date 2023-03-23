@@ -13,6 +13,8 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
@@ -25,7 +27,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
   public CollectionAdapter(Context context, Collection collection) {
     this.context = context;
     this.collection = collection;
-    this.reviews = collection.getReviews();
+    this.reviews = new ArrayList<>(collection.getReviews().values());
   }
 
   @NonNull
