@@ -21,7 +21,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.media.CollectionType;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.SampleReviews;
@@ -94,6 +96,7 @@ public class ProfileFragment extends Fragment {
     Collection collection = viewModel.getCollection();
     if (collection == null) {
       collection = new Collection("Some Title");
+      Database.addCollection(USERNAME, collection);
       viewModel.setCollection(collection);
     }
 
@@ -129,8 +132,9 @@ public class ProfileFragment extends Fragment {
       @Override
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
-
-        viewModel.addReviewToCollection(s.getMovieReview());
+        Review review = s.getMovieReview();
+        Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
+        viewModel.addReviewToCollection(review);
       }
     });
 
