@@ -13,19 +13,19 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
   private Context context;
-  private List<Review> reviews;
   private Collection collection;
 
 
   public CollectionAdapter(Context context, Collection collection) {
     this.context = context;
     this.collection = collection;
-    this.reviews = collection.getReviews();
   }
 
   @NonNull
@@ -40,11 +40,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    Review review = reviews.get(position);
+    Review review = collection.getReviewsList().get(position);
     Media media = review.getMedia();
-
     holder.mediaImage.setImageResource(R.drawable.bg_movie2);
-
     holder.mediaTitle.setText(media.getTitle());
     try {
       int grade = review.getGrade();
@@ -59,7 +57,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
   @Override
   public int getItemCount() {
-    return reviews.size();
+    return collection.getReviewsList().size();
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {

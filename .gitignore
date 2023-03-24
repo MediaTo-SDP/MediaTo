@@ -16,3 +16,5 @@
 local.properties
 /secret.local
 secret.local
+firebase-debug.log
+database-debug.log
