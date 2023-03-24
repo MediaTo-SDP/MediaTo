@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    // CreateProfileFragment
+    <!-- CreateProfileFragment -->
     <integer name="mt_username_min_length">4</integer>
     <integer name="mt_username_max_length">20</integer>
+
+    <!-- Rating -->
+    <integer name="max_rating">10</integer>
+    <integer name="min_rating">0</integer>
 
 </resources>

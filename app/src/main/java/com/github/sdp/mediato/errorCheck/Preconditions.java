@@ -39,12 +39,14 @@ public class Preconditions {
      * @param mediaType
      * @param title
      * @param summary
-     * @param imageUrl
+     * @param posterUrl
+     * @param iconUrl
      */
-    public static void checkMedia(MediaType mediaType, String title, String summary, String imageUrl){
+    public static void checkMedia(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl){
         Preconditions.checkTitle(title);
         Preconditions.checkSummary(summary);
-        Preconditions.checkImageURL(imageUrl);
+        Preconditions.checkImageURL(posterUrl);
+        Preconditions.checkImageURL(iconUrl);
         Objects.requireNonNull(mediaType);
     }
 

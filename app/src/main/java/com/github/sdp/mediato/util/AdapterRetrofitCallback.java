@@ -1,5 +1,7 @@
 package com.github.sdp.mediato.util;
 
+import android.accounts.NetworkErrorException;
+
 import java.util.concurrent.CompletableFuture;
 
 import retrofit2.Call;
@@ -44,7 +46,6 @@ public class AdapterRetrofitCallback<T> implements Callback<T> {
      */
     @Override @EverythingIsNonNull
     public void onFailure(Call<T> call, Throwable t) {
-        System.out.println("failure");
-        future.completeExceptionally(t);
+        future.completeExceptionally(new NetworkErrorException(t.getCause()));
     }
 }
