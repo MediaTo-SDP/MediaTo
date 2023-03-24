@@ -2,7 +2,9 @@ package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.model.Review;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Collection {
@@ -50,6 +52,10 @@ public class Collection {
 
     public Map<String, Review> getReviews() {
         return reviews;
+    }
+
+    public List<Review> getReviewsList(){
+        return new ArrayList<>(reviews.values());
     }
 
     public void setReviews(Map<String, Review> reviews) {
