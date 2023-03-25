@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -15,7 +15,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
 
     private SearchView searchView;
     private TextView textView;
-    private ListView listView;
+    private GridView listView;
 
     private Button peopleButton;
     private Button booksButton;
@@ -28,7 +28,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     @Override
     public boolean onQueryTextSubmit(String s) {
 
-        if(s.length() > 0){
+        if (s.length() > 0) {
             // this.mTextView.setText("Results");
             search(s);
             // toDO : call the search function
@@ -39,7 +39,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public boolean onQueryTextChange(String s) {
-        if(s.length() > 0){
+        if (s.length() > 0) {
             // this.mTextView.setText("Suggested");
             search(s);
             // toDO : call the search function
@@ -70,7 +70,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     }
 
     /* attributes */
-    private enum SearchCategory{
+    private enum SearchCategory {
         PEOPLE,
         MOVIES,
         BOOKS,
@@ -102,7 +102,7 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
         this.textView = findViewById(R.id.searchactivity_textView_textDuringAfterSearch);
 
         // get the list view
-        this.listView = findViewById(R.id.searchactivity_listview_searchresults);
+        this.listView = findViewById(R.id.searchactivity_gridview_searchresults);
 
         // get the search view and bind it to a listener
         this.searchView = findViewById(R.id.searchactivity_searchview_searchbar);
@@ -117,8 +117,8 @@ public class SearchBar extends AppCompatActivity implements View.OnClickListener
     /**
      * not implemented yet
      */
-    private void search(String toBeSearched){
-        switch(this.currentCategory){
+    private void search(String toBeSearched) {
+        switch (this.currentCategory) {
             case PEOPLE:
                 break;
             case MOVIES:
