@@ -97,6 +97,16 @@ public class TMDBApiTest {
     }
 
     @Test
+    // Subsequent request do not do request if data is available locally
+    public void TestNoSearchingAdditionalRequest() {
+        List<TMDBMovie> movies = db.searchItems(SEARCHTERM, 1).thenCompose((val) ->
+                db.searchItems(SEARCHTERM,1)).thenCompose((val) ->
+                db.searchItems(SEARCHTERM,100)).join();
+        assertThat(movies.size(), is(38));
+    }
+
+
+    @Test
     // The cache holds not returned values of precedent searches
     public void TestSearchCache() {
         db.searchItems(SEARCHTERM, 10).join();
@@ -107,6 +117,7 @@ public class TMDBApiTest {
 
     // Exceeding available data returns empty list
     public void TestEmptyListExcessOfSearching() {
+        // We do three searches since we hard-coded only 2 return pages
         List<TMDBMovie> movies = db.searchItems(SEARCHTERM, 20).thenCompose((v) ->
                 db.searchItems(SEARCHTERM, 20)).thenCompose(v ->
                 db.searchItems(SEARCHTERM, 20)).join();
@@ -142,7 +153,7 @@ public class TMDBApiTest {
 
     @Test
     // Subsequent request do not do request if the data is available
-    public void TestNoAdditionalRequest() {
+    public void TestNoTrendingAdditionalRequest() {
         List<TMDBMovie> movies = db.trending(1).thenCompose((val) ->
                 db.trending(1)).thenCompose((val) ->
                 db.trending(100)).join();
