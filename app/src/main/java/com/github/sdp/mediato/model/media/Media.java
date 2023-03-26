@@ -2,6 +2,9 @@ package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public abstract class Media {
 
@@ -31,7 +34,7 @@ public abstract class Media {
     }
 
     public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, int id) {
-        Preconditions.checkMedia(mediaType, title, summary, posterUrl, iconUrl);
+        Preconditions.checkMedia(mediaType, List.of(title, summary, posterUrl, iconUrl));
         this.mediaType = mediaType;
         this.title = title;
         this.summary = summary;
