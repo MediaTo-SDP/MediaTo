@@ -143,6 +143,18 @@ public class TheMovieDB implements API<TMDBMovie> {
     }
 
     /**
+     * Get a single movie from it's TMDB id
+     * @param id the TMDB id of the movie
+     * @return a completable holding the movie data
+     */
+    @Override
+    public CompletableFuture<TMDBMovie> get(int id) {
+        CompletableFuture<TMDBMovie> future = new CompletableFuture<>();
+        api.get(id, apikey, "en-US").enqueue(new AdapterRetrofitCallback<>(future));
+        return future;
+    }
+
+    /**
      * Clears the local cache. Should be called before each search loop.
      */
     @Override

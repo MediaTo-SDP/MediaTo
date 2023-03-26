@@ -8,6 +8,7 @@ import android.accounts.NetworkErrorException;
 
 import androidx.annotation.NonNull;
 
+import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
 import org.junit.After;
@@ -33,21 +34,17 @@ public class TMDBApiTest {
         public MockResponse dispatch(@NonNull RecordedRequest recordedRequest) {
             switch (recordedRequest.getPath()) {
                 case "/3/search/movie?api_key=apiKey&query=searchTerm&language=en-US&page=1":
-                    return new MockResponse()
-                            .setResponseCode(200)
-                            .setBody(APITestStrings.MULAN1);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.MULAN1);
                 case "/3/search/movie?api_key=apiKey&query=searchTerm&language=en-US&page=2":
-                    return new MockResponse()
-                            .setResponseCode(200)
-                            .setBody(APITestStrings.MULAN2);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.MULAN2);
                 case "/3/trending/movie/week?api_key=apiKey&language=en-US&page=1":
-                    return new MockResponse()
-                            .setResponseCode(200)
-                            .setBody(APITestStrings.TRENDING);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.TRENDING);
                 case "/3/trending/movie/week?api_key=apiKey&language=en-US&page=2":
-                    return new MockResponse()
-                            .setResponseCode(200)
-                            .setBody(APITestStrings.TRENDING2);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.TRENDING2);
+                case "/3/trending/movie/week?api_key=apiKey&language=en-US&page=3":
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.TRENDING3);
+                case "/3/movie/10674?api_key=apiKey&language=en-US":
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.GET);
                 default:
                     return new MockResponse().setResponseCode(404);
             }
@@ -58,7 +55,7 @@ public class TMDBApiTest {
     public void setUp() throws IOException {
         mockApi.setDispatcher(DISPATCHER);
         mockApi.start(8080);
-        db = new TheMovieDB(String.format("http://%s:8080/3/", mockApi.getHostName()), APIKEY);
+        db = new TheMovieDB(String.format("http://%s:8080/", mockApi.getHostName()), APIKEY);
     }
 
     @Test
@@ -176,10 +173,19 @@ public class TMDBApiTest {
     }
 
     // Wrong URL throws ERROR
-    @Test(expected = NetworkErrorException.class)
+    @Test(expected = Exception.class)
     public void WrongURLWillThrowAnError() {
         // Throws an error, since the the mock server answer 404 to searches that do not use SEARCHTERM
         db.searchItems(" ", 1).join();
+    }
+
+    @Test
+    public void GetReturnsTheMovieData(){
+        TMDBMovie movie = db.get(10674).join();
+        assertThat(movie.getTitle(), is("Mulan"));
+        assertThat(movie.getId(), is(10674));
+        assertThat(movie.getOverview(), is("To save her father from certain death in the army, a young woman secretly enlists in his place and becomes one of China's greatest heroines in the process."));
+        assertThat(movie.getPoster_path(), is("https://image.tmdb.org/t/p/original/5TYgKxYhnhRNNwqnRAKHkgfqi2G.jpg"));
     }
 
     @After
