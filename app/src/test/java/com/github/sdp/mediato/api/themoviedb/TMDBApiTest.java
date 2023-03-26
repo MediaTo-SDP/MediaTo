@@ -23,7 +23,7 @@ public class TMDBApiTest {
     private final String APIKEY = "apiKey";
     private final String SEARCHTERM = "searchTerm";
     public final MockWebServer mockApi = new MockWebServer();
-    private TheMovieDB db;
+    private TheMovieDBAPI db;
     final Dispatcher DISPATCHER = new Dispatcher() {
         @NonNull
         @Override
@@ -55,7 +55,7 @@ public class TMDBApiTest {
     public void setUp() throws IOException {
         mockApi.setDispatcher(DISPATCHER);
         mockApi.start(8080);
-        db = new TheMovieDB(String.format("http://%s:8080/3/", mockApi.getHostName()), APIKEY);
+        db = new TheMovieDBAPI(String.format("http://%s:8080/3/", mockApi.getHostName()), APIKEY);
     }
 
     @Test

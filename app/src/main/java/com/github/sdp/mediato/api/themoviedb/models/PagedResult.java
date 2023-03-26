@@ -3,7 +3,7 @@ package com.github.sdp.mediato.api.themoviedb.models;
 import java.util.List;
 
 /**
- * Class wrapper for the API returns of TheMovieDB
+ * Class wrapper for the API returns of TheMovieDBAPI
  * @param <T> The type of the result
  */
 public final class PagedResult<T> {

@@ -3,7 +3,7 @@ package com.github.sdp.mediato.api.themoviedb.models;
 import java.util.List;
 
 /**
- * Class used by the retrofit library to store the movies returned by TheMovieDB api.
+ * Class used by the retrofit library to store the movies returned by TheMovieDBAPI api.
  */
 public final class TMDBMovie {
     private static final String BASE_URL = "https://image.tmdb.org/t/p/original";
