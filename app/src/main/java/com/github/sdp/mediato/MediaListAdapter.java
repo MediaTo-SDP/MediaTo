@@ -36,7 +36,7 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
     /**
      * Default constructor
      */
-    protected MediaListAdapter() {
+    public MediaListAdapter() {
         super(MEDIA_COMPARATOR);
     }
 

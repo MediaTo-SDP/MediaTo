@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui.viewmodel;
 
 
 import android.app.Application;
@@ -7,9 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDB;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
+import com.github.sdp.mediato.ui.HomeFragment;
 
 import java.util.List;
 import java.util.stream.Collectors;
