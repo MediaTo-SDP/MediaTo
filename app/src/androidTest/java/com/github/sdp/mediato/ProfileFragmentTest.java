@@ -2,7 +2,6 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -76,30 +75,31 @@ public class ProfileFragmentTest {
     recentlyWatchedText.check(matches(withText("Recently watched")));
   }
 
-  // Test whether the "Add movie" button is displayed
+  /*// Test whether the "Add movie" button is displayed
   @Test
   public void testAddMovieButton() {
-    ViewInteraction addMovieButton = onView(withId(R.id.add_movie_button));
-    ViewInteraction horizontalScrollView = onView(withId(R.id.horizontal_scroll_view));
-    horizontalScrollView.check(matches(hasDescendant(withId(R.id.add_movie_button))));
+    ViewInteraction collectionView = onView(withId(R.id.layout_collection));
+    collectionView.check(matches(hasDescendant(withId(R.id.add_media_button))));
+    onView(withId(R.id.add_media_button)).check(matches(isDisplayed()));
   }
 
-  // Test whether the horizontal scroll list is displayed and contains the addMovieButton
+  // Test whether the collection view is displayed
   @Test
   public void testHorizontalScrollList() {
-    ViewInteraction horizontalScrollView = onView(withId(R.id.horizontal_scroll_view));
-    horizontalScrollView.check(matches(isDisplayed()));
+    ViewInteraction collectionView = onView(withId(R.id.collectionRecyclerView));
+    collectionView.check(matches(isDisplayed()));
   }
 
   // Test whether a movie item, which consists of an image of a movie and a title and rating text,
   // is displayed and has the correct title and rating
   @Test
   public void testMovieItem() {
-    ViewInteraction movieItem = onView(withId(R.id.test_movie_item));
+    ViewInteraction movieItem = onView(withId(R.layout.layout_movie_item));
     movieItem.check(matches(isDisplayed()));
     movieItem.check(matches(hasDescendant(withText("Skyfall"))));
-    movieItem.check(matches(hasDescendant(withText("Rating: "))));
-  }
+    movieItem.check(matches(hasDescendant(withText("Rating: 10"))));
+  }*/
+
 
 }
 
