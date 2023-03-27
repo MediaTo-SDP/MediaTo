@@ -1,11 +1,10 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
+import android.app.Application;
 import android.graphics.Bitmap;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 
@@ -13,13 +12,14 @@ import com.github.sdp.mediato.model.media.Collection;
  * The ViewModel for the ProfileFragment. Handles all communication between the UI and the data
  * layer.
  */
-public class ProfileViewModel extends ViewModel {
+public class ProfileViewModel extends AndroidViewModel {
 
   private MutableLiveData<Collection> collectionLiveData;
   private MutableLiveData<String> usernameLiveData;
   private MutableLiveData<Bitmap> profilePicLiveData;
 
-  public ProfileViewModel() {
+  public ProfileViewModel(Application application) {
+    super(application);
     collectionLiveData = new MutableLiveData<>();
     usernameLiveData = new MutableLiveData<>();
     profilePicLiveData = new MutableLiveData<>();
