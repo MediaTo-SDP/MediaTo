@@ -6,4 +6,6 @@
 
     <!-- Rating -->
     <integer name="max_rating">10</integer>
+    <integer name="min_rating">0</integer>
+
 </resources>

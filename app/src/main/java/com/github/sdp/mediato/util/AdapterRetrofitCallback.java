@@ -1,4 +1,4 @@
-package com.github.sdp.mediato.utility.adapters;
+package com.github.sdp.mediato.util;
 
 import android.accounts.NetworkErrorException;
 

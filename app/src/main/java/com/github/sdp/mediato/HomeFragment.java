@@ -1,4 +1,4 @@
-package com.github.sdp.mediato.ui;
+package com.github.sdp.mediato;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.FragmentHomeBinding;
-import com.github.sdp.mediato.ui.viewmodel.HomeViewModel;
-import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
 
 /**
  * The View class of the Home fragment
