@@ -6,7 +6,7 @@ import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.github.sdp.mediato.util.AdapterRetrofitCallback;
+import com.github.sdp.mediato.utility.adapters.AdapterRetrofitCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
