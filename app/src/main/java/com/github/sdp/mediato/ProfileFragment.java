@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 
 
   // Used as a key to access the database
-  public static String USERNAME;
+  private static String USERNAME;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
