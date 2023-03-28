@@ -1,3 +1,0 @@
-18:17:53.833 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-18:17:54.106 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-18:22:36.032 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - mediato-21040-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 548ms, init: 0ms
