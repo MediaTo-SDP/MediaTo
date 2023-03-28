@@ -143,22 +143,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public void onClick(View view) {
+        SwitchGridOrRecyclerView(view);
+
         if (view == peopleButton) {
-            this.gridView.setVisibility(View.GONE);
-            this.recyclerView.setVisibility(View.VISIBLE);
-
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
-        } else {
-            this.recyclerView.setVisibility(View.GONE);
-            this.gridView.setVisibility(View.VISIBLE);
-
-            if (view == booksButton) {
-                this.currentCategory = SearchFragment.SearchCategory.BOOKS;
-            } else if (view == filmButton) {
-                this.currentCategory = SearchFragment.SearchCategory.MOVIES;
-            } else if (view == musicButton) {
-                this.currentCategory = SearchFragment.SearchCategory.MUSIC;
-            }
+        } else if (view == booksButton) {
+            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
+        } else if (view == filmButton) {
+            this.currentCategory = SearchFragment.SearchCategory.MOVIES;
+        } else if (view == musicButton) {
+            this.currentCategory = SearchFragment.SearchCategory.MUSIC;
         }
 
         this.currentHighlightedButton.setTypeface(null, Typeface.NORMAL);
@@ -166,6 +160,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.currentHighlightedButton = (Button) view;
         this.currentHighlightedButton.setTypeface(null, Typeface.BOLD);
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+    }
+
+    private void SwitchGridOrRecyclerView(View view) {
+        if (view == peopleButton) {
+            this.gridView.setVisibility(View.GONE);
+            this.recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            this.recyclerView.setVisibility(View.GONE);
+            this.gridView.setVisibility(View.VISIBLE);
+        }
     }
 
     private List<Media> search(String toBeSearched) {
