@@ -8,9 +8,11 @@ import java.util.concurrent.CompletableFuture;
 public interface API<T> {
     CompletableFuture<T> searchItem(String s);
 
-    CompletableFuture<List<TMDBMovie>> searchItems(String s, int count);
+    CompletableFuture<List<T>> searchItems(String s, int count);
 
-    CompletableFuture<List<TMDBMovie>> trending(int count);
+    CompletableFuture<List<T>> trending(int count);
 
-    void clearCache();
+    CompletableFuture<T> get(int id);
+
+    default void clearCache(){ }
 }

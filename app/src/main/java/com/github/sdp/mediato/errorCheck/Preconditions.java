@@ -37,14 +37,14 @@ public class Preconditions {
     /**
      * Checks if Media attributes are valid
      * @param mediaType
-     * @param title
-     * @param summary
-     * @param imageUrl
+     * @param strings the list of the strings needed to create a media as a list
+     * cf : <a href="https://github.com/MediaTo-SDP/MediaTo/pull/82#discussion_r1148591086">https://github.com/MediaTo-SDP/MediaTo/pull/82#discussion_r1148591086</a>
      */
-    public static void checkMedia(MediaType mediaType, String title, String summary, String imageUrl){
-        Preconditions.checkTitle(title);
-        Preconditions.checkSummary(summary);
-        Preconditions.checkImageURL(imageUrl);
+    public static void checkMedia(MediaType mediaType, List<String> strings){
+        Preconditions.checkTitle(strings.get(0));
+        Preconditions.checkSummary(strings.get(1));
+        Preconditions.checkImageURL(strings.get(2));
+        Preconditions.checkImageURL(strings.get(3));
         Objects.requireNonNull(mediaType);
     }
 
