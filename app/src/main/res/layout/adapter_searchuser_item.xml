@@ -20,14 +20,17 @@
             android:orientation="horizontal">
 
             <!-- Media -->
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/searchUserAdapter_imageView"
                 android:layout_width="@dimen/profile_picture_small"
                 android:layout_height="@dimen/profile_picture_small"
-                app:srcCompat="@drawable/profile_picture_default"
-                android:scaleType="centerCrop"
+                android:layout_gravity="start"
+                android:src="@drawable/profile_picture_default"
                 android:contentDescription="@string/searchUser_profilePicture"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <!-- Buttons -->
             <LinearLayout

@@ -3,6 +3,9 @@ package com.github.sdp.mediato;
 import static com.github.sdp.mediato.data.Database.followUser;
 import static com.github.sdp.mediato.data.Database.unfollowUser;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+
+import java.util.concurrent.CompletableFuture;
 
 
 public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.UserViewHolder> {
@@ -42,6 +48,8 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = searchUserViewModel.getUserListLiveData().getValue().get(position);
         holder.userNameTextView.setText(user.getUsername());
+
+        downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
 
         // Decide which button to display
         if(searchUserViewModel.getUser().getFollowing().contains(user.getUsername())) {
@@ -84,6 +92,29 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
             followButton = itemView.findViewById(R.id.searchUserAdapter_followButton);
             unfollowButton = itemView.findViewById(R.id.searchUserAdapter_unfollowButton);
         }
+    }
+
+    private void downloadProfilePicWithRetry(ImageView userProfileImageView, String userName) {
+
+        CompletableFuture<byte[]> imageFuture = Database.getProfilePic(userName);
+
+        // It would probably be better to do this directly in the database class
+        // (getProfilePic would return CompletableFuture<Bitmap>)
+        CompletableFuture<Bitmap> future = imageFuture.thenApply(imageBytes -> {
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        });
+
+        // Try to set the profile pic
+        future.thenAccept(userProfileImageView::setImageBitmap)
+                .exceptionally(throwable -> {
+                    // Could not download image, try again in 1 second
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        downloadProfilePicWithRetry(userProfileImageView, userName);
+                    }, 1000);
+
+                    return null;
+                });
     }
 }
 
