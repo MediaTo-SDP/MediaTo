@@ -1,5 +1,7 @@
 package com.github.sdp.mediato;
 
+import static com.github.sdp.mediato.data.Database.getUser;
+
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,11 +12,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.sdp.mediato.model.LocalFilmDatabase;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +36,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         MUSIC
     }
 
+    private SearchUserViewModel searchUserViewModel;
+
     private SearchView searchView;
     private TextView textView;
     private GridView gridView;
+
+    private RecyclerView recyclerView;
 
     private Button peopleButton;
     private Button booksButton;
@@ -65,6 +77,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // get the list view
         this.gridView = searchView.findViewById(R.id.searchactivity_gridview_searchresults);
 
+        // Create and init the Search User ViewModel
+        searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
+        searchUserViewModel.setUserName(ProfileFragment.USERNAME);
+
+        // Set the Search User RecyclerView with its adapter
+        recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
+
         // get the search view and bind it to a listener
         this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);
         this.searchView.setOnQueryTextListener(this);
@@ -73,6 +94,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.currentHighlightedButton = peopleButton;
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
+        this.gridView.setVisibility(View.GONE);
 
         return searchView;
     }
@@ -80,9 +102,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public boolean onQueryTextSubmit(String s) {
         if (s.length() > 0) {
-            // this.mTextView.setText("Results");
-            // List<Media> searchResults = search(s);
-            // gridView.setAdapter(new MediaAdapter(this.getContext(), searchResults));
+            //this.mTextView.setText("Results");
+            search(s);
+            //gridView.setAdapter(new MediaAdapter(this.getContext(), searchResults));
 
             // toDO : call the search function
             // toDO : update the GridView
@@ -104,13 +126,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public void onClick(View view) {
         if (view == peopleButton) {
+            this.gridView.setVisibility(View.GONE);
+            this.recyclerView.setVisibility(View.VISIBLE);
+
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
-        } else if (view == booksButton) {
-            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
-        } else if (view == filmButton) {
-            this.currentCategory = SearchFragment.SearchCategory.MOVIES;
-        } else if (view == musicButton) {
-            this.currentCategory = SearchFragment.SearchCategory.MUSIC;
+        } else {
+            this.recyclerView.setVisibility(View.GONE);
+            this.gridView.setVisibility(View.VISIBLE);
+
+            if (view == booksButton) {
+                this.currentCategory = SearchFragment.SearchCategory.BOOKS;
+            } else if (view == filmButton) {
+                this.currentCategory = SearchFragment.SearchCategory.MOVIES;
+            } else if (view == musicButton) {
+                this.currentCategory = SearchFragment.SearchCategory.MUSIC;
+            }
         }
 
         this.currentHighlightedButton.setTypeface(null, Typeface.NORMAL);
@@ -124,9 +154,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         List<Media> searchMediaResults = new ArrayList<Media>();
         switch (this.currentCategory) {
             case PEOPLE:
+                searchUser(toBeSearched);
                 break;
             case MOVIES:
-
                 // toDO : fetch from firebase 
                 // for now fetches from a local database
                 if (toBeSearched.equals("james bond")) {
@@ -139,5 +169,18 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
         }
         return searchMediaResults;
+    }
+
+    private void searchUser(String toBeSearched) {
+        //TODO Use a search engine
+        getUser(toBeSearched).thenAccept(user -> {
+            List<User> users = new ArrayList<>();
+            users.add(user);
+            searchUserViewModel.setUserList(users);
+        }).exceptionally(throwable -> {
+            searchUserViewModel.clearUserList();
+            Toast.makeText(getContext(), R.string.searchUserFailed, Toast.LENGTH_SHORT).show();
+            return null;
+        });
     }
 }
