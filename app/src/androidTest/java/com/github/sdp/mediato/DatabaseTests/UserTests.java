@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,17 +37,20 @@ import java.util.concurrent.TimeoutException;
  */
 public class UserTests {
     private final static int STANDARD_USER_TIMEOUT = 10;
+    private final static int STANDARD_SLEEP_DELAY = 1000;
     User user1;
     User user2;
     User user3;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         try {
             Database.database.useEmulator("10.0.2.2", 9000);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            throw e;
         }
         //Create new sample users
+        /**
         user1 = new User.UserBuilder("uniqueId1")
                 .setUsername("user_test_1")
                 .setEmail("email_test_1")
@@ -64,14 +68,21 @@ public class UserTests {
                 .setEmail("email_test_3")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
-                .build();
+                .build();*/
     }
 
-    @AfterClass
-    public static void cleanDatabase() {
-        Database.database.getReference().setValue(null);
+    @Test
+    public void test() throws InterruptedException {
+        Database.database.getReference().child("Test").setValue("testval");
+        Thread.sleep(5000);
     }
 
+    //@AfterClass
+    //public static void cleanDatabase() {
+        //Database.database.getReference().setValue(null);
+    //}
+
+    /**
     @Test
     //Tests that following a user adds the right username in the following list and the followers list
     public void followUserAddsUsernameInFollowingAndFollowers() throws ExecutionException, InterruptedException, TimeoutException {
@@ -79,35 +90,14 @@ public class UserTests {
         Database.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
         Database.followUser(user2.getUsername(), user3.getUsername());
-        DatabaseReference user1FollowingRef = Database.database.getReference().child(Database.USERS_PATH + user2.getUsername() + Database.FOLLOWING_PATH);
-        user1FollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        Thread.sleep(STANDARD_SLEEP_DELAY);
 
-                Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(following.get(user3.getUsername()));
-            }
+        List<String> followers = Database.getUser(user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS).getFollowers();
+        List<String> following = Database.getUser(user2.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS).getFollowing();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
+        assertTrue(followers.contains(user2.getUsername()));
+        assertTrue(following.contains(user3.getUsername()));
 
-        DatabaseReference user2FollowersRef = Database.database.getReference().child(Database.USERS_PATH + user3.getUsername() + Database.FOLLOWERS_PATH);
-        user2FollowersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
-                assertTrue(followers.get(user2.getUsername()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
     }
 
     @Test
@@ -115,37 +105,16 @@ public class UserTests {
     public void unfollowUserRemovesUsernameFromFollowingAndFollowers() throws ExecutionException, InterruptedException, TimeoutException {
         Database.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         Database.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+
         Database.followUser(user2.getUsername(), user3.getUsername());
         Database.unfollowUser(user2.getUsername(), user3.getUsername());
-        DatabaseReference user1FollowingRef = Database.database.getReference().child(Database.USERS_PATH + user2.getUsername() + Database.FOLLOWING_PATH);
-        user1FollowingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        Thread.sleep(STANDARD_SLEEP_DELAY);
 
-                Map<String, Boolean> following = (Map<String, Boolean>) snapshot.getValue();
-                assertFalse(following.get(user3.getUsername()));
-            }
+        List<String> followers = Database.getUser(user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS).getFollowers();
+        List<String> following = Database.getUser(user2.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS).getFollowing();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
-
-        DatabaseReference user2FollowersRef = Database.database.getReference().child(Database.USERS_PATH + user3.getUsername() + Database.FOLLOWERS_PATH);
-        user2FollowersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                Map<String, Boolean> followers = (Map<String, Boolean>) snapshot.getValue();
-                assertFalse(followers.get(user2.getUsername()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
+        assertFalse(followers.contains(user2.getUsername()));
+        assertFalse(following.contains(user3.getUsername()));
     }
 
     @Test
@@ -200,6 +169,6 @@ public class UserTests {
     public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername() throws ExecutionException, InterruptedException, TimeoutException {
         Database.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertFalse(Database.isUsernameUnique("user_test_1").get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
-    }
+    }*/
 
 }

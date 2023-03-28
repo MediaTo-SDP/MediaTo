@@ -1,4 +1,4 @@
-package com.github.sdp.mediato.model;
+package com.github.sdp.mediato.model.mediaTests;
 
 
 import static org.hamcrest.CoreMatchers.is;
