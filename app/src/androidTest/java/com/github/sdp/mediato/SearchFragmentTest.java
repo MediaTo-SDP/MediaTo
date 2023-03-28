@@ -93,6 +93,8 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "something");
     pressImeActionButton();
 
+    sleep(500);
+
     onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(R.string.searchUserFailed)))
             .check(matches(isDisplayed()));
