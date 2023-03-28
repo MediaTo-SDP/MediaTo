@@ -6,7 +6,7 @@ import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.github.sdp.mediato.util.AdapterRetrofitCallback;
+import com.github.sdp.mediato.utility.adapters.AdapterRetrofitCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,6 +140,18 @@ public class TheMovieDB implements API<TMDBMovie> {
             trendingCache = new ArrayList<>(trendingCache.subList(resultSize, trendingCache.size()));
             return results;
         });
+    }
+
+    /**
+     * Get a single movie from it's TMDB id
+     * @param id the TMDB id of the movie
+     * @return a completable holding the movie data
+     */
+    @Override
+    public CompletableFuture<TMDBMovie> get(int id) {
+        CompletableFuture<TMDBMovie> future = new CompletableFuture<>();
+        api.get(id, apikey, "en-US").enqueue(new AdapterRetrofitCallback<>(future));
+        return future;
     }
 
     /**

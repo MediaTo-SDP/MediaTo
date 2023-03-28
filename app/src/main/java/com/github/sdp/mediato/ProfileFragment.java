@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
-import com.github.sdp.mediato.model.media.CollectionType;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.SampleReviews;
@@ -76,7 +75,7 @@ public class ProfileFragment extends Fragment {
     addMediaButton = view.findViewById(R.id.add_media_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
-    collectionRecyclerView = view.findViewById(R.id.collectionRecyclerView);
+    collectionRecyclerView = view.findViewById(R.id.collection_recycler_view);
 
     // Initialize components
     photoPicker = setupPhotoPicker();
