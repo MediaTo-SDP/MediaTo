@@ -1,19 +1,27 @@
 package com.github.sdp.mediato;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.github.sdp.mediato.data.Database.getUser;
+
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Toast;
+
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +31,7 @@ import com.github.sdp.mediato.model.LocalFilmDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +45,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         MUSIC
     }
 
+    private Snackbar failedUserSearch;
     private SearchUserViewModel searchUserViewModel;
 
     private SearchView searchView;
@@ -51,6 +61,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
+
+    private static String USERNAME;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        USERNAME = getArguments().getString("username");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +97,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         // Create and init the Search User ViewModel
         searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
-        searchUserViewModel.setUserName(ProfileFragment.USERNAME);
+        searchUserViewModel.setUserName(USERNAME);
 
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
@@ -179,8 +197,23 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             searchUserViewModel.setUserList(users);
         }).exceptionally(throwable -> {
             searchUserViewModel.clearUserList();
-            Toast.makeText(getContext(), R.string.searchUserFailed, Toast.LENGTH_SHORT).show();
+            displaySnackbar(R.string.searchUserFailed);
             return null;
         });
+    }
+
+    private void displaySnackbar(int msg) {
+        Snackbar snackbar = Snackbar.make(
+                getActivity().getWindow().getDecorView().findViewById(android.R.id.content),
+                msg,
+                Snackbar.LENGTH_SHORT
+        );
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 }
