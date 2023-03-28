@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
@@ -17,7 +18,14 @@ public class SearchUserViewModel extends ViewModel {
     private final MutableLiveData<List<User>> userListLiveData = new MutableLiveData<>();
 
     public SearchUserViewModel() {
-        userNameLiveData.setValue("");
+        userNameLiveData.setValue("None");
+        userLiveData.setValue(new User.UserBuilder("None")
+                .setUsername("None")
+                .setEmail("None")
+                .setRegisterDate("01/01/0001")
+                .setLocation(new Location(3.14, 3.14))
+                .build()
+        );
         userListLiveData.setValue(new ArrayList<>());
     }
 
