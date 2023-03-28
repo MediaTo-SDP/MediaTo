@@ -11,8 +11,9 @@
         android:orientation="vertical"
         android:background="#a6a29b">
 
-        <android.widget.SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/searchactivity_searchview_searchbar"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
