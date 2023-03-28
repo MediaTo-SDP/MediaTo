@@ -1,16 +1,23 @@
 package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.os.Bundle;
+import android.view.View;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +25,12 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class ProfileFragmentTest {
 
+  ActivityScenario<TestingActivity> scenario;
+
   @Before
   public void setUp() {
     // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    scenario = ActivityScenario.launch(TestingActivity.class);
 
     // Set up the TestingActivity to display the ProfileFragment
     scenario.onActivity(activity -> {
@@ -67,39 +76,76 @@ public class ProfileFragmentTest {
     userNameText.check(matches(withText("myUsername")));
   }
 
-  // Test whether the "Recently watched" title is displayed  and contains the correct text
+  // Test the initial state of the default collection after profile creation
   @Test
-  public void testRecentlyWatchedTitle() {
-    ViewInteraction recentlyWatchedText = onView(withId(R.id.recently_watched_text));
-    recentlyWatchedText.check(matches(isDisplayed()));
-    recentlyWatchedText.check(matches(withText("Recently watched")));
+  public void testInitialDefaultCollectionState() {
+    ViewInteraction defaultCollection = onView(withId(R.id.default_collection));
+    ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
+
+    // Check that the default collection is displayed
+    defaultCollection.check(matches(isDisplayed()));
+
+    // Check that the default title is correct
+    defaultCollection.check(matches(hasDescendant(withText("Recently watched"))));
+
+    // Check that the collection has an AddMedia button
+    defaultCollection.check(matches(hasDescendant(withId(R.id.add_media_button))));
+
+    // Check that the collection has a recycler view
+    defaultCollection.check(matches(hasDescendant(withId(R.id.collection_recycler_view))));
+
+    // Check that the recycler view is initially empty
+    recyclerView.check(matches(hasItemCount(0)));
   }
 
-  /*// Test whether the "Add movie" button is displayed
+  // Test that an item is added to the collection on click of the AddMediaButton
   @Test
-  public void testAddMovieButton() {
-    ViewInteraction collectionView = onView(withId(R.id.layout_collection));
-    collectionView.check(matches(hasDescendant(withId(R.id.add_media_button))));
-    onView(withId(R.id.add_media_button)).check(matches(isDisplayed()));
+  public void testAddMediaButton() {
+    ViewInteraction collectionRecyclerView = onView(withId(R.id.collection_recycler_view));
+    ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
+
+    int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
+
+    collectionRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    addMediaButton.perform(click());
+    collectionRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
 
-  // Test whether the collection view is displayed
-  @Test
-  public void testHorizontalScrollList() {
-    ViewInteraction collectionView = onView(withId(R.id.collectionRecyclerView));
-    collectionView.check(matches(isDisplayed()));
+  /**
+   * A matcher to check if a RecyclerView has a certain amount of items.
+   *
+   * @param count the expected number of items.
+   * @return a Matcher to check if a view has count amount of items.
+   */
+  public static Matcher<View> hasItemCount(int count) {
+    return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+      @Override
+      protected boolean matchesSafely(RecyclerView recyclerView) {
+        return recyclerView.getAdapter().getItemCount() == count;
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("RecyclerView with item count: " + count);
+      }
+    };
   }
 
-  // Test whether a movie item, which consists of an image of a movie and a title and rating text,
-  // is displayed and has the correct title and rating
-  @Test
-  public void testMovieItem() {
-    ViewInteraction movieItem = onView(withId(R.layout.layout_movie_item));
-    movieItem.check(matches(isDisplayed()));
-    movieItem.check(matches(hasDescendant(withText("Skyfall"))));
-    movieItem.check(matches(hasDescendant(withText("Rating: 10"))));
-  }*/
+  /**
+   * Returns the number of items in a RecyclerView hosted by the TestingActivity
+   *
+   * @param id the id of the RecyclerView
+   * @return the number of items currently in the RecyclerView
+   */
+  private int getRecyclerViewItemCount(int id) {
+    final int[] itemCount = new int[1];
 
+    scenario.onActivity(activity -> {
+      RecyclerView recyclerView = activity.findViewById(id);
+      itemCount[0] = recyclerView.getAdapter().getItemCount();
+    });
+    return itemCount[0];
+  }
 
 }
 
