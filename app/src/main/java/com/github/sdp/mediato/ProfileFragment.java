@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,7 +26,6 @@ import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
-import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,14 +113,10 @@ public class ProfileFragment extends Fragment {
   }
 
   private void setupAddCollectionsButton(Button addCollectionButton) {
-    //TODO connect this to the SearchFragment
-    SampleReviews s = new SampleReviews();
     addCollectionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // random string to test for now
-        String randomString = java.util.UUID.randomUUID().toString().substring(0, 6);
-        viewModel.addCollection(randomString);
+        showAddCollectionDialog();
       }
     });
   }
@@ -217,5 +215,32 @@ public class ProfileFragment extends Fragment {
       return null;
     });
   }
+
+  private void showAddCollectionDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+    LayoutInflater inflater = requireActivity().getLayoutInflater();
+    View view = inflater.inflate(R.layout.dialog_add_collection, null);
+    final EditText input = view.findViewById(R.id.collection_name_input);
+
+    builder.setView(view);
+
+    builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        String collectionName = input.getText().toString();
+        viewModel.addCollection(collectionName);
+      }
+    });
+    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.cancel();
+      }
+    });
+
+    builder.show();
+  }
+
 
 }
