@@ -51,7 +51,7 @@ public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.
       Review review = s.getMovieReview();
       collection.addReview(review);
       System.out.println("add");
-      notifyDataSetChanged();
+      collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
     });
   }
 
