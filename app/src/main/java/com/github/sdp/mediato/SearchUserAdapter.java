@@ -94,6 +94,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
     }
 
+    // TODO: Should be improved so it does not need to use the hardcoded retry
     private void downloadProfilePicWithRetry(ImageView userProfileImageView, String userName) {
 
         CompletableFuture<byte[]> imageFuture = Database.getProfilePic(userName);

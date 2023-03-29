@@ -61,6 +61,7 @@
   <!--Toast messages-->
   <string name="profile_creation_success">Profile creation successful!</string>
   <string name="searchUserFailed">Failed to search users</string>
+    <string name="movie_name">movie_name</string>
 
 
 </resources>

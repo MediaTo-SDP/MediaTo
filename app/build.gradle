@@ -69,9 +69,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
-        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
-    }
+    androidTestImplementation('com.adevinta.android:barista:4.2.0')
 
 
     implementation 'com.github.dhaval2404:imagepicker:2.1'
