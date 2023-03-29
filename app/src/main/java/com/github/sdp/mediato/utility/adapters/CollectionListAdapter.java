@@ -15,12 +15,13 @@ import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
 import java.util.List;
 
-public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.ViewHolder> {
+public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private Context context;
+  
   private List<Collection> collections;
 
-  public CollectionsAdapter(Context context, List<Collection> collections) {
+  public CollectionListAdapter(Context context, List<Collection> collections) {
     this.context = context;
     this.collections = collections;
   }

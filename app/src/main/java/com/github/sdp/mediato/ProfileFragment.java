@@ -24,7 +24,7 @@ import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.SampleReviews;
-import com.github.sdp.mediato.utility.adapters.CollectionsAdapter;
+import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
   private ImageView profileImage;
   private RecyclerView collectionsRecyclerView;
 
-  private CollectionsAdapter collectionsAdapter;
+  private CollectionListAdapter collectionsAdapter;
 
 
   // Used as a key to access the database
@@ -91,7 +91,7 @@ public class ProfileFragment extends Fragment {
     return view;
   }
 
-  private CollectionsAdapter setupCollections(RecyclerView recyclerView) {
+  private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
     // Check if a collection is already in the viewModel, if not create one
     List<Collection> collections = viewModel.getCollections();
     if (collections == null) {
@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // Create an adapter to display the collections in a RecycleView
-    CollectionsAdapter collectionsAdapter = new CollectionsAdapter(getContext(), collections);
+    CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections);
     recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -123,7 +123,7 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-  private void observeCollections(CollectionsAdapter collectionsAdapter) {
+  private void observeCollections(CollectionListAdapter collectionsAdapter) {
     viewModel.getCollectionsLiveData()
         .observe(getViewLifecycleOwner(), new Observer<List<Collection>>() {
           @Override
