@@ -1,12 +1,10 @@
 package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Media {
+public class Media {
 
     private MediaType mediaType;
     private String title;

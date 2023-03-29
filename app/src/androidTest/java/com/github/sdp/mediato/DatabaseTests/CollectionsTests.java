@@ -4,33 +4,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
-import com.github.sdp.mediato.model.media.Media;
-import com.github.sdp.mediato.model.media.MediaType;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
+import com.github.sdp.mediato.model.media.Movie;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -41,18 +30,21 @@ import java.util.concurrent.TimeoutException;
 public class CollectionsTests {
     private final static int STANDARD_COLLECTION_TIMEOUT = 10;
     private User user1 = new User.UserBuilder("uniqueId1")
-            .setUsername("user_test_1")
-            .setEmail("email_test_1")
-            .setRegisterDate("09/03/2023")
-            .setLocation(new Location(3.14, 3.14))
-            .build();
+        .setUsername("user_test_1")
+        .setEmail("email_test_1")
+        .setRegisterDate("09/03/2023")
+        .setLocation(new Location(3.14, 3.14))
+        .build();
 
     private Collection collection1;
     private Collection collection2;
 
-    private Review review1 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 1", "the chosen one", "url", 1));
-    private Review review2 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 2", "the chosen two", "url", 2), 9);
-    private Review review3 = new Review(user1.getUsername(), new Media(MediaType.MOVIE, "Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
+    private Review review1 = new Review(user1.getUsername(),
+        new Movie("Harry Potter 1", "the chosen one", "url", 1));
+    private Review review2 = new Review(user1.getUsername(),
+        new Movie("Harry Potter 2", "the chosen two", "url", 2), 9);
+    private Review review3 = new Review(user1.getUsername(),
+        new Movie("Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
 
     private Map<String, Review> reviews1 = new HashMap<>() {
     };
