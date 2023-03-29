@@ -24,6 +24,7 @@
   <string name="recently_watched">Recently watched</string>
   <string name="title">Title</string>
   <string name="rating">Rating: </string>
+  <string name="add_collection">Add collection</string>
 
   <!--Buttons-->
   <string name="friends">Friends</string>

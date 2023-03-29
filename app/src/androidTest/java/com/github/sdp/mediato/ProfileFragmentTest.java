@@ -79,7 +79,7 @@ public class ProfileFragmentTest {
   // Test the initial state of the default collection after profile creation
   @Test
   public void testInitialDefaultCollectionState() {
-    ViewInteraction defaultCollection = onView(withId(R.id.default_collection));
+    ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
     ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
 
     // Check that the default collection is displayed

@@ -14,9 +14,6 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
   private Context context;
@@ -72,8 +69,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
       mediaImage = itemView.findViewById(R.id.movie_image);
       mediaTitle = itemView.findViewById(R.id.movie_title);
       mediaRating = itemView.findViewById(R.id.movie_rating);
-
-
     }
   }
 
@@ -89,7 +84,5 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
     return sb.toString();
   }
-
-
 }
 

@@ -13,8 +13,8 @@
     app:layout_constraintTop_toTopOf="parent" />
 
   <include
-    android:id="@+id/default_collection"
-    layout="@layout/layout_collection"
+    android:id="@+id/collection_list"
+    layout="@layout/layout_collection_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@+id/profile_header"

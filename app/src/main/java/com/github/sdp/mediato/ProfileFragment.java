@@ -21,12 +21,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.data.Database;
-import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.SampleReviews;
-import com.github.sdp.mediato.utility.adapters.CollectionAdapter;
+import com.github.sdp.mediato.utility.adapters.CollectionsAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -39,11 +40,12 @@ public class ProfileFragment extends Fragment {
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
-  private ImageButton addMediaButton;
+  private ImageButton addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
-  private RecyclerView collectionRecyclerView;
-  private CollectionAdapter collectionAdapter;
+  private RecyclerView collectionsRecyclerView;
+
+  private CollectionsAdapter collectionsAdapter;
 
 
   // Used as a key to access the database
@@ -72,72 +74,80 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
-    addMediaButton = view.findViewById(R.id.add_media_button);
+    addCollectionButton = view.findViewById(R.id.add_collection_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
-    collectionRecyclerView = view.findViewById(R.id.collection_recycler_view);
+    collectionsRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
 
     // Initialize components
     photoPicker = setupPhotoPicker();
-    collectionAdapter = setupCollection(collectionRecyclerView);
-    setupAddButton(addMediaButton);
+    collectionsAdapter = setupCollections(collectionsRecyclerView);
+    setupAddCollectionsButton(addCollectionButton);
 
     // Observe the view model's live data to update UI components
     observeUsername();
     observeProfilePic();
-    observeCollection(collectionAdapter);
+    observeCollections(collectionsAdapter);
 
     return view;
   }
 
-  private CollectionAdapter setupCollection(RecyclerView recyclerView) {
+  private CollectionsAdapter setupCollections(RecyclerView recyclerView) {
     // Check if a collection is already in the viewModel, if not create one
-    Collection collection = viewModel.getCollection();
-    if (collection == null) {
-      collection = new Collection("Some Title");
+    List<Collection> collections = viewModel.getCollections();
+    if (collections == null) {
+      Collection collection = new Collection("Recently watched");
+      collections = new ArrayList<>();
+      collections.add(collection);
       Database.addCollection(USERNAME, collection);
-      viewModel.setCollection(collection);
+      viewModel.setCollections(collections);
     }
 
-    // Create an adapter to display the collection in a RecycleView
-    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collection);
-    recyclerView.setAdapter(collectionAdapter);
+    // Create an adapter to display the collections in a RecycleView
+    CollectionsAdapter collectionsAdapter = new CollectionsAdapter(getContext(), collections);
+    recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
-        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-    return collectionAdapter;
+        new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    return collectionsAdapter;
   }
 
-  private PhotoPicker setupPhotoPicker() {
-    PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
-
-    // On click on the edit button, open a photo picker to choose the profile image
-    editButton.setOnClickListener(v -> {
-          photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
-          //TODO This does not work (does not update the viewModel), change the PhotoPicker to return a Bitmap instead
-          Drawable drawable = profileImage.getDrawable();
-          BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-          Bitmap bitmap = bitmapDrawable.getBitmap();
-          viewModel.setProfilePic(bitmap);
-        }
-
-    );
-    return photoPicker;
+  private void setupAddCollectionsButton(ImageButton addCollectionButto) {
+    //TODO connect this to the SearchFragment
+    SampleReviews s = new SampleReviews();
+    addCollectionButto.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // random string to test for now
+        String randomString = java.util.UUID.randomUUID().toString().substring(0, 6);
+        viewModel.addCollection(randomString);
+      }
+    });
   }
 
-  private void setupAddButton(ImageButton addMediaButton) {
+  private void observeCollections(CollectionsAdapter collectionsAdapter) {
+    viewModel.getCollectionsLiveData()
+        .observe(getViewLifecycleOwner(), new Observer<List<Collection>>() {
+          @Override
+          public void onChanged(List<Collection> collections) {
+            collectionsAdapter.notifyDataSetChanged();
+          }
+        });
+  }
+
+   /* private void setupAddButton(ImageButton addMediaButton) {
     //TODO connect this to the SearchFragment
     SampleReviews s = new SampleReviews();
     addMediaButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        /*replaceFragment(new SearchFragment());*/
+        *//*replaceFragment(new SearchFragment());*//*
         Review review = s.getMovieReview();
         Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
         viewModel.addReviewToCollection(review);
       }
     });
 
-  }
+  }*/
 
   private void observeUsername() {
     viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -158,20 +168,28 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-  private void observeCollection(CollectionAdapter collectionAdapter) {
-    viewModel.getCollectionLiveData().observe(getViewLifecycleOwner(), new Observer<Collection>() {
-      @Override
-      public void onChanged(Collection collection) {
-        collectionAdapter.notifyDataSetChanged();
-      }
-    });
-  }
-
   private void replaceFragment(Fragment fragment) {
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.main_container, fragment);
     fragmentTransaction.commit();
+  }
+
+  private PhotoPicker setupPhotoPicker() {
+    PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
+
+    // On click on the edit button, open a photo picker to choose the profile image
+    editButton.setOnClickListener(v -> {
+          photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
+          //TODO This does not work (does not update the viewModel), change the PhotoPicker to return a Bitmap instead
+          Drawable drawable = profileImage.getDrawable();
+          BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+          Bitmap bitmap = bitmapDrawable.getBitmap();
+          viewModel.setProfilePic(bitmap);
+        }
+
+    );
+    return photoPicker;
   }
 
 
