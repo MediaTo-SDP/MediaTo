@@ -111,10 +111,10 @@ public class ProfileFragment extends Fragment {
     return collectionsAdapter;
   }
 
-  private void setupAddCollectionsButton(ImageButton addCollectionButto) {
+  private void setupAddCollectionsButton(ImageButton addCollectionButton) {
     //TODO connect this to the SearchFragment
     SampleReviews s = new SampleReviews();
-    addCollectionButto.setOnClickListener(new View.OnClickListener() {
+    addCollectionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         // random string to test for now

@@ -49,6 +49,9 @@ public class CollectionsAdapter extends RecyclerView.Adapter<CollectionsAdapter.
     holder.addMediaButton.setOnClickListener(v -> {
       // Handle adding a new media item to the current collection
       Review review = s.getMovieReview();
+      collection.addReview(review);
+      System.out.println("add");
+      notifyDataSetChanged();
     });
   }
 
