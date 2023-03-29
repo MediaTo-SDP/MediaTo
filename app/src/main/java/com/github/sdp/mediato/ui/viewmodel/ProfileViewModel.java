@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
@@ -68,6 +69,7 @@ public class ProfileViewModel extends ViewModel {
     Collection collection = getCollection(collectionName);
 
     collection.addReview(review);
+    Database.addReviewToCollection(getUsername(), collectionName, review);
 
     // Notify observers about the change in collections
     collectionsLiveData.setValue(getCollections());
@@ -91,6 +93,8 @@ public class ProfileViewModel extends ViewModel {
     }
     Collection newCollection = new Collection(collectionName);
     collections.add(newCollection);
+
+    Database.addCollection(getUsername(), newCollection);
 
     // Notify observers about the change in collections
     collectionsLiveData.setValue(collections);

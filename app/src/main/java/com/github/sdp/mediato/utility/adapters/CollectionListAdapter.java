@@ -14,6 +14,7 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * This adapter displays a list of collections of Media.
@@ -21,12 +22,14 @@ import java.util.List;
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private Context context;
+  private Consumer<Runnable> notifyItemChangedConsumer;
   
   private List<Collection> collections;
 
   public CollectionListAdapter(Context context, List<Collection> collections) {
     this.context = context;
     this.collections = collections;
+    this.notifyItemChangedConsumer = notifyItemChangedConsumer;
   }
 
   @NonNull
