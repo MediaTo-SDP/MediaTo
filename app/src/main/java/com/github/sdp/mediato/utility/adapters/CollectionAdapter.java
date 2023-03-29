@@ -39,7 +39,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Review review = collection.getReviewsList().get(position);
     Media media = review.getMedia();
-    holder.mediaImage.setImageResource(R.drawable.bg_movie2);
+    holder.mediaImage.setImageResource(R.drawable.bg_movie);
     holder.mediaTitle.setText(media.getTitle());
     try {
       int grade = review.getGrade();

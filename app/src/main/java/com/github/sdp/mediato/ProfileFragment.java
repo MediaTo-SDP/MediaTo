@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
@@ -40,7 +39,7 @@ public class ProfileFragment extends Fragment {
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
-  private ImageButton addCollectionButton;
+  private Button addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
   private RecyclerView collectionsRecyclerView;
@@ -111,7 +110,7 @@ public class ProfileFragment extends Fragment {
     return collectionsAdapter;
   }
 
-  private void setupAddCollectionsButton(ImageButton addCollectionButton) {
+  private void setupAddCollectionsButton(Button addCollectionButton) {
     //TODO connect this to the SearchFragment
     SampleReviews s = new SampleReviews();
     addCollectionButton.setOnClickListener(new View.OnClickListener() {
