@@ -20,7 +20,7 @@ import com.google.firebase.storage.UploadTask.TaskSnapshot;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
-public class Database implements GenericDatabase {
+public class Database {
 
     public static final String USERS_PATH = "Users/";
 
