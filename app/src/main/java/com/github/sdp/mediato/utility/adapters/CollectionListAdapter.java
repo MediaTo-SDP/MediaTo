@@ -15,6 +15,9 @@ import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
 import java.util.List;
 
+/**
+ * This adapter displays a list of collections of Media.
+ */
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private Context context;

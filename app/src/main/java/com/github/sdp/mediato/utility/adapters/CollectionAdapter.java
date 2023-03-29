@@ -14,6 +14,9 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 
+/**
+ * This adapter displays a single collection of Media.
+ */
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
   private Context context;
@@ -46,7 +49,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     int grade = review.getGrade();
     holder.mediaRating.setText(getStarString(grade));
 
-    // TODO set the movie image
+    // TODO set the movie image retrieved from the API
     holder.mediaImage.setImageResource(R.drawable.bg_movie);
   }
 
