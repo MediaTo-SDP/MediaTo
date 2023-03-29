@@ -14,13 +14,12 @@
     android:id="@+id/friends_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="0dp"
     android:backgroundTint="@color/white"
     android:text="@string/friends"
     android:textAllCaps="false"
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-    app:layout_constraintStart_toEndOf="@+id/profile_image" />
+    app:layout_constraintStart_toStartOf="@+id/username_text" />
   <Button
     android:id="@+id/edit_button"
     android:layout_width="wrap_content"
