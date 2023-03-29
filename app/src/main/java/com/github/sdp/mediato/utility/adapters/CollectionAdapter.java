@@ -32,24 +32,22 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         .inflate(R.layout.layout_profile_movie_item, parent, false);
 
     return new ViewHolder(view);
-
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Review review = collection.getReviewsList().get(position);
     Media media = review.getMedia();
-    holder.mediaImage.setImageResource(R.drawable.bg_movie);
+
+    // Set the media title
     holder.mediaTitle.setText(media.getTitle());
-    try {
-      int grade = review.getGrade();
-      holder.mediaRating.setText(getStarString(grade));
 
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    /* holder.mediaRating.setText(review.getGrade());*/
+    // Set the media rating
+    int grade = review.getGrade();
+    holder.mediaRating.setText(getStarString(grade));
 
+    // TODO set the movie image
+    holder.mediaImage.setImageResource(R.drawable.bg_movie);
   }
 
   @Override
@@ -84,5 +82,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
     return sb.toString();
   }
+
 }
 

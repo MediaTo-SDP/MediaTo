@@ -51,7 +51,6 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
       // Handle adding a new media item to the current collection
       Review review = s.getMovieReview();
       collection.addReview(review);
-      System.out.println("add");
       collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
     });
   }

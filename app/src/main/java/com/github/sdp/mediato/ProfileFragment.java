@@ -1,6 +1,5 @@
 package com.github.sdp.mediato;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,11 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,8 +30,8 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * A fragment that displays the user's profile information, including their profile picture,
- * username, and collections of their favorite media types. The profile picture and collections can
- * be edited by the user.
+ * username, and custom collections of their favorite media types. The profile picture can be edited
+ * by the user.
  */
 public class ProfileFragment extends Fragment {
 
@@ -45,9 +42,7 @@ public class ProfileFragment extends Fragment {
   private TextView usernameView;
   private ImageView profileImage;
   private RecyclerView collectionsRecyclerView;
-
   private CollectionListAdapter collectionsAdapter;
-
 
   // Used as a key to access the database
   private static String USERNAME;
@@ -94,17 +89,18 @@ public class ProfileFragment extends Fragment {
   }
 
   private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
-    // Check if a collection is already in the viewModel, if not create one
+    // Check if a collection is already in the viewModel, if not create the default one
     List<Collection> collections = viewModel.getCollections();
     if (collections == null) {
-      Collection collection = new Collection("Recently watched");
+      String defaultTitle = getResources().getString(R.string.recently_watched);
+      Collection defaultCollection = new Collection(defaultTitle);
       collections = new ArrayList<>();
-      collections.add(collection);
-      Database.addCollection(USERNAME, collection);
+      collections.add(defaultCollection);
+      Database.addCollection(USERNAME, defaultCollection);
       viewModel.setCollections(collections);
     }
 
-    // Create an adapter to display the collections in a RecycleView
+    // Create an adapter to display the list of collections in a RecycleView
     CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections);
     recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
@@ -113,63 +109,22 @@ public class ProfileFragment extends Fragment {
   }
 
   private void setupAddCollectionsButton(Button addCollectionButton) {
-    addCollectionButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        showAddCollectionDialog();
-      }
-    });
+    addCollectionButton.setOnClickListener(v -> showEnterCollectionNameDialog());
   }
 
   private void observeCollections(CollectionListAdapter collectionsAdapter) {
     viewModel.getCollectionsLiveData()
-        .observe(getViewLifecycleOwner(), new Observer<List<Collection>>() {
-          @Override
-          public void onChanged(List<Collection> collections) {
-            collectionsAdapter.notifyDataSetChanged();
-          }
-        });
+        .observe(getViewLifecycleOwner(), collections -> collectionsAdapter.notifyDataSetChanged());
   }
 
-   /* private void setupAddButton(ImageButton addMediaButton) {
-    //TODO connect this to the SearchFragment
-    SampleReviews s = new SampleReviews();
-    addMediaButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        *//*replaceFragment(new SearchFragment());*//*
-        Review review = s.getMovieReview();
-        Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
-        viewModel.addReviewToCollection(review);
-      }
-    });
-
-  }*/
-
   private void observeUsername() {
-    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
-      @Override
-      public void onChanged(String username) {
-        usernameView.setText(username);
-      }
-    });
+    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(),
+        username -> usernameView.setText(username));
   }
 
   private void observeProfilePic() {
-    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
-      @Override
-      public void onChanged(Bitmap bitmap) {
-        profileImage.setImageBitmap(bitmap);
-
-      }
-    });
-  }
-
-  private void replaceFragment(Fragment fragment) {
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.commit();
+    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(),
+        bitmap -> profileImage.setImageBitmap(bitmap));
   }
 
   private PhotoPicker setupPhotoPicker() {
@@ -184,11 +139,48 @@ public class ProfileFragment extends Fragment {
           Bitmap bitmap = bitmapDrawable.getBitmap();
           viewModel.setProfilePic(bitmap);
         }
-
     );
     return photoPicker;
   }
 
+  private void showEnterCollectionNameDialog() {
+    // Build the dialog box
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    LayoutInflater inflater = requireActivity().getLayoutInflater();
+    View view = inflater.inflate(R.layout.dialog_add_collection, null);
+    final EditText textInput = view.findViewById(R.id.collection_name_input);
+
+    builder.setView(view);
+
+    // Set the add button
+    String addText = getResources().getString(R.string.add);
+    builder.setPositiveButton(addText,
+        (dialog, which) -> handleEnteredCollectionName(textInput));
+
+    // Set the cancel button
+    String cancelText = getResources().getString(R.string.add);
+    builder.setNegativeButton(cancelText,
+        (dialog, which) -> dialog.cancel());
+
+    builder.show();
+  }
+
+  private void handleEnteredCollectionName(EditText textInput) {
+    String collectionName = textInput.getText().toString();
+
+    // Check if the entered name is empty and make a toast if yes
+    if (collectionName.isEmpty()) {
+      String toastEmptyName = getResources().getString(R.string.collection_empty_name);
+      makeToast(toastEmptyName);
+      return;
+    }
+
+    // Check if the entered name is the same as an already existing collection and make a toast if yes
+    String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
+    if (!viewModel.addCollection(collectionName)) {
+      makeToast(toastDuplicateName);
+    }
+  }
 
   // TODO: Should be improved so it does not need to use the hardcoded retry
   private void downloadProfilePicWithRetry(String username) {
@@ -216,31 +208,8 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-  private void showAddCollectionDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-    LayoutInflater inflater = requireActivity().getLayoutInflater();
-    View view = inflater.inflate(R.layout.dialog_add_collection, null);
-    final EditText input = view.findViewById(R.id.collection_name_input);
-
-    builder.setView(view);
-
-    builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        String collectionName = input.getText().toString();
-        viewModel.addCollection(collectionName);
-      }
-    });
-    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        dialog.cancel();
-      }
-    });
-
-    builder.show();
+  private void makeToast(String text) {
+    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
   }
-
 
 }

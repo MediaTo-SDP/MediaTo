@@ -59,7 +59,6 @@ public class ProfileViewModel extends ViewModel {
     usernameLiveData.setValue(username);
   }
 
-
   public void setProfilePic(@NonNull Bitmap profilePic) {
     profilePicLiveData.setValue(profilePic);
   }
@@ -74,12 +73,6 @@ public class ProfileViewModel extends ViewModel {
     collectionsLiveData.setValue(getCollections());
   }
 
-  @Deprecated
-  public void addReviewToCollection(@NonNull Review review) {
-    addReviewToCollection(review, "Recently watched");
-  }
-
-
   /**
    * Adds a collection with the chosen name if no collection of that name already exists, or makes
    * no changes if such a collection already exists.
@@ -93,7 +86,6 @@ public class ProfileViewModel extends ViewModel {
 
     for (Collection collection : collections) {
       if (collection.getCollectionName().equals(collectionName)) {
-        // TODO add a Toast or something to notify to the user that two collections cannot have the same name
         return false;
       }
     }
