@@ -31,8 +31,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
     // We assign a callback to Google sign in button
     findViewById(R.id.google_sign_in).setOnClickListener(view -> {
-      FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
-      if (authUser == null) {
+
         // Initialize sign in intent
         Intent signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
@@ -41,9 +40,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             .build();
         // Start the intent
         signInLauncher.launch(signInIntent);
-      } else {
-        launchPostActivity(authUser);
-      }
+
     });
 
   }
@@ -62,6 +59,8 @@ public class AuthenticationActivity extends AppCompatActivity {
       launchPostActivity(
           Objects.requireNonNull(
               FirebaseAuth.getInstance().getCurrentUser()));
+      System.out.println("Error while signing in: " + result.getResultCode());
+
     }
   }
   

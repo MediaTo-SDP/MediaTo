@@ -10,10 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
 
-class git NewItemFragment extends Fragment {
+class NewItemFragment extends Fragment {
 
     // The maximum allowed length for review field
     public final static int MAX_REVIEW_LENGTH = 100;
