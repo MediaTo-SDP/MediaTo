@@ -104,7 +104,8 @@ public class ProfileFragment extends Fragment {
     // Define what happens when the add button inside a collection is clicked
     OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
       Database.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
-      viewModel.addReviewToCollection(review, collection.getCollectionName());
+      Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
+      viewModel.addReviewToCollection(review, "sample collection");
     };
 
     // Create an adapter to display the list of collections in a RecycleView
