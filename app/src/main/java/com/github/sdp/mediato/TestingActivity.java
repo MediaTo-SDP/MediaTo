@@ -1,9 +1,11 @@
 package com.github.sdp.mediato;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class TestingActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+public class TestingActivity extends AppCompatActivity implements FragmentSwitcher {
 
 /*  This activity can be used to launch fragments in for testing.
     The dependencies for using FragmentScenario are causing issues with some firebase dependencies.
@@ -14,5 +16,10 @@ public class TestingActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_testing);
+  }
+
+  @Override
+  public void switchCurrentFragmentWithChildFragment(Fragment childFragment) {
+
   }
 }
