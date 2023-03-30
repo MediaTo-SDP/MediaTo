@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -12,7 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import java.util.Locale;
+import java.util.Objects;
 
 class NewItemFragment extends Fragment {
 
@@ -21,16 +25,18 @@ class NewItemFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Objects.requireNonNull(savedInstanceState);
+
         View view = inflater.inflate(R.layout.activity_new_item, container, false);
 
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
 
         /* ToDO 1 : with the given Bundle assign the view elements properly */
-        String title = "";
-        String description = "";
-        String url = "";
+        String title = savedInstanceState.getString("title");
+        String description = savedInstanceState.getString("description");
+        String url = savedInstanceState.getString("url");
 
         setItemInformation(title, description, url);
 
@@ -91,7 +97,8 @@ class NewItemFragment extends Fragment {
         ((TextView) getView().findViewById(R.id.item_description_text)).setText(description);
 
         /* ToDO 2 : fetch the image from url and display it */
-        // ((ImageView) getView().findViewById(R.id.item_image)).setImageResource(image_res);
+        ImageView img = getView().findViewById(R.id.item_image);
+        Glide.with(this).load(url).into(img);
 
     }
 
