@@ -14,10 +14,10 @@ import java.util.List;
 
 public class MediaAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Media> mediaItems;
+    private final Context context;
+    private final List<Media> mediaItems;
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     public MediaAdapter(Context context, List<Media> mediaItems) {
         this.context = context;

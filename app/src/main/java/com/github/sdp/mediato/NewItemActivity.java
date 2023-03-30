@@ -109,7 +109,6 @@ public class NewItemActivity extends AppCompatActivity {
     if (review.getText().length() > MAX_REVIEW_LENGTH) {
       runOnUiThread(() -> errorTextView.setText(
           String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
-      ;
     }
   }
 }

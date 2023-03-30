@@ -3,7 +3,9 @@ package com.github.sdp.mediato.model;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Media;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
 
     public static final int MAX_GRADE = 10;
     public static final int MIN_GRADE = 1;

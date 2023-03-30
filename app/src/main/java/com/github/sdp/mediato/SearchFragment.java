@@ -35,13 +35,7 @@ import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
-    private enum SearchCategory {
-        PEOPLE,
-        MOVIES,
-        BOOKS,
-        MUSIC
-    }
-
+    private static String USERNAME;
     private Snackbar failedUserSearch;
     private SearchUserViewModel searchUserViewModel;
 
@@ -58,9 +52,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
-
-    private static String USERNAME;
-
     private TheMovieDB theMovieDB;
 
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
@@ -209,5 +200,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             }
         });
         snackbar.show();
+    }
+
+    private enum SearchCategory {
+        PEOPLE,
+        MOVIES,
+        BOOKS,
+        MUSIC
     }
 }

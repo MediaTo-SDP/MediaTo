@@ -20,10 +20,10 @@ import java.util.List;
 
 public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder> {
 
-    private List<Media> medias;
-    private Context context;
+    private final List<Media> medias;
+    private final Context context;
 
-    private FragmentSwitcher fs;
+    private final FragmentSwitcher fs;
 
     public MediaAdapter2(List<Media> medias, Context context, FragmentSwitcher fs) {
         this.medias = medias;
@@ -54,9 +54,7 @@ public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder
             public void onClick(View v) {
                 Fragment fg = new NewItemFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("url", currentMedia.getPosterUrl());
-                bundle.putString("title", currentMedia.getTitle());
-                bundle.putString("description", currentMedia.getSummary());
+                bundle.putSerializable("media", currentMedia);
                 fg.setArguments(bundle);
                 fs.switchCurrentFragmentWithChildFragment(fg);
             }
@@ -70,9 +68,9 @@ public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView titleView;
-        private ImageView imageView;
-        private LinearLayout entireElement;
+        private final TextView titleView;
+        private final ImageView imageView;
+        private final LinearLayout entireElement;
 
         public ViewHolder(View itemView) {
             super(itemView);

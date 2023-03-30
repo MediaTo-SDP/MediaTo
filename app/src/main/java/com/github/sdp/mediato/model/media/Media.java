@@ -1,10 +1,12 @@
 package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
+
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Media {
+public class Media implements Serializable {
 
     private MediaType mediaType;
     private String title;

@@ -66,9 +66,8 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
             public void onClick(View v) {
                 Fragment fg = new NewItemFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("url", getItem(holder.getAdapterPosition()).getPosterUrl());
-                bundle.putString("title", getItem(holder.getAdapterPosition()).getTitle());
-                bundle.putString("description", getItem(holder.getAdapterPosition()).getSummary());
+                
+                bundle.putSerializable("media", holder.getAdapterPosition());
 
                 fg.setArguments(bundle);
                 fs.switchCurrentFragmentWithChildFragment(fg);
