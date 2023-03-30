@@ -4,11 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import android.accounts.NetworkErrorException;
-
 import androidx.annotation.NonNull;
 
-import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
 import org.junit.After;
@@ -115,6 +112,7 @@ public class TMDBApiTest {
         assertThat(movies.get(19).getId(), is(316876));
     }
 
+    @Test
     // Exceeding available data returns empty list
     public void TestEmptyListExcessOfSearching() {
         // We do three searches since we hard-coded only 2 return pages
@@ -160,6 +158,7 @@ public class TMDBApiTest {
         assertThat(movies.size(), is(38));
     }
 
+    @Test
     // Exceeding available data returns empty list
     public void TestEmptyListExcessOfTrending() {
         List<TMDBMovie> movies = db.trending(20).thenCompose((v) ->
@@ -192,7 +191,7 @@ public class TMDBApiTest {
 
     @Test
     public void GetReturnsTheMovieData(){
-        TMDBMovie movie = db.get(10674).join();
+        TMDBMovie movie = db.get("10674").join();
         assertThat(movie.getTitle(), is("Mulan"));
         assertThat(movie.getId(), is(10674));
         assertThat(movie.getOverview(), is("To save her father from certain death in the army, a young woman secretly enlists in his place and becomes one of China's greatest heroines in the process."));

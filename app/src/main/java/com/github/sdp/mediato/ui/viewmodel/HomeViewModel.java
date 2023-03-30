@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.api.themoviedb.TheMovieDBRetrofitInterface;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 
@@ -22,7 +22,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     Application application;
     private final MutableLiveData<List<Media>> movies = new MutableLiveData<>();
-    private final TheMovieDBAPI api;
+    private final TheMovieDBRetrofitInterface api;
 
     /**
      * Default constructor
@@ -32,7 +32,7 @@ public class HomeViewModel extends AndroidViewModel {
     public HomeViewModel(Application application) {
         super(application);
         this.application = application;
-        api = new TheMovieDBAPI(application.getApplicationContext().getString(R.string.tmdb_url),
+        api = new TheMovieDBRetrofitInterface(application.getApplicationContext().getString(R.string.tmdb_url),
                 application.getApplicationContext().getString(R.string.TMDBAPIKEY));
     }
 
