@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
-
     // The maximum allowed length for review field
     public final static int MAX_REVIEW_LENGTH = 100;
 
