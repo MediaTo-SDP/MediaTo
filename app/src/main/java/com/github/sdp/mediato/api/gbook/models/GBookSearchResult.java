@@ -2,7 +2,7 @@ package com.github.sdp.mediato.api.gbook.models;
 
 import java.util.List;
 
-public class GBookSearchResult {
+public final class GBookSearchResult {
     public List<GoogleBook> getItems() {
         return items;
     }

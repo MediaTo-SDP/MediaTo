@@ -3,6 +3,9 @@ package com.github.sdp.mediato.model;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.User;
+
 import org.junit.Assert;
 import org.junit.Test;
 

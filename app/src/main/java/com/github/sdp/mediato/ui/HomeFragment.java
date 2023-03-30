@@ -43,7 +43,8 @@ public class HomeFragment extends Fragment {
     binding.trendingItems.setLayoutManager(new GridLayoutManager(getContext(), 3));
     binding.trendingItems.setHasFixedSize(true);
     viewModel.getMovies().observe(getViewLifecycleOwner(), adapter::submitList);
-
-
+    binding.movieTrending.performClick();
+    binding.booksTrending.setOnClickListener(v -> viewModel.getBooks());
+    binding.movieTrending.setOnClickListener(v -> viewModel.getMovies());
   }
 }

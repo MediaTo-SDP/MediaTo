@@ -14,7 +14,7 @@ public class Media {
     // Less than 200px wide
     private String iconUrl;
 
-    private int id;
+    private String id;
 
     Media() {
     }
@@ -30,8 +30,11 @@ public class Media {
     public Media(MediaType mediaType, String title, String summary, String imageUrl, int id) {
         this(mediaType, title, summary, imageUrl, imageUrl, id);
     }
-
     public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, int id) {
+        this(mediaType, title, summary, posterUrl, iconUrl, Integer.toString(id));
+    }
+
+    public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, String id) {
         Preconditions.checkMedia(mediaType, List.of(title, summary, posterUrl, iconUrl));
         this.mediaType = mediaType;
         this.title = title;
@@ -69,7 +72,8 @@ public class Media {
     }
 
     public int getId() {
-        return id;
+        return Integer.parseInt(id);
     }
+    public String getStringId() {return id;}
 
 }

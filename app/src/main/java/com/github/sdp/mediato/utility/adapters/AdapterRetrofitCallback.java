@@ -35,6 +35,7 @@ public class AdapterRetrofitCallback<T> implements Callback<T> {
         if (response.isSuccessful()) {
             future.complete(response.body());
         } else {
+            System.out.println(call.request().url().toString());
             future.completeExceptionally(new HttpException(response));
         }
     }
@@ -46,6 +47,7 @@ public class AdapterRetrofitCallback<T> implements Callback<T> {
      */
     @Override @EverythingIsNonNull
     public void onFailure(Call<T> call, Throwable t) {
+        System.out.println(call.request().url().toString());
         future.completeExceptionally(new NetworkErrorException(t.getCause()));
     }
 }

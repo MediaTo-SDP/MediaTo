@@ -2,7 +2,7 @@ package com.github.sdp.mediato.api.gbook.models;
 
 import java.util.List;
 
-public class GoogleBook {
+public final class GoogleBook {
     private String id;
     private VolumeInfo volumeInfo;
 
@@ -32,6 +32,14 @@ public class GoogleBook {
      */
     public String getSubtitle() {
         return volumeInfo.subtitle;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getOverview() {
+        return volumeInfo.description;
     }
 
     /**
@@ -67,9 +75,10 @@ public class GoogleBook {
     }
 
     // TODO: Set the class as private if possible
-    public class VolumeInfo {
+    public static class VolumeInfo {
         private String title;
         private String subtitle;
+        private String description;
 
 
 

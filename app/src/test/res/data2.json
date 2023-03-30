@@ -1,0 +1,3020 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 760,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "njJSDwAAQBAJ",
+      "etag": "3Zq3O+JJtTI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/njJSDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Case Studies in Social Psychology",
+        "subtitle": "Critical Thinking and Application",
+        "authors": [
+          "Thomas Heinzen",
+          "Wind Goodfriend"
+        ],
+        "publisher": "SAGE Publications",
+        "publishedDate": "2018-03-21",
+        "description": "In Case Studies in Social Psychology: Critical Thinking and Application, Thomas Heinzen and Wind Goodfriend use brief, entertaining case stories to illustrate the historical context and evolution of major theories within the field of social psychology. By employing a unique mix of contemporary research and hallmark studies, Heinzen and Goodfriend encourage students to explore new, meaningful ways of thinking about and connecting with foundational course concepts. In turn, this approach facilitates engaged conversation and deeper critical thinking both in and out of the classroom.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781544308890"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1544308892"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 327,
+        "printType": "BOOK",
+        "categories": [
+          "Psychology"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.2.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=njJSDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=njJSDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=njJSDwAAQBAJ&pg=PT123&dq=maze&hl=&cd=41&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=njJSDwAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Case_Studies_in_Social_Psychology.html?hl=&id=njJSDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Case_Studies_in_Social_Psychology-sample-epub.acsm?id=njJSDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Case_Studies_in_Social_Psychology-sample-pdf.acsm?id=njJSDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=njJSDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "“\u003cb\u003eMaze\u003c/b\u003e. Dull”. or. “\u003cb\u003eMaze\u003c/b\u003e. Bright.” In his first experiment about self-fulfilling prophecies, Rosenthal told a lie. ... Half of the students were led to believe their rats were “\u003cb\u003emaze\u003c/b\u003e bright” (genetically bred to be good at \u003cb\u003emazes\u003c/b\u003e),&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "C0PYBgAAQBAJ",
+      "etag": "enGLWv1bAEE",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/C0PYBgAAQBAJ",
+      "volumeInfo": {
+        "title": "The Digital God",
+        "subtitle": "How Technology Will Reshape Spirituality",
+        "authors": [
+          "William Indick"
+        ],
+        "publisher": "McFarland",
+        "publishedDate": "2015-03-02",
+        "description": "As humans charge up the steep slope of technological innovation, digital age media increasingly shapes our perception of everything--even spiritual matters. The next stage of spiritual development may be the product of a digital interface between our own image of the divine, virtual reality technology that produces real perceptions, and with devices that stimulate areas of the brain associated with spiritual experience. This book explores the influence of digital media on spirituality and the impact of the digital environment on our experience of the spiritual world. The author predicts a future in which digital technology and neuroscience will combine to create a new understanding of the divine. Instructors considering this book for use in a course may request an examination copy here.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780786498925"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0786498927"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 257,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Criticism"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=C0PYBgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=C0PYBgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=C0PYBgAAQBAJ&pg=PA31&dq=maze&hl=&cd=42&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=C0PYBgAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/The_Digital_God.html?hl=&id=C0PYBgAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/The_Digital_God-sample-pdf.acsm?id=C0PYBgAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=C0PYBgAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "For example, figuring out a \u003cb\u003emaze\u003c/b\u003e is usually quite easy when you are looking at the \u003cb\u003emaze\u003c/b\u003e as an image on a page. From your detached perspective, it is quite easy to see how the \u003cb\u003emaze\u003c/b\u003e is constructed, and by focusing in and out of specific&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "aNYbAAAAMAAJ",
+      "etag": "nyLpJYPLM6E",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/aNYbAAAAMAAJ",
+      "volumeInfo": {
+        "title": "Comparative Psychology Monographs",
+        "authors": [
+          "John Donald Harris"
+        ],
+        "publishedDate": "1943",
+        "description": "Contains studies of animal behavior, in addition to studies in human psychology, conducted from the comparative point of view.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015035521080"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 286,
+        "printType": "BOOK",
+        "categories": [
+          "Conditioned response"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.6.4.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=aNYbAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=aNYbAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=aNYbAAAAMAAJ&q=maze&dq=maze&hl=&cd=43&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=aNYbAAAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Comparative_Psychology_Monographs.html?hl=&id=aNYbAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=aNYbAAAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "These animals were given training on the same short \u003cb\u003emazes\u003c/b\u003e which were used as the interpolated problems for the experi- mental animals in the R groups , the difference being that their B \u003cb\u003emaze\u003c/b\u003e training preceded rather than followed their&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "AK1K0_jRk7wC",
+      "etag": "EZothgucfUw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/AK1K0_jRk7wC",
+      "volumeInfo": {
+        "title": "CD-ROM Classics",
+        "subtitle": "Cheats and Hints to Your Favorite Games",
+        "authors": [
+          "Rick Barba",
+          "Michael Knight",
+          "Rod Harten"
+        ],
+        "publisher": "Prima Games",
+        "publishedDate": "1997-04-30",
+        "description": "Prima's back to guide you through the most challenging and enduring PC games available-- 15 games in all. There's no fluff here; the most bare-bones, yet complete, methods for defeating your favorite games are within the pages of \"CD-Rom Game Classics, Volume 2.\" One guide-- fifteen games! Including: - Command & Conquer - Command & Conquer: Red Alert - - Crusader: No Regret - Diablo - Duke Nukem 3D - - Leisure Suit Larry: Love for Sail - MechWarrior II: Mercenaries - Myst - - Pandora Directive - Phantasmagoria II - Quake - - Sid Meier's Civilization II - Timelapse - WarCraft II - Zork Nemesis - About the Authors Rick Barba is a game designer and author or co-author of numerous game books, including \"Myst: The Official Strategy Guide.\" Michael Knight is a technical editor and the author of Prima's \"Steel Panthers II: The Official Strategy Guide.\" Rod Harten is a technical editor for Prima and co-author of \"Heroes of Might and Magic II: The Price of Loyalty-- The Official Strategy Guide.\"",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0761511520"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780761511526"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 388,
+        "printType": "BOOK",
+        "categories": [
+          "Computer games"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.4.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=AK1K0_jRk7wC&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=AK1K0_jRk7wC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=AK1K0_jRk7wC&q=maze&dq=maze&hl=&cd=44&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=AK1K0_jRk7wC&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/CD_ROM_Classics.html?hl=&id=AK1K0_jRk7wC"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=AK1K0_jRk7wC&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Monkey Temple: Spider \u003cb\u003eMaze\u003c/b\u003e Enter the temple and touch the shriveled Monkey head on the stick. This activates the \u003cb\u003emaze\u003c/b\u003e to your left. Turn left and approach the \u003cb\u003emaze\u003c/b\u003e. The Monkey head inside the \u003cb\u003emaze\u003c/b\u003e opens its mouth and a green spider&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "9-E7AAAAIAAJ",
+      "etag": "cxSqIJOiAWI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/9-E7AAAAIAAJ",
+      "volumeInfo": {
+        "title": "Chemistry & Atomic Structure",
+        "authors": [
+          "John David Main Smith"
+        ],
+        "publishedDate": "1924",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCAL:$B35062"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 234,
+        "printType": "BOOK",
+        "categories": [
+          "Atomic theory"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.5.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=9-E7AAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=9-E7AAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=9-E7AAAAIAAJ&q=maze&dq=maze&hl=&cd=45&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=9-E7AAAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Chemistry_Atomic_Structure.html?hl=&id=9-E7AAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=9-E7AAAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "marble floated in one corner , and through dle of the \u003cb\u003emaze\u003c/b\u003e , contenting myself with the lattice of the \u003cb\u003emaze\u003c/b\u003e I could see a maneuvering the ball . It was a pretty small red light blinking in the center of intriguing little toy ."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "_WRQAQAAIAAJ",
+      "etag": "3CgcWWGXQr4",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/_WRQAQAAIAAJ",
+      "volumeInfo": {
+        "title": "The Japanese Journal of Pharmacology",
+        "subtitle": "Official Publication of the Japanese Pharmacological Society",
+        "publishedDate": "1991",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCLA:L0065293565"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 1328,
+        "printType": "BOOK",
+        "categories": [
+          "Pharmacology"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.2.1.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=_WRQAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=_WRQAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=_WRQAQAAIAAJ&q=maze&dq=maze&hl=&cd=46&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=_WRQAQAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/The_Japanese_Journal_of_Pharmacology.html?hl=&id=_WRQAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=_WRQAQAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "and the non-matching to sample task using a T-\u003cb\u003emaze\u003c/b\u003e have been frequently used on rats to test working memory. However, these common methods could not easily detect the specific effects of drugs on memory subtypes, since both reference&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "F2UuyZqwKjoC",
+      "etag": "WCbdI3+wevo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/F2UuyZqwKjoC",
+      "volumeInfo": {
+        "title": "The British Journal of Psychology",
+        "publishedDate": "1919",
+        "description": "Issues for 1904-47 include the Proceedings of the society.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCR:31210014851974"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Psychology"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=F2UuyZqwKjoC&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=F2UuyZqwKjoC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=F2UuyZqwKjoC&q=maze&dq=maze&hl=&cd=47&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=F2UuyZqwKjoC&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/The_British_Journal_of_Psychology.html?hl=&id=F2UuyZqwKjoC"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=F2UuyZqwKjoC&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e B \u003cb\u003eMaze\u003c/b\u003e C RAT A Mins . 19153 3 \u003cb\u003eMaze\u003c/b\u003e D \u003cb\u003eMaze\u003c/b\u003e B blocked \u003cb\u003eMaze\u003c/b\u003e A blocked 4-6 1 4 5 6 8 9 RAT B 0 7 8 91011121516171921 232526282930 1 2 May June \u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e B 3 11121415192022 23 2526272930 4 5 6 101112131617 July \u003cb\u003eMaze\u003c/b\u003e D \u003cb\u003eMaze\u003c/b\u003e B&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "rPwDAAAAMBAJ",
+      "etag": "XZVIca1fEIU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/rPwDAAAAMBAJ",
+      "volumeInfo": {
+        "title": "Scouting",
+        "publishedDate": "2002-10",
+        "description": "Published by the Boy Scouts of America for all BSA registered adult volunteers and professionals, Scouting magazine offers editorial content that is a mixture of information, instruction, and inspiration, designed to strengthen readers' abilities to better perform their leadership roles in Scouting and also to assist them as parents in strengthening families.",
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 56,
+        "printType": "MAGAZINE",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.0.1.0.preview.1",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=rPwDAAAAMBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=rPwDAAAAMBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=rPwDAAAAMBAJ&pg=PA21&dq=maze&hl=&cd=48&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=rPwDAAAAMBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Scouting.html?hl=&id=rPwDAAAAMBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=rPwDAAAAMBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Every fall the pack visits a local corn \u003cb\u003emaze\u003c/b\u003e, getting lost on the twisting paths that weave between the acres of ... Fun and educational Corn \u003cb\u003emazes\u003c/b\u003e are seasonal &quot;agritainment&quot; programs run on farms in about 40 states (see box on page&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "fNcXAQAAIAAJ",
+      "etag": "ZoYXWTW8c+4",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/fNcXAQAAIAAJ",
+      "volumeInfo": {
+        "title": "Abstracts of Dissertations and Theses",
+        "authors": [
+          "Clark University (Worcester, Mass.)"
+        ],
+        "publishedDate": "1945",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCAL:B3057664"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 708,
+        "printType": "BOOK",
+        "categories": [
+          "Dissertations, Academic"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.7.4.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=fNcXAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=fNcXAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=fNcXAQAAIAAJ&pg=RA4-PA94&dq=maze&hl=&cd=49&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=fNcXAQAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Abstracts_of_Dissertations_and_Theses.html?hl=&id=fNcXAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=fNcXAQAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "ooiS5hVBQLwC",
+      "etag": "2E3qTcG0uaQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/ooiS5hVBQLwC",
+      "volumeInfo": {
+        "title": "Contributions to Education",
+        "publishedDate": "1937",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015062343291"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 68,
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.8.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=ooiS5hVBQLwC&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=ooiS5hVBQLwC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=ooiS5hVBQLwC&q=maze&dq=maze&hl=&cd=50&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=ooiS5hVBQLwC&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Contributions_to_Education.html?hl=&id=ooiS5hVBQLwC"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=ooiS5hVBQLwC&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\u003cb\u003eMaze\u003c/b\u003e 1 -f- \u003cb\u003eMaze\u003c/b\u003e 2 Wavy lines indicate the positions of the curtains Due to the difficulty or impossibility of eliminating the effects of position within the \u003cb\u003emaze\u003c/b\u003e upon the difficulty of individual blind alleys, it was decided to run&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "kw5YAAAAYAAJ",
+      "etag": "tVFLvE+g2fw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/kw5YAAAAYAAJ",
+      "volumeInfo": {
+        "title": "Reports and Papers of the Architectural and Archaeological Societies of the Counties of Lincoln and Northampton",
+        "publishedDate": "1857",
+        "description": "1850-1931 (v. 1-40) include reports and papers of the Yorkshire Architectural and York Archaeological Society, and some years, of the Worcestershire Archaeological Society, of the Leicestershire Archaeological Society and of other similar societies.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PRNC:32101054826597"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Archaeology"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.1.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=kw5YAAAAYAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=kw5YAAAAYAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=kw5YAAAAYAAJ&q=maze&dq=maze&hl=&cd=51&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=kw5YAAAAYAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Reports_and_Papers_of_the_Architectural.html?hl=&id=kw5YAAAAYAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=kw5YAAAAYAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Ancient turf-\u003cb\u003emazes\u003c/b\u003e either exist or are known to have existed in Scotland and Wales as well as in England ; whilst shepherds ... The first which I shall notice is the \u003cb\u003emaze\u003c/b\u003e which formerly existed in Yorkshire, on Ripon common :3 it was&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "e4vtDwAAQBAJ",
+      "etag": "wEir6tLEx0s",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/e4vtDwAAQBAJ",
+      "volumeInfo": {
+        "title": "The Carceral Network in Ireland",
+        "subtitle": "History, Agency and Resistance",
+        "authors": [
+          "Fiona McCann"
+        ],
+        "publisher": "Springer Nature",
+        "publishedDate": "2020-06-26",
+        "description": "This book examines the forms and practices of Irish confinement from the 19th century to present-day to explore the social and political failings of 20th and 21st century postcolonial Ireland. Building on an interdisciplinary conference held in the Crumlin Road Gaol, Belfast, the methodological approaches adopted across this book range from the historical and archival to the sociological, political, and literary. This edited collection touches on topics such as industrial schools, Magdalen laundries, struggles and resistance in prisons both North and South, Direct Provision, and the ways in which prison experiences have been represented in literature, cinema, and the arts. It sketches out an uncomfortable picture of the techniques for policing bodies deployed in Ireland for over a century. This innovative study seeks to establish a link between Ireland’s inhumane treatment of women and children, of prisoners, and of asylum seekers today, and to expose and pinpoint modes of resistance to these situations.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9783030421847"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "3030421848"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 285,
+        "printType": "BOOK",
+        "categories": [
+          "Social Science"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=e4vtDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=e4vtDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=e4vtDwAAQBAJ&pg=PA201&dq=maze&hl=&cd=52&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=e4vtDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=e4vtDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 165.5,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 115.85,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=e4vtDwAAQBAJ&rdid=book-e4vtDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 165500000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 115850000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/The_Carceral_Network_in_Ireland-sample-epub.acsm?id=e4vtDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/The_Carceral_Network_in_Ireland-sample-pdf.acsm?id=e4vtDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=e4vtDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "JSTOR, www.jstor.org/stable/41057668. Accessed 26 Nov 2019. Giffen, H. PMA Recording. Graham, B., and S. McDowell. 2007. Meaning in the \u003cb\u003eMaze\u003c/b\u003e: The Heritage of Long Kesh. Cultural Geographies 14 (3): 343–268. Healing Through Remembering."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "T8iROFzgjckC",
+      "etag": "XAgu9rgJlvU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/T8iROFzgjckC",
+      "volumeInfo": {
+        "title": "Cassava Production and Processing in Côte D'Ivoire",
+        "publisher": "IITA",
+        "publishedDate": "2000",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "9781311622"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9789781311628"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 188,
+        "printType": "BOOK",
+        "categories": [
+          "Cassava"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.5.6.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=T8iROFzgjckC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=T8iROFzgjckC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=T8iROFzgjckC&pg=PA169&dq=maze&hl=&cd=53&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=T8iROFzgjckC&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Cassava_Production_and_Processing_in_C%C3%B4.html?hl=&id=T8iROFzgjckC"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Cassava_Production_and_Processing_in_C%C3%B4-sample-pdf.acsm?id=T8iROFzgjckC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=T8iROFzgjckC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "... PLANTAIN Mth / Yr \u003cb\u003eMAZE\u003c/b\u003e MAIZE Mth / Yr System number 3 in Village J / 9 \u003cb\u003eMAZE MAZE MAZE MAZE\u003c/b\u003e преде приде преде \u003cb\u003eMAZE MAZE MAZE\u003c/b\u003e Center Institute of Tropical Library &amp; Documentation International 0140 References Akinlosotu , T.A. 1985."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "fJE-AQAAMAAJ",
+      "etag": "3WDnfgvTgBs",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/fJE-AQAAMAAJ",
+      "volumeInfo": {
+        "title": "The Journal of the Assembly, during the ... session of the Legislature of the State of California",
+        "authors": [
+          "California. Legislature. Assembly",
+          "California. Legislature. Senate"
+        ],
+        "publishedDate": "1872",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCD:31175028606104"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "printType": "BOOK",
+        "categories": [
+          "California"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "2.5.6.0.full.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=fJE-AQAAMAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=fJE-AQAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=fJE-AQAAMAAJ&pg=RA7-PA44&dq=maze&hl=&cd=54&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=fJE-AQAAMAAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=fJE-AQAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FREE",
+        "isEbook": true,
+        "buyLink": "https://play.google.com/store/books/details?id=fJE-AQAAMAAJ&rdid=book-fJE-AQAAMAAJ&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": true,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false,
+          "downloadLink": "http://books.google.ch/books/download/The_Journal_of_the_Assembly_during_the_s.epub?id=fJE-AQAAMAAJ&hl=&output=epub&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=fJE-AQAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "FULL_PUBLIC_DOMAIN",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "30 , 1870 Certified to \u003cb\u003eMaze\u003c/b\u003e Edwards , month of November , 1870 ....... Dec. 31 , 1870 Certified to \u003cb\u003eMaze\u003c/b\u003e Edwards , month i of December , 1870 ........ Jan. 31 , 1871 Certified to \u003cb\u003eMaze\u003c/b\u003e Edwards , month of January , 1871 .... Feb."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "kjlXAgAAQBAJ",
+      "etag": "skUZjbG96Hs",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/kjlXAgAAQBAJ",
+      "volumeInfo": {
+        "title": "Atlantis Reprise",
+        "authors": [
+          "James Axler"
+        ],
+        "publisher": "Gold Eagle",
+        "publishedDate": "2014-01-15",
+        "description": "GLORIOUS FOLLY For Ryan Cawdor, leader of a small group of post-apocalypse survivalists, it's the inner fire of survival that guides them through this hell on earth&…to whatever lies beyond the daily fight for existence. There are times when the oblivion of death seems a most welcome journey out of Deathlands. But for Ryan, death is something his warrior's soul will never take on without a fight. GRIM UNITY In the forested coastal region of the eastern seaboard, near the Pine Barrens of what was New Jersey, Ryan and his companions encounter a group of rebels. Having broken away from the strange, isolated community known as Atlantis, and led by the obscene and paranoid Odyssey, this small group desires to live in peace. But in a chill-or-be-chilled world, freedom can only be won by spilled blood. Ryan and company are willing to come to the aid of these freedom fighters, ready to wage a war against the twisted tyranny that permeates Deathlands.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781460373361"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1460373367"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 224,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.3.4.0.preview.2",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=kjlXAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=kjlXAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=kjlXAgAAQBAJ&pg=PT125&dq=maze&hl=&cd=55&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=kjlXAgAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Atlantis_Reprise.html?hl=&id=kjlXAgAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Atlantis_Reprise-sample-epub.acsm?id=kjlXAgAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=kjlXAgAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&#39;No doubt,&#39; Lemur remarked. &#39;But I fear that, even if we should encounter them, they will not be our main problem.&#39; &#39;If they aren&#39;t, then who or what is?&#39; Ryan questioned. &#39;The \u003cb\u003emaze\u003c/b\u003e,&#39; Mark replied softly. &#39;The great unknown."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "ncarAAAAQBAJ",
+      "etag": "OvzCb/Chb90",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/ncarAAAAQBAJ",
+      "volumeInfo": {
+        "title": "Sworn To Raise: Courtlight #1",
+        "authors": [
+          "Terah Edun"
+        ],
+        "publisher": "Terah Edun Publishing",
+        "publishedDate": "2013-09-17",
+        "description": "Young Adult Teen Romance for readers of The Selection & Throne of Glass! Adventure and romance, magic and secrecy, are woven into a fantasy world that is a phenomenally unique and captivating tale. In this breathtaking launchof the successful high fantasy series, readers will be kept on the edgeof their seat. USA Today Recommended Read and grab the first book FREE for a limited time! \"One world you don't want to miss out on!\" - City Of Books ★★★★★ \"Absolutely in LOVE!\" - Girls *Heart* Books ★★★★★ \"A phenomenally unique and completely captivating tale!\" - Jonel's Book Reviews ★★★★★ Seventeen-year-old Ciardis Vane grew up in a small village on the edge of the realm.Beautiful, destitute, and desperate she is looking to get out any way she can. She has worked her whole live as a laundress with no hope ofescaping her fate anytime soon. Butthen her life changes when a strange woman appears with the key toCiardis's escape. With an offer to take her to the capital and a lifeshe'd never dreamed of, it's hard to resist. There's only one catch. She wants Ciardis to become a companion: she'll be required to wearexpensive dresses, learn to conduct suitable magic, educate herself oncourt proclivities, and - in the end - chain herself to the highestbidder. A Patron for life. Ciardis knows that this is her one opportunity to change her life. But what she does not know is that she will soon be at the heart ofintrigues and power struggles, and that her new life in luxury demands a high price, perhaps even the life of a prince. Keywords: Courtlight series, fantasy, royals, romance, boxed set, Ciardis Weathervane, dragons, magic, empires, thrones, queens, ebooks, princes, princess, imperial courts, nobility, teen, YA, young adult, epic reads, love, fairy tales, crown, happily ever after, coming of age, mages, kids, middle grade, hearts, collection, romantic, box set, series, engagement, kingdom, action, adventure, betrothed, swords, sorcery.",
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 275,
+        "printType": "BOOK",
+        "categories": [
+          "Young Adult Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.14.16.0.preview.2",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=ncarAAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=ncarAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=ncarAAAAQBAJ&pg=PT159&dq=maze&hl=&cd=56&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=ncarAAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=ncarAAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 0,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 0,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=ncarAAAAQBAJ&rdid=book-ncarAAAAQBAJ&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=ncarAAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "problems encountered in the \u003cb\u003emaze\u003c/b\u003e will be noticed and weighed,&quot; he continued. &quot;I will be flying a dedicated route above the \u003cb\u003emaze\u003c/b\u003e along with two other Ansari. We will watch over you from the skies but will not interfere unless summoned."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "TzIvDQAAQBAJ",
+      "etag": "fSDT6X1ADUU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/TzIvDQAAQBAJ",
+      "volumeInfo": {
+        "title": "The Four Legendary Kingdoms",
+        "authors": [
+          "Matthew Reilly"
+        ],
+        "publisher": "Simon and Schuster",
+        "publishedDate": "2017-05-02",
+        "description": "The new, thrilling novel featuring Jack West, Jr., from New York Times and #1 international bestselling author Matthew Reilly. Jack West, Jr. and his family are living contentedly on their remote farm when their lives are abruptly shattered. Jack is brutally kidnapped and he awakens in an underground cell to find a masked attacker with a knife charging at him. It seems he has been chosen—along with a dozen other elite soldiers—to compete in a series of deadly challenges designed to fulfill an ancient ritual. With the fate of the Earth at stake, he will have to traverse diabolical mazes, fight cruel assassins, and face unimaginable horrors that will test him like he has never been tested before. In the process, he will discover the mysterious and powerful group of individuals behind it all: the four legendary kingdoms. He might also discover that he is not the only hero in this place….",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781501167164"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1501167162"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "pageCount": 448,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "averageRating": 4.5,
+        "ratingsCount": 10,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.9.6.0.preview.2",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=TzIvDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=TzIvDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=TzIvDQAAQBAJ&pg=PA178&dq=maze&hl=&cd=57&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=TzIvDQAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/The_Four_Legendary_Kingdoms.html?hl=&id=TzIvDQAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED_FOR_ACCESSIBILITY",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/The_Four_Legendary_Kingdoms-sample-epub.acsm?id=TzIvDQAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=TzIvDQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Ten champions shall enter the \u003cb\u003emaze\u003c/b\u003e, but there is only one exit from it. Once that exit is used by seven champions, it will be closed and sealed. “As you can see, two Golden Spheres sit inside the \u003cb\u003emaze\u003c/b\u003e. To the champions who emerge from&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "f6TDDwAAQBAJ",
+      "etag": "XyFMmvl0akI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/f6TDDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Robotic Systems: Concepts, Methodologies, Tools, and Applications",
+        "subtitle": "Concepts, Methodologies, Tools, and Applications",
+        "authors": [
+          "Management Association, Information Resources"
+        ],
+        "publisher": "IGI Global",
+        "publishedDate": "2020-01-03",
+        "description": "Through expanded intelligence, the use of robotics has fundamentally transformed a variety of fields, including manufacturing, aerospace, medicine, social services, and agriculture. Continued research on robotic design is critical to solving various dynamic obstacles individuals, enterprises, and humanity at large face on a daily basis. Robotic Systems: Concepts, Methodologies, Tools, and Applications is a vital reference source that delves into the current issues, methodologies, and trends relating to advanced robotic technology in the modern world. Highlighting a range of topics such as mechatronics, cybernetics, and human-computer interaction, this multi-volume book is ideally designed for robotics engineers, mechanical engineers, robotics technicians, operators, software engineers, designers, programmers, industry professionals, researchers, students, academicians, and computer practitioners seeking current research on developing innovative ideas for intelligent and autonomous robotics systems.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781799817550"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1799817555"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 2075,
+        "printType": "BOOK",
+        "categories": [
+          "Technology & Engineering"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.2.2.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=f6TDDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=f6TDDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=f6TDDwAAQBAJ&pg=PA801&dq=maze&hl=&cd=58&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=f6TDDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=f6TDDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1267.21,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 887.05,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=f6TDDwAAQBAJ&rdid=book-f6TDDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1267210000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 887050000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Robotic_Systems_Concepts_Methodologies_T-sample-pdf.acsm?id=f6TDDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=f6TDDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "12a) The \u003cb\u003emaze\u003c/b\u003e configuration used to validate OC learning; 12b) Second \u003cb\u003emaze\u003c/b\u003e set up process taking as inputs the common cue and one of the actions. In the same manner, any possible new action necessitates as many SKAN processes as there&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "kC6dDwAAQBAJ",
+      "etag": "xL1EmKeOQHU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/kC6dDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Omega Fatty Acids in Brain and Neurological Health",
+        "authors": [
+          "Ronald Ross Watson",
+          "Victor R. Preedy"
+        ],
+        "publisher": "Academic Press",
+        "publishedDate": "2019-06-12",
+        "description": "Research has clearly established a link between omega fatty acids and general health, particularly cardiovascular health. Omega Fatty Acids in Brain and Neurological Health, Second Edition, illustrates the importance of omega-3 fatty acids in longevity, cognitive impairment and structure and function of the brain's neurons and also the adverse effects of omega-6 fatty acids on neurological function. This book encompasses some of the most recent research on the links between omega fatty acids and the developing brain, aging, dementia, Alzheimer's disease and multiple sclerosis, including the role of omega-3 fatty acid supplements on hippocampal neurogenesis, substantia nigra modulation, migraine headaches, the developing brain in animals, sleep and neurodegenerative diseases. This completely updated second edition focuses on the counterbalancing dietary and tissue omega-6 fatty acids as well as it studies the effects in pregnancy and early infancy, animal model studies and autoimmune neurological diseases. Provides a comprehensive introduction to omega-3 and omega-6 fatty acids in neurological health and directions for future research Features novel focus on the adverse effects of omega-6 fatty acids on neurological function and the counterbalancing of dietary and tissue omega-6 Illustrates the importance of omega-3 fatty acids in longevity and cognitive impairment Features new chapters on early effects in pregnancy and early infancy, animal model studies and autoimmune neurological diseases Discusses links between omega fatty acids and the developing brain, aging, dementia, Alzheimer's disease and multiple sclerosis, including the role of omega-3 fatty acid supplements",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780128152393"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0128152397"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 518,
+        "printType": "BOOK",
+        "categories": [
+          "Medical"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.2.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=kC6dDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=kC6dDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=kC6dDwAAQBAJ&pg=PA118&dq=maze&hl=&cd=59&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=kC6dDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=kC6dDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 212.85,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 149,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=kC6dDwAAQBAJ&rdid=book-kC6dDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 212850000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 149000000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Omega_Fatty_Acids_in_Brain_and_Neurologi-sample-epub.acsm?id=kC6dDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Omega_Fatty_Acids_in_Brain_and_Neurologi-sample-pdf.acsm?id=kC6dDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=kC6dDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Rats maintained on this diet for 3 months were impaired on a series of learning and memory-related tasks: radial arm \u003cb\u003emaze\u003c/b\u003e, Hebb-Williams \u003cb\u003emaze\u003c/b\u003e, and a variable interval delayed alternation task. Spatial memory tasks are a widely accepted&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "qmmDDwAAQBAJ",
+      "etag": "ZX7okuimU8A",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/qmmDDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Operative Mitral and Tricuspid Valve Surgery",
+        "authors": [
+          "Narain Moorjani",
+          "Bushra S. Rana",
+          "Francis C. Wells"
+        ],
+        "publisher": "Springer",
+        "publishedDate": "2019-01-11",
+        "description": "This book reviews the surgical management of the mitral and tricuspid valves. It provides a detailed examination of the recent exponential improvements in the understanding of the pathophysiology of the disease processes affecting these valves, which has resulted in significant changes in the strategies that can be applied. Chapters include analysis of the basic sciences related to the anatomy and physiology of the mitral and tricuspid valves, pre-operative imaging of these valves, illustrating the variety of pathologies encountered, and critically a comprehensive step-by-step approach to the peri-operative management and surgical techniques pertaining to each pathological process. Operative Mitral and Tricuspid Valve Surgery systematically covers all major topics involved in the current practice of an adult cardiac surgeon who performs operations on the mitral and tricuspid valves. It is therefore suitable for the cardiac intensive care unit specialist interested in improving their knowledge of cardiac patient management. It is an essential resource for all adult cardiac surgeons and cardiac intervention specialists at any stage of their career.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781447142041"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1447142047"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 281,
+        "printType": "BOOK",
+        "categories": [
+          "Medical"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.3.2.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=qmmDDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=qmmDDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=qmmDDwAAQBAJ&pg=PA62&dq=maze&hl=&cd=60&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=qmmDDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=qmmDDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 165.5,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 115.85,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=qmmDDwAAQBAJ&rdid=book-qmmDDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 165500000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 115850000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Operative_Mitral_and_Tricuspid_Valve_Sur-sample-epub.acsm?id=qmmDDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Operative_Mitral_and_Tricuspid_Valve_Sur-sample-pdf.acsm?id=qmmDDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=qmmDDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Atrial Fibrillation A concomitant \u003cb\u003emaze\u003c/b\u003e procedure is reasonable at the time of mitral valve repair or replacement for the treatment of chronic, persistent AF. This is made on the basis that persistent AF is an independent risk factor for&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Kg68EzGslm0C",
+      "etag": "iFuQ+WQsU9o",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Kg68EzGslm0C",
+      "volumeInfo": {
+        "title": "3-D Mazes",
+        "authors": [
+          "Larry Evans"
+        ],
+        "publisher": "Price Stern Sloan",
+        "publishedDate": "1995",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "0843138882"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9780843138887"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 36,
+        "printType": "BOOK",
+        "categories": [
+          "Maze puzzles"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.2.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Kg68EzGslm0C&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Kg68EzGslm0C&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=Kg68EzGslm0C&q=maze&dq=maze&hl=&cd=61&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=Kg68EzGslm0C&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/3_D_Mazes.html?hl=&id=Kg68EzGslm0C"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Kg68EzGslm0C&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "HOW TO SOLVE 3 - DimensioNAL \u003cb\u003eMAZES\u003c/b\u003e When confronted with a regular line \u003cb\u003emaze\u003c/b\u003e , your path from start to finish is enclosed between two lines . You are blocked when a line stops the path . Three - dimensional \u003cb\u003emazes\u003c/b\u003e differ from linear \u003cb\u003emazes\u003c/b\u003e&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "R85BAQAAMAAJ",
+      "etag": "3+2gHDH8vNc",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/R85BAQAAMAAJ",
+      "volumeInfo": {
+        "title": "Redintegration in the Albino Rat",
+        "subtitle": "A Study in Retention",
+        "authors": [
+          "Charles A. Coburn",
+          "Cora Daisy Reeves",
+          "Harold Clyde Bingham",
+          "Rutledge Thornton Wiltbank",
+          "Thomas William Brockbank"
+        ],
+        "publishedDate": "1922",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "OSU:32435030150999"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 66,
+        "printType": "BOOK",
+        "categories": [
+          "Animal behavior"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=R85BAQAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=R85BAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=R85BAQAAMAAJ&q=maze&dq=maze&hl=&cd=62&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=R85BAQAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Redintegration_in_the_Albino_Rat.html?hl=&id=R85BAQAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=R85BAQAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "TABLE 9 THE AVERAGE TOTAL NUMBER OF ERRORS PER RAT IN THE LEARNING OF A SERIES OF \u003cb\u003eMAZES\u003c/b\u003e Group 1 Group 2 Group 3 Group 4 Group 5 \u003cb\u003eMaze\u003c/b\u003e A .. 48.45 + 13.52 \u003cb\u003eMaze\u003c/b\u003e B .. 8.15+ 2.52 68.88 + 36.52 \u003cb\u003eMaze\u003c/b\u003e C .. 6.82 € 2.42 14.50+ 6.20 28.35 + 8.72&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Cs8wAAAAMAAJ",
+      "etag": "fZOG/yy6Njk",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Cs8wAAAAMAAJ",
+      "volumeInfo": {
+        "title": "Behavior Monographs",
+        "authors": [
+          "John Broadus Watson"
+        ],
+        "publishedDate": "1922",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015023267076"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 460,
+        "printType": "BOOK",
+        "categories": [
+          "Animal behavior"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.7.7.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Cs8wAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Cs8wAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=Cs8wAAAAMAAJ&q=maze&dq=maze&hl=&cd=63&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=Cs8wAAAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Behavior_Monographs.html?hl=&id=Cs8wAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Cs8wAAAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "TABLE 9 THE AVERAGE TOTAL NUMBER OF ERRORS PER RAT IN THE LEARNING OF A SERIES OF \u003cb\u003eMAZES Maze\u003c/b\u003e A .. \u003cb\u003eMaze\u003c/b\u003e B .. \u003cb\u003eMaze\u003c/b\u003e C .. Group 1 48.45 + 13.52 8.15 2.52 6.82 ± 2.42 Group 2 Group 3 Group 4 Group 5 68.88 + 36.52 14.50 6.20 \u003cb\u003eMaze\u003c/b\u003e D .."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "AAERAQAAIAAJ",
+      "etag": "a4/SOzfUw0M",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/AAERAQAAIAAJ",
+      "volumeInfo": {
+        "title": "Experimental Studies of Adaptive Behavior in Cats",
+        "authors": [
+          "Donald Keith Adams"
+        ],
+        "publishedDate": "1929",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCSC:32106006042888"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 534,
+        "printType": "BOOK",
+        "categories": [
+          "Animal intelligence"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.5.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=AAERAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=AAERAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=AAERAQAAIAAJ&q=maze&dq=maze&hl=&cd=64&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=AAERAQAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Experimental_Studies_of_Adaptive_Behavio.html?hl=&id=AAERAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=AAERAQAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Later, the elimination of the tendency to enter alley C began to cause retraceals in nearby portions of the \u003cb\u003emaze\u003c/b\u003e, but even these errors dropped relatively rapidly. For the last four trips, the only error &#39;2&#39; made was a short return in&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "vLEiAQAAIAAJ",
+      "etag": "U93vgAExKBI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/vLEiAQAAIAAJ",
+      "volumeInfo": {
+        "title": "Collected papers",
+        "authors": [
+          "Yale University. School of Medicine. Laboratory of Physiological Chemistry"
+        ],
+        "publishedDate": "1927",
+        "description": "Consists of reprints of various papers, bound together in chronological order, with title-page and table of contents",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCAL:B2918006"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 704,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.7.7.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=vLEiAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=vLEiAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=vLEiAQAAIAAJ&q=maze&dq=maze&hl=&cd=65&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=vLEiAQAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Collected_papers.html?hl=&id=vLEiAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=vLEiAQAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Realimentation , following the stunting process brings the stunted animals nearer to the normal animals both with respect to their weight and their \u003cb\u003emaze\u003c/b\u003e reacting ability . 4 . In general , the differences between the two types of&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "KGUcAAAAMAAJ",
+      "etag": "LfgbwIwqVEc",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/KGUcAAAAMAAJ",
+      "volumeInfo": {
+        "title": "The University of Colorado Studies",
+        "authors": [
+          "University of Colorado"
+        ],
+        "publishedDate": "1935",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015049268009"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 776,
+        "printType": "BOOK",
+        "categories": [
+          "Scholarly publishing"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.7.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=KGUcAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=KGUcAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=KGUcAAAAMAAJ&q=maze&dq=maze&hl=&cd=66&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=KGUcAAAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/The_University_of_Colorado_Studies.html?hl=&id=KGUcAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=KGUcAAAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "In order to insure uniform motivation , the problem to be mastered consisted of learning a water \u003cb\u003emaze\u003c/b\u003e . At the age of three months the rats &#39; retention of this \u003cb\u003emaze\u003c/b\u003e habit was tested , and immediately afterwards they were made to learn a&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "LvwMAAAAIAAJ",
+      "etag": "FVKTKarMOyI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/LvwMAAAAIAAJ",
+      "volumeInfo": {
+        "title": "Fields of Psychology",
+        "authors": [
+          "Joy Paul Guilford"
+        ],
+        "publishedDate": "1966",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015008497003"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 370,
+        "printType": "BOOK",
+        "categories": [
+          "Psychology"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.7.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=LvwMAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=LvwMAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=LvwMAAAAIAAJ&q=maze&dq=maze&hl=&cd=67&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=LvwMAAAAIAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Fields_of_Psychology.html?hl=&id=LvwMAAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=LvwMAAAAIAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "run a \u003cb\u003emaze\u003c/b\u003e , they exhibited “ lookings or running laries and theorems . The corollaries and theorems , back and forth &quot; upon approaching a choice point when correlated with experimental operations , are ( Tolman , 1938 ) ."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "L7k5AQAAMAAJ",
+      "etag": "lRwPu6wPWCo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/L7k5AQAAMAAJ",
+      "volumeInfo": {
+        "title": "The Boy's Own Annual",
+        "publishedDate": "1889",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCAL:C2723981"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 904,
+        "printType": "BOOK",
+        "categories": [
+          "Adventure stories, English"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.4.5.0.full.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=L7k5AQAAMAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=L7k5AQAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=L7k5AQAAMAAJ&pg=PA397&dq=maze&hl=&cd=68&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=L7k5AQAAMAAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=L7k5AQAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FREE",
+        "isEbook": true,
+        "buyLink": "https://play.google.com/store/books/details?id=L7k5AQAAMAAJ&rdid=book-L7k5AQAAMAAJ&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": true,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false,
+          "downloadLink": "http://books.google.ch/books/download/The_Boy_s_Own_Annual.epub?id=L7k5AQAAMAAJ&hl=&output=epub&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "downloadLink": "http://books.google.ch/books/download/The_Boy_s_Own_Annual.pdf?id=L7k5AQAAMAAJ&hl=&output=pdf&sig=ACfU3U1b7NfXccv__3OlQrOnLJkrEjV3GQ&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=L7k5AQAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "FULL_PUBLIC_DOMAIN",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "A T the Tudor Exhibition , now open at the New Gallery in Regent Street , which all should see before its close early in April , there is in the balcony a curious picture of a \u003cb\u003emaze\u003c/b\u003e . This \u003cb\u003emaze\u003c/b\u003e has a history ."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Z35_DwAAQBAJ",
+      "etag": "XNqNOSkYL3Q",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Z35_DwAAQBAJ",
+      "volumeInfo": {
+        "title": "Infinite Learning Diversity",
+        "subtitle": "Uncovering the Hidden Talents of Our Students",
+        "authors": [
+          "Tony McCaffrey"
+        ],
+        "publisher": "Rowman & Littlefield",
+        "publishedDate": "2019-01-12",
+        "description": "This is a framework for measuring student intelligence.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781475834628"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1475834624"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 150,
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Z35_DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Z35_DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=Z35_DwAAQBAJ&pg=PA29&dq=maze&hl=&cd=69&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=Z35_DwAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Infinite_Learning_Diversity.html?hl=&id=Z35_DwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Infinite_Learning_Diversity-sample-pdf.acsm?id=Z35_DwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Z35_DwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Fourth, in experiments with rats learning \u003cb\u003emazes\u003c/b\u003e, some scientists have used many implanted tiny electrodes that eavesdrop on neighboring neurons to understand what happens during the execution of the \u003cb\u003emaze\u003c/b\u003e as well as sleeping after&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "5A-BCgAAQBAJ",
+      "etag": "IqKSHpy91oU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/5A-BCgAAQBAJ",
+      "volumeInfo": {
+        "title": "Stanley Kubrick",
+        "subtitle": "Essays on His Films and Legacy",
+        "authors": [
+          "Gary D. Rhodes"
+        ],
+        "publisher": "McFarland",
+        "publishedDate": "2007-12-13",
+        "description": "Seventeen essays examine the career and films of director Stanley Kubrick from a variety of perspectives. Part I focuses on his early career, including his first newsreels, his photography for Look magazine, and his earliest films (Fear and Desire, Killer's Kiss). Part II examines his major or most popular films (Paths of Glory, The Shining, 2001: A Space Odyssey). Part III provides a thorough case study of Eyes Wide Shut, with four very different essays focusing on the film's use of sound, its representation of gender, its carnivalesque qualities, and its phenomenological nature. Finally, Part IV discusses Kubrick's ongoing legacy and his impact on contemporary filmmakers. Instructors considering this book for use in a course may request an examination copy here.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780786432974"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0786432977"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 265,
+        "printType": "BOOK",
+        "categories": [
+          "Performing Arts"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=5A-BCgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=5A-BCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=5A-BCgAAQBAJ&pg=PA141&dq=maze&hl=&cd=70&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=5A-BCgAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Stanley_Kubrick.html?hl=&id=5A-BCgAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Stanley_Kubrick-sample-pdf.acsm?id=5A-BCgAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=5A-BCgAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "The first point can be illustrated by critical responses to one of the most visually striking features of Kubrick&#39;s The Shining—the Overlook&#39;s hedge \u003cb\u003emaze\u003c/b\u003e. Conventional wisdom holds that Kubrick must have opted for the labyrinth because&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "-t8vAAAAYAAJ",
+      "etag": "nTHJHRC90Iw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/-t8vAAAAYAAJ",
+      "volumeInfo": {
+        "title": "Manual for the Wechsler Intelligence Scale for Children",
+        "authors": [
+          "David Wechsler"
+        ],
+        "publishedDate": "1974",
+        "description": "The Wechsler Intelligence Scale for Children - Revised (WISC-R) consists of the same twelve tests (six on the Verbal Scale and six on the Performance Scale) that constituted the 1949 WISC. The revised Scale includes the use of Test Age, Global Intelligence, Nonintellective Factors, Psychological Diagnosis, Individual Assessment, and Test Interpretation as means for measuring general intelligence in children.",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "CORNELL:31924073916052"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 191,
+        "printType": "BOOK",
+        "categories": [
+          "Child development"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.2.4.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=-t8vAAAAYAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=-t8vAAAAYAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=-t8vAAAAYAAJ&q=maze&dq=maze&hl=&cd=71&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=-t8vAAAAYAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Manual_for_the_Wechsler_Intelligence_Sca.html?hl=&id=-t8vAAAAYAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=-t8vAAAAYAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "If he fails \u003cb\u003eMaze\u003c/b\u003e 2 , demonstrate the correct path before proceeding to \u003cb\u003eMaze\u003c/b\u003e 3 . ( However , if the child has also failed \u003cb\u003eMaze\u003c/b\u003e 1 , discontinue the test without demonstrating the correct path . ) \u003cb\u003eMAZE\u003c/b\u003e 3. Point to \u003cb\u003eMaze\u003c/b\u003e 3 and say , Now try&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "8NNUAAAAMAAJ",
+      "etag": "4/WzL//aV7Q",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/8NNUAAAAMAAJ",
+      "volumeInfo": {
+        "title": "Craft Horizons",
+        "publishedDate": "1977",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015007247334"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 468,
+        "printType": "BOOK",
+        "categories": [
+          "Decoration and ornament"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.4.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=8NNUAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=8NNUAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=8NNUAAAAMAAJ&q=maze&dq=maze&hl=&cd=72&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=8NNUAAAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Craft_Horizons.html?hl=&id=8NNUAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=8NNUAAAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "9 Nancy ran into the \u003cb\u003emaze\u003c/b\u003e , the \u003cb\u003emaze\u003c/b\u003e , Nancy ran into the \u003cb\u003emaze\u003c/b\u003e , Wearing her necklace of broken glass , 12 The children ran out for their mid - summer play In the ruined gardens of yesterday . Lenard , and Flora , Jason , and Nan&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "TWIJCgAAQBAJ",
+      "etag": "PVdivJfsLNo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/TWIJCgAAQBAJ",
+      "volumeInfo": {
+        "title": "The Shadow Throne",
+        "authors": [
+          "Aroon Raman"
+        ],
+        "publisher": "Pan Macmillan",
+        "publishedDate": "2015-07-30",
+        "description": "A mysterious murder at the Qutub Minar triggers a call to ace journalist Chandrasekhar from his cop acquaintance, Inspector Syed Ali Hassan. The victim is unlike anyone Chandra has ever seen: a white Caucasian male who has all the looks of a throwback to Greek antiquity. Soon after, Hassan calls in to report the case has been taken away from him - in all likelihood by RAW - the Research & Analysis Wing, the uber-agency of Indian intelligence. What began as a murder enquiry soon morphs into a deadly game of hide-and-seek within the shadowy world of Pakistan's ISI and India's RAW; and Chandra, his friend history professor Meenakshi Pirzada and Hassan find themselves in a race against time to avert a sub-continental nuclear holocaust. As the action moves to its hair-raising climax in the Hindu Kush mountains of Afghanistan, Chandra must face up to the fact that Inspector Hassan is not all that he seems... The Shadow Throne by Aroon Raman displays taut writing and nail-biting suspense in a debut that is chillingly believable. Will this unlikely trio succeed in navigating the treacherous politics of India and Pakistan?",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781509814091"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1509814094"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "averageRating": 4,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.1.2.0.preview.2",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=TWIJCgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=TWIJCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=TWIJCgAAQBAJ&pg=PT107&dq=maze&hl=&cd=73&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=TWIJCgAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=TWIJCgAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 6.68,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 5.01,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=TWIJCgAAQBAJ&rdid=book-TWIJCgAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 6680000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 5010000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/The_Shadow_Throne-sample-epub.acsm?id=TWIJCgAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=TWIJCgAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&#39;It&#39;s a \u003cb\u003emaze\u003c/b\u003e. A simply connected cross section in 3D, most likely. More than 100,000 combinations if tried at random.&#39; &#39;What?&#39; &#39;It&#39;s a \u003cb\u003emaze\u003c/b\u003e, Hassan. I&#39;ll need to see a bit more of it to understand the general structure."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "CZogAQAAQBAJ",
+      "etag": "8y0zxlvv8OQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/CZogAQAAQBAJ",
+      "volumeInfo": {
+        "title": "Intermediate Statistics",
+        "subtitle": "A Conceptual Course",
+        "authors": [
+          "Brett W. Pelham"
+        ],
+        "publisher": "SAGE",
+        "publishedDate": "2012-08-20",
+        "description": "Intermediate Statistics: A Conceptual Course is a student-friendly text for advanced undergraduate and graduate courses. It begins with an introductory chapter that reviews descriptive and inferential statistics in plain language, avoiding extensive emphasis on complex formulas. The remainder of the text covers 13 different statistical topics ranging from descriptive statistics to advanced multiple regression analysis and path analysis. Each chapter contains a description of the logic of each set of statistical tests or procedures and then introduces students to a series of data sets using SPSS, with screen captures and detailed step-by-step instructions. Students acquire an appreciation of the logic of descriptive and inferential statistics, and an understanding of which techniques are best suited to which kinds of data or research questions.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781483306025"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "148330602X"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 449,
+        "printType": "BOOK",
+        "categories": [
+          "Social Science"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.6.6.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=CZogAQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=CZogAQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=CZogAQAAQBAJ&pg=PA398&dq=maze&hl=&cd=74&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=CZogAQAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=CZogAQAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 71.63,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 50.77,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=CZogAQAAQBAJ&rdid=book-CZogAQAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 71630000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 50770000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Intermediate_Statistics-sample-epub.acsm?id=CZogAQAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Intermediate_Statistics-sample-pdf.acsm?id=CZogAQAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=CZogAQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "As Rosenthal and Fode expected, the \u003cb\u003emaze\u003c/b\u003e-bright rats learned their way around in the \u003cb\u003emazes\u003c/b\u003e more quickly than did the \u003cb\u003emaze\u003c/b\u003e-dull rats. This seemingly trivial finding may seem a little less trivial when you consider that the two groups of&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "QkQSAQAAMAAJ",
+      "etag": "wVKdfuCTfVI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/QkQSAQAAMAAJ",
+      "volumeInfo": {
+        "title": "IBM PC Programs",
+        "authors": [
+          "William T. Barden"
+        ],
+        "publishedDate": "1985",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PSU:000010894576"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 390,
+        "printType": "BOOK",
+        "categories": [
+          "Computer programs"
+        ],
+        "averageRating": 4,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.2.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=QkQSAQAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=QkQSAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=QkQSAQAAMAAJ&q=maze&dq=maze&hl=&cd=75&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=QkQSAQAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/IBM_PC_Programs.html?hl=&id=QkQSAQAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=QkQSAQAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "out the complete \u003cb\u003emaze\u003c/b\u003e initially. Be careful of the values. It is possible to construct a \u003cb\u003emaze\u003c/b\u003e in which one can enter a room, and then not have any doors or openings from which to exit! 3. For the answer to the \u003cb\u003emaze\u003c/b\u003e,&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "q4ZnEAAAQBAJ",
+      "etag": "YhlvZEP+pLY",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/q4ZnEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Forever My Princess",
+        "authors": [
+          "Tamara Gill"
+        ],
+        "publisher": "Tamara Gill",
+        "publishedDate": "2022-04-03",
+        "description": "She’s not who he thinks she is. But she just might be everything he needs… Tired doesn’t even begin to describe how Princess Elena of Atharia is feeling. A brief respite from the pressures of her position will do her good. Unfortunately, rest isn’t something royalty is typically afforded. But she’ll do what is necessary to escape her responsibilities for a time—even if it means becoming someone else entirely… Lord Theodore Ward has no love for the wealthy. But if he doesn’t marry well soon, he’ll lose everything. And his hunt for a perfect bride cannot begin while his mother is unwell and unattended. So, hiring a lady’s companion is the only option. Then the lovely Elena Smith arrives at his door and his plans become infinitely more complicated… When all the truths and secrets come to light, can these opposites find their way to happily ever after? Or will Theo lose his princess forever?",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9780645321609"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "0645321605"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=q4ZnEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=q4ZnEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=q4ZnEAAAQBAJ&pg=PT86&dq=maze&hl=&cd=76&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=q4ZnEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=q4ZnEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 3.73,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 3.73,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=q4ZnEAAAQBAJ&rdid=book-q4ZnEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 3730000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 3730000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Forever_My_Princess-sample-epub.acsm?id=q4ZnEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Forever_My_Princess-sample-pdf.acsm?id=q4ZnEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=q4ZnEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&quot;Miss Smith,&quot; he called when he was close enough to hear that it was indeed Elena somewhere lost in the \u003cb\u003emaze\u003c/b\u003e. &quot;Where are you?&quot; He heard her mumble something before she called, &quot;I&#39;m at the pond at the \u003cb\u003emaze&#39;s\u003c/b\u003e center. Please help me."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "RMJbEAAAQBAJ",
+      "etag": "xordLyTLgMs",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/RMJbEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Yellow",
+        "authors": [
+          "Tim O'Rourke"
+        ],
+        "publisher": "Tim ORourke",
+        "publishedDate": "2013-02-22",
+        "description": "In love with Vincent and trying to move on with her life, Sydney Hart is visited by an old friend. When this friend suddenly goes missing, Sydney finds herself in a desperate race against time, not only to save her friend’s life, but also her relationship with Vincent. With Michael wanting to spend more time with her in order to rekindle their relationship, Sydney’s life and emotions become ever more complex. Trying to stay focused on the hunt for her missing friend, Sydney has to figure out who is telling her the truth; but most importantly, who is Mr. Yellow? ‘Yellow’ (A Sydney Hart Novel) Book Two. \ufeffSearch Terms: vampire, romance, werewolf, fantasy, horror, mystery, new adult & college romance, occult, urban, young adult fantasy, paranormal, paranormal romance, fantasy witches, shapeshifter wolf romance, dystopian, superhero fantasy ebooks, demon, werewolf romance, angels, vampire romance, young adult paranormal, paranormal new adult romance, shade of, werewolf romance, vampires, diaries, demons and devils, shapeshifter wolf romance, academy, twilight, horror, angels, saga, new adult fantasy romance, journals, coming of age, new adult, young adult, gothic, shifter, lycan, vampire books, vampire romance books, vampire and werewolf books, werewolf books, fantasy books, coming of age fantasy, genetic engineering, science fiction, mash ups, bad girlfriend, vampire girl, vampire vengeance, anti-heroes, vengeance, science fiction, science fiction books vampire, supernatural, strong female lead fantasy, strong female characters, strong female vampire vampire romance, young adult paranormal, paranormal new",
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 198,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.4.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=RMJbEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=RMJbEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=RMJbEAAAQBAJ&pg=PT9&dq=maze&hl=&cd=77&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=RMJbEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=RMJbEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1.92,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 1.92,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=RMJbEAAAQBAJ&rdid=book-RMJbEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1920000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 1920000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Yellow-sample-epub.acsm?id=RMJbEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Yellow-sample-pdf.acsm?id=RMJbEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=RMJbEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Werewolves of Shade (Part Two) Werewolves of Shade (Part Three) Werewolves of Shade (Part Four) Werewolves of Shade (Part Five) Werewolves of Shade (Part Six) Vampires of \u003cb\u003eMaze\u003c/b\u003e Vampires of \u003cb\u003eMaze\u003c/b\u003e (Part One) Vampires of \u003cb\u003eMaze\u003c/b\u003e (Part Two)&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "pT66BQAAQBAJ",
+      "etag": "amGqBsaPWtI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/pT66BQAAQBAJ",
+      "volumeInfo": {
+        "title": "Intelligent Data Engineering and Automated Learning -- IDEAL 2012",
+        "subtitle": "13th International Conference, Natal, Brazil, August 29-31, 2012, Proceedings",
+        "authors": [
+          "Hujun Yin",
+          "Jose A.F. Costa",
+          "Guilherme Barreto"
+        ],
+        "publisher": "Springer",
+        "publishedDate": "2012-08-01",
+        "description": "This book constitutes the refereed proceedings of the 13th International Conference on Intelligent Data Engineering and Automated Learning, IDEAL 2012, held in Natal, Brazil, in August 2012. The 100 revised full papers presented were carefully reviewed and selected from more than 200 submissions for inclusion in the book and present the latest theoretical advances and real-world applications in computational intelligence.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9783642326394"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "3642326390"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 862,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.1.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=pT66BQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=pT66BQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=pT66BQAAQBAJ&pg=PA158&dq=maze&hl=&cd=78&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=pT66BQAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=pT66BQAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 112,
+          "currencyCode": "CHF"
+        },
+        "retailPrice": {
+          "amount": 78.4,
+          "currencyCode": "CHF"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=pT66BQAAQBAJ&rdid=book-pT66BQAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 112000000,
+              "currencyCode": "CHF"
+            },
+            "retailPrice": {
+              "amountInMicros": 78400000,
+              "currencyCode": "CHF"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.ch/books/download/Intelligent_Data_Engineering_and_Automat-sample-pdf.acsm?id=pT66BQAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=pT66BQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Hogg, S.: A review of the validity and variability of the elevated plus-\u003cb\u003emaze\u003c/b\u003e as an animal model of anxiety. Pharmacol. Biochem. Behav. 54(1), 21–30 (1996) 2. Montgomery, K.C.: The relation between fear induced by novel stimulation and&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "mnTMAAAAMAAJ",
+      "etag": "fv0kGoewGBM",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/mnTMAAAAMAAJ",
+      "volumeInfo": {
+        "title": "Abstracts of Theses",
+        "subtitle": "Humanistic series",
+        "authors": [
+          "University of Chicago"
+        ],
+        "publishedDate": "1928",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015013731719"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 628,
+        "printType": "BOOK",
+        "categories": [
+          "Dissertations, Academic"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=mnTMAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=mnTMAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=mnTMAAAAMAAJ&q=maze&dq=maze&hl=&cd=79&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=mnTMAAAAMAAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Abstracts_of_Theses.html?hl=&id=mnTMAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=mnTMAAAAMAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e A 20 III ... 20 \u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e A IV ... 20 \u003cb\u003eMaze\u003c/b\u003e A \u003cb\u003eMaze\u003c/b\u003e A irst rest - twentieth day Days 1-15 : Days 16-20 rest 5 trials in \u003cb\u003emaze\u003c/b\u003e B Days 1-13 : Days 14–20 : rest 9 trials in B Days 1-10 : Days 11-20 : rest 15 trials&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "qTgLAAAAQBAJ",
+      "etag": "PV7Vu4gYTUw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/qTgLAAAAQBAJ",
+      "volumeInfo": {
+        "title": "Developmental Psychology: Childhood and Adolescence",
+        "authors": [
+          "David R. Shaffer",
+          "Katherine Kipp"
+        ],
+        "publisher": "Cengage Learning",
+        "publishedDate": "2013-01-01",
+        "description": "This popular, topically organized, and thoroughly updated child and adolescent development text presents you with the best theories, research, and practical advice that developmentalists have to offer today. Authors David R. Shaffer and Katherine Kipp provide you with a current and comprehensive overview of child and adolescent development, written in clear, concise language that talks to you rather than at you. The authors also focus on application showing how theories and research apply to real-life settings. As a result, you will gain an understanding of developmental principles that will help you in your roles as parents, teachers, nurses, day-care workers, pediatricians, psychologists, or in any other capacity by which you may one day influence the lives of developing persons. Available with InfoTrac Student Collections http://gocengage.com/infotrac. Important Notice: Media content referenced within the product description or the product text may not be available in the ebook version.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781285545769"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1285545761"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 720,
+        "printType": "BOOK",
+        "categories": [
+          "Education"
+        ],
+        "averageRating": 5,
+        "ratingsCount": 2,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=qTgLAAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=qTgLAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.ch/books?id=qTgLAAAAQBAJ&pg=PA65&dq=maze&hl=&cd=80&source=gbs_api",
+        "infoLink": "http://books.google.ch/books?id=qTgLAAAAQBAJ&dq=maze&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Developmental_Psychology_Childhood_and_A.html?hl=&id=qTgLAAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "CH",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "CH",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=qTgLAAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "A classic example of such a selective breeding experiment is R. C. Tryon&#39;s (1940) attempt to show that \u003cb\u003emaze\u003c/b\u003e-learning ability is a heritable attribute in rats. Tryon first tested a large number of rats for the ability to run a complex&nbsp;..."
+      }
+    }
+  ]
+}
