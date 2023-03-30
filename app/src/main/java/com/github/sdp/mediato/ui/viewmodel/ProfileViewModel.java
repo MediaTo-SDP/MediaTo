@@ -56,7 +56,6 @@ public class ProfileViewModel extends ViewModel {
   }
 
   public void setUsername(String username) {
-    Preconditions.checkUsername(username);
     usernameLiveData.setValue(username);
   }
 

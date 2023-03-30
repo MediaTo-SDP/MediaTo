@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.fail;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,11 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -111,6 +117,63 @@ public class ProfileFragmentTest {
     collectionRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
 
+  // Test the initial state of the list of collections after profile creation
+  @Test
+  public void testInitialOuterRecyclerViewState() {
+    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+
+    // Check that the outer RecyclerView is displayed
+    outerRecyclerView.check(matches(isDisplayed()));
+
+    // Check that the outer RecyclerView initially has one item (default collection)
+    outerRecyclerView.check(matches(hasItemCount(1)));
+  }
+
+  // Check that a new collection has been added to the outer RecyclerView if the user chooses a valid collection name
+  @Test
+  public void testAddValidCollection() throws UiObjectNotFoundException {
+    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+
+    int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    addCollectionButton.perform(click());
+    enterTextInAlertBox("valid");
+
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+  }
+
+  // Check that no new collection has been added to the outer RecyclerView if the user enters an empty collection name
+  @Test
+  public void testEmptyCollectionNameNotAdded() throws UiObjectNotFoundException {
+    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+
+    int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    addCollectionButton.perform(click());
+    enterTextInAlertBox("");
+
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+  }
+
+  // Check that only one collection gets added if the user tries to add a collection with the same username twice
+  @Test
+  public void testDuplicateCollectionNameNotAdded() throws UiObjectNotFoundException {
+    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+
+    int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    addCollectionButton.perform(click());
+    enterTextInAlertBox("duplicate");
+    addCollectionButton.perform(click());
+    enterTextInAlertBox("duplicate");
+
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+  }
+  
+
   /**
    * A matcher to check if a RecyclerView has a certain amount of items.
    *
@@ -145,6 +208,28 @@ public class ProfileFragmentTest {
       itemCount[0] = recyclerView.getAdapter().getItemCount();
     });
     return itemCount[0];
+  }
+
+  /**
+   * Used to interact with the AlertDialog to enter the collection name
+   *
+   * @param enterText the text to enter into the dialog box
+   */
+  private void enterTextInAlertBox(String enterText) {
+    try {
+      UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+      UiObject inputField = device.findObject(
+          new UiSelector().resourceId("com.github.sdp.mediato:id/collection_name_input"));
+      inputField.setText(enterText);
+
+      UiObject addButton = device.findObject(
+          // In case the text of the button is ever changed: this is case sensitive!
+          // If the string resource says Add but the button text is displayed in capital letters, only ADD works!
+          new UiSelector().text("ADD"));
+      addButton.click();
+    } catch (UiObjectNotFoundException e) {
+      fail();
+    }
   }
 
 }

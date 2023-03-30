@@ -42,8 +42,8 @@ public class ProfileFragment extends Fragment {
   private Button addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
-  private RecyclerView collectionsRecyclerView;
-  private CollectionListAdapter collectionsAdapter;
+  private RecyclerView collectionListRecyclerView;
+  private CollectionListAdapter collectionlistAdapter;
 
   // Used as a key to access the database
   private static String USERNAME;
@@ -74,17 +74,17 @@ public class ProfileFragment extends Fragment {
     addCollectionButton = view.findViewById(R.id.add_collection_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
-    collectionsRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
+    collectionListRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
 
     // Initialize components
     photoPicker = setupPhotoPicker();
-    collectionsAdapter = setupCollections(collectionsRecyclerView);
+    collectionlistAdapter = setupCollections(collectionListRecyclerView);
     setupAddCollectionsButton(addCollectionButton);
 
     // Observe the view model's live data to update UI components
     observeUsername();
     observeProfilePic();
-    observeCollections(collectionsAdapter);
+    observeCollections(collectionlistAdapter);
 
     return view;
   }
