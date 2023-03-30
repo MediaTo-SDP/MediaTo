@@ -4,6 +4,7 @@ import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +22,11 @@ public class MyFollowingViewModel extends UserViewModel {
         CompletableFuture[] futures = new CompletableFuture[getUser().getFollowing().size()];
         int i = 0;
 
-        for (String username : getUser().getFollowing()) {
+        List<String> followingUserNames = getUser().getFollowing();
+
+        Collections.sort(followingUserNames);
+
+        for (String username : followingUserNames) {
             futures[i++] = Database.getUser(username).thenAccept(followings::add);
         }
 
