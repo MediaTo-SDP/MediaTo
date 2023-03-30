@@ -9,12 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.sdp.mediato.ProfileFragment.OnAddMediaButtonClickListener;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * This adapter displays a list of collections of Media.
@@ -22,14 +22,15 @@ import java.util.function.Consumer;
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private Context context;
-  private Consumer<Runnable> notifyItemChangedConsumer;
-  
+  private OnAddMediaButtonClickListener onAddMediaButtonClickListener;
+
   private List<Collection> collections;
 
-  public CollectionListAdapter(Context context, List<Collection> collections) {
+  public CollectionListAdapter(Context context, List<Collection> collections,
+      OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
     this.context = context;
     this.collections = collections;
-    this.notifyItemChangedConsumer = notifyItemChangedConsumer;
+    this.onAddMediaButtonClickListener = onAddMediaButtonClickListener;
   }
 
   @NonNull
@@ -57,6 +58,9 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
       // Handle adding a new media item to the current collection
       Review review = s.getMovieReview();
       collection.addReview(review);
+      if (onAddMediaButtonClickListener != null) {
+        onAddMediaButtonClickListener.onAddMediaButtonClick(position, collection);
+      }
       collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
     });
   }

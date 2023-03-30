@@ -101,7 +101,16 @@ public class ProfileFragment extends Fragment {
     }
 
     // Create an adapter to display the list of collections in a RecycleView
-    CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections);
+
+    OnAddMediaButtonClickListener onAddMediaButtonClickListener = new OnAddMediaButtonClickListener() {
+      @Override
+      public void onAddMediaButtonClick(int position, Collection collection) {
+        // Handle adding a new media item to the current collection here
+        System.out.println("in here");
+      }
+    };
+    CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
+        onAddMediaButtonClickListener);
     recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -210,6 +219,11 @@ public class ProfileFragment extends Fragment {
 
   private void makeToast(String text) {
     Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+  }
+
+  public interface OnAddMediaButtonClickListener {
+
+    void onAddMediaButtonClick(int position, Collection collection);
   }
 
 }
