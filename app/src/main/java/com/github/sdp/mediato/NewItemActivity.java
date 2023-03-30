@@ -7,7 +7,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Locale;
 
 /**
@@ -43,7 +45,6 @@ public class NewItemActivity extends AppCompatActivity {
         errorTextView.setText("");
       }
     });
-
   }
 
   /**

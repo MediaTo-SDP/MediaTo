@@ -28,7 +28,7 @@ public class LocalFilmDatabase {
         filmItems.add(new Media(MediaType.MOVIE, " L\'homme au pistolet d\'or", " 1974 ", "l_homme_au_pistolet_d_or.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, "L\'espion qui m\'aimait", " 1977 ", "l_espion_qui_m_aimait.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, "Moonraker", " 1979 ", "moonraker.jpeg", 0));
-        filmItems.add(new Media(MediaType.MOVIE, " Rien que pour vos yeux", " 1981 ", "", 0));
+        filmItems.add(new Media(MediaType.MOVIE, " Rien que pour vos yeux", " 1981 ", "rien_que_pour_vos_yeux.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Octopussy ", " 1983 ", "octopussy.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Jamais plus jamais", " 1983 ", "jamais_plus_jamais.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Dangereusement vôtre ", "1985", "dangereusement_votre.jpeg", 0));

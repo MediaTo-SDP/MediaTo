@@ -15,10 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-
 import java.util.Locale;
-import java.util.Objects;
 
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
@@ -38,15 +35,23 @@ public class NewItemFragment extends Fragment {
         EditText review = view.findViewById(R.id.item_review_edittext);
 
 
-        /* ToDO 1 : with the given Bundle assign the view elements properly */
+        Bundle bundle = this.getArguments();
+        String title = "";
+        String description = "";
+        String url = "";
+        if (bundle != null) {
+            title = bundle.getString("title");
+            description = bundle.getString("description");
+            url = bundle.getString("url");
+        }
+        setItemInformation(title, description, url);
+
+
         /*String title = savedInstanceState.getString("title");
         String description = savedInstanceState.getString("description");
         String url = savedInstanceState.getString("url");
 
         setItemInformation(title, description, url);*/
-        setItemInformation("OSS 117", "OSS 117 : Alerte rouge en Afrique noire ou" +
-                " OSS 117: Bons Baisers d'Afrique au Québec est une comédie d'espionnage" +
-                " française réalisé par Nicolas Bedos et sorti en 2021.", String.valueOf(R.drawable.oss117_item_test));
 
 
         setProgressBarIndicator();
@@ -109,7 +114,7 @@ public class NewItemFragment extends Fragment {
 
         ImageView img = view.findViewById(R.id.item_image);
         /* ToDO 2 : fetch the image from url and display it */
-        img.setImageResource(Integer.parseInt(url));
+        // img.setImageResource(Integer.parseInt(url));
         /*
         Glide.with(this).load(url).into(img);*/
 

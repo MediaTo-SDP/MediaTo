@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -84,17 +85,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // get the text view
         this.textView = searchView.findViewById(R.id.searchactivity_textView_textDuringAfterSearch);
 
-        // get the list view
-        this.gridView = searchView.findViewById(R.id.searchactivity_gridview_searchresults);
-
         // Create and init the Search User ViewModel
         searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
         searchUserViewModel.setUserName(USERNAME);
 
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
         this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);
@@ -104,7 +100,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.currentHighlightedButton = peopleButton;
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
-        this.gridView.setVisibility(View.GONE);
 
         return searchView;
     }
@@ -113,7 +108,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     public boolean onQueryTextSubmit(String s) {
         if (s.length() > 0) {
             //this.mTextView.setText("Results");
-            search(s);
+            searchAndDisplayResult(s);
             //gridView.setAdapter(new MediaAdapter(this.getContext(), searchResults));
 
             // toDO : call the search function
@@ -135,14 +130,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public void onClick(View view) {
-        SwitchGridOrRecyclerView(view);
-
         if (view == peopleButton) {
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
         } else if (view == booksButton) {
-            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
-            FragmentSwitcher fs = (FragmentSwitcher) getActivity();
-            fs.switchCurrentFragmentWithChildFragment(new NewItemFragment());
+
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
         } else if (view == musicButton) {
@@ -156,35 +147,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
-    private void SwitchGridOrRecyclerView(View view) {
-        if (view == peopleButton) {
-            this.gridView.setVisibility(View.GONE);
-            this.recyclerView.setVisibility(View.VISIBLE);
-        } else {
-            this.recyclerView.setVisibility(View.GONE);
-            this.gridView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private List<Media> search(String toBeSearched) {
-        List<Media> searchMediaResults = new ArrayList<Media>();
+    private void searchAndDisplayResult(String toBeSearched) {
         switch (this.currentCategory) {
             case PEOPLE:
+                recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+                recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
                 searchUser(toBeSearched);
                 break;
             case MOVIES:
-                // toDO : fetch from firebase 
-                // for now fetches from a local database
+                /* toDO : fetch from the movie API */
+                /* for now on fetch from the local data base*/
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                List<Media> searchMediaResults = new ArrayList<>();
                 if (toBeSearched.equals("james bond")) {
                     searchMediaResults = new LocalFilmDatabase().getMovieItems();
                 }
+                recyclerView.setAdapter(new MediaAdapter2(searchMediaResults, getContext(), (FragmentSwitcher) getActivity()));
                 break;
             case BOOKS:
                 break;
             case MUSIC:
                 break;
         }
-        return searchMediaResults;
     }
 
     private void searchUser(String toBeSearched) {

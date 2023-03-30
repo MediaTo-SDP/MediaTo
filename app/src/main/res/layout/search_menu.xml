@@ -76,22 +76,12 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black" />
 
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchactivity_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/searchactivity_gridview_searchresults"
-            android:numColumns="3" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchactivity_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            app:itemSpacing="4dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        app:itemSpacing="4dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>
