@@ -138,7 +138,7 @@ public class ProfileFragmentTest {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
-    enterTextInAlertBox("valid");
+    enterTextInAlertBoxAndClickAdd("valid");
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
@@ -152,7 +152,7 @@ public class ProfileFragmentTest {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
-    enterTextInAlertBox("");
+    enterTextInAlertBoxAndClickAdd("");
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
   }
@@ -166,13 +166,27 @@ public class ProfileFragmentTest {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
-    enterTextInAlertBox("duplicate");
+    enterTextInAlertBoxAndClickAdd("duplicate");
     addCollectionButton.perform(click());
-    enterTextInAlertBox("duplicate");
+    enterTextInAlertBoxAndClickAdd("duplicate");
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
-  
+
+  // Check that only one collection gets added if the user tries to add a collection with the same username twice
+  @Test
+  public void testEnterValidCollectionAndCancelDoesNotAddCollection()
+      throws UiObjectNotFoundException {
+    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+
+    int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    addCollectionButton.perform(click());
+    enterTextInAlertBoxAndClickCancel("duplicate");
+    outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+  }
+
 
   /**
    * A matcher to check if a RecyclerView has a certain amount of items.
@@ -215,7 +229,7 @@ public class ProfileFragmentTest {
    *
    * @param enterText the text to enter into the dialog box
    */
-  private void enterTextInAlertBox(String enterText) {
+  private void enterTextInAlertBoxAndClickAdd(String enterText) {
     try {
       UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
       UiObject inputField = device.findObject(
@@ -226,6 +240,28 @@ public class ProfileFragmentTest {
           // In case the text of the button is ever changed: this is case sensitive!
           // If the string resource says Add but the button text is displayed in capital letters, only ADD works!
           new UiSelector().text("ADD"));
+      addButton.click();
+    } catch (UiObjectNotFoundException e) {
+      fail();
+    }
+  }
+
+  /**
+   * Used to interact with the AlertDialog to enter the collection name
+   *
+   * @param enterText the text to enter into the dialog box
+   */
+  private void enterTextInAlertBoxAndClickCancel(String enterText) {
+    try {
+      UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+      UiObject inputField = device.findObject(
+          new UiSelector().resourceId("com.github.sdp.mediato:id/collection_name_input"));
+      inputField.setText(enterText);
+
+      UiObject addButton = device.findObject(
+          // In case the text of the button is ever changed: this is case sensitive!
+          // If the string resource says Cancel but the button text is displayed in capital letters, only CANCEL works!
+          new UiSelector().text("CANCEL"));
       addButton.click();
     } catch (UiObjectNotFoundException e) {
       fail();

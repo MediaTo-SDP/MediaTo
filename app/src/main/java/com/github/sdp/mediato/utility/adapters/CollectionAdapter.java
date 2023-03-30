@@ -47,7 +47,11 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
     // Set the media rating
     int grade = review.getGrade();
-    holder.mediaRating.setText(getStarString(grade));
+    String ratingString = "";
+    if (grade > 0) {
+      ratingString = getStarString(grade);
+    }
+    holder.mediaRating.setText(ratingString);
 
     // TODO set the movie image retrieved from the API
     holder.mediaImage.setImageResource(R.drawable.bg_movie);
