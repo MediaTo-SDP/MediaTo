@@ -64,9 +64,18 @@ public class ProfileViewModel extends ViewModel {
     profilePicLiveData.setValue(profilePic);
   }
 
+  /**
+   * Adds a review to a collection or does nothing if the collection does not exits.
+   *
+   * @param review         the review to add
+   * @param collectionName the name of the collection to add to
+   */
   public void addReviewToCollection(@NonNull Review review, String collectionName) {
     Preconditions.checkNullOrEmptyString(collectionName, "collectionName");
     Collection collection = getCollection(collectionName);
+    if (collection == null) {
+      return;
+    }
 
     collection.addReview(review);
     Database.addReviewToCollection(getUsername(), collectionName, review);
@@ -79,8 +88,8 @@ public class ProfileViewModel extends ViewModel {
    * Adds a collection with the chosen name if no collection of that name already exists, or makes
    * no changes if such a collection already exists.
    *
-   * @param collectionName
-   * @return
+   * @param collectionName name of the collection to add
+   * @return true if the collection was sucessfully added, false otherwise
    */
   public boolean addCollection(String collectionName) {
     Preconditions.checkNullOrEmptyString(collectionName, "collectionName");
@@ -105,8 +114,8 @@ public class ProfileViewModel extends ViewModel {
    * Returns the collection with the corresponding name in the viewmodel, or throws an error if such
    * a collection does not exist.
    *
-   * @param collectionName
-   * @return
+   * @param collectionName name of the collection to get
+   * @return the collection if it exists, or null otherwise
    */
   private Collection getCollection(String collectionName) {
     Preconditions.checkNullOrEmptyString(collectionName, "collectionName");
@@ -117,8 +126,8 @@ public class ProfileViewModel extends ViewModel {
         return collection;
       }
     }
-    // TODO handle collection not found error
-    throw new IllegalArgumentException("A collection with this name does not exist.");
+
+    return null;
   }
 
 }
