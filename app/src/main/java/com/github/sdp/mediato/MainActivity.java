@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   }
 
   @Override
-  public void switchCurrentFragmentWithChilFragment(Fragment childFragment) {
+  public void switchCurrentFragmentWithChildFragment(Fragment childFragment) {
     replaceFragment(childFragment);
   }
 }
