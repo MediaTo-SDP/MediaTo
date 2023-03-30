@@ -18,10 +18,11 @@ import com.bumptech.glide.Glide;
 import java.util.Locale;
 import java.util.Objects;
 
-class NewItemFragment extends Fragment {
-
+public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
     public final static int MAX_REVIEW_LENGTH = 100;
+
+    private View view;
 
     @Nullable
     @Override
@@ -29,9 +30,12 @@ class NewItemFragment extends Fragment {
         Objects.requireNonNull(savedInstanceState);
 
         View view = inflater.inflate(R.layout.activity_new_item, container, false);
+        this.view = view;
 
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
+
+
 
         /* ToDO 1 : with the given Bundle assign the view elements properly */
         String title = savedInstanceState.getString("title");
@@ -39,6 +43,13 @@ class NewItemFragment extends Fragment {
         String url = savedInstanceState.getString("url");
 
         setItemInformation(title, description, url);
+
+        TextView titleView = view.findViewById(R.id.item_title);
+        titleView.setText(title);
+
+        TextView descriptionView = (TextView) view.findViewById(R.id.item_description_text);
+        descriptionView.setText(description);
+
 
         setProgressBarIndicator();
 
@@ -56,8 +67,8 @@ class NewItemFragment extends Fragment {
      * rating)
      */
     private void setProgressBarIndicator() {
-        SeekBar ratingSlider = getView().findViewById(R.id.item_rating_slider);
-        TextView ratingIndicator = getView().findViewById(R.id.item_rating_slider_progress);
+        SeekBar ratingSlider = view.findViewById(R.id.item_rating_slider);
+        TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
         // We add a listener to the slide bar to update the indicator text (displays the rating on
         // top of it)
@@ -92,9 +103,9 @@ class NewItemFragment extends Fragment {
      */
     private void setItemInformation(String title, String description, String url) {
 
-        ((TextView) getView().findViewById(R.id.item_title)).setText(title);
+        ((TextView) this.view.findViewById(R.id.item_title)).setText(title);
 
-        ((TextView) getView().findViewById(R.id.item_description_text)).setText(description);
+        ((TextView) this.view.findViewById(R.id.item_description_text)).setText(description);
 
         /* ToDO 2 : fetch the image from url and display it */
         ImageView img = getView().findViewById(R.id.item_image);
@@ -109,8 +120,8 @@ class NewItemFragment extends Fragment {
      */
     public void addItem(View view) {
 
-        TextView errorTextView = getView().findViewById(R.id.new_item_review_error_msg);
-        EditText review = getView().findViewById(R.id.item_review_edittext);
+        TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
+        EditText review = view.findViewById(R.id.item_review_edittext);
 
         if (review.getText().length() > MAX_REVIEW_LENGTH) {
             getActivity().runOnUiThread(() -> errorTextView.setText(

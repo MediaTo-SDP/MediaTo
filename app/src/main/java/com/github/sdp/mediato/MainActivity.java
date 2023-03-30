@@ -14,7 +14,7 @@ import com.github.sdp.mediato.ui.HomeFragment;
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
  * between the home, search, and profile fragments.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
   ActivityMainBinding binding;
   ProfileFragment profileFragment;
@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
         item -> navigateFragments(item.getItemId()));
-
   }
 
   private boolean navigateFragments(int itemId) {
@@ -79,5 +78,10 @@ public class MainActivity extends AppCompatActivity {
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
 
     replaceFragment(profileFragment);
+  }
+
+  @Override
+  public void switchCurrentFragmentWithChilFragment(Fragment childFragment) {
+    replaceFragment(childFragment);
   }
 }
