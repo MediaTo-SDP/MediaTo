@@ -133,19 +133,22 @@ public class AuthenticationActivityTest {
     public void testSignInWorks() {
 
         login();
-        ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
-        loginButton.perform(click());
+        Database.deleteUser(databaseUser.getUsername()).thenAccept(u -> {
 
-        // select the account if google account selector pops up
-        try {
-            device.findObject(By.textContains("@")).click();
-        } catch (NullPointerException e) {
-            System.out.println("Object wasn't found");
-        }
+            ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
+            loginButton.perform(click());
 
-        Intents.intended(hasComponent(NewProfileActivity.class.getName()));
+            // select the account if google account selector pops up
+            try {
+                device.findObject(By.textContains("@")).click();
+            } catch (NullPointerException e) {
+                System.out.println("Object wasn't found");
+            }
 
-        logout();
+            Intents.intended(hasComponent(NewProfileActivity.class.getName()));
+
+            logout();
+        });
     }
 
     /**

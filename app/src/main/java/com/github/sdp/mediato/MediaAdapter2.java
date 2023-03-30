@@ -56,9 +56,7 @@ public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder
             public void onClick(View v) {
                 Fragment fg = new NewItemFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("url", currentMedia.getPosterUrl());
-                bundle.putString("title", currentMedia.getTitle());
-                bundle.putString("description", currentMedia.getSummary());
+                bundle.putSerializable("media", currentMedia);
                 fg.setArguments(bundle);
                 fs.switchCurrentFragmentWithChildFragment(fg);
             }

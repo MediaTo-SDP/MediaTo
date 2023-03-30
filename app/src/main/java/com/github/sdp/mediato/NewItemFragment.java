@@ -1,6 +1,7 @@
 package com.github.sdp.mediato;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.media.Media;
+
 import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
@@ -22,6 +27,7 @@ public class NewItemFragment extends Fragment {
     public final static int MAX_REVIEW_LENGTH = 100;
 
     private View view;
+    private Media media;
 
     @Nullable
     @Override
@@ -36,22 +42,14 @@ public class NewItemFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
-        String title = "";
-        String description = "";
-        String url = "";
         if (bundle != null) {
-            title = bundle.getString("title");
-            description = bundle.getString("description");
-            url = bundle.getString("url");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                media = bundle.getSerializable("media", Media.class);
+            } else {
+                throw new RuntimeException("bundle requires api level 33, change minimum version to 33 isntead of 24");
+            }
         }
-        setItemInformation(title, description, url);
-
-
-        /*String title = savedInstanceState.getString("title");
-        String description = savedInstanceState.getString("description");
-        String url = savedInstanceState.getString("url");
-
-        setItemInformation(title, description, url);*/
+        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
 
 
         setProgressBarIndicator();
@@ -114,9 +112,7 @@ public class NewItemFragment extends Fragment {
 
         ImageView img = view.findViewById(R.id.item_image);
         /* ToDO 2 : fetch the image from url and display it */
-        // img.setImageResource(Integer.parseInt(url));
-        /*
-        Glide.with(this).load(url).into(img);*/
+        Glide.with(this).load(url).into(img);
 
     }
 
@@ -129,12 +125,16 @@ public class NewItemFragment extends Fragment {
 
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
+        TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
         if (review.getText().length() > MAX_REVIEW_LENGTH) {
             getActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
+            String username =  getActivity().getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
+            intent.putExtra("review", new Review(username, media,
+                    Integer.parseInt(ratingIndicator.getText().toString()), review.getText().toString()));
             startActivity(intent);
         }
     }

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,13 +21,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
-import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionAdapter;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -82,6 +84,12 @@ public class ProfileFragment extends Fragment {
     collectionAdapter = setupCollection(collectionRecyclerView);
     setupAddButton(addMediaButton);
 
+    Review review = (Review) getActivity().getIntent().getSerializableExtra("review");
+    System.out.println("review is: "+review);
+    if (review != null) {
+      addReviewToCollection(review);
+    }
+
     // Observe the view model's live data to update UI components
     observeUsername();
     observeProfilePic();
@@ -126,17 +134,22 @@ public class ProfileFragment extends Fragment {
 
   private void setupAddButton(ImageButton addMediaButton) {
     //TODO connect this to the SearchFragment
-    SampleReviews s = new SampleReviews();
     addMediaButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         /*replaceFragment(new SearchFragment());*/
-        Review review = s.getMovieReview();
-        Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
-        viewModel.addReviewToCollection(review);
       }
     });
 
+  }
+
+  /**
+   * Adds a review to the profile and database
+   * @param review: the review to add
+   */
+  private void addReviewToCollection(Review review) {
+    Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
+    viewModel.addReviewToCollection(review);
   }
 
   private void observeUsername() {
