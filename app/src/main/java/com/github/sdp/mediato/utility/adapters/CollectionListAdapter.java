@@ -22,6 +22,8 @@ import java.util.List;
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private Context context;
+
+  // Can be used to execute some code in the profilePage, such as updating the database
   private OnAddMediaButtonClickListener onAddMediaButtonClickListener;
 
   private List<Collection> collections;
@@ -55,11 +57,13 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
 
     // Set up the add button for the current collection
     holder.addMediaButton.setOnClickListener(v -> {
-      // Handle adding a new media item to the current collection
+
       Review review = s.getMovieReview();
       collection.addReview(review);
+
+      // Can be used to execute some code in the profilePage, such as updating the database
       if (onAddMediaButtonClickListener != null) {
-        onAddMediaButtonClickListener.onAddMediaButtonClick(position, collection);
+        onAddMediaButtonClickListener.onAddMediaButtonClick(collection, review);
       }
       collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
     });

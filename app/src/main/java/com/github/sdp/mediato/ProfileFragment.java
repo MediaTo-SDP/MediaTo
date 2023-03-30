@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
@@ -100,15 +101,12 @@ public class ProfileFragment extends Fragment {
       viewModel.setCollections(collections);
     }
 
-    // Create an adapter to display the list of collections in a RecycleView
-
-    OnAddMediaButtonClickListener onAddMediaButtonClickListener = new OnAddMediaButtonClickListener() {
-      @Override
-      public void onAddMediaButtonClick(int position, Collection collection) {
-        // Handle adding a new media item to the current collection here
-        System.out.println("in here");
-      }
+    // Define what happens when the add button inside a collection is clicked
+    OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
+      Database.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
     };
+
+    // Create an adapter to display the list of collections in a RecycleView
     CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
         onAddMediaButtonClickListener);
     recyclerView.setAdapter(collectionsAdapter);
@@ -167,7 +165,7 @@ public class ProfileFragment extends Fragment {
         (dialog, which) -> handleEnteredCollectionName(textInput));
 
     // Set the cancel button
-    String cancelText = getResources().getString(R.string.add);
+    String cancelText = getResources().getString(R.string.cancel);
     builder.setNegativeButton(cancelText,
         (dialog, which) -> dialog.cancel());
 
@@ -223,7 +221,7 @@ public class ProfileFragment extends Fragment {
 
   public interface OnAddMediaButtonClickListener {
 
-    void onAddMediaButtonClick(int position, Collection collection);
+    void onAddMediaButtonClick(Collection collection, Review review);
   }
 
 }
