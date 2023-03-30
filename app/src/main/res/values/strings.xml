@@ -26,7 +26,6 @@
   <string name="rating">Rating: </string>
 
   <!--Buttons-->
-  <string name="friends">Friends</string>
   <string name="edit">Edit</string>
   <string name="new_item_end_button_text">Add</string>
   <string name="film">Film</string>
@@ -63,6 +62,7 @@
   <string name="searchUserFailed">Failed to search users</string>
     <string name="movie_name">movie_name</string>
     <string name="myFollowing_title_bar">My followings</string>
+    <string name="following">Following</string>
 
 
 </resources>

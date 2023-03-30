@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.MyFollowingFragment;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.SampleReviews;
@@ -39,6 +40,7 @@ public class ProfileFragment extends Fragment {
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
+  private Button followingButton;
   private ImageButton addMediaButton;
   private TextView usernameView;
   private ImageView profileImage;
@@ -72,6 +74,7 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
+    followingButton = view.findViewById(R.id.following_button);
     addMediaButton = view.findViewById(R.id.add_media_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
@@ -81,6 +84,7 @@ public class ProfileFragment extends Fragment {
     photoPicker = setupPhotoPicker();
     collectionAdapter = setupCollection(collectionRecyclerView);
     setupAddButton(addMediaButton);
+    setupFollowingButton(followingButton);
 
     // Observe the view model's live data to update UI components
     observeUsername();
@@ -137,6 +141,15 @@ public class ProfileFragment extends Fragment {
       }
     });
 
+  }
+
+  private void setupFollowingButton(Button followingButton) {
+    followingButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        openMyFollowingFragment();
+      }
+    });
   }
 
   private void observeUsername() {
@@ -201,4 +214,16 @@ public class ProfileFragment extends Fragment {
     });
   }
 
+  private void openMyFollowingFragment() {
+    MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+    Bundle args = new Bundle();
+    args.putString("username", USERNAME);
+    myFollowingFragment.setArguments(args);
+
+    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.replace(R.id.main_container, myFollowingFragment);
+    fragmentTransaction.addToBackStack(null);
+    fragmentTransaction.commit();
+  }
 }
