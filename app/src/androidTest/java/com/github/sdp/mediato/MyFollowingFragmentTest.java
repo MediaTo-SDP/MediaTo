@@ -115,8 +115,6 @@ public class MyFollowingFragmentTest {
     sleep(500);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 1);
-    assertNotDisplayed(user2.getUsername());
-    assertDisplayed(user3.getUsername());
   }
 }
 

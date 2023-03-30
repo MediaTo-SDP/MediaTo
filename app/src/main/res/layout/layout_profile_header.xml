@@ -12,7 +12,7 @@
   app:layout_constraintVertical_bias="0.0">
 
   <Button
-    android:id="@+id/following_button"
+    android:id="@+id/profile_following_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="30dp"
@@ -32,7 +32,7 @@
     android:textAllCaps="false"
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-    app:layout_constraintStart_toEndOf="@+id/following_button" />
+    app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
 
   <TextView
     android:id="@+id/username_text"

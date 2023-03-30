@@ -49,7 +49,7 @@ public class ProfileFragmentTest {
   // Test whether the "Friends" button is displayed and contains the correct text
   @Test
   public void testFollowingButton() {
-    ViewInteraction followingButton = onView(withId(R.id.following_button));
+    ViewInteraction followingButton = onView(withId(R.id.profile_following_button));
     followingButton.check(matches(isDisplayed()));
     followingButton.check(matches(withText(R.string.following)));
   }

@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
-    followingButton = view.findViewById(R.id.following_button);
+    followingButton = view.findViewById(R.id.profile_following_button);
     addMediaButton = view.findViewById(R.id.add_media_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
