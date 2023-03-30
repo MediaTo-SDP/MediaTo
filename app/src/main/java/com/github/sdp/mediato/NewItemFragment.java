@@ -32,7 +32,6 @@ public class NewItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        // TODO Objects.requireNonNull(savedInstanceState);
 
         View view = inflater.inflate(R.layout.activity_new_item, container, false);
         this.view = view;
@@ -111,7 +110,6 @@ public class NewItemFragment extends Fragment {
         ((TextView) this.view.findViewById(R.id.item_description_text)).setText(description);
 
         ImageView img = view.findViewById(R.id.item_image);
-        /* ToDO 2 : fetch the image from url and display it */
         Glide.with(this).load(url).into(img);
 
     }
@@ -128,10 +126,10 @@ public class NewItemFragment extends Fragment {
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
         if (review.getText().length() > MAX_REVIEW_LENGTH) {
-            getActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
+            requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            String username =  getActivity().getIntent().getStringExtra("username");
+            String username = requireActivity().getIntent().getStringExtra("username");
             intent.putExtra("username", username);
             intent.putExtra("review", new Review(username, media,
                     Integer.parseInt(ratingIndicator.getText().toString()), review.getText().toString()));

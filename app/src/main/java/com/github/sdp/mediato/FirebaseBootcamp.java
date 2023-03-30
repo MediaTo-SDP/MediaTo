@@ -3,18 +3,21 @@ package com.github.sdp.mediato;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.concurrent.CompletableFuture;
 
 public class FirebaseBootcamp extends AppCompatActivity {
 
-  private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+  private final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

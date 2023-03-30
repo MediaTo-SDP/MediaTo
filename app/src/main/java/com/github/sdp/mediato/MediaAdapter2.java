@@ -19,10 +19,10 @@ import java.util.List;
 
 public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder> {
 
-    private List<Media> medias;
-    private Context context;
+    private final List<Media> medias;
+    private final Context context;
 
-    private FragmentSwitcher fs;
+    private final FragmentSwitcher fs;
 
     public MediaAdapter2(List<Media> medias, Context context, FragmentSwitcher fs) {
         this.medias = medias;
@@ -70,9 +70,9 @@ public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView titleView;
-        private ImageView imageView;
-        private LinearLayout entireElement;
+        private final TextView titleView;
+        private final ImageView imageView;
+        private final LinearLayout entireElement;
 
         public ViewHolder(View itemView) {
             super(itemView);

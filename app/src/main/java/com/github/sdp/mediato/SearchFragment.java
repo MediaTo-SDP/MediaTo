@@ -31,13 +31,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
-    private enum SearchCategory {
-        PEOPLE,
-        MOVIES,
-        BOOKS,
-        MUSIC
-    }
-
+    private static String USERNAME;
     private Snackbar failedUserSearch;
     private SearchUserViewModel searchUserViewModel;
 
@@ -54,8 +48,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
-
-    private static String USERNAME;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,5 +189,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             }
         });
         snackbar.show();
+    }
+
+    private enum SearchCategory {
+        PEOPLE,
+        MOVIES,
+        BOOKS,
+        MUSIC
     }
 }
