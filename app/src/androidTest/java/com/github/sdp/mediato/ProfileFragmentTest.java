@@ -32,6 +32,17 @@ import org.junit.runner.RunWith;
 public class ProfileFragmentTest {
 
   ActivityScenario<TestingActivity> scenario;
+  ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+  ViewInteraction collectionRecyclerView = onView(withId(R.id.collection_recycler_view));
+  ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
+  ViewInteraction userNameText = onView(withId(R.id.username_text));
+  ViewInteraction editButton = onView(withId(R.id.edit_button));
+  ViewInteraction friendsButton = onView(withId(R.id.friends_button));
+  ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
+  ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
+  ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+  ViewInteraction profilePic = onView(withId(R.id.profile_image));
+
 
   @Before
   public void setUp() {
@@ -55,7 +66,6 @@ public class ProfileFragmentTest {
   // Test whether the "Friends" button is displayed and contains the correct text
   @Test
   public void testFriendsButton() {
-    ViewInteraction friendsButton = onView(withId(R.id.friends_button));
     friendsButton.check(matches(isDisplayed()));
     friendsButton.check(matches(withText("Friends")));
   }
@@ -63,7 +73,6 @@ public class ProfileFragmentTest {
   // Test whether the "Edit" button is displayed and contains the correct text
   @Test
   public void testEditButton() {
-    ViewInteraction editButton = onView(withId(R.id.edit_button));
     editButton.check(matches(isDisplayed()));
     editButton.check(matches(withText("Edit")));
   }
@@ -71,13 +80,12 @@ public class ProfileFragmentTest {
   // Test whether the profile picture is displayed
   @Test
   public void testProfilePicture() {
-    onView(withId(R.id.profile_image)).check(matches(isDisplayed()));
+    profilePic.check(matches(isDisplayed()));
   }
 
   // Test whether the username text is displayed and contains the correct text
   @Test
   public void testUsername() {
-    ViewInteraction userNameText = onView(withId(R.id.username_text));
     userNameText.check(matches(isDisplayed()));
     userNameText.check(matches(withText("myUsername")));
   }
@@ -85,8 +93,6 @@ public class ProfileFragmentTest {
   // Test the initial state of the default collection after profile creation
   @Test
   public void testInitialDefaultCollectionState() {
-    ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
-    ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
 
     // Check that the default collection is displayed
     defaultCollection.check(matches(isDisplayed()));
@@ -107,9 +113,6 @@ public class ProfileFragmentTest {
   // Test that an item is added to the collection on click of the AddMediaButton
   @Test
   public void testAddMediaButton() {
-    ViewInteraction collectionRecyclerView = onView(withId(R.id.collection_recycler_view));
-    ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
-
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
 
     collectionRecyclerView.check(matches(hasItemCount(initialItemCount)));
@@ -120,11 +123,7 @@ public class ProfileFragmentTest {
   // Test the initial state of the list of collections after profile creation
   @Test
   public void testInitialOuterRecyclerViewState() {
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
-
-    // Check that the outer RecyclerView is displayed
     outerRecyclerView.check(matches(isDisplayed()));
-
     // Check that the outer RecyclerView initially has one item (default collection)
     outerRecyclerView.check(matches(hasItemCount(1)));
   }
@@ -132,44 +131,35 @@ public class ProfileFragmentTest {
   // Check that a new collection has been added to the outer RecyclerView if the user chooses a valid collection name
   @Test
   public void testAddValidCollection() throws UiObjectNotFoundException {
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
-    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
-
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickAdd("valid");
-
     outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
 
   // Check that no new collection has been added to the outer RecyclerView if the user enters an empty collection name
   @Test
   public void testEmptyCollectionNameNotAdded() throws UiObjectNotFoundException {
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
-    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
-
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickAdd("");
-
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
   }
 
   // Check that only one collection gets added if the user tries to add a collection with the same username twice
   @Test
   public void testDuplicateCollectionNameNotAdded() throws UiObjectNotFoundException {
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
-    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
-
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickAdd("duplicate");
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickAdd("duplicate");
-
     outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
   }
 
@@ -177,10 +167,8 @@ public class ProfileFragmentTest {
   @Test
   public void testEnterValidCollectionAndCancelDoesNotAddCollection()
       throws UiObjectNotFoundException {
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
-    ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
-
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickCancel("duplicate");
