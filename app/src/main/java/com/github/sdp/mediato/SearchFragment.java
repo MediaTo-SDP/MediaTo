@@ -1,24 +1,16 @@
 package com.github.sdp.mediato;
 
-import static android.widget.Toast.LENGTH_SHORT;
 import static com.github.sdp.mediato.data.Database.getUser;
-
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Toast;
-
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -149,6 +141,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
         } else if (view == booksButton) {
             this.currentCategory = SearchFragment.SearchCategory.BOOKS;
+            FragmentSwitcher fs = (FragmentSwitcher) getActivity();
+            fs.switchCurrentFragmentWithChilFragment(new NewItemFragment());
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
         } else if (view == musicButton) {
