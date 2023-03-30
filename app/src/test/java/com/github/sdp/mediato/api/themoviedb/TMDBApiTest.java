@@ -52,7 +52,7 @@ public class TMDBApiTest {
     public void setUp() throws IOException {
         mockApi.setDispatcher(DISPATCHER);
         mockApi.start(8080);
-        db = new TheMovieDBAPI(String.format("http://%s:8080/3/", mockApi.getHostName()), APIKEY);
+        db = new TheMovieDBAPI(String.format("http://%s:8080/", mockApi.getHostName()), APIKEY);
     }
 
     @Test
