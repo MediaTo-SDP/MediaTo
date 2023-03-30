@@ -1,9 +1,11 @@
 package com.github.sdp.mediato;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -27,7 +29,7 @@ public class NewItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Objects.requireNonNull(savedInstanceState);
+        // TODO Objects.requireNonNull(savedInstanceState);
 
         View view = inflater.inflate(R.layout.activity_new_item, container, false);
         this.view = view;
@@ -36,19 +38,15 @@ public class NewItemFragment extends Fragment {
         EditText review = view.findViewById(R.id.item_review_edittext);
 
 
-
         /* ToDO 1 : with the given Bundle assign the view elements properly */
-        String title = savedInstanceState.getString("title");
+        /*String title = savedInstanceState.getString("title");
         String description = savedInstanceState.getString("description");
         String url = savedInstanceState.getString("url");
 
-        setItemInformation(title, description, url);
-
-        TextView titleView = view.findViewById(R.id.item_title);
-        titleView.setText(title);
-
-        TextView descriptionView = (TextView) view.findViewById(R.id.item_description_text);
-        descriptionView.setText(description);
+        setItemInformation(title, description, url);*/
+        setItemInformation("OSS 117", "OSS 117 : Alerte rouge en Afrique noire ou" +
+                " OSS 117: Bons Baisers d'Afrique au Québec est une comédie d'espionnage" +
+                " française réalisé par Nicolas Bedos et sorti en 2021.", String.valueOf(R.drawable.oss117_item_test));
 
 
         setProgressBarIndicator();
@@ -58,6 +56,9 @@ public class NewItemFragment extends Fragment {
                 errorTextView.setText("");
             }
         });
+
+        Button addButton = view.findViewById(R.id.item_button_add);
+        addButton.setOnClickListener(v -> addItem(view));
 
         return view;
     }
@@ -85,8 +86,7 @@ public class NewItemFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 // get position of slide bar and set the text to match rating and position
-                int val =
-                        (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
                 ratingIndicator.setText(String.valueOf(progress));
                 ratingIndicator.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.f);
                 ratingIndicator.setY(seekBar.getY() - ratingIndicator.getTextSize() * 1.5f);
@@ -107,9 +107,11 @@ public class NewItemFragment extends Fragment {
 
         ((TextView) this.view.findViewById(R.id.item_description_text)).setText(description);
 
+        ImageView img = view.findViewById(R.id.item_image);
         /* ToDO 2 : fetch the image from url and display it */
-        ImageView img = getView().findViewById(R.id.item_image);
-        Glide.with(this).load(url).into(img);
+        img.setImageResource(Integer.parseInt(url));
+        /*
+        Glide.with(this).load(url).into(img);*/
 
     }
 
@@ -124,9 +126,11 @@ public class NewItemFragment extends Fragment {
         EditText review = view.findViewById(R.id.item_review_edittext);
 
         if (review.getText().length() > MAX_REVIEW_LENGTH) {
-            getActivity().runOnUiThread(() -> errorTextView.setText(
-                    String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
-            ;
+            getActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
+        } else {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra("username", getActivity().getIntent().getStringExtra("username"));
+            startActivity(intent);
         }
     }
 }
