@@ -10,13 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,26 +24,26 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
-import com.github.sdp.mediato.utility.SampleReviews;
-import com.github.sdp.mediato.utility.adapters.CollectionAdapter;
+import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * A fragment that displays the user's profile information, including their profile picture,
- * username, and collections of their favorite media types. The profile picture and collections can
- * be edited by the user.
+ * username, and custom collections of their favorite media types. The profile picture can be edited
+ * by the user.
  */
 public class ProfileFragment extends Fragment {
 
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private Button editButton;
-  private ImageButton addMediaButton;
+  private Button addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
-  private RecyclerView collectionRecyclerView;
-  private CollectionAdapter collectionAdapter;
-
+  private RecyclerView collectionListRecyclerView;
+  private CollectionListAdapter collectionlistAdapter;
 
   // Used as a key to access the database
   private static String USERNAME;
@@ -72,39 +71,68 @@ public class ProfileFragment extends Fragment {
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
-    addMediaButton = view.findViewById(R.id.add_media_button);
+    addCollectionButton = view.findViewById(R.id.add_collection_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
-    collectionRecyclerView = view.findViewById(R.id.collection_recycler_view);
+    collectionListRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
 
     // Initialize components
     photoPicker = setupPhotoPicker();
-    collectionAdapter = setupCollection(collectionRecyclerView);
-    setupAddButton(addMediaButton);
+    collectionlistAdapter = setupCollections(collectionListRecyclerView);
+    setupAddCollectionsButton(addCollectionButton);
 
     // Observe the view model's live data to update UI components
     observeUsername();
     observeProfilePic();
-    observeCollection(collectionAdapter);
+    observeCollections(collectionlistAdapter);
 
     return view;
   }
 
-  private CollectionAdapter setupCollection(RecyclerView recyclerView) {
-    // Check if a collection is already in the viewModel, if not create one
-    Collection collection = viewModel.getCollection();
-    if (collection == null) {
-      collection = new Collection("Some Title");
-      Database.addCollection(USERNAME, collection);
-      viewModel.setCollection(collection);
+  private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
+    // Check if a collection is already in the viewModel, if not create the default one
+    List<Collection> collections = viewModel.getCollections();
+    if (collections == null) {
+      String defaultTitle = getResources().getString(R.string.recently_watched);
+      Collection defaultCollection = new Collection(defaultTitle);
+      collections = new ArrayList<>();
+      collections.add(defaultCollection);
+      Database.addCollection(USERNAME, defaultCollection);
+      viewModel.setCollections(collections);
     }
 
-    // Create an adapter to display the collection in a RecycleView
-    CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collection);
-    recyclerView.setAdapter(collectionAdapter);
+    // Define what happens when the add button inside a collection is clicked
+    OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
+      Database.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
+      viewModel.addReviewToCollection(review, collection.getCollectionName());
+    };
+
+    // Create an adapter to display the list of collections in a RecycleView
+    CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
+        onAddMediaButtonClickListener);
+    recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
-        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-    return collectionAdapter;
+        new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    return collectionsAdapter;
+  }
+
+  private void setupAddCollectionsButton(Button addCollectionButton) {
+    addCollectionButton.setOnClickListener(v -> showEnterCollectionNameDialog());
+  }
+
+  private void observeCollections(CollectionListAdapter collectionsAdapter) {
+    viewModel.getCollectionsLiveData()
+        .observe(getViewLifecycleOwner(), collections -> collectionsAdapter.notifyDataSetChanged());
+  }
+
+  private void observeUsername() {
+    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(),
+        username -> usernameView.setText(username));
+  }
+
+  private void observeProfilePic() {
+    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(),
+        bitmap -> profileImage.setImageBitmap(bitmap));
   }
 
   private PhotoPicker setupPhotoPicker() {
@@ -119,61 +147,48 @@ public class ProfileFragment extends Fragment {
           Bitmap bitmap = bitmapDrawable.getBitmap();
           viewModel.setProfilePic(bitmap);
         }
-
     );
     return photoPicker;
   }
 
-  private void setupAddButton(ImageButton addMediaButton) {
-    //TODO connect this to the SearchFragment
-    SampleReviews s = new SampleReviews();
-    addMediaButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        /*replaceFragment(new SearchFragment());*/
-        Review review = s.getMovieReview();
-        Database.addReviewToCollection(USERNAME, viewModel.getCollection().getCollectionName(), review);
-        viewModel.addReviewToCollection(review);
-      }
-    });
+  private void showEnterCollectionNameDialog() {
+    // Build the dialog box
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    LayoutInflater inflater = requireActivity().getLayoutInflater();
+    View view = inflater.inflate(R.layout.dialog_add_collection, null);
+    final EditText textInput = view.findViewById(R.id.collection_name_input);
 
+    builder.setView(view);
+
+    // Set the add button
+    String addText = getResources().getString(R.string.add);
+    builder.setPositiveButton(addText,
+        (dialog, which) -> handleEnteredCollectionName(textInput));
+
+    // Set the cancel button
+    String cancelText = getResources().getString(R.string.cancel);
+    builder.setNegativeButton(cancelText,
+        (dialog, which) -> dialog.cancel());
+
+    builder.show();
   }
 
-  private void observeUsername() {
-    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
-      @Override
-      public void onChanged(String username) {
-        usernameView.setText(username);
-      }
-    });
+  private void handleEnteredCollectionName(EditText textInput) {
+    String collectionName = textInput.getText().toString();
+
+    // Check if the entered name is empty and make a toast if yes
+    if (collectionName.isEmpty()) {
+      String toastEmptyName = getResources().getString(R.string.collection_empty_name);
+      makeToast(toastEmptyName);
+      return;
+    }
+
+    // Check if the entered name is the same as an already existing collection and make a toast if yes
+    String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
+    if (!viewModel.addCollection(collectionName)) {
+      makeToast(toastDuplicateName);
+    }
   }
-
-  private void observeProfilePic() {
-    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
-      @Override
-      public void onChanged(Bitmap bitmap) {
-        profileImage.setImageBitmap(bitmap);
-
-      }
-    });
-  }
-
-  private void observeCollection(CollectionAdapter collectionAdapter) {
-    viewModel.getCollectionLiveData().observe(getViewLifecycleOwner(), new Observer<Collection>() {
-      @Override
-      public void onChanged(Collection collection) {
-        collectionAdapter.notifyDataSetChanged();
-      }
-    });
-  }
-
-  private void replaceFragment(Fragment fragment) {
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.commit();
-  }
-
 
   // TODO: Should be improved so it does not need to use the hardcoded retry
   private void downloadProfilePicWithRetry(String username) {
@@ -199,6 +214,15 @@ public class ProfileFragment extends Fragment {
 
       return null;
     });
+  }
+
+  private void makeToast(String text) {
+    Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+  }
+
+  public interface OnAddMediaButtonClickListener {
+
+    void onAddMediaButtonClick(Collection collection, Review review);
   }
 
 }
