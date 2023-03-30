@@ -106,6 +106,7 @@ public class ProfileFragment extends Fragment {
       Database.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
       Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
       viewModel.addReviewToCollection(review, "sample collection");
+
     };
 
     // Create an adapter to display the list of collections in a RecycleView
