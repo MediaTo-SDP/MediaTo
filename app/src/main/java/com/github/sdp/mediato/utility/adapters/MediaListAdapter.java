@@ -1,14 +1,21 @@
 package com.github.sdp.mediato.utility.adapters;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.github.sdp.mediato.FragmentSwitcher;
+import com.github.sdp.mediato.NewItemFragment;
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.model.media.Media;
 
@@ -31,11 +38,14 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
         }
     };
 
+    final private FragmentSwitcher fs;
+
     /**
      * Default constructor
      */
-    public MediaListAdapter() {
+    public MediaListAdapter(Activity activity) {
         super(MEDIA_COMPARATOR);
+        fs = (FragmentSwitcher) activity;
     }
 
     /**
@@ -49,7 +59,23 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
     public MediaListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutMovieItemBinding binding = LayoutMovieItemBinding.inflate(inflater, parent, false);
-        return new MyViewHolder(binding);
+        MyViewHolder holder = new MyViewHolder(binding);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fg = new NewItemFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("url", getItem(holder.getAdapterPosition()).getPosterUrl());
+                bundle.putString("title", getItem(holder.getAdapterPosition()).getTitle());
+                bundle.putString("description", getItem(holder.getAdapterPosition()).getSummary());
+
+                fg.setArguments(bundle);
+                fs.switchCurrentFragmentWithChildFragment(fg);
+            }
+        });
+
+        return holder;
     }
 
     /**
@@ -63,6 +89,7 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
         holder.binding.textTitle.setText(getItem(position).getTitle());
         Glide.with(holder.itemView.getContext())
                 .load(getItem(position).getIconUrl())
+                .placeholder(R.drawable.movie)
                 .into(holder.binding.mediaCover);
         if (position + 6 == getItemCount()) {
             // TODO: Download more data through a callback function

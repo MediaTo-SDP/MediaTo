@@ -15,19 +15,23 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.sdp.mediato.model.LocalFilmDatabase;
+import com.github.sdp.mediato.api.themoviedb.TheMovieDB;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
@@ -57,10 +61,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private static String USERNAME;
 
+    private TheMovieDB theMovieDB;
+
+    private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         USERNAME = getArguments().getString("username");
+
+        theMovieDB = new TheMovieDB(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
+
     }
 
     @Override
@@ -148,26 +159,27 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchAndDisplayResult(String toBeSearched) {
-        switch (this.currentCategory) {
-            case PEOPLE:
-                recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-                recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
-                searchUser(toBeSearched);
-                break;
-            case MOVIES:
-                /* toDO : fetch from the movie API */
-                /* for now on fetch from the local data base*/
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                List<Media> searchMediaResults = new ArrayList<>();
-                if (toBeSearched.equals("james bond")) {
-                    searchMediaResults = new LocalFilmDatabase().getMovieItems();
-                }
-                recyclerView.setAdapter(new MediaAdapter2(searchMediaResults, getContext(), (FragmentSwitcher) getActivity()));
-                break;
-            case BOOKS:
-                break;
-            case MUSIC:
-                break;
+        if (this.currentCategory == SearchCategory.PEOPLE) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
+            searchUser(toBeSearched);
+        } else {
+            switch (this.currentCategory) {
+                case MOVIES:
+                    // fetch from API
+                    theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
+                        searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
+                    });
+                    break;
+                case BOOKS:
+                    break;
+                case MUSIC:
+                    break;
+            }
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            MediaListAdapter mla = new MediaListAdapter(getActivity());
+            recyclerView.setAdapter(mla);
+            searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.model.media.Media;
 
 import java.util.List;
@@ -42,12 +43,9 @@ public class MediaAdapter2 extends RecyclerView.Adapter<MediaAdapter2.ViewHolder
 
         Media currentMedia = medias.get(position);
 
-        // toDO : display the image properly
-        /*
         Glide.with(context)
-                .load(currentMedia.getImageURL())
+                .load(currentMedia.getIconUrl())
                 .into(holder.imageView);
-         */
 
         holder.getTitleView().setText(currentMedia.getTitle());
 

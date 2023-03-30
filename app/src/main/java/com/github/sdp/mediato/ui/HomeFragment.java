@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-    adapter = new MediaListAdapter();
+    adapter = new MediaListAdapter(getActivity());
     binding.trendingItems.setAdapter(adapter);
     binding.trendingItems.setLayoutManager(new GridLayoutManager(getContext(), 3));
     binding.trendingItems.setHasFixedSize(true);
