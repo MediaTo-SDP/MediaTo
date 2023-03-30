@@ -116,7 +116,7 @@ public class ProfileViewModel extends ViewModel {
    * @param collectionName name of the collection to get
    * @return the collection if it exists, or null otherwise
    */
-  private Collection getCollection(String collectionName) {
+  public Collection getCollection(String collectionName) {
     Preconditions.checkNullOrEmptyString(collectionName, "collectionName");
     List<Collection> collections = getCollections();
 
