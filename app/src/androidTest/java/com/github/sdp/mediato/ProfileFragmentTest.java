@@ -38,7 +38,7 @@ public class ProfileFragmentTest {
   ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
   ViewInteraction userNameText = onView(withId(R.id.username_text));
   ViewInteraction editButton = onView(withId(R.id.edit_button));
-  ViewInteraction friendsButton = onView(withId(R.id.friends_button));
+  ViewInteraction followingButton = onView(withId(R.id.profile_following_button));
   ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
   ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
   ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
@@ -72,9 +72,9 @@ public class ProfileFragmentTest {
 
   // Test whether the "Friends" button is displayed and contains the correct text
   @Test
-  public void testFriendsButton() {
-    friendsButton.check(matches(isDisplayed()));
-    friendsButton.check(matches(withText("Friends")));
+  public void testFollowingButton() {
+    followingButton.check(matches(isDisplayed()));
+    followingButton.check(matches(withText(R.string.following)));
   }
 
   // Test whether the "Edit" button is displayed and contains the correct text

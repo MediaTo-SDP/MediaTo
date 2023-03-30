@@ -22,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.SearchFragment;
 
 import org.junit.Before;
 import org.junit.Test;

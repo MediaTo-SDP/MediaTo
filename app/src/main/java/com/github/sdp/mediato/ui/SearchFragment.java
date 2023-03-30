@@ -1,24 +1,18 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
-import static android.widget.Toast.LENGTH_SHORT;
 import static com.github.sdp.mediato.data.Database.getUser;
 
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -27,10 +21,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.LocalFilmDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.utility.adapters.UserAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -102,7 +98,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
+        recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
         this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);

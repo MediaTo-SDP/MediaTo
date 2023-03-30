@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.utility.adapters;
 
 import static com.github.sdp.mediato.data.Database.followUser;
 import static com.github.sdp.mediato.data.Database.unfollowUser;
@@ -16,25 +16,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.viewmodel.MyFollowingViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 
 import java.util.concurrent.CompletableFuture;
 
 
-public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.UserViewHolder> {
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private final SearchUserViewModel searchUserViewModel;
+    private final UserViewModel userViewModel;
 
-    public SearchUserAdapter(SearchUserViewModel searchUserViewModel) {
-        this.searchUserViewModel = searchUserViewModel;
+    public UserAdapter(UserViewModel userViewModel) {
+        this.userViewModel = userViewModel;
 
         // Refresh when follow or unfollow
-        searchUserViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
+        this.userViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
 
         // Refresh when new search
-        searchUserViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
+        this.userViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
     }
 
     @NonNull
@@ -46,13 +49,13 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = searchUserViewModel.getUserListLiveData().getValue().get(position);
+        User user = userViewModel.getUserListLiveData().getValue().get(position);
         holder.userNameTextView.setText(user.getUsername());
 
         downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
 
         // Decide which button to display
-        if(searchUserViewModel.getUser().getFollowing().contains(user.getUsername())) {
+        if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.VISIBLE);
         } else {
@@ -61,21 +64,21 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
 
         holder.followButton.setOnClickListener(v -> {
-                    followUser(searchUserViewModel.getUserName(), user.getUsername());
-                    searchUserViewModel.reloadUser();
+                    followUser(userViewModel.getUserName(), user.getUsername());
+                    userViewModel.reloadUser();
                 }
         );
 
         holder.unfollowButton.setOnClickListener(v -> {
-                    unfollowUser(searchUserViewModel.getUserName(), user.getUsername());
-                    searchUserViewModel.reloadUser();
+                    unfollowUser(userViewModel.getUserName(), user.getUsername());
+                    userViewModel.reloadUser();
                 }
         );
     }
 
     @Override
     public int getItemCount() {
-        return searchUserViewModel.getUserList().size();
+        return userViewModel.getUserList().size();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {

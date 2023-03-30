@@ -11,11 +11,11 @@
   app:layout_constraintVertical_bias="0.0">
 
   <Button
-    android:id="@+id/friends_button"
+    android:id="@+id/profile_following_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/white"
-    android:text="@string/friends"
+    android:text="@string/following"
     android:textAllCaps="false"
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
@@ -30,7 +30,7 @@
     android:textAllCaps="false"
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-    app:layout_constraintStart_toEndOf="@+id/friends_button" />
+    app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
 
   <TextView
     android:id="@+id/username_text"
