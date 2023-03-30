@@ -142,7 +142,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         } else if (view == booksButton) {
             this.currentCategory = SearchFragment.SearchCategory.BOOKS;
             FragmentSwitcher fs = (FragmentSwitcher) getActivity();
-            fs.switchCurrentFragmentWithChilFragment(new NewItemFragment());
+            fs.switchCurrentFragmentWithChildFragment(new NewItemFragment());
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
         } else if (view == musicButton) {
