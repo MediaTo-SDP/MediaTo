@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
+
 import java.util.List;
 
 
@@ -59,6 +60,7 @@ public class Media {
     /**
      * @deprecated use {@link #getIconUrl()} or {@link #getPosterUrl()} instead for higher granularity
      */
+    @Deprecated
     public String getImageURL() {
         return getPosterUrl();
     }

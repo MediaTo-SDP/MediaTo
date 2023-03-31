@@ -48,6 +48,7 @@ public class AdapterRetrofitCallback<T> implements Callback<T> {
     @Override @EverythingIsNonNull
     public void onFailure(Call<T> call, Throwable t) {
         System.out.println(call.request().url().toString());
+        System.out.println(t.getMessage());
         future.completeExceptionally(new NetworkErrorException(t.getCause()));
     }
 }

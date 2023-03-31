@@ -1,31 +1,28 @@
-package com.github.sdp.mediato.api.gbook;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import androidx.annotation.NonNull;
 
+import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.gbook.models.GoogleBook;
-import com.google.common.io.CharStreams;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import mockwebserver3.Dispatcher;
 import mockwebserver3.MockResponse;
 import mockwebserver3.MockWebServer;
 import mockwebserver3.RecordedRequest;
-/*
+
 public class GbookApiTest {
     private final String SEARCHTERM = "searchTerm";
-    private  String search2;
-    private String search1;
+    // private final APITestStrings strings = new APITestStrings();
+    private String search2;
     public final MockWebServer mockApi = new MockWebServer();
     private GBookAPI db;
     final Dispatcher DISPATCHER = new Dispatcher() {
@@ -34,9 +31,9 @@ public class GbookApiTest {
         public MockResponse dispatch(@NonNull RecordedRequest recordedRequest) {
             switch (recordedRequest.getPath()) {
                 case "/books/v1/volumes?q=searchTerm&langRestrict=en&startIndex=0&maxResults=40":
-                    return new MockResponse().setResponseCode(200).setBody(search1);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.SEARCH1);
                 case "/books/v1/volumes?q=searchTerm&langRestrict=en&startIndex=40&maxResults=40":
-                    return new MockResponse().setResponseCode(200).setBody(search2);
+                    return new MockResponse().setResponseCode(200).setBody(APITestStrings.SEARCH2);
                 case "/books/v1/volumes?q=searchTerm&langRestrict=en&startIndex=80&maxResults=40":
                     return new MockResponse().setResponseCode(200).setBody(APITestStrings.SEARCH3);
                 case "/books/v1/volumes/ucSmAgAAQBAJ":
@@ -49,13 +46,10 @@ public class GbookApiTest {
 
     @Before
     public void setUp() throws IOException {
-        ClassLoader loader = getClass().getClassLoader();
-        assert loader != null;
-        search1 = CharStreams.toString(new InputStreamReader(loader.getResource("data1.json").openStream()));
-        search2 = CharStreams.toString(new InputStreamReader(loader.getResource("data2.json").openStream()));
+        mockApi.setBodyLimit(Long.MAX_VALUE);
         mockApi.setDispatcher(DISPATCHER);
         mockApi.start(8080);
-        db = new GBookAPI(String.format("http://%s:8080/", mockApi.getHostName()));
+        db = new GBookAPI(String.format("http://%s:8080", mockApi.getHostName()));
     }
 
     @Test
@@ -161,5 +155,4 @@ public class GbookApiTest {
     }
 
 
-
-}*/
+}
