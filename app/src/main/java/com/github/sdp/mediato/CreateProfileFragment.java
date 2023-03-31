@@ -122,43 +122,53 @@ public class CreateProfileFragment extends Fragment {
         Database.addUser(user);
         if (photoPicker.getProfileImageUri() != null) {
           uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
+          switchToMainActivity(username);
+          makeToast(getString(R.string.profile_creation_success));
         } else {
-          // we need to create a new thread to download the default profile pic, otherwise it will make the app lag
-          new Thread(() -> {
-            try {
-              // the url of the default profile picture
-              URL url = new URL(getString(R.string.default_profile_pic));
-
-              // connect via html to download
-              HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-              connection.setDoInput(true);
-              connection.connect();
-              InputStream input = connection.getInputStream();
-              Bitmap bitmap = BitmapFactory.decodeStream(input);
-
-              // store the file as a temporary image in the cache
-              File cacheDir = requireContext().getCacheDir();
-              File imageFile = File.createTempFile("profile_pic", ".jpg", cacheDir);
-              FileOutputStream outputStream = new FileOutputStream(imageFile);
-
-              // get the bitmap out of it, and convert to uri
-              bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-              outputStream.close();
-              Uri uri = Uri.fromFile(imageFile);
-
-              // we can now store it in the database, and then switch to main activity
-              Database.setProfilePic(user.getUsername(), uri).addOnCompleteListener(v -> {
-                switchToMainActivity(username);
-                makeToast(getString(R.string.profile_creation_success));
-              });;
-            } catch (IOException e) {
-              throw new RuntimeException("Failed to download and save the default profile pic", e);
-            }
-          }).start();
+          addDefaultProfilePic(username);
         }
       }
 
     };
+  }
+
+  /**
+   * Adds the default profile image to the user
+   * @param username: the user's username
+   */
+  private void addDefaultProfilePic(String username) {
+    // we need to create a new thread to download the default profile pic, otherwise it will make the app lag
+    new Thread(() -> {
+      try {
+        // the url of the default profile picture
+        URL url = new URL(getString(R.string.default_profile_pic));
+
+        // connect via html to download
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoInput(true);
+        connection.connect();
+        InputStream input = connection.getInputStream();
+        Bitmap bitmap = BitmapFactory.decodeStream(input);
+
+        // store the file as a temporary image in the cache
+        File cacheDir = requireContext().getCacheDir();
+        File imageFile = File.createTempFile("profile_pic", ".jpg", cacheDir);
+        FileOutputStream outputStream = new FileOutputStream(imageFile);
+
+        // get the bitmap out of it, and convert to uri
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        outputStream.close();
+        Uri uri = Uri.fromFile(imageFile);
+
+        // we can now store it in the database, and then switch to main activity
+        Database.setProfilePic(username, uri).addOnCompleteListener(v -> {
+          switchToMainActivity(username);
+          makeToast(getString(R.string.profile_creation_success));
+        });;
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to download and save the default profile pic", e);
+      }
+    }).start();
   }
 
   private void switchToMainActivity(String username) {
