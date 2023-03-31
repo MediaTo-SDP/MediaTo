@@ -121,9 +121,11 @@ public class CreateProfileFragment extends Fragment {
         Uri profilePicUri = photoPicker.getProfileImageUri();
         Database.addUser(user);
         if (photoPicker.getProfileImageUri() != null) {
-          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
-          switchToMainActivity(username);
-          makeToast(getString(R.string.profile_creation_success));
+          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
+              switchToMainActivity(username);
+              makeToast(getString(R.string.profile_creation_success));
+          });
+
         } else {
           addDefaultProfilePic(username);
         }

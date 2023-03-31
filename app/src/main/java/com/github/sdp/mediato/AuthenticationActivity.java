@@ -74,12 +74,14 @@ public class AuthenticationActivity extends AppCompatActivity {
    */
   public void launchPostActivity(FirebaseUser user) {
     Objects.requireNonNull(user);
-
+    //TODO change back to original, jsut for testing
+    launchProfileCreationActivity(user);
+    /*
     Database.getUserByEmail(user.getEmail()).thenAccept(this::launchMainActivity)
         .exceptionally(e -> {
           launchProfileCreationActivity(user);
           return null;
-        });
+        });*/
   }
 
   /**
