@@ -47,7 +47,7 @@ public class NewItemFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 media = bundle.getSerializable("media", Media.class);
             } else {
-                throw new RuntimeException("bundle requires api level 33, change minimum version to 33 isntead of 24");
+                throw new RuntimeException("bundle requires api level 33, change minimum version to 33 instead of 24");
             }
         }
         setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
@@ -75,27 +75,38 @@ public class NewItemFragment extends Fragment {
         SeekBar ratingSlider = view.findViewById(R.id.item_rating_slider);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
+        ratingIndicator.setText("5");
+        setIndicatorToSeekBarPosition(ratingSlider, ratingIndicator, 5);
+
         // We add a listener to the slide bar to update the indicator text (displays the rating on
         // top of it)
         ratingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                // get position of slide bar and set the text to match rating and position
-                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                ratingIndicator.setText(String.valueOf(progress));
-                ratingIndicator.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.f);
-                ratingIndicator.setY(seekBar.getY() - ratingIndicator.getTextSize() * 1.5f);
+                setIndicatorToSeekBarPosition(seekBar, ratingIndicator, progress);
             }
         });
+    }
+
+    /**
+     * Private method used to set seek bar indicator to display the score
+     *
+     * @param seekBar: the seek bar
+     * @param ratingIndicator: the indicator
+     * @param progress: the progress of the seek bar
+     */
+    private void setIndicatorToSeekBarPosition(SeekBar seekBar, TextView ratingIndicator, int progress) {
+        // get position of slide bar and set the text to match rating and position
+        int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+        ratingIndicator.setText(String.valueOf(progress));
+        ratingIndicator.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.f);
+        ratingIndicator.setY(seekBar.getY() - ratingIndicator.getTextSize() * 1.5f);
     }
 
     /**
@@ -124,17 +135,18 @@ public class NewItemFragment extends Fragment {
     public void addItem(View view) {
 
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
-        EditText review = view.findViewById(R.id.item_review_edittext);
+        EditText reviewText = view.findViewById(R.id.item_review_edittext);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
-        if (review.getText().length() > MAX_REVIEW_LENGTH) {
+        if (reviewText.getText().length() > MAX_REVIEW_LENGTH) {
             requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             String username = requireActivity().getIntent().getStringExtra("username");
             intent.putExtra("username", username);
-            intent.putExtra("review", new Review(username, media,
-                    Integer.parseInt(ratingIndicator.getText().toString()), review.getText().toString()));
+            Review review = new Review(username, media,
+                    Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+            intent.putExtra("review", review);
             startActivity(intent);
         }
     }

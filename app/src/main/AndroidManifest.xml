@@ -16,9 +16,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".NewItemActivity"
-            android:exported="false" />
-        <activity
             android:name=".NewProfileActivity"
             android:exported="false" />
         <activity

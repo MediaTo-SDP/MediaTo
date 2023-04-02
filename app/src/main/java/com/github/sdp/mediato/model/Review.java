@@ -4,11 +4,12 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Media;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Review implements Serializable {
 
     public static final int MAX_GRADE = 10;
-    public static final int MIN_GRADE = 1;
+    public static final int MIN_GRADE = 0;
     private String username;
     private Media media;
     private int grade;
@@ -60,6 +61,18 @@ public class Review implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Review)) {
+            throw new IllegalArgumentException("Object is not an instance of Review");
+        }
+        Review other = (Review) obj;
+        return Objects.equals(this.username, other.username)
+                && Objects.equals(this.media, other.media)
+                && this.grade == other.grade
+                && Objects.equals(this.comment, other.comment);
     }
 
 }
