@@ -175,7 +175,6 @@
             android:layout_width="125dp"
             android:layout_height="60dp"
             android:layout_marginEnd="24dp"
-            android:onClick="addItem"
             android:text="@string/new_item_end_button_text"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

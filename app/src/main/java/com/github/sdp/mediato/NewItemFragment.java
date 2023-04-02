@@ -41,6 +41,8 @@ public class NewItemFragment extends Fragment {
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
 
+        Button addButton = view.findViewById(R.id.item_button_add);
+        addButton.setOnClickListener(v -> addItem(view));
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -60,9 +62,6 @@ public class NewItemFragment extends Fragment {
                 errorTextView.setText("");
             }
         });
-
-        Button addButton = view.findViewById(R.id.item_button_add);
-        addButton.setOnClickListener(v -> addItem(view));
 
         return view;
     }
