@@ -69,10 +69,7 @@ public class Review implements Serializable {
             throw new IllegalArgumentException("Object is not an instance of Review");
         }
         Review other = (Review) obj;
-        return Objects.equals(this.username, other.username)
-                && Objects.equals(this.media, other.media)
-                && this.grade == other.grade
-                && Objects.equals(this.comment, other.comment);
+        return Objects.equals(this.username, other.username) && Objects.equals(this.media, other.media) && this.grade == other.grade && Objects.equals(this.comment, other.comment);
     }
 
 }

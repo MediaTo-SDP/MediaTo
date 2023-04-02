@@ -1,7 +1,6 @@
 package com.github.sdp.mediato;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +24,9 @@ import java.util.Locale;
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
 
+    public final static int MAX_REVIEW_LENGTH = 100;
     private View view;
     private Media media;
-
-    public final static int MAX_REVIEW_LENGTH = 100;
-
 
     @Nullable
     @Override
@@ -46,11 +43,7 @@ public class NewItemFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                media = bundle.getSerializable("media", Media.class);
-            } else {
-                throw new RuntimeException("bundle requires api level 33, change minimum version to 33 instead of 24");
-            }
+            media = (Media) bundle.get("media");
         }
         setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
 
@@ -81,10 +74,12 @@ public class NewItemFragment extends Fragment {
         // top of it)
         ratingSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -96,9 +91,9 @@ public class NewItemFragment extends Fragment {
     /**
      * Private method used to set seek bar indicator to display the score
      *
-     * @param seekBar: the seek bar
+     * @param seekBar:         the seek bar
      * @param ratingIndicator: the indicator
-     * @param progress: the progress of the seek bar
+     * @param progress:        the progress of the seek bar
      */
     private void setIndicatorToSeekBarPosition(SeekBar seekBar, TextView ratingIndicator, int progress) {
         // get position of slide bar and set the text to match rating and position
