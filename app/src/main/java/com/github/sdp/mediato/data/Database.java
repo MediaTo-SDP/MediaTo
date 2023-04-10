@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
@@ -25,6 +27,9 @@ public class Database {
     public static final String USERS_PATH = "Users/";
 
     public static final String REVIEWS_PATH = "reviews/";
+
+    public static final String LOCATION_PATH = "/location/";
+    public static final String LOCATION_VALIDITY_PATH = LOCATION_PATH + "/valid/";
 
     public static final String FOLLOWING_PATH = "/following/";
     public static final String FOLLOWERS_PATH = "/followers/";
@@ -322,6 +327,39 @@ public class Database {
         database.getReference()
                 .child(USERS_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(myUsername + " is now set to " + value + " in " + targetUserUsername + " followers list."));
+    }
+
+    /**
+     * Updates the user's location in the database
+     * @param username
+     * @param latitude
+     * @param longitude
+     */
+    public static void updateLocation(String username, double latitude, double longitude) {
+        Location location = new Location(latitude, longitude);
+        Preconditions.checkLocation(location);
+        database.getReference().child(USERS_PATH + username + LOCATION_PATH)
+                .setValue(location);
+    }
+
+    /**
+     * Retrieves the user's saved location from the database
+     * @param username
+     * @return a completable future with the location in it
+     * @see Location class to check for validity
+     */
+    public static CompletableFuture<Location> getSavedLocation(String username) {
+        CompletableFuture<Location> future = new CompletableFuture<>();
+        database.getReference().child(USERS_PATH + username + LOCATION_PATH).get().addOnSuccessListener(
+                dataSnapshot -> {
+                    if (dataSnapshot.getValue() == null) {
+                        future.completeExceptionally(new NoSuchFieldException());
+                    } else {
+                        future.complete(dataSnapshot.getValue(Location.class));
+                    }
+                }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
     }
 
 }
