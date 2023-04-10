@@ -21,14 +21,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class UserDatabase {
 
-    public static final String USERS_PATH = "Users/";
-    public static final String LOCATION_PATH = "/location/";
-    public static final String FOLLOWING_PATH = "/following/";
-    public static final String FOLLOWERS_PATH = "/followers/";
+    private static final String USERS_PATH = "Users/";
+    private static final String LOCATION_PATH = "/location/";
+    private static final String FOLLOWING_PATH = "/following/";
+    private static final String FOLLOWERS_PATH = "/followers/";
 
-    public static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
+    private static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
 
-    public static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
+    private static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference()

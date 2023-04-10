@@ -76,7 +76,7 @@ public class CollectionsTests {
 
     @Test
     //Tests that the collections are added, retrieved and removed properly
-    public void addsRetrievesAndRemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
+    public void addsAndRetrievesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
         //Adds the collection
         CollectionsDatabase.addCollection(user1.getUsername(), collection1);
         Thread.sleep(1000);
@@ -92,7 +92,13 @@ public class CollectionsTests {
         assertEquals(review1.getUsername(), retrievedReview.getUsername());
         assertEquals(review1.getComment(), retrievedReview.getComment());
         assertEquals(review1.getGrade(), retrievedReview.getGrade());
+    }
 
+    @Test
+    //Tests that the collections are removed properly
+    public void RemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        CollectionsDatabase.addCollection(user1.getUsername(), collection1);
+        Thread.sleep(1000);
         //Test removing the collection
         CollectionsDatabase.removeCollection(user1.getUsername(), collection1.getCollectionName());
         Thread.sleep(1000);
@@ -101,7 +107,6 @@ public class CollectionsTests {
                     CollectionsDatabase.getCollection(user1.getUsername(), collection1.getCollectionName()).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
                 });
     }
-
     @Test
     //Tests that you can add a review to an existent collection
     public void addsReviewToCollectionProperly() throws InterruptedException, ExecutionException, TimeoutException {

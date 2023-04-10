@@ -8,9 +8,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.concurrent.CompletableFuture;
 
 public class CollectionsDatabase {
-    public static final String USERS_PATH = "Users/";
-    public static final String REVIEWS_PATH = "reviews/";
-    public static final String USER_COLLECTIONS_PATH = "/collections/";
+    private static final String USERS_PATH = "Users/";
+    private static final String REVIEWS_PATH = "reviews/";
+    private static final String USER_COLLECTIONS_PATH = "/collections/";
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
