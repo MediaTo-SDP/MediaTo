@@ -21,7 +21,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.sdp.mediato.data.Database;
+
+import com.github.sdp.mediato.data.CollectionsDatabase;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
@@ -103,13 +105,13 @@ public class ProfileFragment extends Fragment {
       Collection defaultCollection = new Collection(defaultTitle);
       collections = new ArrayList<>();
       collections.add(defaultCollection);
-      Database.addCollection(USERNAME, defaultCollection);
+      CollectionsDatabase.addCollection(USERNAME, defaultCollection);
       viewModel.setCollections(collections);
     }
 
     // Define what happens when the add button inside a collection is clicked
     OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
-      Database.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
+      CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
       Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
       viewModel.addReviewToCollection(review, "sample collection");
 
@@ -210,7 +212,7 @@ public class ProfileFragment extends Fragment {
   // TODO: Should be improved so it does not need to use the hardcoded retry
   private void downloadProfilePicWithRetry(String username) {
 
-    CompletableFuture<byte[]> imageFuture = Database.getProfilePic(username);
+    CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(username);
 
     // It would probably be better to do this directly in the database class
     // (getProfilePic would return CompletableFuture<Bitmap>)

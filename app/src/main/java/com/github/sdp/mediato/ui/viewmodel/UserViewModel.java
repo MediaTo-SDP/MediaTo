@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.github.sdp.mediato.data.Database;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 

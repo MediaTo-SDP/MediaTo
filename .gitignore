@@ -18,3 +18,9 @@ local.properties
 secret.local
 firebase-debug.log
 database-debug.log
+.idea/deploymentTargetDropDown.xml
+app/src/main/assets/
+database.rules.json
+q
+storage.rules
+

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 
@@ -12,7 +12,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -35,7 +34,7 @@ public class LocationTests {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            Database.database.useEmulator("10.0.2.2", 9000);
+            UserDatabase.database.useEmulator("10.0.2.2", 9000);
         } catch (Exception ignored) {
         }
         //Create new sample user
@@ -45,20 +44,20 @@ public class LocationTests {
                 .setRegisterDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
-        Database.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     }
 
     @AfterClass
     public static void cleanDatabase() {
-        Database.database.getReference().setValue(null);
+        UserDatabase.database.getReference().setValue(null);
     }
 
     @Test
     //Tests that the location is updated, set to valid and retrieved properly in the database
     public void updatesAndRetrievesLocationProperly() throws InterruptedException, ExecutionException, TimeoutException {
-        Database.updateLocation(user1.getUsername(), VALID_LATITUDE, VALID_LONGITUDE);
+        UserDatabase.updateLocation(user1.getUsername(), VALID_LATITUDE, VALID_LONGITUDE);
         Thread.sleep(STANDARD_SLEEP_DELAY);
-        Location location = Database.getSavedLocation(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        Location location = UserDatabase.getSavedLocation(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(location.isValid());
         assertEquals(VALID_LONGITUDE, location.getLongitude(), 0);
         assertEquals(VALID_LATITUDE, location.getLatitude(), 0);
@@ -69,7 +68,7 @@ public class LocationTests {
     public void invalidLocationUpdateThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> Database.updateLocation(user1.getUsername(), INVALID_LATITUDE, INVALID_LONGITUDE)
+                () -> UserDatabase.updateLocation(user1.getUsername(), INVALID_LATITUDE, INVALID_LONGITUDE)
         );
     }
 

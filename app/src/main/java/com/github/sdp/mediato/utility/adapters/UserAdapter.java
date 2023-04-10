@@ -1,7 +1,7 @@
 package com.github.sdp.mediato.utility.adapters;
 
-import static com.github.sdp.mediato.data.Database.followUser;
-import static com.github.sdp.mediato.data.Database.unfollowUser;
+import static com.github.sdp.mediato.data.UserDatabase.followUser;
+import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,10 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.viewmodel.MyFollowingViewModel;
-import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 
 import java.util.concurrent.CompletableFuture;
@@ -100,7 +98,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     // TODO: Should be improved so it does not need to use the hardcoded retry
     private void downloadProfilePicWithRetry(ImageView userProfileImageView, String userName) {
 
-        CompletableFuture<byte[]> imageFuture = Database.getProfilePic(userName);
+        CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(userName);
 
         // It would probably be better to do this directly in the database class
         // (getProfilePic would return CompletableFuture<Bitmap>)

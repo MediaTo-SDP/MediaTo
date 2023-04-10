@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
@@ -36,7 +36,7 @@ public class MyFollowingFragmentTest {
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
     try {
-      Database.database.useEmulator("10.0.2.2", 9000);
+      UserDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -59,9 +59,9 @@ public class MyFollowingFragmentTest {
             .setLocation(new Location(3.14, 3.14))
             .build();
 
-    Database.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
-    Database.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
-    Database.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
     // Launch the TestingActivity
     ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
@@ -87,8 +87,8 @@ public class MyFollowingFragmentTest {
 
   @Test
   public void testRecyclerViewWithTwoFollowings() {
-    Database.followUser(user1.getUsername(), user2.getUsername());
-    Database.followUser(user1.getUsername(), user3.getUsername());
+    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
+    UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
     sleep(500);
 
@@ -100,8 +100,8 @@ public class MyFollowingFragmentTest {
 
   @Test
   public void testOneUnfollowWithTwoFollowings() {
-    Database.followUser(user1.getUsername(), user2.getUsername());
-    Database.followUser(user1.getUsername(), user3.getUsername());
+    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
+    UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
     sleep(500);
 
