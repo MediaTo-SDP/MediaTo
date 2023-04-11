@@ -16,6 +16,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,6 +31,8 @@ public class UserDatabase {
     private static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
 
     private static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
+
+    private static final int LOCATION_RADIUS = 100;
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference()
@@ -200,7 +204,6 @@ public class UserDatabase {
     }
 
 
-
     /**
      * Method to follow a user
      *
@@ -251,6 +254,7 @@ public class UserDatabase {
 
     /**
      * Updates the user's location in the database
+     *
      * @param username
      * @param latitude
      * @param longitude
@@ -264,6 +268,7 @@ public class UserDatabase {
 
     /**
      * Retrieves the user's saved location from the database
+     *
      * @param username
      * @return a completable future with the location in it
      * @see Location class to check for validity
@@ -282,4 +287,45 @@ public class UserDatabase {
         return future;
     }
 
+    /**
+     * Gets all the nearby users' usernames
+     * @param username of the reference user
+     * @return a completable future with a list of strings containing the usernames
+     */
+    public static CompletableFuture<List<String>> getNearbyUsers(String username) {
+        CompletableFuture<List<String>> future = new CompletableFuture<>();
+        List<String> nearbyUsers = new ArrayList<>();
+        getSavedLocation(username).thenAccept(
+                location -> {
+                    if (!location.isValid())
+                        future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
+                    else {
+                        database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // Iterate over all child nodes of the "Users" node
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                    // Get the user object from the snapshot
+                                    User user = userSnapshot.getValue(User.class);
+                                    // Check if the user has a location within the specified radius
+                                    if (((!userSnapshot.getKey().equals(username) && user.getLocation().isValid()) && user.getLocation().isInRadius(location))) {
+                                        // The user is within the radius, so you can get the username and do something with it
+                                        String nearbyUser = userSnapshot.getKey();
+                                        nearbyUsers.add(nearbyUser);
+                                    }
+                                }
+                                System.out.println("Nearby users " + nearbyUsers);
+                                future.complete(nearbyUsers);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                future.completeExceptionally(databaseError.toException());
+                            }
+                        });
+                    }
+                }
+        );
+        return future;
+    }
 }
