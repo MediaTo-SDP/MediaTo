@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,7 +74,7 @@ public class AuthenticationActivity extends AppCompatActivity {
    */
   public void launchPostActivity(FirebaseUser user) {
     Objects.requireNonNull(user);
-    Database.getUserByEmail(user.getEmail()).thenAccept(this::launchMainActivity)
+    UserDatabase.getUserByEmail(user.getEmail()).thenAccept(this::launchMainActivity)
         .exceptionally(e -> {
           launchProfileCreationActivity(user);
           return null;

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.github.javafaker.Faker;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.formats.Dates;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -36,9 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 
@@ -119,9 +115,9 @@ public class CreateProfileFragment extends Fragment {
         userBuilder.setLocation(new Location());
         User user = userBuilder.build();
         Uri profilePicUri = photoPicker.getProfileImageUri();
-        Database.addUser(user);
+        UserDatabase.addUser(user);
         if (photoPicker.getProfileImageUri() != null) {
-          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
+          uploadProfilePicTask = UserDatabase.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
               switchToMainActivity(username);
               makeToast(getString(R.string.profile_creation_success));
           });
@@ -163,7 +159,7 @@ public class CreateProfileFragment extends Fragment {
         Uri uri = Uri.fromFile(imageFile);
 
         // we can now store it in the database, and then switch to main activity
-        Database.setProfilePic(username, uri).addOnCompleteListener(v -> {
+        UserDatabase.setProfilePic(username, uri).addOnCompleteListener(v -> {
           switchToMainActivity(username);
           makeToast(getString(R.string.profile_creation_success));
         });;

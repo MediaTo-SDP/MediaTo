@@ -1,6 +1,6 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MyFollowingViewModel extends UserViewModel {
     public void reloadUser() {
-        Database.getUser(getUserName()).thenAccept(value -> {
+        UserDatabase.getUser(getUserName()).thenAccept(value -> {
             userLiveData.setValue(value);
             reloadFollowings();
         });
@@ -27,7 +27,7 @@ public class MyFollowingViewModel extends UserViewModel {
         Collections.sort(followingUserNames);
 
         for (String username : followingUserNames) {
-            futures[i++] = Database.getUser(username).thenAccept(followings::add);
+            futures[i++] = UserDatabase.getUser(username).thenAccept(followings::add);
         }
 
         // Wait for all the CompletableFuture to complete

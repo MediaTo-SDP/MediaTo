@@ -22,7 +22,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class ProfileFragmentTest {
 
     // Use Database emulator
     try {
-      Database.database.useEmulator("10.0.2.2", 9000);
+      UserDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
 

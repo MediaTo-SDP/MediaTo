@@ -1,6 +1,6 @@
 package com.github.sdp.mediato.ui;
 
-import static com.github.sdp.mediato.data.Database.getUser;
+import static com.github.sdp.mediato.data.UserDatabase.getUser;
 
 import android.view.View;
 
