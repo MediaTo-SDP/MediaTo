@@ -303,13 +303,9 @@ public class UserDatabase {
                         database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                // Iterate over all child nodes of the "Users" node
                                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                    // Get the user object from the snapshot
                                     User user = userSnapshot.getValue(User.class);
-                                    // Check if the user has a location within the specified radius
-                                    if (((!userSnapshot.getKey().equals(username) && user.getLocation().isValid()) && user.getLocation().isInRadius(location))) {
-                                        // The user is within the radius, so you can get the username and do something with it
+                                    if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location)) {
                                         String nearbyUser = userSnapshot.getKey();
                                         nearbyUsers.add(nearbyUser);
                                     }
