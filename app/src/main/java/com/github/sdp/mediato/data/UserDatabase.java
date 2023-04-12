@@ -303,14 +303,14 @@ public class UserDatabase {
                         database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                    User user = userSnapshot.getValue(User.class);
-                                    if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location)) {
-                                        String nearbyUser = userSnapshot.getKey();
-                                        nearbyUsers.add(nearbyUser);
-                                    }
-                                }
-                                System.out.println("Nearby users " + nearbyUsers);
+                                dataSnapshot.getChildren().forEach(
+                                        userSnapshot -> {
+                                            User user = userSnapshot.getValue(User.class);
+                                            if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location)) {
+                                                nearbyUsers.add(userSnapshot.getKey());
+                                            }
+                                        }
+                                );
                                 future.complete(nearbyUsers);
                             }
 
