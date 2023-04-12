@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +19,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.protobuf.DescriptorProtos;
 
 import java.util.Locale;
@@ -37,6 +40,7 @@ public class LocationService extends Service {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            Log.d("Location", "received result");
             if (locationResult == null) System.out.println("Location is null");
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
@@ -61,7 +65,7 @@ public class LocationService extends Service {
                 getApplicationContext(),
                 0,
                 resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
             getApplicationContext(),
@@ -86,29 +90,21 @@ public class LocationService extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
         }
-        LocationRequest locationRequest = new LocationRequest.Builder(4000)
-                .setIntervalMillis(4000)
-                .setPriority(100).build();
+        Log.d("Location", "creating request");
+        LocationRequest locationRequest = new LocationRequest.Builder(100)
+                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                .setIntervalMillis(100)
+                .setMinUpdateIntervalMillis(0)
+                .build();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("SHOULD CHECK PERMISSIONS");
             return;
         }
+        Log.d("Location", "sending request");
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         startForeground(175, builder.build());
-    }
-    private void stopLocationService() {
-        LocationServices.getFusedLocationProviderClient(this)
-                .removeLocationUpdates(locationCallback);
-        stopForeground(true);
-        stopSelf();
     }
 
     @Override
@@ -118,8 +114,6 @@ public class LocationService extends Service {
             if (action != null) {
                 if (action.equals(ACTION_START_LOCATION_SERVICE)) {
                     startLocationService();
-                } else if(action.equals(ACTION_STOP_LOCATION_SERVICE)) {
-                    stopLocationService();
                 }
             }
         }

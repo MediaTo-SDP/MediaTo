@@ -39,48 +39,13 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
-    LocationHelper.startTrackingLocation(getApplicationContext(), this);
     // Choose the default fragment that opens on creation of the MainActivity
     setDefaultFragment();
-
     // Set the bottomNavigationView
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
         item -> navigateFragments(item.getItemId()));
 
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @Nonnull String[] permissions, @Nonnull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if(requestCode == LocationHelper.REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0){
-      LocationHelper.startLocationService();
-    } else {
-      Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-    }
-  }
-
-  private boolean isLocationServiceRunning() {
-    ActivityManager activityManager =
-            (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-    if(activityManager != null) {
-      for(ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
-        if(LocationService.class.getName().equals(service.service.getClassName())) {
-          if(service.foreground) return true;
-        }
-      }
-      return false;
-    }
-    return false;
-  }
-
-  private void startLocationService() {
-    if(!isLocationServiceRunning()) {
-      Intent intent = new Intent(getApplicationContext(), LocationService.class);
-      intent.setAction(LocationService.ACTION_START_LOCATION_SERVICE);
-      startService(intent);
-      Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
-    }
   }
 
   private boolean navigateFragments(int itemId) {

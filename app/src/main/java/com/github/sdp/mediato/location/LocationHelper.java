@@ -1,13 +1,17 @@
 package com.github.sdp.mediato.location;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -19,23 +23,27 @@ public class LocationHelper {
 
     public static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
-    public static void startTrackingLocation(Context context, Activity activity) {
+    public static void startTrackingLocation(Context context, Activity activity, ActivityResultLauncher<String> requestPermissionLauncher) {
+        Log.d("Location", "Entering startTrackingLocation");
         if(ContextCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_FINE_LOCATION
-        ) !=PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_LOCATION_PERMISSION);
+        ) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("Location", "Launch requestpermission for coarse");
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
-            startLocationService();
+            Log.d("Location", "start location service because permission granted");
+            if(!isLocationServiceRunning(activity)) {
+                Log.d("Location", "preparing to start service");
+                startLocationService(activity);
+            } else {
+                Log.d("Location", "service already running - nothing to do ");
+            }
         }
     }
 
-    }
-
-    private static boolean isLocationServiceRunning() {
+    private static boolean isLocationServiceRunning(Activity activity) {
         ActivityManager activityManager =
-                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         if(activityManager != null) {
             for(ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
                 if(LocationService.class.getName().equals(service.service.getClassName())) {
@@ -47,12 +55,13 @@ public class LocationHelper {
         return false;
     }
 
-    public static void startLocationService(Activity activity ) {
-        if(!isLocationServiceRunning()) {
+    public static void startLocationService(Activity activity) {
+        if(!isLocationServiceRunning(activity)) {
+            Log.d("Location", "Location service not running yet in start location");
             Intent intent = new Intent(activity, LocationService.class);
             intent.setAction(LocationService.ACTION_START_LOCATION_SERVICE);
-            startService(intent);
-            Toast.makeText(this, "Location service started", Toast.LENGTH_SHORT).show();
+            activity.startService(intent);
+            Toast.makeText(activity, "Location service started", Toast.LENGTH_SHORT).show();
         }
     }
 
