@@ -2,7 +2,6 @@ package com.github.sdp.mediato.data;
 
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +17,7 @@ public class CollectionsDatabase {
      * @param collection the collection to be added
      */
     public static void addCollection(String username, Collection collection) {
-        Utils.getCollectionReference(username, collection.getCollectionName())
+        DatabaseUtils.getCollectionReference(username, collection.getCollectionName())
                 .setValue(collection)
                 .addOnCompleteListener(task -> System.out.println("Added " + collection.getCollectionName() + " to " + username));
     }
@@ -30,7 +29,7 @@ public class CollectionsDatabase {
      * @param collectionName
      */
     public static void removeCollection(String username, String collectionName) {
-        Utils.getCollectionReference(username, collectionName)
+        DatabaseUtils.getCollectionReference(username, collectionName)
                 .setValue(null)
                 .addOnCompleteListener(task -> System.out.println("Removed " + collectionName + " from " + username));
     }
@@ -44,7 +43,7 @@ public class CollectionsDatabase {
      */
     public static CompletableFuture<Collection> getCollection(String username, String collectionName) {
         CompletableFuture<Collection> future = new CompletableFuture<>();
-        Utils.getCollectionReference(username, collectionName).get().addOnSuccessListener(
+        DatabaseUtils.getCollectionReference(username, collectionName).get().addOnSuccessListener(
                 dataSnapshot -> {
                     if (dataSnapshot.getValue() == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -65,7 +64,7 @@ public class CollectionsDatabase {
      * @param review
      */
     public static void addReviewToCollection(String username, String collectionName, Review review) {
-        Utils.getCollectionReference(username, collectionName).child(Utils.REVIEWS_PATH + review.getMedia().getTitle()).setValue(review)
+        DatabaseUtils.getCollectionReference(username, collectionName).child(DatabaseUtils.REVIEWS_PATH + review.getMedia().getTitle()).setValue(review)
                 .addOnCompleteListener(
                         task -> {
                             System.out.println("Added review of " + review.getMedia().getTitle() + " for " + username);

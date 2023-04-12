@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class LocationTests {
+    private final static int RADIUS = 100;
     private final static int STANDARD_USER_TIMEOUT = 10;
 
     private final static int STANDARD_SLEEP_DELAY = 1000;
@@ -110,7 +111,7 @@ public class LocationTests {
     //Tests that the future is completed exceptionally when trying to retrieve the nearby users
     //for a user that has an invalid location on the database
     public void failsWhenGettingNearbyUsersForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
-        CompletableFuture<List<String>> future = UserDatabase.getNearbyUsers(user2.getUsername());
+        CompletableFuture<List<String>> future = UserDatabase.getNearbyUsers(user2.getUsername(), RADIUS);
         Thread.sleep(STANDARD_SLEEP_DELAY);
         assertTrue(future.isCompletedExceptionally());
     }
@@ -118,7 +119,7 @@ public class LocationTests {
     @Test
     //Tests that the right nearby users are retrieved
     public void retrievesNearbyUsersProperly() throws ExecutionException, InterruptedException, TimeoutException {
-        List<String> nearbyUsers = UserDatabase.getNearbyUsers(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        List<String> nearbyUsers = UserDatabase.getNearbyUsers(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(nearbyUsers.containsAll(List.of(user3.getUsername(), user4.getUsername()))
                     && !nearbyUsers.contains(user5.getUsername()));
     }

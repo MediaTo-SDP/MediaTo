@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * This is a Utils class for the database classes
+ * This is a DatabaseUtils class for the database classes
  */
-class Utils {
+class DatabaseUtils {
 
     //-----------Constant definitions-------------
 
@@ -29,7 +29,7 @@ class Utils {
 
     static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
 
-    static final int LOCATION_RADIUS = 100;
+    static final int DEFAULT_RADIUS = 100;
 
     //---------------------Util methods-------------------------------------
 
@@ -52,7 +52,7 @@ class Utils {
      * @param username username of the current user
      * @return a list of strings with the users' usernames
      */
-    static List<String> findNearbyUsers(CompletableFuture<List<String>> future, Location location, String username) {
+    static List<String> findNearbyUsers(CompletableFuture<List<String>> future, Location location, String username, double radius) {
         List<String> nearbyUsers = new ArrayList<>();
         UserDatabase.database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,7 +60,7 @@ class Utils {
                 dataSnapshot.getChildren().forEach(
                         userSnapshot -> {
                             User user = userSnapshot.getValue(User.class);
-                            if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location)) {
+                            if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location, radius)) {
                                 nearbyUsers.add(userSnapshot.getKey());
                             }
                         }

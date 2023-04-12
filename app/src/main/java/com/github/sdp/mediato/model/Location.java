@@ -1,8 +1,6 @@
 package com.github.sdp.mediato.model;
 
 public class Location {
-
-    private double RADIUS = 100;
     private static final double EARTH_RADIUS = 6371; // Earth's radius in kilometers
 
     double latitude;
@@ -42,8 +40,8 @@ public class Location {
         this.valid = valid;
     }
 
-    public boolean isInRadius(Location centerLocation) {
-        return calculateDistance(centerLocation) <= RADIUS;
+    public boolean isInRadius(Location centerLocation, double radius) {
+        return calculateDistance(centerLocation) <= radius;
     }
 
     public double calculateDistance(Location that) {
