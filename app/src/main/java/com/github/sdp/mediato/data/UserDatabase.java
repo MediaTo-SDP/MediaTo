@@ -23,20 +23,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class UserDatabase {
 
-    private static final String USERS_PATH = "Users/";
-    private static final String LOCATION_PATH = "/location/";
-    private static final String FOLLOWING_PATH = "/following/";
-    private static final String FOLLOWERS_PATH = "/followers/";
-
-    private static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
-
-    private static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
-
-    private static final int LOCATION_RADIUS = 100;
-
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference()
-            .child(USER_PROFILE_PICS_PATH);
+            .child(Utils.USER_PROFILE_PICS_PATH);
 
 
     /**
@@ -48,7 +37,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<String> addUser(User user, Uri profilePicUri) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(Utils.USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -70,7 +59,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<String> addUser(User user) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(Utils.USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -104,7 +93,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<String> deleteUser(String username) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).setValue(null,
+        database.getReference().child(Utils.USERS_PATH + username).setValue(null,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(username);
@@ -124,7 +113,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<User> getUser(String username) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(Utils.USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> {
                     if (dataSnapshot.getValue() == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -144,7 +133,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<User> getUserByEmail(String email) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference(USERS_PATH)
+        database.getReference(Utils.USERS_PATH)
                 .orderByChild("email")
                 .equalTo(email)
                 .addValueEventListener(new ValueEventListener() {
@@ -176,7 +165,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<Boolean> isUsernameUnique(String username) {
         CompletableFuture<Boolean> unique = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(Utils.USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> unique.complete(!dataSnapshot.exists())
         ).addOnFailureListener(unique::completeExceptionally);
         return unique;
@@ -191,7 +180,7 @@ public class UserDatabase {
     public static CompletableFuture<byte[]> getProfilePic(String username) {
         CompletableFuture<byte[]> future = new CompletableFuture<>();
         System.out.println("Fetching image at path " + profilePics.child(username + ".jpg").getPath());
-        profilePics.child(username + ".jpg").getBytes(PROFILE_PIC_MAX_SIZE)
+        profilePics.child(username + ".jpg").getBytes(Utils.PROFILE_PIC_MAX_SIZE)
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -235,7 +224,7 @@ public class UserDatabase {
      */
     public static void setValueInFollowers(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USERS_PATH + myUsername + FOLLOWING_PATH + targetUserUsername).setValue(value)
+                .child(Utils.USERS_PATH + myUsername + Utils.FOLLOWING_PATH + targetUserUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(targetUserUsername + " is now set to " + value + " in " + myUsername + " following list."));
     }
 
@@ -248,7 +237,7 @@ public class UserDatabase {
      */
     public static void setValueInFollowing(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USERS_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
+                .child(Utils.USERS_PATH + targetUserUsername + Utils.FOLLOWERS_PATH + myUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(myUsername + " is now set to " + value + " in " + targetUserUsername + " followers list."));
     }
 
@@ -262,7 +251,7 @@ public class UserDatabase {
     public static void updateLocation(String username, double latitude, double longitude) {
         Location location = new Location(latitude, longitude);
         Preconditions.checkLocation(location);
-        database.getReference().child(USERS_PATH + username + LOCATION_PATH)
+        database.getReference().child(Utils.USERS_PATH + username + Utils.LOCATION_PATH)
                 .setValue(location);
     }
 
@@ -275,7 +264,7 @@ public class UserDatabase {
      */
     public static CompletableFuture<Location> getSavedLocation(String username) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username + LOCATION_PATH).get().addOnSuccessListener(
+        database.getReference().child(Utils.USERS_PATH + username + Utils.LOCATION_PATH).get().addOnSuccessListener(
                 dataSnapshot -> {
                     if (dataSnapshot.getValue() == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -300,7 +289,7 @@ public class UserDatabase {
                     if (!location.isValid())
                         future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
                     else {
-                        database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
+                        database.getReference(Utils.USERS_PATH).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 dataSnapshot.getChildren().forEach(
