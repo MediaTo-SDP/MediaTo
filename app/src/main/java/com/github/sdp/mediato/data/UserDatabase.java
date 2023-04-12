@@ -289,28 +289,10 @@ public class UserDatabase {
                     if (!location.isValid())
                         future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
                     else {
-                        database.getReference(Utils.USERS_PATH).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                dataSnapshot.getChildren().forEach(
-                                        userSnapshot -> {
-                                            User user = userSnapshot.getValue(User.class);
-                                            if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location)) {
-                                                nearbyUsers.add(userSnapshot.getKey());
-                                            }
-                                        }
-                                );
-                                future.complete(nearbyUsers);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                future.completeExceptionally(databaseError.toException());
-                            }
-                        });
+                        nearbyUsers.addAll(Utils.findNearbyUsers(future, location, username));
                     }
-                }
-        );
+                });
         return future;
     }
 }
+
