@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
+import com.github.sdp.mediato.location.LocationHelper;
 import com.github.sdp.mediato.location.LocationService;
 import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
@@ -33,22 +34,12 @@ public class MainActivity extends AppCompatActivity {
   ProfileFragment profileFragment;
   SearchFragment searchFragment;
 
-  private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
-    if(ContextCompat.checkSelfPermission(
-            getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
-    ) !=PackageManager.PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(MainActivity.this,
-              new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-              REQUEST_CODE_LOCATION_PERMISSION);
-    } else {
-      startLocationService();
-    }
+    LocationHelper.startTrackingLocation(getApplicationContext(), this);
     // Choose the default fragment that opens on creation of the MainActivity
     setDefaultFragment();
 
@@ -62,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public void onRequestPermissionsResult(int requestCode, @Nonnull String[] permissions, @Nonnull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if(requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0){
-      startLocationService();
+    if(requestCode == LocationHelper.REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0){
+      LocationHelper.startLocationService();
     } else {
       Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
     }
@@ -81,14 +72,6 @@ public class MainActivity extends AppCompatActivity {
       return false;
     }
     return false;
-  }
-
-  private void stopLocationService() {
-    if (isLocationServiceRunning()) {
-      Intent intent = new Intent(getApplicationContext(), LocationService.class);
-      intent.setAction(LocationService.ACTION_STOP_LOCATION_SERVICE);
-      Toast.makeText(this, "Location service stopped", Toast.LENGTH_SHORT).show();
-    }
   }
 
   private void startLocationService() {
