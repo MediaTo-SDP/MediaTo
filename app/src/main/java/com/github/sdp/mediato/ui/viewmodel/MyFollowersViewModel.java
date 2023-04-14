@@ -19,10 +19,9 @@ public class MyFollowersViewModel extends UserViewModel {
   public void reloadFollowers() {
     clearUserList();
     List<User> followers = new ArrayList<>();
-    CompletableFuture[] futures = new CompletableFuture[getUser().getFollowers().size()];
-    int i = 0;
-
     List<String> followersUserNames = getUser().getFollowers();
+    CompletableFuture[] futures = new CompletableFuture[followersUserNames.size()];
+    int i = 0;
 
     Collections.sort(followersUserNames);
 

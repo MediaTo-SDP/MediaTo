@@ -110,6 +110,21 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1710527168">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1424736617">
           <value>
             <AndroidTestResultsTableState>
@@ -356,6 +371,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global" value="120" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

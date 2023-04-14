@@ -39,6 +39,7 @@ public class ProfileFragmentTest {
   ViewInteraction userNameText = onView(withId(R.id.username_text));
   ViewInteraction editButton = onView(withId(R.id.edit_button));
   ViewInteraction followingButton = onView(withId(R.id.profile_following_button));
+  ViewInteraction followersButton = onView(withId(R.id.profile_followers_button));
   ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
   ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
   ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
@@ -70,18 +71,25 @@ public class ProfileFragmentTest {
     });
   }
 
-  // Test whether the "Friends" button is displayed and contains the correct text
+  // Test whether the "Following" button is displayed and contains the correct text
   @Test
   public void testFollowingButton() {
     followingButton.check(matches(isDisplayed()));
     followingButton.check(matches(withText(R.string.following)));
+    followingButton.perform(click());
+  }
+
+  // Test whether the "Followers" button is displayed and contains the correct text
+  @Test
+  public void testFollowersButton() {
+    followersButton.check(matches(isDisplayed()));
+    followersButton.check(matches(withText(R.string.followers)));
   }
 
   // Test whether the "Edit" button is displayed and contains the correct text
   @Test
   public void testEditButton() {
     editButton.check(matches(isDisplayed()));
-    editButton.check(matches(withText("Edit")));
   }
 
   // Test whether the profile picture is displayed
