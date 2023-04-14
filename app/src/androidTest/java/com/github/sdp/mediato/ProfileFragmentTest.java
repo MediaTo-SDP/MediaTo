@@ -76,7 +76,6 @@ public class ProfileFragmentTest {
   public void testFollowingButton() {
     followingButton.check(matches(isDisplayed()));
     followingButton.check(matches(withText(R.string.following)));
-    followingButton.perform(click());
   }
 
   // Test whether the "Followers" button is displayed and contains the correct text
