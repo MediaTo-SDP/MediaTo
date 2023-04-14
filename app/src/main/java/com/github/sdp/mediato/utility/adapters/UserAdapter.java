@@ -12,24 +12,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MyFollowersFragment;
 import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
-
 import java.util.concurrent.CompletableFuture;
 
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     private final UserViewModel userViewModel;
+    private final Fragment fragment;
 
-    public UserAdapter(UserViewModel userViewModel) {
+    public UserAdapter(UserViewModel userViewModel, Fragment fragment) {
         this.userViewModel = userViewModel;
+        this.fragment = fragment;
 
         // Refresh when follow or unfollow
         this.userViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
@@ -51,9 +52,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.userNameTextView.setText(user.getUsername());
 
         downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
+        if (fragment instanceof MyFollowersFragment) {
+            holder.followButton.setVisibility(View.GONE);
+            holder.unfollowButton.setVisibility(View.GONE);
+            return;
+        }
 
         // Decide which button to display
-        if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
+        if (userViewModel.getUser().getFollowing().contains(user.getUsername())) {
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.VISIBLE);
         } else {

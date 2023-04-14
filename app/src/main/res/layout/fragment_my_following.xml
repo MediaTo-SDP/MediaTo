@@ -13,12 +13,12 @@
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/myFollowing_bar"
-            style="@style/Widget.MediaTo.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:subtitleTextColor="#000000"
-            app:title="@string/myFollowing_title_bar" />
+          android:id="@+id/myFollowing_bar"
+          style="@style/Widget.MediaTo.Toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:subtitleTextColor="@color/white"
+          app:title="@string/following" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

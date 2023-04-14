@@ -26,6 +26,7 @@ import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.MyFollowersFragment;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
@@ -70,8 +71,6 @@ public class ProfileFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
     viewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
     viewModel.setUsername(USERNAME);
-    viewModel.setFollowing(20);
-    viewModel.setFollowers(10);
 
     // This function is a temporary fix. The delay of uploading the profile picture should be
     // handled before we create the profile fragment (like with a loading screen). Ideally we
@@ -100,8 +99,17 @@ public class ProfileFragment extends Fragment {
     observeCollections(collectionlistAdapter);
     observeFollowingCount();
     observeFollowersCount();
+    updateFollowerButtonCounts();
 
     return view;
+  }
+
+  private void updateFollowerButtonCounts() {
+    UserDatabase.getUser(USERNAME).thenAccept(user -> {
+      viewModel.setFollowing(user.getFollowingCount());
+      System.out.println("follwers count " + user.getFollowersCount() + " " + user.getFollowers());
+      viewModel.setFollowers(user.getFollowersCount());
+    });
   }
 
   private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
@@ -181,12 +189,11 @@ public class ProfileFragment extends Fragment {
   }
 
   private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(v -> openMyFollowingFragment());
+    followingButton.setOnClickListener(v -> switchFragment(new MyFollowingFragment()));
   }
-
-  // TODO: we need a followers fragment, but it can be the same as myFollowingFragment
+  
   private void setupFollowersButton(Button followersButton) {
-    followersButton.setOnClickListener(v -> openMyFollowingFragment());
+    followersButton.setOnClickListener(v -> switchFragment(new MyFollowersFragment()));
   }
 
   private void showEnterCollectionNameDialog() {
@@ -254,15 +261,14 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-  private void openMyFollowingFragment() {
-    MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+  private void switchFragment(Fragment fragment) {
     Bundle args = new Bundle();
     args.putString("username", USERNAME);
-    myFollowingFragment.setArguments(args);
+    fragment.setArguments(args);
 
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, myFollowingFragment);
+    fragmentTransaction.replace(R.id.main_container, fragment);
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }

@@ -2,7 +2,6 @@ package com.github.sdp.mediato.ui.viewmodel;
 
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
