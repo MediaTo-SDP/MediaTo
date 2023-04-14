@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
@@ -43,8 +43,9 @@ public class ProfileFragment extends Fragment {
 
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
-  private Button editButton;
+  private ImageButton editButton;
   private Button followingButton;
+  private Button followersButton;
   private Button addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
@@ -69,6 +70,8 @@ public class ProfileFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
     viewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
     viewModel.setUsername(USERNAME);
+    viewModel.setFollowing(20);
+    viewModel.setFollowers(10);
 
     // This function is a temporary fix. The delay of uploading the profile picture should be
     // handled before we create the profile fragment (like with a loading screen). Ideally we
@@ -78,6 +81,7 @@ public class ProfileFragment extends Fragment {
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
     followingButton = view.findViewById(R.id.profile_following_button);
+    followersButton = view.findViewById(R.id.profile_followers_button);
     addCollectionButton = view.findViewById(R.id.add_collection_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
@@ -86,6 +90,7 @@ public class ProfileFragment extends Fragment {
     // Initialize components
     photoPicker = setupPhotoPicker();
     setupFollowingButton(followingButton);
+    setupFollowersButton(followersButton);
     collectionlistAdapter = setupCollections(collectionListRecyclerView);
     setupAddCollectionsButton(addCollectionButton);
 
@@ -93,6 +98,8 @@ public class ProfileFragment extends Fragment {
     observeUsername();
     observeProfilePic();
     observeCollections(collectionlistAdapter);
+    observeFollowingCount();
+    observeFollowersCount();
 
     return view;
   }
@@ -145,6 +152,18 @@ public class ProfileFragment extends Fragment {
         bitmap -> profileImage.setImageBitmap(bitmap));
   }
 
+  private void observeFollowingCount() {
+    viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
+      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
+    });
+  }
+
+  private void observeFollowersCount() {
+    viewModel.getFollowersLiveData().observe(getViewLifecycleOwner(), followersCount -> {
+      followersButton.setText(followersCount + " " + getResources().getString(R.string.followers));
+    });
+  }
+
   private PhotoPicker setupPhotoPicker() {
     PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
 
@@ -160,14 +179,14 @@ public class ProfileFragment extends Fragment {
     );
     return photoPicker;
   }
-  
+
   private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        openMyFollowingFragment();
-      }
-    });
+    followingButton.setOnClickListener(v -> openMyFollowingFragment());
+  }
+
+  // TODO: we need a followers fragment, but it can be the same as myFollowingFragment
+  private void setupFollowersButton(Button followersButton) {
+    followersButton.setOnClickListener(v -> openMyFollowingFragment());
   }
 
   private void showEnterCollectionNameDialog() {

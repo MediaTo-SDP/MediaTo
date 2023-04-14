@@ -5,9 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.github.sdp.mediato.data.CollectionsDatabase;
-import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
@@ -22,11 +20,15 @@ public class ProfileViewModel extends ViewModel {
   private MutableLiveData<List<Collection>> collectionsLiveData;
   private MutableLiveData<String> usernameLiveData;
   private MutableLiveData<Bitmap> profilePicLiveData;
+  private MutableLiveData<Integer> followingLiveData;
+  private MutableLiveData<Integer> followersLiveData;
 
   public ProfileViewModel() {
     collectionsLiveData = new MutableLiveData<>();
     usernameLiveData = new MutableLiveData<>();
     profilePicLiveData = new MutableLiveData<>();
+    followingLiveData = new MutableLiveData<>();
+    followersLiveData = new MutableLiveData<>();
   }
 
   public LiveData<List<Collection>> getCollectionsLiveData() {
@@ -39,6 +41,14 @@ public class ProfileViewModel extends ViewModel {
 
   public LiveData<Bitmap> getProfilePicLiveData() {
     return profilePicLiveData;
+  }
+
+  public LiveData<Integer> getFollowingLiveData() {
+    return followingLiveData;
+  }
+
+  public LiveData<Integer> getFollowersLiveData() {
+    return followersLiveData;
   }
 
   public List<Collection> getCollections() {
@@ -63,6 +73,14 @@ public class ProfileViewModel extends ViewModel {
 
   public void setProfilePic(@NonNull Bitmap profilePic) {
     profilePicLiveData.setValue(profilePic);
+  }
+
+  public void setFollowing(int following) {
+    followingLiveData.setValue(following);
+  }
+
+  public void setFollowers(int followers) {
+    followersLiveData.setValue(followers);
   }
 
   /**

@@ -65,6 +65,7 @@
 
   <string name="myFollowing_title_bar">My followings</string>
   <string name="following">Following</string>
+  <string name="followers">Followers</string>
 
   <string name="collection_empty_name">Collection name cannot be empty</string>
   <string name="collection_name_already_exists">Collection name already exists</string>
