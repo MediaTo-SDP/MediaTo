@@ -68,10 +68,11 @@ public class GBookAPI implements API<GoogleBook> {
         indices.put(s, index + RES_PER_REQUEST);
 
         return future.thenApply(searchRes -> {
-            if (searchRes.getItems()!= null && searchRes.getItems().size() < 1){
+            if (searchRes.getItems() == null || searchRes.getItems().size() < 1){
                 indices.put(s, -1);
-                termCache.addAll(searchRes.getItems());
+                return new ArrayList<>(termCache);
             }
+            termCache.addAll(searchRes.getItems());
             int resCount = Math.min(count, termCache.size());
             cache.put(s, new ArrayList<>(termCache.subList(resCount, termCache.size())));
             return new ArrayList<>(termCache.subList(0, resCount));

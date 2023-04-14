@@ -58,9 +58,9 @@ public class GbookApiTest {
         GoogleBook book = db.searchItem(SEARCHTERM).join();
         assertThat(book.getId(), is("LanWAAAAMAAJ"));
         assertThat(book.getTitle(), is("The Maze and the Warrior"));
-        assertThat(book.getPosterURL(), is("https://books.google.com/books/content/images/frontcover/LanWAAAAMAAJ?fife=w132-h132"));
+        assertThat(book.getIconURL(), is("https://books.google.com/books/content/images/frontcover/LanWAAAAMAAJ?fife=w132-h132"));
         assertThat(book.getPublishedDate(), is("2004"));
-        assertThat(book.getIconURL(), is("https://books.google.com/books/content/images/frontcover/LanWAAAAMAAJ?fife=w3000-h6000"));
+        assertThat(book.getPosterURL(), is("https://books.google.com/books/content/images/frontcover/LanWAAAAMAAJ?fife=w3000-h6000"));
         assertThat(book.getOverview(), is("Craig Wright explores the complex symbolism of the labyrinth in architecture, religious thought, music, and dance from the Middle Ages to the present."));
     }
 
