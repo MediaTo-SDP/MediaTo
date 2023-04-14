@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.viewbinding.ViewBindings;
 
 import com.github.sdp.mediato.ui.HomeFragment;
 
@@ -20,11 +21,15 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class HomeFragmentTest {
+  ActivityScenario<TestingActivity> scenario;
+  ViewInteraction trendingMovieButton = onView(withId(R.id.movie_trending));
+  ViewInteraction trendingBookButton = onView(withId(R.id.books_trending));
+  ViewInteraction trendingItems = onView(withId(R.id.trending_items));
 
   @Before
   public void setUp() {
     // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    scenario = ActivityScenario.launch(TestingActivity.class);
 
     // Set up the TestingActivity to display the HomeFragment
     scenario.onActivity(activity -> {
@@ -42,6 +47,11 @@ public class HomeFragmentTest {
     homeText.check(matches(withText("Home")));
   }
 
+  @Test
+  public void testHomeFragmentContainsCorrectButtons() {
+    trendingMovieButton.check(matches(isDisplayed()));
+    trendingBookButton.check(matches(isDisplayed()));
+  }
 }
 
 

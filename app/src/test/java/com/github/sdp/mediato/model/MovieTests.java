@@ -30,7 +30,7 @@ public class MovieTests {
 
     @Test
     public void CanGetTheId() {
-        assertThat(MOVIE.getId(), is(1));
+        assertThat(MOVIE.getId(), is("1"));
     }
 
     @Test

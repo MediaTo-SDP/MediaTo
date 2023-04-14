@@ -10,7 +10,7 @@ public class Book extends Media{
         super(MediaType.BOOK, title, summary, posterUrl, iconUrl, id);
     }
     public Book(GoogleBook book){
-        this(book.getTitle(), book.getOverview(),
+        this(book.getTitle(), book.getOverview() == null ? " " : book.getOverview(),
                 book.getPosterURL(), book.getIconURL(), book.getId());
     }
 
