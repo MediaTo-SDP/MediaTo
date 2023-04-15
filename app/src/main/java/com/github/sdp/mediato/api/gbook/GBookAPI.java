@@ -21,7 +21,10 @@ public class GBookAPI implements API<GoogleBook> {
     private final Map<String, List<GoogleBook>> cache;
     private final Map<String, Integer> indices;
 
-
+    /**
+     * Default api constructor
+     * @param serverUrl the url of the server
+     */
     public GBookAPI(String serverUrl) {
         Preconditions.checkNullOrEmptyString(serverUrl, "server Url");
         this.cache = new HashMap<>();
@@ -33,19 +36,31 @@ public class GBookAPI implements API<GoogleBook> {
         this.api = retrofit.create(GbookAPIInterface.class);
     }
 
+    /**
+     * Get a the first returned (not already returned) book from a search with the api
+     * @param s the search term(s)
+     * @return a future containing the book
+     */
     @Override
     public CompletableFuture<GoogleBook> searchItem(String s) {
         Preconditions.checkNullOrEmptyString(s, "search term");
         return searchItems(s, 1).thenApply((list) -> list.get(0));
     }
 
+    /**
+     * Searches for multiple Books on the API. Maximum 40 results are retrieved per call.
+     * So you might use the returned list size to know how much data has been retrieved
+     * (not larger than the requested amount).
+     * @param s The search term(s)
+     * @param count The amount of books requested
+     * @return a future returning the list of books
+     */
     @Override
     public CompletableFuture<List<GoogleBook>> searchItems(String s, int count) {
         Preconditions.checkNullOrEmptyString(s, "search term");
         Preconditions.checkStrictlyPositive(count);
         // cache.getOrDefault could have been null
-        List<GoogleBook> _termCache = cache.getOrDefault(s, new ArrayList<>());
-        List<GoogleBook> termCache = (_termCache == null) ? new ArrayList<>() : _termCache;
+        List<GoogleBook> termCache = getNonNullCache(s);
 
 
         // If there is remaining data, do not update
@@ -67,19 +82,14 @@ public class GBookAPI implements API<GoogleBook> {
                 .enqueue(new AdapterRetrofitCallback<>(future));
         indices.put(s, index + RES_PER_REQUEST);
 
-        return future.thenApply(searchRes -> {
-            if (searchRes.getItems() == null || searchRes.getItems().size() < 1){
-                indices.put(s, -1);
-                return new ArrayList<>(termCache);
-            }
-            termCache.addAll(searchRes.getItems());
-            int resCount = Math.min(count, termCache.size());
-            cache.put(s, new ArrayList<>(termCache.subList(resCount, termCache.size())));
-            return new ArrayList<>(termCache.subList(0, resCount));
-        });
-
+        return future.thenApply(searchRes -> updateDataCache(searchRes, count, s));
     }
 
+    /**
+     * Returns the information about a specific book
+     * @param id the GoogleBook id of the book
+     * @return the information of the book
+     */
     @Override
     public CompletableFuture<GoogleBook> get(String id) {
         CompletableFuture<GoogleBook> future = new CompletableFuture<>();
@@ -87,9 +97,32 @@ public class GBookAPI implements API<GoogleBook> {
         return future;
     }
 
+    /**
+     * Clears the cache of already returned data. So that we can return the data that has
+     * already been returned.
+     */
     @Override
     public void clearCache() {
         cache.clear();
         indices.clear();
     }
+
+    private List<GoogleBook> getNonNullCache(String s){
+        List<GoogleBook> sCache = this.cache.getOrDefault(s, new ArrayList<>());
+        return (sCache != null) ? sCache : new ArrayList<>();
+    }
+
+    private List<GoogleBook> updateDataCache(GBookSearchResult searchRes , int requestedAmount, String s){
+        List<GoogleBook> sCache = getNonNullCache(s);
+        if (searchRes.getItems() == null || searchRes.getItems().size() < 1){
+            indices.put(s, -1);
+        } else {
+            sCache.addAll(searchRes.getItems());
+        }
+        int resCount = Math.min(requestedAmount, sCache.size());
+        this.cache.put(s, new ArrayList<>(sCache.subList(resCount, sCache.size())));
+        return new ArrayList<>(sCache.subList(0, resCount));
+    }
+
+
 }

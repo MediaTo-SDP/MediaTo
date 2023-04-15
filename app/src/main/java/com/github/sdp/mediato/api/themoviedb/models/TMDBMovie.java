@@ -24,6 +24,9 @@ public final class TMDBMovie {
     private boolean video;
     private double voteAverage;
 
+    private TMDBMovie(){
+        // Not possible to create a custom GoogleBook
+    }
     public String getRelease_date() {
         return release_date;
     }

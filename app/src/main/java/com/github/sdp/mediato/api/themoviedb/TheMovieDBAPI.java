@@ -72,10 +72,8 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
     public CompletableFuture<List<TMDBMovie>> searchItems(String s, int count) {
         Preconditions.checkNullOrEmptyString(s, "Argument");
         Preconditions.checkStrictlyPositive(count);
-        // oldCache is null if the key is bound to the null value
-        List<TMDBMovie> _oldCache = searchCache.getOrDefault(s, new ArrayList<>());
-        // oldCache should not be modified
-        final List<TMDBMovie> oldCache = (_oldCache == null) ? new ArrayList<>() : _oldCache;
+        // oldCache should not be reassigned
+        final List<TMDBMovie> oldCache = getNonNullCache(s);
 
         // Do not request the server if we have some local data to proceed
         if (oldCache.size() >= count) {
@@ -96,15 +94,7 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
         searchPage.put(s, index);
 
         // Updates the cache when the request returns
-        return future.thenApply(pagedResult -> {
-            if (pagedResult.getPage() == pagedResult.getTotal_pages()) {
-                searchPage.put(s, -1);
-            }
-            oldCache.addAll(pagedResult.getResults());
-            int resultSize = Math.min(count, oldCache.size());
-            searchCache.put(s, new ArrayList<>(oldCache.subList(resultSize, oldCache.size())));
-            return new ArrayList<>(oldCache.subList(0, resultSize));
-        });
+        return future.thenApply(pagedResult -> updateSearchCache(pagedResult, count, s));
     }
 
     /**
@@ -168,5 +158,21 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
         trendingCache.clear();
         searchCache.clear();
         searchPage.clear();
+    }
+
+    private List<TMDBMovie> getNonNullCache(String s){
+        List<TMDBMovie> _oldCache = searchCache.getOrDefault(s, new ArrayList<>());
+        return (_oldCache == null) ? new ArrayList<>() : _oldCache;
+    }
+
+    private List<TMDBMovie> updateSearchCache(PagedResult<TMDBMovie> pagedResult, int requestedSize, String s){
+        final List<TMDBMovie> oldCache = getNonNullCache(s);
+        if (pagedResult.getPage() == pagedResult.getTotal_pages()) {
+            searchPage.put(s, -1);
+        }
+        oldCache.addAll(pagedResult.getResults());
+        int resultSize = Math.min(requestedSize, oldCache.size());
+        searchCache.put(s, new ArrayList<>(oldCache.subList(resultSize, oldCache.size())));
+        return new ArrayList<>(oldCache.subList(0, resultSize));
     }
 }

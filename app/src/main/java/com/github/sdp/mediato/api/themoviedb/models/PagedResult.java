@@ -12,6 +12,9 @@ public final class PagedResult<T> {
     private List<T> results;
     private int total_pages;
     private int total_results;
+    private PagedResult(){
+        // Not possible to create a custom GoogleBook
+    }
 
     public int getPage() {
         return page;
