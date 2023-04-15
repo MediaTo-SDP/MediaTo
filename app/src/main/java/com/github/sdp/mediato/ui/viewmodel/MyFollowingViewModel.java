@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class MyFollowingViewModel extends UserViewModel {
+
+    /**
+     * Gets the user data from the database. Updates the user's "following" list by loading all their
+     * followed users from the database.
+     */
     public void reloadUser() {
         UserDatabase.getUser(getUserName()).thenAccept(value -> {
             userLiveData.setValue(value);
@@ -15,6 +20,9 @@ public class MyFollowingViewModel extends UserViewModel {
         });
     }
 
+    /**
+     * Updates the user's "following" list by loading all their followed users from the database.
+     */
     public void reloadFollowings() {
         clearUserList();
         List<User> followings = new ArrayList<>();

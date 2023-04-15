@@ -1,28 +1,24 @@
 package com.github.sdp.mediato.utility.adapters;
 
-import static com.github.sdp.mediato.data.UserDatabase.followUser;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.MyFollowersFragment;
 import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 import java.util.concurrent.CompletableFuture;
 
-
+/**
+ * Adapter to display a User list item, displays name and profile pic only.
+ */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     protected final UserViewModel userViewModel;

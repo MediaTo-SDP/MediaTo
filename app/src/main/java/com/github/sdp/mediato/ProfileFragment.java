@@ -106,7 +106,6 @@ public class ProfileFragment extends Fragment {
   private void updateFollowingAndFollowersCount() {
     UserDatabase.getUser(USERNAME).thenAccept(user -> {
       viewModel.setFollowing(user.getFollowingCount());
-      System.out.println("follwers count " + user.getFollowersCount() + " " + user.getFollowers());
       viewModel.setFollowers(user.getFollowersCount());
     });
   }

@@ -21,7 +21,9 @@ import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 import com.github.sdp.mediato.utility.adapters.UserAdapter.UserViewHolder;
 import java.util.concurrent.CompletableFuture;
 
-
+/**
+ * Adapter to display a User list item, displays name, profile pic and a button to follow or unfollow the user.
+ */
 public class UserFollowAdapter extends UserAdapter {
 
     public UserFollowAdapter(UserViewModel userViewModel) {

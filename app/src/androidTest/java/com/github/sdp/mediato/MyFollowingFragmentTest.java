@@ -90,7 +90,7 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(500);
+    sleep(700);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
@@ -103,7 +103,7 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(500);
+    sleep(700);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
@@ -111,7 +111,7 @@ public class MyFollowingFragmentTest {
 
     clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
 
-    sleep(500);
+    sleep(700);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 1);
   }

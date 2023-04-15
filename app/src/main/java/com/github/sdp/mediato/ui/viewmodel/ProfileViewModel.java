@@ -29,6 +29,8 @@ public class ProfileViewModel extends ViewModel {
     profilePicLiveData = new MutableLiveData<>();
     followingLiveData = new MutableLiveData<>();
     followersLiveData = new MutableLiveData<>();
+    followersLiveData.setValue(0);
+    followingLiveData.setValue(0);
   }
 
   public LiveData<List<Collection>> getCollectionsLiveData() {
