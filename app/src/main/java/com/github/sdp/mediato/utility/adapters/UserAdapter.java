@@ -25,12 +25,10 @@ import java.util.concurrent.CompletableFuture;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private final UserViewModel userViewModel;
-    private final Fragment fragment;
+    protected final UserViewModel userViewModel;
 
-    public UserAdapter(UserViewModel userViewModel, Fragment fragment) {
+    public UserAdapter(UserViewModel userViewModel) {
         this.userViewModel = userViewModel;
-        this.fragment = fragment;
 
         // Refresh when follow or unfollow
         this.userViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
@@ -52,32 +50,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.userNameTextView.setText(user.getUsername());
 
         downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
-        if (fragment instanceof MyFollowersFragment) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.GONE);
-            return;
-        }
-
-        // Decide which button to display
-        if (userViewModel.getUser().getFollowing().contains(user.getUsername())) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.VISIBLE);
-        } else {
-            holder.unfollowButton.setVisibility(View.GONE);
-            holder.followButton.setVisibility(View.VISIBLE);
-        }
-
-        holder.followButton.setOnClickListener(v -> {
-                    followUser(userViewModel.getUserName(), user.getUsername());
-                    userViewModel.reloadUser();
-                }
-        );
-
-        holder.unfollowButton.setOnClickListener(v -> {
-                    unfollowUser(userViewModel.getUserName(), user.getUsername());
-                    userViewModel.reloadUser();
-                }
-        );
     }
 
     @Override
@@ -85,19 +57,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return userViewModel.getUserList().size();
     }
 
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
+    protected static class UserViewHolder extends RecyclerView.ViewHolder {
 
         ImageView userProfileImageView;
         TextView userNameTextView;
-        Button followButton;
-        Button unfollowButton;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             userProfileImageView = itemView.findViewById(R.id.searchUserAdapter_imageView);
             userNameTextView = itemView.findViewById(R.id.searchUserAdapter_userName);
-            followButton = itemView.findViewById(R.id.searchUserAdapter_followButton);
-            unfollowButton = itemView.findViewById(R.id.searchUserAdapter_unfollowButton);
         }
     }
 

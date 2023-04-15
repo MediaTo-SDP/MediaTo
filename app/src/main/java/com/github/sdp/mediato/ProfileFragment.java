@@ -97,14 +97,13 @@ public class ProfileFragment extends Fragment {
     observeUsername();
     observeProfilePic();
     observeCollections(collectionlistAdapter);
-    observeFollowingCount();
-    observeFollowersCount();
-    updateFollowerButtonCounts();
+    observeFollowingAndFollowersCount();
+    updateFollowingAndFollowersCount();
 
     return view;
   }
 
-  private void updateFollowerButtonCounts() {
+  private void updateFollowingAndFollowersCount() {
     UserDatabase.getUser(USERNAME).thenAccept(user -> {
       viewModel.setFollowing(user.getFollowingCount());
       System.out.println("follwers count " + user.getFollowersCount() + " " + user.getFollowers());
@@ -160,15 +159,12 @@ public class ProfileFragment extends Fragment {
         bitmap -> profileImage.setImageBitmap(bitmap));
   }
 
-  private void observeFollowingCount() {
-    viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
-      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
-    });
-  }
-
-  private void observeFollowersCount() {
+  private void observeFollowingAndFollowersCount() {
     viewModel.getFollowersLiveData().observe(getViewLifecycleOwner(), followersCount -> {
       followersButton.setText(followersCount + " " + getResources().getString(R.string.followers));
+    });
+    viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
+      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
     });
   }
 
