@@ -1,3 +1,5 @@
+package com.github.sdp.mediato.api.gbook;
+
 import java.util.List;
 
 public class APITestStrings {

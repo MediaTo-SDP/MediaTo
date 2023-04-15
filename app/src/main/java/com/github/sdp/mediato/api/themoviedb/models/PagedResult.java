@@ -16,19 +16,27 @@ public final class PagedResult<T> {
         // Not possible to create a custom GoogleBook
     }
 
+    /**
+     * Get the page index
+     * @return the index of page
+     */
     public int getPage() {
         return page;
     }
 
+    /**
+     * Get the current results
+     * @return the results
+     */
     public List<T> getResults() {
         return results;
     }
 
+    /**
+     * Get the total amount of pages
+     * @return the total amount of pages
+     */
     public int getTotal_pages() {
         return total_pages;
-    }
-
-    public int getTotal_results() {
-        return total_results;
     }
 }

@@ -1,10 +1,11 @@
+package com.github.sdp.mediato.api.gbook;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import androidx.annotation.NonNull;
 
-import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.gbook.models.GoogleBook;
 
 import org.junit.After;
@@ -21,7 +22,7 @@ import mockwebserver3.RecordedRequest;
 
 public class GbookApiTest {
     private final String SEARCHTERM = "searchTerm";
-    // private final APITestStrings strings = new APITestStrings();
+    // private final com.github.sdp.mediato.api.gbook.APITestStrings strings = new com.github.sdp.mediato.api.gbook.APITestStrings();
     private String search2;
     public final MockWebServer mockApi = new MockWebServer();
     private GBookAPI db;
@@ -62,6 +63,8 @@ public class GbookApiTest {
         assertThat(book.getPublishedDate(), is("2004"));
         assertThat(book.getPosterURL(), is("https://books.google.com/books/content/images/frontcover/LanWAAAAMAAJ?fife=w3000-h6000"));
         assertThat(book.getOverview(), is("Craig Wright explores the complex symbolism of the labyrinth in architecture, religious thought, music, and dance from the Middle Ages to the present."));
+        assertThat(book.getSubtitle(), is("Symbols in Architecture, Theology, and Music"));
+        assertThat(book.getAuthors(), is(List.of("Craig Wright")));
     }
 
     @Test
@@ -155,4 +158,11 @@ public class GbookApiTest {
     }
 
 
+    public List<GoogleBook> getBooks() throws IOException {
+        setUp();
+        List<GoogleBook> data = db.searchItems(SEARCHTERM, 20).join();
+        clearEverything();
+        return data;
+
+    }
 }
