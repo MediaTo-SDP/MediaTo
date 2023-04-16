@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 public class HomeFragmentTest {
   private final static int MOVIE_PER_CLICK = 20;
   private final static int BOOK_PER_CLICK = 40;
-  private final static int WAIT_TIME = 500;
+  private final static int WAIT_TIME = 1000;
 
 
   ActivityScenario<TestingActivity> scenario;
