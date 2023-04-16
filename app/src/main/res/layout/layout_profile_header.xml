@@ -12,6 +12,7 @@
 
   <Button
     android:id="@+id/profile_following_button"
+    android:padding="@dimen/button_padding"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/white"
@@ -20,23 +21,36 @@
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toStartOf="@+id/username_text" />
+
   <Button
-    android:id="@+id/edit_button"
+    android:id="@+id/profile_followers_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="30dp"
+    android:layout_marginStart="20dp"
+    android:padding="@dimen/button_padding"
     android:backgroundTint="@color/white"
-    android:text="@string/edit"
+    android:text="@string/followers"
     android:textAllCaps="false"
     android:textColor="@color/gray"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
-
+  <ImageButton
+    android:id="@+id/edit_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginStart="-22dp"
+    android:background="@drawable/bg_round_button"
+    android:src="@drawable/ic_edit"
+    android:translationZ="90dp"
+    app:layout_constraintBottom_toBottomOf="@+id/profile_following_button"
+    app:layout_constraintStart_toEndOf="@+id/profile_image" />
   <TextView
     android:id="@+id/username_text"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="30dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="25dp"
     android:text="@string/username"
     android:textColor="@color/white"
     android:textSize="26dp"
@@ -47,15 +61,12 @@
     android:id="@+id/profile_image"
     android:layout_width="@dimen/profile_picture_small"
     android:layout_height="@dimen/profile_picture_small"
-    android:layout_marginTop="30dp"
-    android:layout_marginBottom="30dp"
-    android:layout_marginStart="30dp"
+    android:layout_marginStart="25dp"
     android:src="@drawable/profile_picture_default_white"
     app:civ_border_color="@color/white"
     app:civ_border_width="5dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.0" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
