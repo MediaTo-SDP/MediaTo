@@ -2,6 +2,7 @@ package com.github.sdp.mediato.ui.viewmodel;
 
 
 import android.app.Application;
+import android.system.ErrnoException;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -16,7 +17,9 @@ import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.model.media.Movie;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 public class HomeViewModel extends AndroidViewModel {
 
     Application application;
-    private final MutableLiveData<List<Media>> medias = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<ArrayList<Media>> medias = new MutableLiveData<>(new ArrayList<>());
     private final TheMovieDBAPI movieApi;
     private final GBookAPI bookApi;
     private MediaType currentType;
@@ -70,7 +73,7 @@ public class HomeViewModel extends AndroidViewModel {
      * Getter for the LiveData containing the currently displayed medias
      * @return the medias LiveData
      */
-    public LiveData<List<Media>> getMedias() {
+    public LiveData<ArrayList<Media>> getMedias() {
         return medias;
     }
 
@@ -84,14 +87,14 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     private void updateMediaList(List<? extends Media> downloadedData, MediaType type){
-            List<Media> completedList = new ArrayList<>();
+            ArrayList<Media> completedList = new ArrayList<>();
             if (currentType == type) {
-                completedList = medias.getValue();
+                completedList.addAll(Objects.requireNonNull(medias.getValue()));
             } else {
                 wipeOldData();
             }
             completedList.addAll(downloadedData);
-            medias.setValue(completedList);
+            medias.setValue(new ArrayList<>(completedList));
             currentType = type;
     }
 
