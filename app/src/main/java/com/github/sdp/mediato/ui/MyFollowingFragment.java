@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
 import com.github.sdp.mediato.ui.viewmodel.MyFollowingViewModel;
+import com.github.sdp.mediato.utility.adapters.UserFollowAdapter;
 
 public class MyFollowingFragment extends Fragment {
     private static String USERNAME;
@@ -29,17 +30,17 @@ public class MyFollowingFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_following, container, false);
 
         // Create and init the Search User ViewModel
-        MyFollowingViewModel myFollowingViewModelViewModel = new ViewModelProvider(this).get(MyFollowingViewModel.class);
-        myFollowingViewModelViewModel.setUserName(USERNAME);
+        MyFollowingViewModel myFollowingViewModel = new ViewModelProvider(getActivity()).get(MyFollowingViewModel.class);
+        myFollowingViewModel.setUserName(USERNAME);
 
         // Set the Search User RecyclerView with its adapter
         RecyclerView recyclerView = view.findViewById(R.id.myFollowing_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new UserAdapter(myFollowingViewModelViewModel));
+        recyclerView.setAdapter(new UserFollowAdapter(myFollowingViewModel));
 
         return view;
     }

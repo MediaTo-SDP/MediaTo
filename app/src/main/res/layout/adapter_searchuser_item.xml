@@ -59,6 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="@string/searchUser_follow"
+                        android:visibility="gone"
                         style="?attr/borderlessButtonStyle"
                         />
 
@@ -69,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="@string/searchUser_unfollow"
+                        android:visibility="gone"
                         android:textColor="#F44336" />
                 </FrameLayout>
 

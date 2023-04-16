@@ -2,11 +2,13 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.slowSwipeLeft;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 import static org.junit.Assert.fail;
 
 import android.os.Bundle;
@@ -39,6 +41,7 @@ public class ProfileFragmentTest {
   ViewInteraction userNameText = onView(withId(R.id.username_text));
   ViewInteraction editButton = onView(withId(R.id.edit_button));
   ViewInteraction followingButton = onView(withId(R.id.profile_following_button));
+  ViewInteraction followersButton = onView(withId(R.id.profile_followers_button));
   ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
   ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
   ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
@@ -70,18 +73,24 @@ public class ProfileFragmentTest {
     });
   }
 
-  // Test whether the "Friends" button is displayed and contains the correct text
+  // Test whether the "Following" button is displayed and contains the correct text
   @Test
   public void testFollowingButton() {
     followingButton.check(matches(isDisplayed()));
-    followingButton.check(matches(withText(R.string.following)));
+    followingButton.check(matches(withText("0 Following")));
   }
 
-  // Test whether the "Edit" button is displayed and contains the correct text
+  // Test whether the "Followers" button is displayed and contains the correct text
+  @Test
+  public void testFollowersButton() {
+    followersButton.check(matches(isDisplayed()));
+    followersButton.check(matches(withText("0 Followers")));
+  }
+
+  // Test whether the "Edit" button is displayed
   @Test
   public void testEditButton() {
     editButton.check(matches(isDisplayed()));
-    editButton.check(matches(withText("Edit")));
   }
 
   // Test whether the profile picture is displayed

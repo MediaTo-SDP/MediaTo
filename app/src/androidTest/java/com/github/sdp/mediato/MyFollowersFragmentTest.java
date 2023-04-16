@@ -7,26 +7,23 @@ import static com.adevinta.android.barista.interaction.BaristaListInteractions.c
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MyFollowersFragment;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
-
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 @RunWith(AndroidJUnit4.class)
-public class MyFollowingFragmentTest {
+public class MyFollowersFragmentTest {
   private final static int STANDARD_USER_TIMEOUT = 10;
   User user1;
   User user2;
@@ -69,13 +66,13 @@ public class MyFollowingFragmentTest {
     // Set up the TestingActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
-      MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+      MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
-      myFollowingFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowingFragment)
+      myFollowersFragment.setArguments(bundle);
+      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowersFragment)
               .commitAllowingStateLoss();
     });
   }
@@ -87,34 +84,19 @@ public class MyFollowingFragmentTest {
 
   @Test
   public void testRecyclerViewWithTwoFollowings() {
-    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
-    UserDatabase.followUser(user1.getUsername(), user3.getUsername());
+    UserDatabase.followUser(user2.getUsername(), user1.getUsername());
+    UserDatabase.followUser(user3.getUsername(), user1.getUsername());
 
-    sleep(700);
-
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
-    assertDisplayed(user2.getUsername());
-    assertDisplayed(user3.getUsername());
-  }
-
-
-  @Test
-  public void testOneUnfollowWithTwoFollowings() {
-    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
-    UserDatabase.followUser(user1.getUsername(), user3.getUsername());
-
-    sleep(700);
+    sleep(500);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
-
-    sleep(700);
-
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 1);
+    assertNotDisplayed(R.id.searchUserAdapter_unfollowButton);
+    assertNotDisplayed(R.id.searchUserAdapter_followButton);
   }
+
 }
 
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +22,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.MyFollowersFragment;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
@@ -43,8 +44,9 @@ public class ProfileFragment extends Fragment {
 
   private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
-  private Button editButton;
+  private ImageButton editButton;
   private Button followingButton;
+  private Button followersButton;
   private Button addCollectionButton;
   private TextView usernameView;
   private ImageView profileImage;
@@ -78,6 +80,7 @@ public class ProfileFragment extends Fragment {
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
     followingButton = view.findViewById(R.id.profile_following_button);
+    followersButton = view.findViewById(R.id.profile_followers_button);
     addCollectionButton = view.findViewById(R.id.add_collection_button);
     usernameView = view.findViewById(R.id.username_text);
     profileImage = view.findViewById(R.id.profile_image);
@@ -86,6 +89,7 @@ public class ProfileFragment extends Fragment {
     // Initialize components
     photoPicker = setupPhotoPicker();
     setupFollowingButton(followingButton);
+    setupFollowersButton(followersButton);
     collectionlistAdapter = setupCollections(collectionListRecyclerView);
     setupAddCollectionsButton(addCollectionButton);
 
@@ -93,8 +97,17 @@ public class ProfileFragment extends Fragment {
     observeUsername();
     observeProfilePic();
     observeCollections(collectionlistAdapter);
+    observeFollowingAndFollowersCount();
+    updateFollowingAndFollowersCount();
 
     return view;
+  }
+
+  private void updateFollowingAndFollowersCount() {
+    UserDatabase.getUser(USERNAME).thenAccept(user -> {
+      viewModel.setFollowing(user.getFollowingCount());
+      viewModel.setFollowers(user.getFollowersCount());
+    });
   }
 
   private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
@@ -145,6 +158,15 @@ public class ProfileFragment extends Fragment {
         bitmap -> profileImage.setImageBitmap(bitmap));
   }
 
+  private void observeFollowingAndFollowersCount() {
+    viewModel.getFollowersLiveData().observe(getViewLifecycleOwner(), followersCount -> {
+      followersButton.setText(followersCount + " " + getResources().getString(R.string.followers));
+    });
+    viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
+      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
+    });
+  }
+
   private PhotoPicker setupPhotoPicker() {
     PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
 
@@ -160,14 +182,13 @@ public class ProfileFragment extends Fragment {
     );
     return photoPicker;
   }
-  
+
   private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        openMyFollowingFragment();
-      }
-    });
+    followingButton.setOnClickListener(v -> switchFragment(new MyFollowingFragment()));
+  }
+  
+  private void setupFollowersButton(Button followersButton) {
+    followersButton.setOnClickListener(v -> switchFragment(new MyFollowersFragment()));
   }
 
   private void showEnterCollectionNameDialog() {
@@ -235,15 +256,14 @@ public class ProfileFragment extends Fragment {
     });
   }
 
-  private void openMyFollowingFragment() {
-    MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+  private void switchFragment(Fragment fragment) {
     Bundle args = new Bundle();
     args.putString("username", USERNAME);
-    myFollowingFragment.setArguments(args);
+    fragment.setArguments(args);
 
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, myFollowingFragment);
+    fragmentTransaction.replace(R.id.main_container, fragment);
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }
