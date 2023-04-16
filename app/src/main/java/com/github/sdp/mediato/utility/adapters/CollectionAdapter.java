@@ -14,9 +14,9 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * This adapter displays a single collection of Media.
+ */
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
   private Context context;
@@ -35,24 +35,26 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         .inflate(R.layout.layout_profile_movie_item, parent, false);
 
     return new ViewHolder(view);
-
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Review review = collection.getReviewsList().get(position);
     Media media = review.getMedia();
-    holder.mediaImage.setImageResource(R.drawable.bg_movie2);
+
+    // Set the media title
     holder.mediaTitle.setText(media.getTitle());
-    try {
-      int grade = review.getGrade();
-      holder.mediaRating.setText(getStarString(grade));
 
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    // Set the media rating
+    int grade = review.getGrade();
+    String ratingString = "";
+    if (grade > 0) {
+      ratingString = getStarString(grade);
     }
-    /* holder.mediaRating.setText(review.getGrade());*/
+    holder.mediaRating.setText(ratingString);
 
+    // TODO set the movie image retrieved from the API
+    holder.mediaImage.setImageResource(R.drawable.bg_movie);
   }
 
   @Override
@@ -72,8 +74,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
       mediaImage = itemView.findViewById(R.id.movie_image);
       mediaTitle = itemView.findViewById(R.id.movie_title);
       mediaRating = itemView.findViewById(R.id.movie_rating);
-
-
     }
   }
 
@@ -89,7 +89,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
     return sb.toString();
   }
-
 
 }
 

@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.model;
 
 public class Location {
+    private static final double EARTH_RADIUS = 6371; // Earth's radius in kilometers
 
     double latitude;
     double longitude;
@@ -38,4 +39,24 @@ public class Location {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
+
+    public boolean isInRadius(Location centerLocation, double radius) {
+        return calculateDistance(centerLocation) <= radius;
+    }
+
+    public double calculateDistance(Location that) {
+        //Haversine formula for distance calculation
+        double dLat = Math.toRadians(this.getLatitude() - that.getLatitude());
+        double dLon = Math.toRadians(this.getLongitude() - that.getLongitude());
+
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(that.getLatitude())) * Math.cos(Math.toRadians(this.getLatitude())) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = EARTH_RADIUS * c;
+        System.out.println("Estimated distance is " + distance);
+        return distance;
+    }
+
 }

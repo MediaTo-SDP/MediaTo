@@ -1,6 +1,8 @@
 package com.github.sdp.mediato;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,8 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.github.javafaker.Faker;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.formats.Dates;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -25,6 +29,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Objects;
 
 
@@ -104,21 +115,58 @@ public class CreateProfileFragment extends Fragment {
         userBuilder.setLocation(new Location());
         User user = userBuilder.build();
         Uri profilePicUri = photoPicker.getProfileImageUri();
-        Database.addUser(user);
+        UserDatabase.addUser(user);
         if (photoPicker.getProfileImageUri() != null) {
-          uploadProfilePicTask = Database.setProfilePic(user.getUsername(), profilePicUri);
-        }
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
+          uploadProfilePicTask = UserDatabase.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
+              switchToMainActivity(username);
+              makeToast(getString(R.string.profile_creation_success));
+          });
 
-        switchToMainActivity(username);
-        makeToast(getString(R.string.profile_creation_success));
+        } else {
+          addDefaultProfilePic(username);
+        }
       }
 
     };
+  }
+
+  /**
+   * Adds the default profile image to the user
+   * @param username: the user's username
+   */
+  private void addDefaultProfilePic(String username) {
+    // we need to create a new thread to download the default profile pic, otherwise it will make the app lag
+    new Thread(() -> {
+      try {
+        // the url of the default profile picture
+        URL url = new URL(getString(R.string.default_profile_pic));
+
+        // connect via html to download
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoInput(true);
+        connection.connect();
+        InputStream input = connection.getInputStream();
+        Bitmap bitmap = BitmapFactory.decodeStream(input);
+
+        // store the file as a temporary image in the cache
+        File cacheDir = requireContext().getCacheDir();
+        File imageFile = File.createTempFile("profile_pic", ".jpg", cacheDir);
+        FileOutputStream outputStream = new FileOutputStream(imageFile);
+
+        // get the bitmap out of it, and convert to uri
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        outputStream.close();
+        Uri uri = Uri.fromFile(imageFile);
+
+        // we can now store it in the database, and then switch to main activity
+        UserDatabase.setProfilePic(username, uri).addOnCompleteListener(v -> {
+          switchToMainActivity(username);
+          makeToast(getString(R.string.profile_creation_success));
+        });;
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to download and save the default profile pic", e);
+      }
+    }).start();
   }
 
   private void switchToMainActivity(String username) {

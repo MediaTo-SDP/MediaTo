@@ -24,11 +24,12 @@
   <string name="recently_watched">Recently watched</string>
   <string name="title">Title</string>
   <string name="rating">Rating: </string>
+  <string name="add_collection">add collection</string>
 
   <!--Buttons-->
-  <string name="friends">Friends</string>
   <string name="edit">Edit</string>
-  <string name="new_item_end_button_text">Add</string>
+  <string name="add">Add</string>
+  <string name="cancel">Cancel</string>
   <string name="film">Film</string>
   <string name="books">Books</string>
 
@@ -54,7 +55,7 @@
   <string name="new_item_title">Title</string>
   <string name="new_item_description">Description of the item in a few lines</string>
   <string name="new_item_image_description">Image of the currently rated and reviewed item</string>
-  
+
   <!--Authentication-->
   <string name="authentication_page_welcome_title">Welcome to MediaTo</string>
   <string name="authentication_page_login_text">Please login to continue</string>
@@ -62,7 +63,14 @@
   <!--Toast messages-->
   <string name="profile_creation_success">Profile creation successful!</string>
   <string name="searchUserFailed">Failed to search users</string>
-    <string name="movie_name">movie_name</string>
 
+  <string name="myFollowing_title_bar">My followings</string>
+  <string name="following">Following</string>
+
+  <string name="collection_empty_name">Collection name cannot be empty</string>
+  <string name="collection_name_already_exists">Collection name already exists</string>
+  <string name="movie_name">movie_name</string>
+
+  <string name="default_profile_pic">https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg</string>
 
 </resources>
