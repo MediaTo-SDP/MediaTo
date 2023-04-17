@@ -52,17 +52,10 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
       viewModel.setCollections(collections);
     }
 
-    // Define what happens when the add button inside a collection is clicked
-    MyProfileFragment.OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
-      CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
-      Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
-      viewModel.addReviewToCollection(review, "sample collection");
-
-    };
 
     // Create an adapter to display the list of collections in a RecycleView
     CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
-        onAddMediaButtonClickListener);
+        null);
     recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
