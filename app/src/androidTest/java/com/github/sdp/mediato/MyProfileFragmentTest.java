@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -128,6 +129,7 @@ public class MyProfileFragmentTest {
   // Tests that clicking the following button opens the following fragment
   @Test
   public void testFollowingButtonOpensFollowingPage() {
+    followingButton.check(matches(isCompletelyDisplayed()));
     followingButton.perform(click());
     myFollowingBar.check(matches(isDisplayed()));
   }
@@ -151,9 +153,8 @@ public class MyProfileFragmentTest {
   // Tests that clicking the followers button opens the followers fragment
   @Test
   public void testFollowersButtonOpensFollowersPage() {
-    BaristaSleepInteractions.sleep(1000);
+    followersButton.check(matches(isCompletelyDisplayed()));
     followersButton.perform(click());
-    BaristaSleepInteractions.sleep(1000);
     myFollowersBar.check(matches(isDisplayed()));
   }
 
