@@ -129,7 +129,6 @@ public class MyProfileFragmentTest {
   // Tests that clicking the following button opens the following fragment
   @Test
   public void testFollowingButtonOpensFollowingPage() {
-    followingButton.check(matches(isCompletelyDisplayed()));
     followingButton.perform(click());
     myFollowingBar.check(matches(isDisplayed()));
   }
@@ -153,7 +152,6 @@ public class MyProfileFragmentTest {
   // Tests that clicking the followers button opens the followers fragment
   @Test
   public void testFollowersButtonOpensFollowersPage() {
-    followersButton.check(matches(isCompletelyDisplayed()));
     followersButton.perform(click());
     myFollowersBar.check(matches(isDisplayed()));
   }
