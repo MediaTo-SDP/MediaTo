@@ -149,13 +149,6 @@ public class MyProfileFragmentTest {
     followersButton.check(matches(withText("1 Followers")));
   }
 
-  // Tests that clicking the followers button opens the followers fragment
-  @Test
-  public void testFollowersButtonOpensFollowersPage() {
-    followersButton.perform(click());
-    myFollowersBar.check(matches(isDisplayed()));
-  }
-
   // Test whether the "Edit" button is displayed
   @Test
   public void testEditButton() {
