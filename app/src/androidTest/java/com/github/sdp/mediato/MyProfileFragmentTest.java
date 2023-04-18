@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -25,8 +26,13 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import java.sql.DatabaseMetaData;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -35,6 +41,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class MyProfileFragmentTest {
+  private final static int STANDARD_USER_TIMEOUT = 10;
+  private final static String MY_USERNAME = "test_username";
 
   ActivityScenario<MainActivity> scenario;
   ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
@@ -48,18 +56,42 @@ public class MyProfileFragmentTest {
   ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
   ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
   ViewInteraction profilePic = onView(withId(R.id.profile_image));
+  ViewInteraction profileMenuItem= onView(withId(R.id.profile));
+  ViewInteraction searchMenuItem = onView(withId(R.id.search));
+  ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
+  ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
 
+  User user1;
+  User user2;
 
   @Before
-  public void setUp() {
-    // Launch the MainActivity
-    scenario = ActivityScenario.launch(MainActivity.class);
+  public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
 
     // Use Database emulator
     try {
       UserDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
+
+    //Create new sample users
+    user1 = new User.UserBuilder("uniqueId1")
+        .setUsername(MY_USERNAME)
+        .setEmail("email_test_1")
+        .setRegisterDate("09/03/2023")
+        .setLocation(new Location(3.14, 3.14))
+        .build();
+    user2 = new User.UserBuilder("uniqueId2")
+        .setUsername("user_test_2")
+        .setEmail("email_test_2")
+        .setRegisterDate("19/03/2023")
+        .setLocation(new Location(3.14, 3.14))
+        .build();
+
+    UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    
+    // Launch the MainActivity
+    scenario = ActivityScenario.launch(MainActivity.class);
 
     // Set up the MainActivity to display the ProfileFragment
     scenario.onActivity(activity -> {
@@ -68,7 +100,7 @@ public class MyProfileFragmentTest {
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();
-      bundle.putString("username", "myUsername");
+      bundle.putString("username", MY_USERNAME);
       myProfileFragment.setArguments(bundle);
       fragmentManager.beginTransaction().replace(R.id.main_container, myProfileFragment)
           .commitAllowingStateLoss();
@@ -77,16 +109,48 @@ public class MyProfileFragmentTest {
 
   // Test whether the "Following" button is displayed and contains the correct text
   @Test
-  public void testFollowingButton() {
+  public void testInitialFollowingButtonState() {
     followingButton.check(matches(isDisplayed()));
     followingButton.check(matches(withText("0 Following")));
   }
 
+  // Tests that following a user updates the count on the following button when getting back to the profile page
+  @Test
+  public void testAddFollowingUpdatesFollowingButton() {
+    UserDatabase.followUser(MY_USERNAME, user2.getUsername());
+    searchMenuItem.perform(click());
+    profileMenuItem.perform(click());
+    followingButton.check(matches(withText("1 Following")));
+  }
+
+  // Tests that clicking the following button opens the following fragment
+  @Test
+  public void testFollowingButtonOpensFollowingPage() {
+    followingButton.perform(click());
+    myFollowingBar.check(matches(isDisplayed()));
+  }
+
   // Test whether the "Followers" button is displayed and contains the correct text
   @Test
-  public void testFollowersButton() {
+  public void testInitialFollowersButtonState() {
     followersButton.check(matches(isDisplayed()));
     followersButton.check(matches(withText("0 Followers")));
+  }
+
+  // Tests getting a new follower updates the count on the following button when getting back to the profile page
+  @Test
+  public void testAddFollowerUpdatesFollowerButton() {
+    UserDatabase.followUser(user2.getUsername(), MY_USERNAME);
+    searchMenuItem.perform(click());
+    profileMenuItem.perform(click());
+    followersButton.check(matches(withText("1 Followers")));
+  }
+
+  // Tests that clicking the followers button opens the followers fragment
+  @Test
+  public void testFollowersButtonOpensFollowersPage() {
+    followersButton.perform(click());
+    myFollowersBar.check(matches(isDisplayed()));
   }
 
   // Test whether the "Edit" button is displayed
@@ -105,7 +169,7 @@ public class MyProfileFragmentTest {
   @Test
   public void testUsername() {
     userNameText.check(matches(isDisplayed()));
-    userNameText.check(matches(withText("myUsername")));
+    userNameText.check(matches(withText(MY_USERNAME)));
   }
 
   // Test the initial state of the default collection after profile creation
@@ -215,7 +279,7 @@ public class MyProfileFragmentTest {
   }
 
   /**
-   * Returns the number of items in a RecyclerView hosted by the MainActivity
+   * Returns the number of items in a RecyclerView hosted by the TestingActivity
    *
    * @param id the id of the RecyclerView
    * @return the number of items currently in the RecyclerView
