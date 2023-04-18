@@ -4,21 +4,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -27,11 +30,10 @@ import java.util.Objects;
 public class AuthenticationActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
-
     // Sign-in launcher callback for button, calls onSignInResult
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(), this::onSignInResult
-    );
+    private final ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), this::onSignInResult);
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,80 +43,79 @@ public class AuthenticationActivity extends AppCompatActivity {
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("mySharedPreferences", MODE_PRIVATE);
 
-        // Check if there is a saved authentication token
-        String authToken = sharedPreferences.getString("authToken", "");
+        // Configure Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
+                .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
+                .requestEmail()
+                .build();
 
-        if (!authToken.isEmpty()) {
-            // Use the saved authentication token to authenticate the user automatically
-            AuthCredential credential = GoogleAuthProvider.getCredential(authToken, null);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Check if there is a saved authentication token
+        String idToken = sharedPreferences.getString("google_id_token", "");
+        String accessToken = sharedPreferences.getString("google_access_token", "");
+
+        if (!idToken.isEmpty() && !accessToken.isEmpty()) {
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
             FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
                         FirebaseUser user = authResult.getUser();
                         launchPostActivity(user);
                     })
                     .addOnFailureListener(e -> {
-                        // If authentication fails, remove the saved authentication token
+                        // If authentication fails, remove the saved authentication credential
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove("authToken");
+                        editor.remove("credential");
                         editor.apply();
-                        throw new RuntimeException(e);
                     });
         } else {
 
             // We assign a callback to Google sign in button
             findViewById(R.id.google_sign_in).setOnClickListener(view -> {
-                FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
-                /*TODO if (authUser == null) {
-                    // Initialize sign in intent
-                    Intent signInIntent = AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(Collections.singletonList(
-                                    new AuthUI.IdpConfig.GoogleBuilder().build())) // only available login is Google
-                            .build();
-                    // Start the intent
-                    signInLauncher.launch(signInIntent);
-                } else {
-                    launchPostActivity(authUser);
-                }*/
-                Intent signInIntent = AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(Collections.singletonList(
-                                new AuthUI.IdpConfig.GoogleBuilder().build())) // only available login is Google
-                        .build();
-                // Start the intent
-                signInLauncher.launch(signInIntent);
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                googleSignInActivityResultLauncher.launch(signInIntent);
             });
         }
-
     }
-
 
     /**
      * Called when user is login in. If login is successful, the user is greeted.
      *
-     * @param result: firebase authentication result
+     * @param result: Google sign-in activity result
      */
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+    private void onSignInResult(ActivityResult result) {
         if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser != null) {
-                currentUser.getIdToken(false)
-                        .addOnSuccessListener(result1 -> {
-                            String authToken = result1.getToken();
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("authToken", authToken);
-                            editor.apply(); // Save the authentication token in SharedPreferences
-                            launchPostActivity(currentUser);
-                        })
-                        .addOnFailureListener(e -> {
-                            // Handle error getting ID token
-                        });
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Handle Google Sign-In error
             }
         }
     }
 
-
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(authResult -> {
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        String idToken = account.getIdToken();
+                        String accessToken = account.getServerAuthCode();
+                        // Save the Google ID token and access token to SharedPreferences
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("google_id_token", idToken);
+                        editor.putString("google_access_token", accessToken);
+                        editor.apply();
+                        launchPostActivity(currentUser);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error getting ID token
+                });
+    }
 
     /**
      * Launches the next activity with the user signed in, either the main if user exists in database,
@@ -140,7 +141,6 @@ public class AuthenticationActivity extends AppCompatActivity {
         Intent postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
         postIntent.putExtra("username", databaseUser.getUsername());
         AuthenticationActivity.this.startActivity(postIntent);
-
     }
 
     /**
@@ -153,8 +153,5 @@ public class AuthenticationActivity extends AppCompatActivity {
         postIntent.putExtra("uid", user.getUid());
         postIntent.putExtra("email", user.getEmail());
         AuthenticationActivity.this.startActivity(postIntent);
-
     }
-
-
 }
