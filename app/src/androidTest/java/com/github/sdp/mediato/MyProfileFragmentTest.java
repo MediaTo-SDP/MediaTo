@@ -52,7 +52,7 @@ public class MyProfileFragmentTest {
 
   @Before
   public void setUp() {
-    // Launch the TestingActivity
+    // Launch the MainActivity
     scenario = ActivityScenario.launch(MainActivity.class);
 
     // Use Database emulator
@@ -61,7 +61,7 @@ public class MyProfileFragmentTest {
     } catch (Exception ignored) {
     }
 
-    // Set up the TestingActivity to display the ProfileFragment
+    // Set up the MainActivity to display the ProfileFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyProfileFragment myProfileFragment = new MyProfileFragment();
@@ -215,7 +215,7 @@ public class MyProfileFragmentTest {
   }
 
   /**
-   * Returns the number of items in a RecyclerView hosted by the TestingActivity
+   * Returns the number of items in a RecyclerView hosted by the MainActivity
    *
    * @param id the id of the RecyclerView
    * @return the number of items currently in the RecyclerView

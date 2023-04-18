@@ -36,6 +36,14 @@ public class MyProfileFragment extends BaseProfileFragment {
   private ImageButton editButton;
   private Button addCollectionButton;
 
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // The username must be stored locally because it is used as a key to access the DB
+    // For now it is passed as an argument from the profile creation.
+    USERNAME = getArguments().getString("username");
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,

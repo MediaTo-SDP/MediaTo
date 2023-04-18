@@ -22,9 +22,18 @@ import java.util.List;
 public class ReadOnlyProfileFragment extends BaseProfileFragment {
 
   @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // TODO: get the username that was clicked on
+    USERNAME = getArguments().getString("username");
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    viewModel = ((MainActivity) getActivity()).getCurrentUserViewModel();
+    viewModel = ((MainActivity) getActivity()).getOtherUsersViewModel();
+    // This should already set the profile pic and username, based on USERNAME
     View view = super.onCreateView(inflater, container, savedInstanceState);
 
     // Get all UI components
@@ -41,19 +50,12 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
 
   @Override
   public CollectionListAdapter setupCollections(RecyclerView recyclerView) {
-    // Check if a collection is already in the viewModel, if not create the default one
-    List<Collection> collections = viewModel.getCollections();
-    if (collections == null) {
-      String defaultTitle = getResources().getString(R.string.recently_watched);
-      Collection defaultCollection = new Collection(defaultTitle);
-      collections = new ArrayList<>();
-      collections.add(defaultCollection);
-      CollectionsDatabase.addCollection(USERNAME, defaultCollection);
-      viewModel.setCollections(collections);
-    }
-
+    // TODO: get the collections from the user that was clicked on in the search
+    List<Collection> collections = new ArrayList<>();
+    viewModel.setCollections(collections);
 
     // Create an adapter to display the list of collections in a RecycleView
+    // (with no AddMediaButtonClickListener, so that the add media button is not displayed)
     CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
         null);
     recyclerView.setAdapter(collectionsAdapter);
@@ -61,5 +63,4 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
     return collectionsAdapter;
   }
-
 }

@@ -42,15 +42,6 @@ public abstract class BaseProfileFragment extends Fragment {
   protected static String USERNAME;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    // The username must be stored locally because it is used as a key to access the DB
-    // For now it is passed as an argument from the profile creation.
-    USERNAME = getArguments().getString("username");
-  }
-
-  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
