@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
  * - profile picture
  * - follower and following buttons
  * It also displays a user's collections, the setup of which needs to be defined in the subclass.
- *
  */
 public abstract class BaseProfileFragment extends Fragment {
 
@@ -91,10 +90,12 @@ public abstract class BaseProfileFragment extends Fragment {
 
   private void observeFollowingAndFollowersCount() {
     viewModel.getFollowersLiveData().observe(getViewLifecycleOwner(), followersCount -> {
-      followersButton.setText(followersCount + " " + getResources().getString(R.string.followers));
+      String followersText = getResources().getString(R.string.followers_button, followersCount);
+      followersButton.setText(followersText);
     });
     viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
-      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
+      String followingText = getResources().getString(R.string.following_button, followingCount);
+      followingButton.setText(followingText);
     });
   }
 

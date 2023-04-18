@@ -4,15 +4,12 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 import static org.junit.Assert.fail;
 
 import android.os.Bundle;
-import android.service.autofill.UserData;
 import android.view.View;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +26,6 @@ import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyProfileFragment;
-import java.sql.DatabaseMetaData;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -89,7 +85,7 @@ public class MyProfileFragmentTest {
 
     UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
-    
+
     // Launch the MainActivity
     scenario = ActivityScenario.launch(MainActivity.class);
 
@@ -105,6 +101,10 @@ public class MyProfileFragmentTest {
       fragmentManager.beginTransaction().replace(R.id.main_container, myProfileFragment)
           .commitAllowingStateLoss();
     });
+  }
+
+  private void storeUsers(){
+
   }
 
   // Test whether the "Following" button is displayed and contains the correct text
@@ -212,7 +212,7 @@ public class MyProfileFragmentTest {
 
   // Check that a new collection has been added to the outer RecyclerView if the user chooses a valid collection name
   @Test
-  public void testAddValidCollection() throws UiObjectNotFoundException {
+  public void testAddValidCollection() {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
@@ -223,7 +223,7 @@ public class MyProfileFragmentTest {
 
   // Check that no new collection has been added to the outer RecyclerView if the user enters an empty collection name
   @Test
-  public void testEmptyCollectionNameNotAdded() throws UiObjectNotFoundException {
+  public void testEmptyCollectionNameNotAdded() {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
@@ -234,7 +234,7 @@ public class MyProfileFragmentTest {
 
   // Check that only one collection gets added if the user tries to add a collection with the same username twice
   @Test
-  public void testDuplicateCollectionNameNotAdded() throws UiObjectNotFoundException {
+  public void testDuplicateCollectionNameNotAdded(){
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
@@ -247,8 +247,7 @@ public class MyProfileFragmentTest {
 
   // Check that only one collection gets added if the user tries to add a collection with the same username twice
   @Test
-  public void testEnterValidCollectionAndCancelDoesNotAddCollection()
-      throws UiObjectNotFoundException {
+  public void testEnterValidCollectionAndCancelDoesNotAddCollection() {
     int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));

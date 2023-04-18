@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.ui.MyProfileFragment.OnAddMediaButtonClickListener;
@@ -30,13 +31,12 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
   private List<Collection> collections;
 
   public CollectionListAdapter(Context context, List<Collection> collections,
-      OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
+      @Nullable OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
     this.context = context;
     this.collections = collections;
     this.onAddMediaButtonClickListener = onAddMediaButtonClickListener;
   }
 
-  @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(context).inflate(R.layout.layout_collection, parent, false);

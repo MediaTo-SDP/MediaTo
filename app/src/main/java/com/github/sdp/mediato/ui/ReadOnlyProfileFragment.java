@@ -10,6 +10,7 @@ import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.List;
 /**
  * A fragment to display another user's profile. It extends the basic profile fragment to also include:
  * - Non-editable view of collections
- * - TODO: follow buttom
  */
 public class ReadOnlyProfileFragment extends BaseProfileFragment {
 
@@ -33,7 +33,8 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     viewModel = ((MainActivity) getActivity()).getOtherUsersViewModel();
-    // This should already set the profile pic and username, based on USERNAME
+
+    // Initializes the profile header, based on USERNAME
     View view = super.onCreateView(inflater, container, savedInstanceState);
 
     // Get all UI components
@@ -50,8 +51,15 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
 
   @Override
   public CollectionListAdapter setupCollections(RecyclerView recyclerView) {
-    // TODO: get the collections from the user that was clicked on in the search
+    // TODO: get the collections from the user that was clicked on in the search, this is was just for testing
+    SampleReviews sampleReviews = new SampleReviews();
     List<Collection> collections = new ArrayList<>();
+    Collection collection = new Collection("sample");
+    collection.addReview(sampleReviews.getMovieReview());
+    collection.addReview(sampleReviews.getMovieReview());
+    collection.addReview(sampleReviews.getMovieReview());
+    collection.addReview(sampleReviews.getMovieReview());
+    collections.add(collection);
     viewModel.setCollections(collections);
 
     // Create an adapter to display the list of collections in a RecycleView

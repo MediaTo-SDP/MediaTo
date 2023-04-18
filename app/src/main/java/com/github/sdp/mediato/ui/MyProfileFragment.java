@@ -49,6 +49,8 @@ public class MyProfileFragment extends BaseProfileFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     viewModel = ((MainActivity) getActivity()).getCurrentUserViewModel();
+
+    // Initializes the profile header, based on USERNAME
     View view = super.onCreateView(inflater, container, savedInstanceState);
 
     // Get all UI components
@@ -98,11 +100,13 @@ public class MyProfileFragment extends BaseProfileFragment {
   }
 
   private void setupAddCollectionsButton(Button addCollectionButton) {
+    addCollectionButton.setVisibility(View.VISIBLE);
     addCollectionButton.setOnClickListener(v -> showEnterCollectionNameDialog());
   }
 
   private PhotoPicker setupPhotoPicker() {
     PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
+    editButton.setVisibility(View.VISIBLE);
 
     // On click on the edit button, open a photo picker to choose the profile image
     editButton.setOnClickListener(v -> {
