@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.fail;
 
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -149,7 +151,9 @@ public class MyProfileFragmentTest {
   // Tests that clicking the followers button opens the followers fragment
   @Test
   public void testFollowersButtonOpensFollowersPage() {
+    BaristaSleepInteractions.sleep(1000);
     followersButton.perform(click());
+    BaristaSleepInteractions.sleep(1000);
     myFollowersBar.check(matches(isDisplayed()));
   }
 

@@ -90,7 +90,7 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(700);
+    sleep(1000);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
