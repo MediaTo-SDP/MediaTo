@@ -23,7 +23,6 @@ import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
-import com.github.sdp.mediato.utility.adapters.UserFollowAdapter;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +93,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new UserFollowAdapter(searchUserViewModel));
+        recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
         this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);

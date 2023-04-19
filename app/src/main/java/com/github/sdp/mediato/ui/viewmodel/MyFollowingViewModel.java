@@ -16,27 +16,7 @@ public class MyFollowingViewModel extends UserViewModel {
     public void reloadUser() {
         UserDatabase.getUser(getUserName()).thenAccept(value -> {
             userLiveData.setValue(value);
-            reloadFollowings();
+            reloadFollowingFollower(getUser().getFollowing());
         });
-    }
-
-    /**
-     * Updates the user's "following" list by loading all their followed users from the database.
-     */
-    public void reloadFollowings() {
-        clearUserList();
-        List<User> followings = new ArrayList<>();
-        List<String> followingUserNames = getUser().getFollowing();
-        CompletableFuture[] futures = new CompletableFuture[followingUserNames.size()];
-        int i = 0;
-
-        Collections.sort(followingUserNames);
-
-        for (String username : followingUserNames) {
-            futures[i++] = UserDatabase.getUser(username).thenAccept(followings::add);
-        }
-
-        // Wait for all the CompletableFuture to complete
-        CompletableFuture.allOf(futures).thenRun(() -> setUserList(followings));
     }
 }
