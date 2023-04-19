@@ -1,7 +1,10 @@
 package com.github.sdp.mediato;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -53,30 +56,54 @@ public class AuthenticationActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Check if there is a saved authentication token
+        // Check if there is a saved authentication token and username
         String idToken = sharedPreferences.getString("google_id_token", "");
         String accessToken = sharedPreferences.getString("google_access_token", "");
+        String username = sharedPreferences.getString("username", "");
 
         if (!idToken.isEmpty() && !accessToken.isEmpty()) {
-            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                    .addOnSuccessListener(authResult -> {
-                        FirebaseUser user = authResult.getUser();
-                        launchPostActivity(user);
-                    })
-                    .addOnFailureListener(e -> {
-                        // If authentication fails, remove the saved authentication credential
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove("credential");
-                        editor.apply();
-                    });
-        } else {
+            if (isNetworkAvailable(this)) {
+                // Authenticate user with Firebase
+                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
+                FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnSuccessListener(authResult -> {
+                            FirebaseUser user = authResult.getUser();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            UserDatabase.getUserByEmail(user.getEmail())
+                                    .thenAccept(u -> {
+                                        editor.putString("username", u.getUsername());
+                                        editor.apply();
+                                    });
 
-            // We assign a callback to Google sign in button
-            findViewById(R.id.google_sign_in).setOnClickListener(view -> {
-                Intent signInIntent = googleSignInClient.getSignInIntent();
-                googleSignInActivityResultLauncher.launch(signInIntent);
-            });
+                            launchPostActivity(user);
+                        })
+                        .addOnFailureListener(e -> {
+                            // If authentication fails, remove the saved authentication credential
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.remove("credential");
+                            editor.apply();
+                            setUpSignInButton();
+                        });
+            } else if (!username.isEmpty()) {
+                // Authenticate user using stored username
+                launchMainActivity(username);
+            } else {
+                // No saved authentication token or username, show sign-in button
+                setUpSignInButton();
+            }
+        } else {
+            // No saved authentication token, show sign-in button
+            setUpSignInButton();
         }
+
+    }
+
+    private void setUpSignInButton() {
+        // We assign a callback to Google sign in button
+        findViewById(R.id.google_sign_in).setOnClickListener(view -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            googleSignInActivityResultLauncher.launch(signInIntent);
+        });
     }
 
     /**
@@ -91,7 +118,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Handle Google Sign-In error
+                throw new RuntimeException(e); // Handle Google Sign-In error
             }
         }
     }
@@ -108,6 +135,12 @@ public class AuthenticationActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("google_id_token", idToken);
                         editor.putString("google_access_token", accessToken);
+                        UserDatabase.getUserByEmail(currentUser.getEmail())
+                                .thenAccept(user -> {
+                                    editor.putString("username", user.getUsername());
+                                    editor.apply();
+                                });
+
                         editor.apply();
                         launchPostActivity(currentUser);
                     }
@@ -115,6 +148,14 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     // Handle error getting ID token
                 });
+    }
+
+    private static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     /**
@@ -125,7 +166,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     public void launchPostActivity(FirebaseUser user) {
         Objects.requireNonNull(user);
-        UserDatabase.getUserByEmail(user.getEmail()).thenAccept(this::launchMainActivity)
+        UserDatabase.getUserByEmail(user.getEmail()).thenAccept(u -> launchMainActivity(u.getUsername()))
                 .exceptionally(e -> {
                     launchProfileCreationActivity(user);
                     return null;
@@ -135,15 +176,15 @@ public class AuthenticationActivity extends AppCompatActivity {
     /**
      * Launches the main activity when the user already has a profile
      *
-     * @param databaseUser: the user's profile from the database
+     * @param username: the user's name from the database
      */
-    private void launchMainActivity(User databaseUser) {
+    private void launchMainActivity(String username) {
         Intent postIntent = new Intent(AuthenticationActivity.this, MainActivity.class);
-        postIntent.putExtra("username", databaseUser.getUsername());
+        postIntent.putExtra("username", username);
         AuthenticationActivity.this.startActivity(postIntent);
     }
 
-    /**
+    /**s
      * Launches the profile creation activity when the user doesn't have one
      *
      * @param user: the authenticated user
