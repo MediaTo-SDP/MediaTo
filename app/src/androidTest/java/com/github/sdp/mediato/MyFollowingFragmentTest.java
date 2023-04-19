@@ -63,10 +63,10 @@ public class MyFollowingFragmentTest {
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
@@ -75,7 +75,7 @@ public class MyFollowingFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       myFollowingFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowingFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, myFollowingFragment)
               .commitAllowingStateLoss();
     });
   }
@@ -90,7 +90,7 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(700);
+    sleep(1000);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
@@ -109,7 +109,7 @@ public class MyFollowingFragmentTest {
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
+    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(700);
 

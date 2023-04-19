@@ -45,14 +45,14 @@ public class CreateProfileFragmentTest {
 
   @Before
   public void setUp() {
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the HomeFragment
+    // Set up the MainActivity to display the HomeFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       fragmentManager.beginTransaction()
-          .replace(R.id.fragment_container, new CreateProfileFragment("uid", "email@test.com"))
+          .replace(R.id.main_container, new CreateProfileFragment("uid", "email@test.com"))
           .commitAllowingStateLoss();
     });
   }
