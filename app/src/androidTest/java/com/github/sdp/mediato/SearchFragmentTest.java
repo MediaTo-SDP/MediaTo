@@ -7,7 +7,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
+import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.pressImeActionButton;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -23,11 +26,14 @@ import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.SearchFragment;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -38,6 +44,7 @@ public class SearchFragmentTest {
   User user1;
   User user2;
   User user3;
+  User user4;
 
 
   @Before
@@ -66,10 +73,17 @@ public class SearchFragmentTest {
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
+    user4 = new User.UserBuilder("uniqueId4")
+            .setUsername("oser_test_4")
+            .setEmail("email_test_3")
+            .setRegisterDate("19/03/2023")
+            .setLocation(new Location(3.14, 3.14))
+            .build();
 
     UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user4).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
     // Launch the MainActivity
     ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
@@ -87,7 +101,21 @@ public class SearchFragmentTest {
               .commitAllowingStateLoss();
     });
   }
+  @Test
+  public void testUserSearchWithEmptyString() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "user");
+    pressImeActionButton();
 
+    sleep(500);
+
+    clearText(androidx.appcompat.R.id.search_src_text);
+    pressImeActionButton();
+
+    sleep(500);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
   @Test
   public void testUserSearchWithUnknownUser() {
     clickOn(androidx.appcompat.R.id.search_button);
@@ -96,12 +124,7 @@ public class SearchFragmentTest {
 
     sleep(500);
 
-    onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText(R.string.searchUserFailed)))
-            .check(matches(isDisplayed()));
-
-    onView(withId(com.google.android.material.R.id.snackbar_action))
-            .perform(click());
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
 
   @Test
@@ -113,6 +136,20 @@ public class SearchFragmentTest {
     sleep(1000);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+  }
+
+  @Test
+  public void testUserSearchWithBeginningOfKnownUser() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "user");
+    pressImeActionButton();
+
+    sleep(1000);
+
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user4.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user1.getUsername());
   }
 
   @Test
