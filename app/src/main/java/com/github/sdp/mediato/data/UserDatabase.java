@@ -296,5 +296,33 @@ public class UserDatabase {
                 });
         return future;
     }
+
+    /**
+     * Gets all the users
+     * @param username of the reference user
+     * @return a completable future with a list of users containing all the user other than the
+     *          user itself.
+     */
+    static CompletableFuture<List<User>> getAllUser(String username) {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+        UserDatabase.database.getReference(DatabaseUtils.USERS_PATH).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot dataSnapshot = task.getResult();
+                List<User> allUsers = new ArrayList<>();
+                dataSnapshot.getChildren().forEach(
+                        userSnapshot -> {
+                            String userKey = userSnapshot.getKey();
+                            if (!userKey.equals(username)) {
+                                allUsers.add(userSnapshot.getValue(User.class));
+                            }
+                        }
+                );
+                future.complete(allUsers);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+        return future;
+    }
 }
 
