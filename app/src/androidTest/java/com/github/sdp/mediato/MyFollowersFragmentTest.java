@@ -79,22 +79,23 @@ public class MyFollowersFragmentTest {
 
   @Test
   public void testRecyclerViewWithNoneFollowing() {
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 0);
   }
 
   @Test
   public void testRecyclerViewWithTwoFollowings() {
+    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user2.getUsername(), user1.getUsername());
     UserDatabase.followUser(user3.getUsername(), user1.getUsername());
 
     sleep(500);
 
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 2);
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    assertNotDisplayed(R.id.searchUserAdapter_unfollowButton);
-    assertNotDisplayed(R.id.searchUserAdapter_followButton);
+    assertDisplayed(R.id.userAdapter_unfollowButton);
+    assertDisplayed(R.id.userAdapter_followButton);
   }
 
 }
