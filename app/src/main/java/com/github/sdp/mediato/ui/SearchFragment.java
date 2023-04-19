@@ -1,5 +1,6 @@
 package com.github.sdp.mediato.ui;
 
+import static com.github.sdp.mediato.data.UserDatabase.getAllUser;
 import static com.github.sdp.mediato.data.UserDatabase.getUser;
 
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.LocalFilmDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
@@ -26,7 +28,11 @@ import com.github.sdp.mediato.utility.adapters.UserAdapter;
 import com.github.sdp.mediato.utility.adapters.UserFollowAdapter;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
@@ -111,25 +117,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextSubmit(String s) {
-        if (s.length() > 0) {
-            //this.mTextView.setText("Results");
-            search(s);
-            //gridView.setAdapter(new MediaAdapter(this.getContext(), searchResults));
-
-            // toDO : call the search function
-            // toDO : update the GridView
-        }
+        search(s);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String s) {
-        if (s.length() > 0) {
-            // this.mTextView.setText("Suggested");
-            //search(s);
-            // toDO : call the search function
-            // toDO : update the GridView
-        }
+        search(s);
         return false;
     }
 
@@ -186,16 +180,25 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchUser(String toBeSearched) {
-        //TODO Use a search engine
-        getUser(toBeSearched).thenAccept(user -> {
-            List<User> users = new ArrayList<>();
-            users.add(user);
-            searchUserViewModel.setUserList(users);
-        }).exceptionally(throwable -> {
+        if (toBeSearched.length() > 0) {
+            getAllUser(USERNAME).thenAccept(users -> {
+                List<User> filteredUser = users.stream()
+                    .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
+                    .collect(Collectors.toList());
+                sortUsersByName(filteredUser);
+                searchUserViewModel.setUserList(filteredUser);
+            }).exceptionally(throwable -> {
+                searchUserViewModel.clearUserList();
+                displaySnackbar(R.string.searchUserFailed);
+                return null;
+            });
+        } else {
             searchUserViewModel.clearUserList();
-            displaySnackbar(R.string.searchUserFailed);
-            return null;
-        });
+        }
+    }
+
+    private static void sortUsersByName(List<User> userList) {
+        Collections.sort(userList, Comparator.comparing(u -> u.getUsername().toLowerCase()));
     }
 
     private void displaySnackbar(int msg) {

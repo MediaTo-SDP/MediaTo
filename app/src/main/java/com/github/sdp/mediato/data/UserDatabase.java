@@ -303,7 +303,7 @@ public class UserDatabase {
      * @return a completable future with a list of users containing all the user other than the
      *          user itself.
      */
-    static CompletableFuture<List<User>> getAllUser(String username) {
+    public static CompletableFuture<List<User>> getAllUser(String username) {
         CompletableFuture<List<User>> future = new CompletableFuture<>();
         UserDatabase.database.getReference(DatabaseUtils.USERS_PATH).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
