@@ -112,7 +112,7 @@ public class SearchFragmentTest {
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
   }
 
   @Test
@@ -123,20 +123,20 @@ public class SearchFragmentTest {
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_unfollowButton, R.string.searchUser_unfollow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton, R.string.searchUser_follow);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
   }
 }
 

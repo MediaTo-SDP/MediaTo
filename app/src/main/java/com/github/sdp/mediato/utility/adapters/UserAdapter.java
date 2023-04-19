@@ -88,10 +88,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            userProfileImageView = itemView.findViewById(R.id.searchUserAdapter_imageView);
-            userNameTextView = itemView.findViewById(R.id.searchUserAdapter_userName);
-            followButton = itemView.findViewById(R.id.searchUserAdapter_followButton);
-            unfollowButton = itemView.findViewById(R.id.searchUserAdapter_unfollowButton);
+            userProfileImageView = itemView.findViewById(R.id.userAdapter_imageView);
+            userNameTextView = itemView.findViewById(R.id.userAdapter_userName);
+            followButton = itemView.findViewById(R.id.userAdapter_followButton);
+            unfollowButton = itemView.findViewById(R.id.userAdapter_unfollowButton);
         }
     }
 

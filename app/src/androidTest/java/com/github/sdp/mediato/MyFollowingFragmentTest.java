@@ -109,7 +109,7 @@ public class MyFollowingFragmentTest {
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
+    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(700);
 
