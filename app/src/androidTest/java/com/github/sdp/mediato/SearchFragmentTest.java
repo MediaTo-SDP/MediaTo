@@ -84,10 +84,10 @@ public class SearchFragmentTest {
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user4).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       SearchFragment searchFragment = new SearchFragment();
@@ -96,7 +96,7 @@ public class SearchFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       searchFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, searchFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, searchFragment)
               .commitAllowingStateLoss();
     });
   }

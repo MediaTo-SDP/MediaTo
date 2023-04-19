@@ -36,6 +36,7 @@
     app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
   <ImageButton
     android:id="@+id/edit_button"
+    android:visibility="gone"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"

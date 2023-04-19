@@ -60,10 +60,10 @@ public class MyFollowersFragmentTest {
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
@@ -72,7 +72,7 @@ public class MyFollowersFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       myFollowersFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowersFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, myFollowersFragment)
               .commitAllowingStateLoss();
     });
   }
