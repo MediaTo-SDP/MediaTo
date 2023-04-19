@@ -35,7 +35,7 @@ public class MyFollowersFragment extends Fragment {
     myFollowersViewModel.setUserName(USERNAME);
 
     // Set the Search User RecyclerView with its adapter
-    RecyclerView recyclerView = view.findViewById(R.id.myFollowing_recyclerView);
+    RecyclerView recyclerView = view.findViewById(R.id.myFollowers_recyclerView);
     recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
     recyclerView.setAdapter(new UserAdapter(myFollowersViewModel));
 
