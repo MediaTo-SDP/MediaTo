@@ -1,60 +1,40 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.sdp.mediato.MainActivity;
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
-import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
-import com.github.sdp.mediato.ui.MyFollowersFragment;
-import com.github.sdp.mediato.ui.MyFollowingFragment;
-import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
- * A fragment that displays the user's profile information, including their profile picture,
- * username, and custom collections of their favorite media types. The profile picture can be edited
- * by the user.
+ * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
+ * - Button to edit the profile picture
+ * - Button to add new collections
+ * - Editable view of collections
  */
-public class ProfileFragment extends Fragment {
+public class MyProfileFragment extends BaseProfileFragment {
 
-  private ProfileViewModel viewModel;
   private PhotoPicker photoPicker;
   private ImageButton editButton;
-  private Button followingButton;
-  private Button followersButton;
   private Button addCollectionButton;
-  private TextView usernameView;
-  private ImageView profileImage;
-  private RecyclerView collectionListRecyclerView;
-  private CollectionListAdapter collectionlistAdapter;
-
-  // Used as a key to access the database
-  private static String USERNAME;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -68,49 +48,29 @@ public class ProfileFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_profile, container, false);
-    viewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
-    viewModel.setUsername(USERNAME);
+    viewModel = ((MainActivity) getActivity()).getCurrentUserViewModel();
 
-    // This function is a temporary fix. The delay of uploading the profile picture should be
-    // handled before we create the profile fragment (like with a loading screen). Ideally we
-    // could set viewModel.setProfilePic(bitmap) here
-    downloadProfilePicWithRetry(USERNAME);
+    // Initializes the profile header, based on USERNAME
+    View view = super.onCreateView(inflater, container, savedInstanceState);
 
     // Get all UI components
     editButton = view.findViewById(R.id.edit_button);
-    followingButton = view.findViewById(R.id.profile_following_button);
-    followersButton = view.findViewById(R.id.profile_followers_button);
     addCollectionButton = view.findViewById(R.id.add_collection_button);
-    usernameView = view.findViewById(R.id.username_text);
-    profileImage = view.findViewById(R.id.profile_image);
     collectionListRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
 
     // Initialize components
     photoPicker = setupPhotoPicker();
-    setupFollowingButton(followingButton);
-    setupFollowersButton(followersButton);
     collectionlistAdapter = setupCollections(collectionListRecyclerView);
     setupAddCollectionsButton(addCollectionButton);
 
     // Observe the view model's live data to update UI components
-    observeUsername();
-    observeProfilePic();
     observeCollections(collectionlistAdapter);
-    observeFollowingAndFollowersCount();
-    updateFollowingAndFollowersCount();
 
     return view;
   }
 
-  private void updateFollowingAndFollowersCount() {
-    UserDatabase.getUser(USERNAME).thenAccept(user -> {
-      viewModel.setFollowing(user.getFollowingCount());
-      viewModel.setFollowers(user.getFollowersCount());
-    });
-  }
-
-  private CollectionListAdapter setupCollections(RecyclerView recyclerView) {
+  @Override
+  public CollectionListAdapter setupCollections(RecyclerView recyclerView) {
     // Check if a collection is already in the viewModel, if not create the default one
     List<Collection> collections = viewModel.getCollections();
     if (collections == null) {
@@ -140,35 +100,13 @@ public class ProfileFragment extends Fragment {
   }
 
   private void setupAddCollectionsButton(Button addCollectionButton) {
+    addCollectionButton.setVisibility(View.VISIBLE);
     addCollectionButton.setOnClickListener(v -> showEnterCollectionNameDialog());
-  }
-
-  private void observeCollections(CollectionListAdapter collectionsAdapter) {
-    viewModel.getCollectionsLiveData()
-        .observe(getViewLifecycleOwner(), collections -> collectionsAdapter.notifyDataSetChanged());
-  }
-
-  private void observeUsername() {
-    viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(),
-        username -> usernameView.setText(username));
-  }
-
-  private void observeProfilePic() {
-    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(),
-        bitmap -> profileImage.setImageBitmap(bitmap));
-  }
-
-  private void observeFollowingAndFollowersCount() {
-    viewModel.getFollowersLiveData().observe(getViewLifecycleOwner(), followersCount -> {
-      followersButton.setText(followersCount + " " + getResources().getString(R.string.followers));
-    });
-    viewModel.getFollowingLiveData().observe(getViewLifecycleOwner(), followingCount -> {
-      followingButton.setText(followingCount + " " + getResources().getString(R.string.following));
-    });
   }
 
   private PhotoPicker setupPhotoPicker() {
     PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
+    editButton.setVisibility(View.VISIBLE);
 
     // On click on the edit button, open a photo picker to choose the profile image
     editButton.setOnClickListener(v -> {
@@ -181,14 +119,6 @@ public class ProfileFragment extends Fragment {
         }
     );
     return photoPicker;
-  }
-
-  private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(v -> switchFragment(new MyFollowingFragment()));
-  }
-  
-  private void setupFollowersButton(Button followersButton) {
-    followersButton.setOnClickListener(v -> switchFragment(new MyFollowersFragment()));
   }
 
   private void showEnterCollectionNameDialog() {
@@ -228,44 +158,6 @@ public class ProfileFragment extends Fragment {
     if (!viewModel.addCollection(collectionName)) {
       makeToast(toastDuplicateName);
     }
-  }
-
-  // TODO: Should be improved so it does not need to use the hardcoded retry
-  private void downloadProfilePicWithRetry(String username) {
-
-    CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(username);
-
-    // It would probably be better to do this directly in the database class
-    // (getProfilePic would return CompletableFuture<Bitmap>)
-    CompletableFuture<Bitmap> future = imageFuture.thenApply(imageBytes -> {
-      Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-      return bitmap;
-    });
-
-    future.thenAccept(bitmap -> {
-      // Try to set the profile pic
-      viewModel.setProfilePic(bitmap);
-    }).exceptionally(throwable -> {
-      // Could not download image, try again in 1 second
-      Handler handler = new Handler();
-      handler.postDelayed(() -> {
-        downloadProfilePicWithRetry(username);
-      }, 1000);
-
-      return null;
-    });
-  }
-
-  private void switchFragment(Fragment fragment) {
-    Bundle args = new Bundle();
-    args.putString("username", USERNAME);
-    fragment.setArguments(args);
-
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.addToBackStack(null);
-    fragmentTransaction.commit();
   }
 
   private void makeToast(String text) {

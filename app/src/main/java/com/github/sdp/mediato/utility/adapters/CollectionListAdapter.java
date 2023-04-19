@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.sdp.mediato.ProfileFragment.OnAddMediaButtonClickListener;
+import com.github.sdp.mediato.ui.MyProfileFragment.OnAddMediaButtonClickListener;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
+import com.google.android.material.internal.VisibilityAwareImageButton;
 import java.util.List;
 
 /**
@@ -29,13 +31,12 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
   private List<Collection> collections;
 
   public CollectionListAdapter(Context context, List<Collection> collections,
-      OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
+      @Nullable OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
     this.context = context;
     this.collections = collections;
     this.onAddMediaButtonClickListener = onAddMediaButtonClickListener;
   }
 
-  @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(context).inflate(R.layout.layout_collection, parent, false);
@@ -56,17 +57,23 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     SampleReviews s = new SampleReviews();
 
     // Set up the add button for the current collection
-    holder.addMediaButton.setOnClickListener(v -> {
+    if(onAddMediaButtonClickListener == null){
+      // if no click listener is passed, don't show the button
+      holder.addMediaButton.setVisibility(View.INVISIBLE);
+    }else{
+      holder.addMediaButton.setOnClickListener(v -> {
 
-      Review review = s.getMovieReview();
-      collection.addReview(review);
+        Review review = s.getMovieReview();
+        collection.addReview(review);
 
-      // Can be used to execute some code in the profilePage, such as updating the database
-      if (onAddMediaButtonClickListener != null) {
-        onAddMediaButtonClickListener.onAddMediaButtonClick(collection, review);
-      }
-      collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
-    });
+        // Can be used to execute some code in the profilePage, such as updating the database
+        if (onAddMediaButtonClickListener != null) {
+          onAddMediaButtonClickListener.onAddMediaButtonClick(collection, review);
+        }
+        collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
+      });
+    }
+
   }
 
   @Override
