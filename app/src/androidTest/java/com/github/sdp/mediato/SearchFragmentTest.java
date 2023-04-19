@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
@@ -145,8 +146,10 @@ public class SearchFragmentTest {
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.searchUserAdapter_userName, user3.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user4.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user1.getUsername());
   }
 
   @Test
