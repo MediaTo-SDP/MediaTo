@@ -9,6 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.pressImeActionButton;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -99,7 +100,21 @@ public class SearchFragmentTest {
               .commitAllowingStateLoss();
     });
   }
+  @Test
+  public void testUserSearchWithEmptyString() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "user");
+    pressImeActionButton();
 
+    sleep(500);
+
+    clearText(androidx.appcompat.R.id.search_src_text);
+    pressImeActionButton();
+
+    sleep(500);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
   @Test
   public void testUserSearchWithUnknownUser() {
     clickOn(androidx.appcompat.R.id.search_button);

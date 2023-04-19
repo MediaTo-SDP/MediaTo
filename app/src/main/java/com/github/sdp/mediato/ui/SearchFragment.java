@@ -187,10 +187,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                     .collect(Collectors.toList());
                 sortUsersByName(filteredUser);
                 searchUserViewModel.setUserList(filteredUser);
-            }).exceptionally(throwable -> {
-                searchUserViewModel.clearUserList();
-                displaySnackbar(R.string.searchUserFailed);
-                return null;
             });
         } else {
             searchUserViewModel.clearUserList();
@@ -199,20 +195,5 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private static void sortUsersByName(List<User> userList) {
         Collections.sort(userList, Comparator.comparing(u -> u.getUsername().toLowerCase()));
-    }
-
-    private void displaySnackbar(int msg) {
-        Snackbar snackbar = Snackbar.make(
-                getActivity().getWindow().getDecorView().findViewById(android.R.id.content),
-                msg,
-                Snackbar.LENGTH_SHORT
-        );
-        snackbar.setAction("Dismiss", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snackbar.dismiss();
-            }
-        });
-        snackbar.show();
     }
 }
