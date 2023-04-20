@@ -29,7 +29,7 @@ public class HomeFragmentTest {
   private final static int WAIT_TIME = 1000;
 
 
-  ActivityScenario<TestingActivity> scenario;
+  ActivityScenario<MainActivity> scenario;
   ViewInteraction trendingMovieButton = onView(withId(R.id.movie_trending));
   ViewInteraction trendingBookButton = onView(withId(R.id.books_trending));
   ViewInteraction trendingItems = onView(withId(R.id.trending_items));
