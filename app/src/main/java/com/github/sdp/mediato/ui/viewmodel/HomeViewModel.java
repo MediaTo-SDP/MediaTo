@@ -2,7 +2,6 @@ package com.github.sdp.mediato.ui.viewmodel;
 
 
 import android.app.Application;
-import android.system.ErrnoException;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -11,17 +10,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.cache.MediaCache;
+import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.model.media.Movie;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +32,7 @@ public class HomeViewModel extends AndroidViewModel {
     private final TheMovieDBAPI movieApi;
     private final GBookAPI bookApi;
     private MediaType currentType;
+    private MediaDao mediaDao;
 
     /**
      * Default constructor
@@ -63,9 +62,10 @@ public class HomeViewModel extends AndroidViewModel {
      * Get new books from the API (40 each call)
      */
     public void getBooks(){
-        bookApi.searchItems("potter", 40)
-                .thenApply(list ->
-                    list.stream().map(Book::new).collect(Collectors.toList()))
+        String searchTerm = "potter";
+        bookApi.searchItems(searchTerm, 40)
+                .thenApply(list -> (list.stream().map(Book::new).collect(Collectors.toList())))
+                .exceptionally( t -> MediaCache.getSearchedBooks(searchTerm, mediaDao))
                 .thenAccept(books -> updateMediaList(books, MediaType.BOOK));
     }
 
@@ -98,4 +98,7 @@ public class HomeViewModel extends AndroidViewModel {
             currentType = type;
     }
 
+    public void setMediaDao(MediaDao mediaDao){
+        this.mediaDao = mediaDao;
+    }
 }

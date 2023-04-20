@@ -11,8 +11,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.room.Room;
 
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.FragmentHomeBinding;
 import com.github.sdp.mediato.ui.viewmodel.HomeViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
@@ -24,6 +26,8 @@ public class HomeFragment extends Fragment {
   private HomeViewModel viewModel;
   private FragmentHomeBinding binding;
   private MediaListAdapter adapter;
+  AppCache globalCache;
+
 
 
   @Override
@@ -37,8 +41,12 @@ public class HomeFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    globalCache = Room.databaseBuilder(requireActivity().getApplicationContext(), AppCache.class, "global-cache")
+            .build();
+
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     viewModel.wipeOldData();
+    viewModel.setMediaDao(globalCache.mediaDao());
     adapter = new MediaListAdapter();
     binding.trendingItems.setAdapter(adapter);
 

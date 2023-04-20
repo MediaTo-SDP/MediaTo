@@ -75,4 +75,6 @@
 
   <string name="default_profile_pic">https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg</string>
 
+  <!-- String used by cache to easily store the trending output in the database -->
+  <string name="trending_dedup">LPGFtQHBtKHwhrEqNRPM</string>
 </resources>
