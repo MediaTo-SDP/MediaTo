@@ -38,12 +38,16 @@ public class HomeFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+    viewModel.wipeOldData();
     adapter = new MediaListAdapter();
     binding.trendingItems.setAdapter(adapter);
+
+
     binding.trendingItems.setLayoutManager(new GridLayoutManager(getContext(), 3));
     binding.trendingItems.setHasFixedSize(true);
-    viewModel.getMovies().observe(getViewLifecycleOwner(), adapter::submitList);
-
-
+    viewModel.getMedias().observe(getViewLifecycleOwner(), adapter::submitList);
+    binding.booksTrending.setOnClickListener(v -> viewModel.getBooks());
+    binding.movieTrending.setOnClickListener(v -> viewModel.getMovies());
+    binding.movieTrending.performClick();
   }
 }

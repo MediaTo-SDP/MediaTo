@@ -60,10 +60,10 @@ public class MyFollowersFragmentTest {
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
@@ -72,29 +72,30 @@ public class MyFollowersFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       myFollowersFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowersFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, myFollowersFragment)
               .commitAllowingStateLoss();
     });
   }
 
   @Test
   public void testRecyclerViewWithNoneFollowing() {
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 0);
   }
 
   @Test
   public void testRecyclerViewWithTwoFollowings() {
+    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user2.getUsername(), user1.getUsername());
     UserDatabase.followUser(user3.getUsername(), user1.getUsername());
 
     sleep(500);
 
-    assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 2);
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    assertNotDisplayed(R.id.searchUserAdapter_unfollowButton);
-    assertNotDisplayed(R.id.searchUserAdapter_followButton);
+    assertDisplayed(R.id.userAdapter_unfollowButton);
+    assertDisplayed(R.id.userAdapter_followButton);
   }
 
 }
