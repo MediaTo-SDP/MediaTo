@@ -60,11 +60,21 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(getString(R.string.google_id_token_key));
+        editor.remove(getString(R.string.google_access_token_key));
+        editor.remove(getString(R.string.username_key));
+
+        editor.apply();
+
+        setUpSignInButton();
 
         // Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
                 .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
+                .requestEmail()
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -86,6 +96,30 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     /**
+     * update the tokens in shared preferences
+     *
+     * @param idToken:     the id token
+     * @param accessToken: the access token
+     */
+    private void updatePreferencesToken(String idToken, String accessToken) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.google_id_token_key), idToken);
+        editor.putString(getString(R.string.google_access_token_key), accessToken);
+        editor.apply();
+    }
+
+    /**
+     * update the username in shared preferences
+     *
+     * @param username: the username
+     */
+    private void updatePreferencesUsername(String username) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.username_key), username);
+        editor.apply();
+    }
+
+    /**
      * Authenticates the user with the credentials in the SharedPreferences if possible.
      * Otherwise, sets up the sign-in button.
      *
@@ -100,11 +134,9 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .addOnSuccessListener(authResult -> {
                     FirebaseUser user = Objects.requireNonNull(authResult.getUser()); // if successful, we store the username and launch the main activity
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     UserDatabase.getUserByEmail(user.getEmail())
                             .thenAccept(u -> {
-                                editor.putString(getString(R.string.username_key), u.getUsername());
-                                editor.apply();
+                                updatePreferencesUsername(u.getUsername());
                             });
 
                     launchPostActivity(user);
@@ -165,22 +197,21 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .addOnCompleteListener(authResult -> {
                     // if the login is successful, we get the tokens from the user account
                     FirebaseUser currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
+                    currentUser.updateEmail(Objects.requireNonNull(account.getEmail()));
+
                     String idToken = account.getIdToken();
                     String accessToken = account.getServerAuthCode();
 
                     // and we save them to SharedPreferences
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(getString(R.string.google_id_token_key), idToken);
-                    editor.putString(getString(R.string.google_access_token_key), accessToken);
+                    updatePreferencesToken(idToken, accessToken);
 
                     // finally, we need to save the username, which is done by querying the database to give it using the email
                     UserDatabase.getUserByEmail(currentUser.getEmail())
                             .thenAccept(user -> {
-                                editor.putString(getString(R.string.username_key), user.getUsername());
-                                editor.apply();
+                                updatePreferencesUsername(user.getUsername());
                             });
 
-                    editor.apply();
+
                     launchPostActivity(currentUser);
 
                 })
@@ -223,6 +254,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     private void launchProfileCreationActivity(FirebaseUser user) {
         Intent postIntent = new Intent(AuthenticationActivity.this, NewProfileActivity.class);
+
         postIntent.putExtra("uid", user.getUid());
         postIntent.putExtra("email", user.getEmail());
         AuthenticationActivity.this.startActivity(postIntent);

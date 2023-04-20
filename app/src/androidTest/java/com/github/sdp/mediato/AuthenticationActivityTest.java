@@ -135,22 +135,26 @@ public class AuthenticationActivityTest {
      */
     @Test
     public void testSignInWorks() {
-        clearSharedPreferences();
 
         login();
-        ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
-        loginButton.perform(click());
+        UserDatabase.addUser(databaseUser).thenAccept(u -> {
+            UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(u1 -> {
+                ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
+                loginButton.perform(click());
 
-        // select the account if google account selector pops up
-        try {
-            device.findObject(By.textContains("@")).click();
-        } catch (NullPointerException e) {
-            System.out.println("Object wasn't found");
-        }
+                // select the account if google account selector pops up
+                try {
+                    device.findObject(By.textContains("@")).click();
+                } catch (NullPointerException e) {
+                    System.out.println("Object wasn't found");
+                }
 
-        Intents.intended(hasComponent(NewProfileActivity.class.getName()));
+                Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
-        logout();
+                UserDatabase.deleteUser(databaseUser.getUsername());
+                logout();
+            });
+        });
     }
 
     /**
@@ -224,6 +228,9 @@ public class AuthenticationActivityTest {
     @After
     public void releaseIntents() {
         release();
+        clearSharedPreferences();
+
+
     }
 
     private void clearSharedPreferences() {
