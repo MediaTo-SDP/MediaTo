@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class UserViewModel extends ViewModel {
     protected final MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
@@ -61,4 +64,24 @@ public abstract class UserViewModel extends ViewModel {
     }
 
     public abstract void reloadUser();
+
+    /**
+     * Updates the user's "following" or "followers" list by loading all their followed users
+     * from the database.
+     */
+    public void reloadFollowingFollower(List<String> listFollowingFollowerUsername) {
+        clearUserList();
+        List<User> listUser = new ArrayList<>();
+        CompletableFuture[] futures = new CompletableFuture[listFollowingFollowerUsername.size()];
+        int i = 0;
+
+        Collections.sort(listFollowingFollowerUsername);
+
+        for (String username : listFollowingFollowerUsername) {
+            futures[i++] = UserDatabase.getUser(username).thenAccept(listUser::add);
+        }
+
+        // Wait for all the CompletableFuture to complete
+        CompletableFuture.allOf(futures).thenRun(() -> setUserList(listUser));
+    }
 }

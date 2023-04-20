@@ -41,7 +41,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchuser_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_user_item, parent, false);
         return new UserViewHolder(view);
     }
 
@@ -88,10 +88,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            userProfileImageView = itemView.findViewById(R.id.searchUserAdapter_imageView);
-            userNameTextView = itemView.findViewById(R.id.searchUserAdapter_userName);
-            followButton = itemView.findViewById(R.id.searchUserAdapter_followButton);
-            unfollowButton = itemView.findViewById(R.id.searchUserAdapter_unfollowButton);
+            userProfileImageView = itemView.findViewById(R.id.userAdapter_imageView);
+            userNameTextView = itemView.findViewById(R.id.userAdapter_userName);
+            followButton = itemView.findViewById(R.id.userAdapter_followButton);
+            unfollowButton = itemView.findViewById(R.id.userAdapter_unfollowButton);
         }
     }
 
@@ -119,4 +119,3 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 });
     }
 }
-
