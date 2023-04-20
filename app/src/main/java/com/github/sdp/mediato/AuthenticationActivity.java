@@ -62,29 +62,26 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         setUpSignInButton();
 
-        // Configure Google Sign-In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
-                .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
-                .requestEmail()
-                .build();
+        checkSavedCredentialsAndConnection();
+        setUpSignInButton();
+    }
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
+    /**
+     * Checks if credentials already exists or if the user is offline
+     */
+    private void checkSavedCredentialsAndConnection() {
         // Check if there is a saved id token, authentication token and username
         String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
         String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
         String username = sharedPreferences.getString(getString(R.string.username_key), "");
 
-        if (!idToken.isEmpty() && !accessToken.isEmpty()) { // there is no saved login, do nothing
-            if (isNetworkAvailable(this)) { // if we have internet connection, connect using tokens
+        if (!idToken.isEmpty() && !accessToken.isEmpty()) {
+            if (isNetworkAvailable(this)) {
                 authenticateUserWithCredentials(idToken, accessToken);
-            } else if (!username.isEmpty()) { // if we don't, show the user's profile using the username (offline mode)
-                // Authenticate user using stored username
+            } else if (!username.isEmpty()) {
                 launchMainActivity(username);
             }
         }
-        setUpSignInButton();
     }
 
     /**
