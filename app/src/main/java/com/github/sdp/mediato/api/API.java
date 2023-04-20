@@ -1,7 +1,5 @@
 package com.github.sdp.mediato.api;
 
-import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -10,9 +8,10 @@ public interface API<T> {
 
     CompletableFuture<List<T>> searchItems(String s, int count);
 
-    CompletableFuture<List<T>> trending(int count);
+    // Removed since the book API does not provide a trending feature. Might be added again later
+    // CompletableFuture<List<T>> trending(int count);
 
-    CompletableFuture<T> get(int id);
+    CompletableFuture<T> get(String id);
 
     default void clearCache(){ }
 }

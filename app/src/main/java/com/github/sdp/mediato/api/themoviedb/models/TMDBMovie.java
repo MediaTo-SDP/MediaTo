@@ -3,7 +3,7 @@ package com.github.sdp.mediato.api.themoviedb.models;
 import java.util.List;
 
 /**
- * Class used by the retrofit library to store the movies returned by TheMovieDB api.
+ * Class used by the retrofit library to store the movies returned by TheMovieDBRetrofitInterface api.
  */
 public final class TMDBMovie {
     private static final String POSTER_URL = "https://image.tmdb.org/t/p/original";
@@ -24,6 +24,9 @@ public final class TMDBMovie {
     private boolean video;
     private double voteAverage;
 
+    private TMDBMovie(){
+        // Not possible to create a custom GoogleBook
+    }
     public String getRelease_date() {
         return release_date;
     }
