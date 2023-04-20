@@ -57,16 +57,8 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.remove(getString(R.string.google_id_token_key));
-        editor.remove(getString(R.string.google_access_token_key));
-        editor.remove(getString(R.string.username_key));
-
-        editor.apply();
 
         setUpSignInButton();
 
