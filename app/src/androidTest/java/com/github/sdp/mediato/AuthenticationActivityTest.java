@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.init;
@@ -8,6 +9,9 @@ import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
@@ -131,6 +135,7 @@ public class AuthenticationActivityTest {
      */
     @Test
     public void testSignInWorks() {
+        clearSharedPreferences();
 
         login();
         ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
@@ -219,6 +224,19 @@ public class AuthenticationActivityTest {
     @After
     public void releaseIntents() {
         release();
+    }
+
+    private void clearSharedPreferences() {
+        Context context = ApplicationProvider.getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(String.valueOf(R.string.login_shared_preferences), MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(String.valueOf(R.string.google_id_token_key));
+        editor.remove(String.valueOf(R.string.google_access_token_key));
+        editor.remove(String.valueOf(R.string.username_key));
+
+        editor.apply();
     }
 
 }

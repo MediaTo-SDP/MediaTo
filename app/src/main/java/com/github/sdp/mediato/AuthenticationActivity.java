@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.sdp.mediato.data.UserDatabase;
-import com.github.sdp.mediato.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,75 +32,104 @@ import java.util.Objects;
 public class AuthenticationActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
+
     // Sign-in launcher callback for button, calls onSignInResult
     private final ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), this::onSignInResult);
     private GoogleSignInClient googleSignInClient;
+
+    /**
+     * Checks if there is a network connection available.
+     *
+     * @param context: the context of the calling activity
+     * @return true if there is an active network connection, false otherwise
+     */
+    private static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
+
         // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("mySharedPreferences", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
 
         // Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
                 .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
-                .requestEmail()
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Check if there is a saved authentication token
-        // Check if there is a saved authentication token and username
-        String idToken = sharedPreferences.getString("google_id_token", "");
-        String accessToken = sharedPreferences.getString("google_access_token", "");
-        String username = sharedPreferences.getString("username", "");
+        // Check if there is a saved id token, authentication token and username
+        String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
+        String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
+        String username = sharedPreferences.getString(getString(R.string.username_key), "");
 
-        if (!idToken.isEmpty() && !accessToken.isEmpty()) {
-            if (isNetworkAvailable(this)) {
-                // Authenticate user with Firebase
-                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
-                FirebaseAuth.getInstance().signInWithCredential(credential)
-                        .addOnSuccessListener(authResult -> {
-                            FirebaseUser user = authResult.getUser();
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            UserDatabase.getUserByEmail(user.getEmail())
-                                    .thenAccept(u -> {
-                                        editor.putString("username", u.getUsername());
-                                        editor.apply();
-                                    });
-
-                            launchPostActivity(user);
-                        })
-                        .addOnFailureListener(e -> {
-                            // If authentication fails, remove the saved authentication credential
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.remove("credential");
-                            editor.apply();
-                            setUpSignInButton();
-                        });
-            } else if (!username.isEmpty()) {
+        if (!idToken.isEmpty() && !accessToken.isEmpty()) { // there is no saved login, do nothing
+            if (isNetworkAvailable(this)) { // if we have internet connection, connect using tokens
+                authenticateUserWithCredentials(idToken, accessToken);
+            } else if (!username.isEmpty()) { // if we don't, show the user's profile using the username (offline mode)
                 // Authenticate user using stored username
                 launchMainActivity(username);
-            } else {
-                // No saved authentication token or username, show sign-in button
-                setUpSignInButton();
             }
-        } else {
-            // No saved authentication token, show sign-in button
-            setUpSignInButton();
         }
-
+        setUpSignInButton();
     }
 
+    /**
+     * Authenticates the user with the credentials in the SharedPreferences if possible.
+     * Otherwise, sets up the sign-in button.
+     *
+     * @param idToken:     the ID token of the user
+     * @param accessToken: the access token of the user
+     */
+    private void authenticateUserWithCredentials(String idToken, String accessToken) {
+        // Authenticate user with Firebase
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
+
+        FirebaseAuth.getInstance().signInWithCredential(credential) // we try to sign in using the tokens
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser user = Objects.requireNonNull(authResult.getUser()); // if successful, we store the username and launch the main activity
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    UserDatabase.getUserByEmail(user.getEmail())
+                            .thenAccept(u -> {
+                                editor.putString(getString(R.string.username_key), u.getUsername());
+                                editor.apply();
+                            });
+
+                    launchPostActivity(user);
+                })
+                .addOnFailureListener(e -> {
+                    // If authentication fails, remove the saved authentication credential
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.remove(getString(R.string.google_id_token_key));
+                    editor.remove(getString(R.string.google_access_token_key));
+                    editor.remove(getString(R.string.username_key));
+
+                    editor.apply();
+
+                    setUpSignInButton();
+                });
+    }
+
+    /**
+     * Sets up the sign in button
+     */
     private void setUpSignInButton() {
         // We assign a callback to Google sign in button
         findViewById(R.id.google_sign_in).setOnClickListener(view -> {
-            Intent signInIntent = googleSignInClient.getSignInIntent();
+            Intent signInIntent = googleSignInClient.getSignInIntent(); // if the button is clicked, try to sign in
             googleSignInActivityResultLauncher.launch(signInIntent);
         });
     }
@@ -115,7 +143,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
             try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
+                GoogleSignInAccount account = task.getResult(ApiException.class); // get the user's google account and login with it
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 throw new RuntimeException(e); // Handle Google Sign-In error
@@ -123,39 +151,42 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Authenticates the user in firebase with Google sign-in
+     *
+     * @param account: the account of the user
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+
+        // we try to sign in using the credentials of the google account
         FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(authResult -> {
-                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                    if (currentUser != null) {
-                        String idToken = account.getIdToken();
-                        String accessToken = account.getServerAuthCode();
-                        // Save the Google ID token and access token to SharedPreferences
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("google_id_token", idToken);
-                        editor.putString("google_access_token", accessToken);
-                        UserDatabase.getUserByEmail(currentUser.getEmail())
-                                .thenAccept(user -> {
-                                    editor.putString("username", user.getUsername());
-                                    editor.apply();
-                                });
+                    // if the login is successful, we get the tokens from the user account
+                    FirebaseUser currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser());
+                    String idToken = account.getIdToken();
+                    String accessToken = account.getServerAuthCode();
 
-                        editor.apply();
-                        launchPostActivity(currentUser);
-                    }
+                    // and we save them to SharedPreferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(getString(R.string.google_id_token_key), idToken);
+                    editor.putString(getString(R.string.google_access_token_key), accessToken);
+
+                    // finally, we need to save the username, which is done by querying the database to give it using the email
+                    UserDatabase.getUserByEmail(currentUser.getEmail())
+                            .thenAccept(user -> {
+                                editor.putString(getString(R.string.username_key), user.getUsername());
+                                editor.apply();
+                            });
+
+                    editor.apply();
+                    launchPostActivity(currentUser);
+
                 })
                 .addOnFailureListener(e -> {
-                    // Handle error getting ID token
+                    throw new RuntimeException(e);
                 });
-    }
-
-    private static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     /**
@@ -184,7 +215,8 @@ public class AuthenticationActivity extends AppCompatActivity {
         AuthenticationActivity.this.startActivity(postIntent);
     }
 
-    /**s
+    /**
+     * s
      * Launches the profile creation activity when the user doesn't have one
      *
      * @param user: the authenticated user
