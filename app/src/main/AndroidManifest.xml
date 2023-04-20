@@ -11,7 +11,7 @@
         android:icon="@drawable/movie1"
         android:label="@string/mt_app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MediaTo"
+        android:theme="@style/Theme.one"
         android:windowSoftInputMode="adjustResize"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">

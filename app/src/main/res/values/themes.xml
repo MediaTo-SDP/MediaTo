@@ -16,6 +16,22 @@
         <item name="android:textColor">@color/darkgray</item>
     </style>
 
+    <style name="Theme.one" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/one_main</item>
+        <item name="colorPrimaryVariant">@color/one_main</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/one_sec</item>
+        <item name="colorSecondaryVariant">@color/one_sec</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/one_bright</item>
+        <item name="android:textColor">@color/one_dark</item>
+    </style>
+
     <style name="Widget.MediaTo.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimaryVariant</item>
         <item name="android:theme">?theme</item>
