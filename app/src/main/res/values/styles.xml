@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="CustomBottomBarTheme" parent="Widget.MaterialComponents.BottomAppBar.PrimarySurface">
-    <item name="android:backgroundTint">@color/one_dark</item>
+    <item name="android:backgroundTint">@color/theme_dark</item>
 
   </style>
 

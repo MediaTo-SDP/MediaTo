@@ -18,8 +18,8 @@
 
     <style name="Theme.one" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/one_main</item>
-        <item name="colorPrimaryVariant">@color/one_main</item>
+        <item name="colorPrimary">@color/theme_main</item>
+        <item name="colorPrimaryVariant">@color/theme_main</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/one_sec</item>
@@ -28,8 +28,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/one_bright</item>
-        <item name="android:textColor">@color/one_dark</item>
+        <item name="android:windowBackground">@color/theme_bright</item>
+        <item name="android:textColor">@color/theme_dark</item>
     </style>
 
     <style name="Widget.MediaTo.Toolbar" parent="Widget.AppCompat.Toolbar">
