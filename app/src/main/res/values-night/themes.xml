@@ -22,8 +22,8 @@
         <item name="colorPrimaryVariant">@color/theme_main</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/theme_dark</item>
-        <item name="colorSecondaryVariant">@color/theme_dark</item>
+        <item name="colorSecondary">@color/theme_middle</item>
+        <item name="colorSecondaryVariant">@color/theme_middle</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/black</item>
