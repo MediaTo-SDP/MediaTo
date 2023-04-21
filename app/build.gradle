@@ -105,6 +105,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
+    // gps interaction package
+    implementation "com.google.android.gms:play-services-location:17.0.0"
 }
 
 tasks.withType(Test) {
