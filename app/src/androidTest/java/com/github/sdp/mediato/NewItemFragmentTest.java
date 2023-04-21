@@ -10,6 +10,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -142,6 +143,7 @@ public class NewItemFragmentTest {
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
+        addItemButton.check(matches(isCompletelyDisplayed()));
         addItemButton.perform(click());
         //activity.addItem();
 
@@ -156,6 +158,7 @@ public class NewItemFragmentTest {
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
+        addItemButton.check(matches(isCompletelyDisplayed()));
         addItemButton.perform(click());
         //activity.addItem();
 
