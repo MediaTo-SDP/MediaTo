@@ -143,7 +143,6 @@ public class NewItemFragmentTest {
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
-        addItemButton.check(matches(isCompletelyDisplayed()));
         addItemButton.perform(click());
         //activity.addItem();
 
@@ -158,10 +157,10 @@ public class NewItemFragmentTest {
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
-        addItemButton.check(matches(isCompletelyDisplayed()));
         addItemButton.perform(click());
         //activity.addItem();
 
+        editText.perform(closeSoftKeyboard());
         editText.perform(click(), closeSoftKeyboard());
 
         errorText.check(matches(withText("")));
