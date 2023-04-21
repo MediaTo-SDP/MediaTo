@@ -46,7 +46,6 @@ public class SearchFragmentTest {
   User user3;
   User user4;
 
-
   @Before
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
