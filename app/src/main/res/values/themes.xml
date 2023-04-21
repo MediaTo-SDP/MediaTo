@@ -22,14 +22,14 @@
         <item name="colorPrimaryVariant">@color/theme_main</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/one_sec</item>
-        <item name="colorSecondaryVariant">@color/one_sec</item>
+        <item name="colorSecondary">@color/theme_secondary</item>
+        <item name="colorSecondaryVariant">@color/theme_secondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/theme_bright</item>
-        <item name="android:textColor">@color/theme_dark</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Widget.MediaTo.Toolbar" parent="Widget.AppCompat.Toolbar">

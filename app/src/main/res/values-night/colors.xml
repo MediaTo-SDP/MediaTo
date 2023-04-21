@@ -12,9 +12,8 @@
   <color name="transparent">#00FFFFFF</color>
 
   <color name="theme_main">#E45744</color>
-  <color name="one_sec">#FF7A7B75</color>
-  <color name="theme_dark">#FF21201E</color>
-  <color name="theme_middle">#373431</color>
+  <color name="theme_secondary">#FF21201E</color>
+  <color name="theme_grey">#373431</color>
   <color name="theme_bright">#FFFFFF</color>
 
   <color name="colorPrimary">@color/theme_main</color>

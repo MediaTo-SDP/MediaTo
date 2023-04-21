@@ -22,13 +22,13 @@
         <item name="colorPrimaryVariant">@color/theme_main</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/theme_middle</item>
-        <item name="colorSecondaryVariant">@color/theme_middle</item>
+        <item name="colorSecondary">@color/theme_grey</item>
+        <item name="colorSecondaryVariant">@color/theme_grey</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/theme_middle</item>
+        <item name="android:windowBackground">@color/theme_grey</item>
         <item name="android:textColor">@color/white</item>
     </style>
 </resources>

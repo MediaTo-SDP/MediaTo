@@ -3,7 +3,7 @@
   android:id="@+id/profile_header"
   android:layout_width="match_parent"
   android:layout_height="160dp"
-  android:background="@color/theme_dark"
+  android:background="@color/theme_secondary"
   app:layout_constraintBottom_toBottomOf="parent"
   app:layout_constraintLeft_toLeftOf="parent"
   app:layout_constraintRight_toRightOf="parent"
@@ -18,7 +18,7 @@
     android:backgroundTint="@color/white"
     android:text="@string/following"
     android:textAllCaps="false"
-    android:textColor="@color/theme_middle"
+    android:textColor="@color/theme_grey"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toStartOf="@+id/username_text" />
 
@@ -31,7 +31,7 @@
     android:backgroundTint="@color/white"
     android:text="@string/followers"
     android:textAllCaps="false"
-    android:textColor="@color/theme_middle"
+    android:textColor="@color/theme_grey"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
   <ImageButton
