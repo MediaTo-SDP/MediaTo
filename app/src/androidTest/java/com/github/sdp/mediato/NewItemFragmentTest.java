@@ -90,7 +90,7 @@ public class NewItemFragmentTest {
 
             bundle.putSerializable("media", review.getMedia());
             newItemFragment.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, newItemFragment)
+            fragmentManager.beginTransaction().replace(R.id.main_container, newItemFragment)
                     .commitAllowingStateLoss();
         });
     }
