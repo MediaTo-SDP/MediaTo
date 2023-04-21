@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CollectionTests {
-    private static final Map<String, Review> reviews = new HashMap<>();
-    private static final String SAMPLE_TITLE = "Harry Potter";
-    private static final String SAMPLE_DESCRIPTION = "Description";
-    private static final String SAMPLE_URL = "Url";
-    private static final int SAMPLE_ID = 1;
+    private static Map<String, Review> reviews = new HashMap<>();
+    private static String SAMPLE_TITLE = "Harry Potter";
+    private static String SAMPLE_DESCRIPTION = "Description";
+    private static String SAMPLE_URL = "Url";
+    private static int SAMPLE_ID = 1;
 
-    private static final String SAMPLE_USERNAME = "testUser";
+    private static String SAMPLE_USERNAME = "testUser";
     private static final Movie SAMPLE_MOVIE = new Movie(SAMPLE_TITLE , SAMPLE_DESCRIPTION, SAMPLE_URL, SAMPLE_ID);
 
     @BeforeClass

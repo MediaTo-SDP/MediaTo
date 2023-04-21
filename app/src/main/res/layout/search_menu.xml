@@ -6,18 +6,18 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#a6a29b">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:background="@color/colorPrimary">
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchactivity_searchview_searchbar"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:layout_marginBottom="0dp" />
+          android:id="@+id/searchactivity_searchview_searchbar"
+          android:visibility="visible"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="4dp"
+          android:layout_marginBottom="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,44 +29,44 @@
             android:layout_marginTop="0dp">
 
             <Button
-                android:id="@+id/searchactivity_setCategorie_people"
-                android:text="@string/search_category_people"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="#0b1a33"
-                android:padding="0dp"
-                style="?android:attr/buttonBarButtonStyle" />
+              android:id="@+id/searchactivity_setCategorie_people"
+              android:text="@string/search_category_people"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@android:color/transparent"
+              android:textColor="?attr/colorOnPrimary"
+              android:padding="0dp"
+              style="?android:attr/buttonBarButtonStyle" />
 
             <Button
-                android:id="@+id/searchactivity_setCategorie_books"
-                android:text="@string/search_category_books"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="#0b1a33"
-                android:padding="0dp"
-                style="?android:attr/buttonBarButtonStyle" />
+              android:id="@+id/searchactivity_setCategorie_books"
+              android:text="@string/search_category_books"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@android:color/transparent"
+              android:textColor="?attr/colorOnPrimary"
+              android:padding="0dp"
+              style="?android:attr/buttonBarButtonStyle" />
 
             <Button
-                android:id="@+id/searchactivity_setCategorie_film"
-                android:text="@string/search_category_movies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="#0b1a33"
-                android:padding="0dp"
-                style="?android:attr/buttonBarButtonStyle" />
+              android:id="@+id/searchactivity_setCategorie_film"
+              android:text="@string/search_category_movies"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@android:color/transparent"
+              android:textColor="?attr/colorOnPrimary"
+              android:padding="0dp"
+              style="?android:attr/buttonBarButtonStyle" />
 
             <Button
-                android:id="@+id/searchactivity_setCategorie_music"
-                android:text="@string/search_category_music"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="#0b1a33"
-                android:padding="0dp"
-                style="?android:attr/buttonBarButtonStyle" />
+              android:id="@+id/searchactivity_setCategorie_music"
+              android:text="@string/search_category_music"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@android:color/transparent"
+              android:textColor="?attr/colorOnPrimary"
+              android:padding="0dp"
+              style="?android:attr/buttonBarButtonStyle" />
         </LinearLayout>
     </LinearLayout>
 

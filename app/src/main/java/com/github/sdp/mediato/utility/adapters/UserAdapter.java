@@ -1,7 +1,7 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.utility.adapters;
 
-import static com.github.sdp.mediato.data.Database.followUser;
-import static com.github.sdp.mediato.data.Database.unfollowUser;
+import static com.github.sdp.mediato.data.UserDatabase.followUser;
+import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,43 +16,44 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 
 import java.util.concurrent.CompletableFuture;
 
 
-public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.UserViewHolder> {
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private final SearchUserViewModel searchUserViewModel;
+    private final UserViewModel userViewModel;
 
-    public SearchUserAdapter(SearchUserViewModel searchUserViewModel) {
-        this.searchUserViewModel = searchUserViewModel;
+    public UserAdapter(UserViewModel userViewModel) {
+        this.userViewModel = userViewModel;
 
         // Refresh when follow or unfollow
-        searchUserViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
+        this.userViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
 
         // Refresh when new search
-        searchUserViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
+        this.userViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
     }
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchuser_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_user_item, parent, false);
         return new UserViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = searchUserViewModel.getUserListLiveData().getValue().get(position);
+        User user = userViewModel.getUserListLiveData().getValue().get(position);
         holder.userNameTextView.setText(user.getUsername());
 
         downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
 
         // Decide which button to display
-        if(searchUserViewModel.getUser().getFollowing().contains(user.getUsername())) {
+        if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.VISIBLE);
         } else {
@@ -61,21 +62,21 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
 
         holder.followButton.setOnClickListener(v -> {
-                    followUser(searchUserViewModel.getUserName(), user.getUsername());
-                    searchUserViewModel.reloadUser();
+                    followUser(userViewModel.getUserName(), user.getUsername());
+                    userViewModel.reloadUser();
                 }
         );
 
         holder.unfollowButton.setOnClickListener(v -> {
-                    unfollowUser(searchUserViewModel.getUserName(), user.getUsername());
-                    searchUserViewModel.reloadUser();
+                    unfollowUser(userViewModel.getUserName(), user.getUsername());
+                    userViewModel.reloadUser();
                 }
         );
     }
 
     @Override
     public int getItemCount() {
-        return searchUserViewModel.getUserList().size();
+        return userViewModel.getUserList().size();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
@@ -87,17 +88,17 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            userProfileImageView = itemView.findViewById(R.id.searchUserAdapter_imageView);
-            userNameTextView = itemView.findViewById(R.id.searchUserAdapter_userName);
-            followButton = itemView.findViewById(R.id.searchUserAdapter_followButton);
-            unfollowButton = itemView.findViewById(R.id.searchUserAdapter_unfollowButton);
+            userProfileImageView = itemView.findViewById(R.id.userAdapter_imageView);
+            userNameTextView = itemView.findViewById(R.id.userAdapter_userName);
+            followButton = itemView.findViewById(R.id.userAdapter_followButton);
+            unfollowButton = itemView.findViewById(R.id.userAdapter_unfollowButton);
         }
     }
 
     // TODO: Should be improved so it does not need to use the hardcoded retry
     private void downloadProfilePicWithRetry(ImageView userProfileImageView, String userName) {
 
-        CompletableFuture<byte[]> imageFuture = Database.getProfilePic(userName);
+        CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(userName);
 
         // It would probably be better to do this directly in the database class
         // (getProfilePic would return CompletableFuture<Bitmap>)
@@ -118,4 +119,3 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
                 });
     }
 }
-

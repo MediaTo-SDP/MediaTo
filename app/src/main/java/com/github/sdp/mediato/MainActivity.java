@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.HomeFragment;
+import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.github.sdp.mediato.ui.SearchFragment;
+import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
@@ -17,8 +21,11 @@ import com.github.sdp.mediato.ui.HomeFragment;
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
   ActivityMainBinding binding;
-  ProfileFragment profileFragment;
+  MyProfileFragment myProfileFragment;
   SearchFragment searchFragment;
+
+  private ProfileViewModel currentUserViewModel;
+  private ProfileViewModel otherUsersViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Choose the default fragment that opens on creation of the MainActivity
     setDefaultFragment();
+
+    // Initialize the ViewModels
+    currentUserViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+    otherUsersViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
     // Set the bottomNavigationView
     binding.bottomNavigationView.setBackground(null);
@@ -43,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     } else if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
-      replaceFragment(profileFragment);
+      replaceFragment(myProfileFragment);
     }
 
     return true;
@@ -62,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
    * already logged in.
    */
   private void setDefaultFragment() {
-    profileFragment = new ProfileFragment();
+    myProfileFragment = new MyProfileFragment();
     searchFragment = new SearchFragment();
 
     // Get the username set by the profile creation activity
@@ -72,12 +83,20 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
     searchFragment.setArguments(args);
-    profileFragment.setArguments(args);
+    myProfileFragment.setArguments(args);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
 
-    replaceFragment(profileFragment);
+    replaceFragment(myProfileFragment);
+  }
+
+  public ProfileViewModel getCurrentUserViewModel(){
+    return currentUserViewModel;
+  }
+
+  public ProfileViewModel getOtherUsersViewModel(){
+    return otherUsersViewModel;
   }
 
   @Override

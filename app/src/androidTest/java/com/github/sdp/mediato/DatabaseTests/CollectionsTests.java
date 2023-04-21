@@ -6,7 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+<<<<<<< HEAD
 import com.github.sdp.mediato.data.Database;
+=======
+import com.github.sdp.mediato.data.CollectionsDatabase;
+import com.github.sdp.mediato.data.UserDatabase;
+>>>>>>> main
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -60,10 +65,10 @@ public class CollectionsTests {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            Database.database.useEmulator("10.0.2.2", 9000);
+            UserDatabase.database.useEmulator("10.0.2.2", 9000);
         } catch (Exception ignored) {
         }
-        Database.addUser(user1).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.addUser(user1).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         reviews1.put(review1.getMedia().getTitle(), review1);
         reviews2.put(review2.getMedia().getTitle(), review2);
         collection1 = new Collection("MyHighlights", reviews1);
@@ -72,18 +77,18 @@ public class CollectionsTests {
 
     @AfterClass
     public static void cleanDatabase() {
-      Database.database.getReference().setValue(null);
+      UserDatabase.database.getReference().setValue(null);
     }
 
     @Test
     //Tests that the collections are added, retrieved and removed properly
-    public void addsRetrievesAndRemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
+    public void addsAndRetrievesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
         //Adds the collection
-        Database.addCollection(user1.getUsername(), collection1);
+        CollectionsDatabase.addCollection(user1.getUsername(), collection1);
         Thread.sleep(1000);
 
         //Test retrieving the collection
-        Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection1.getCollectionName())
+        Collection retrievedCollection = CollectionsDatabase.getCollection(user1.getUsername(), collection1.getCollectionName())
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         assertEquals(collection1.getCollectionName(), retrievedCollection.getCollectionName());
         assertEquals(collection1.getCollectionType(), retrievedCollection.getCollectionType());
@@ -93,29 +98,34 @@ public class CollectionsTests {
         assertEquals(review1.getUsername(), retrievedReview.getUsername());
         assertEquals(review1.getComment(), retrievedReview.getComment());
         assertEquals(review1.getGrade(), retrievedReview.getGrade());
+    }
 
+    @Test
+    //Tests that the collections are removed properly
+    public void RemovesCollectionProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        CollectionsDatabase.addCollection(user1.getUsername(), collection1);
+        Thread.sleep(1000);
         //Test removing the collection
-        Database.removeCollection(user1.getUsername(), collection1.getCollectionName());
+        CollectionsDatabase.removeCollection(user1.getUsername(), collection1.getCollectionName());
         Thread.sleep(1000);
         assertThrows(
                 Exception.class, () -> {
-                    Database.getCollection(user1.getUsername(), collection1.getCollectionName()).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
+                    CollectionsDatabase.getCollection(user1.getUsername(), collection1.getCollectionName()).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
                 });
     }
-
     @Test
     //Tests that you can add a review to an existent collection
     public void addsReviewToCollectionProperly() throws InterruptedException, ExecutionException, TimeoutException {
         //Add collection
-        Database.addCollection(user1.getUsername(), collection2);
+        CollectionsDatabase.addCollection(user1.getUsername(), collection2);
         Thread.sleep(1000);
 
         //Add review to the collection
-        Database.addReviewToCollection(user1.getUsername(), collection2.getCollectionName(), review1);
+        CollectionsDatabase.addReviewToCollection(user1.getUsername(), collection2.getCollectionName(), review1);
         Thread.sleep(1000);
 
         //Retrieve collection and check that the review was added properly
-        Collection retrievedCollection = Database.getCollection(user1.getUsername(), collection2.getCollectionName())
+        Collection retrievedCollection = CollectionsDatabase.getCollection(user1.getUsername(), collection2.getCollectionName())
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(retrievedCollection.getReviews().containsKey(review1.getMedia().getTitle())
         && retrievedCollection.getReviews().containsKey(review2.getMedia().getTitle()));

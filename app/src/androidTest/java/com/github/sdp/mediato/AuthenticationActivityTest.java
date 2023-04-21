@@ -18,7 +18,7 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 
 import com.firebase.ui.auth.AuthUI;
-import com.github.sdp.mediato.data.Database;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.android.gms.tasks.Task;
@@ -113,7 +113,7 @@ public class AuthenticationActivityTest {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
             auth.useEmulator("10.0.2.2", 9099);
-            Database.database.useEmulator("10.0.2.2", 9000);
+            UserDatabase.database.useEmulator("10.0.2.2", 9000);
         } catch (IllegalStateException ignored) {
         }
 
@@ -121,7 +121,7 @@ public class AuthenticationActivityTest {
             auth.signOut();
         }
 
-        Database.database.getReference().setValue(null);
+        UserDatabase.database.getReference().setValue(null);
 
         testRule.getScenario().onActivity(activity1 -> activity = activity1);
     }
@@ -158,7 +158,7 @@ public class AuthenticationActivityTest {
     public void testLogInWorks() {
 
         login();
-        Database.addUser(databaseUser).thenAccept(u -> {
+        UserDatabase.addUser(databaseUser).thenAccept(u -> {
             ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
             loginButton.perform(click());
 
@@ -171,7 +171,7 @@ public class AuthenticationActivityTest {
 
             Intents.intended(hasComponent(MainActivity.class.getName()));
 
-            Database.deleteUser(databaseUser.getUsername());
+            UserDatabase.deleteUser(databaseUser.getUsername());
             logout();
         });
 
@@ -192,8 +192,8 @@ public class AuthenticationActivityTest {
     @Test
     public void testLaunchingPostActivitySucceedsWithUserSigningIn() {
         login();
-        Database.addUser(databaseUser).thenAccept(u -> {
-            Database.deleteUser(databaseUser.getUsername()).thenAccept(un -> {
+        UserDatabase.addUser(databaseUser).thenAccept(u -> {
+            UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(un -> {
                 activity.launchPostActivity(user);
                 intended(hasComponent(MainActivity.class.getName()));
                 logout();
@@ -207,10 +207,10 @@ public class AuthenticationActivityTest {
     @Test
     public void testLaunchingPostActivitySucceedsWithUserLoggingIn() {
         login();
-        Database.addUser(databaseUser).thenAccept(u -> {
+        UserDatabase.addUser(databaseUser).thenAccept(u -> {
             activity.launchPostActivity(user);
             intended(hasComponent(MainActivity.class.getName()));
-            Database.deleteUser(databaseUser.getUsername());
+            UserDatabase.deleteUser(databaseUser.getUsername());
             logout();
         });
 

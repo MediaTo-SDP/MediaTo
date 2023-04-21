@@ -12,6 +12,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
                   <entry key="Lecture_Exos" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -45,6 +46,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-2020806391">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Test_emulator" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-2014292743">
           <value>
             <AndroidTestResultsTableState>
@@ -65,6 +79,19 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-1947441379">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -97,16 +124,44 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
-        <entry key="-1424736617">
+        <entry key="-1715999877">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-1710527168">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="AQKSLVH003M51800060" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-1424736617">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Duration" value="327" />
                   <entry key="HMD Global" value="120" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
-                  <entry key="Tests" value="360" />
+                  <entry key="Tests" value="597" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -140,6 +195,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1253688534">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1127735966">
           <value>
             <AndroidTestResultsTableState>
@@ -147,6 +215,8 @@
                 <map>
                   <entry key="Bootcamp" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="HMD Global" value="120" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -166,20 +236,33 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+<<<<<<< HEAD
         <entry key="-812839046">
+=======
+        <entry key="-654679195">
+>>>>>>> main
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+<<<<<<< HEAD
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_33" value="120" />
+=======
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+>>>>>>> main
                   <entry key="Tests" value="360" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
           </value>
         </entry>
+<<<<<<< HEAD
         <entry key="-574973379">
+=======
+        <entry key="-638428114">
+>>>>>>> main
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -201,6 +284,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
                   <entry key="Lecture_Exos" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -214,6 +298,19 @@
                 <map>
                   <entry key="Bootcamp" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-471790740">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -272,14 +369,55 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+<<<<<<< HEAD
         <entry key="112280026">
+=======
+        <entry key="212521749">
+>>>>>>> main
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+<<<<<<< HEAD
                   <entry key="Duration" value="208" />
                   <entry key="Pixel_2_API_33" value="237" />
                   <entry key="Tests" value="478" />
+=======
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="652316292">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Lecture_Exos" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="942429496">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+>>>>>>> main
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -327,6 +465,46 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1394959510">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1491950068">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1548030166">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1568704477">
           <value>
             <AndroidTestResultsTableState>
@@ -355,6 +533,34 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1573520880">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1614942179">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Bootcamp" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1622377393">
           <value>
             <AndroidTestResultsTableState>
@@ -369,6 +575,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="1738509454">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Lecture_Exos" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="1744806352">
           <value>
             <AndroidTestResultsTableState>
@@ -377,8 +597,13 @@
                   <entry key="AQKSLVH003M51800060" value="120" />
                   <entry key="Bootcamp" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="HMD Global" value="120" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
+<<<<<<< HEAD
                   <entry key="Pixel_2_API_30" value="120" />
+=======
+                  <entry key="Pixel_2_API_33" value="120" />
+>>>>>>> main
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -391,8 +616,10 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="AQKSLVH003M51800060" value="120" />
+                  <entry key="Bootcamp" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global&#10; Nokia X20" value="120" />
+                  <entry key="Pixel_2_API_33" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
 import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.NewItemFragment;
+
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.model.media.Media;
@@ -29,12 +31,12 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
     private static final DiffUtil.ItemCallback<Media> MEDIA_COMPARATOR = new DiffUtil.ItemCallback<>() {
         @Override
         public boolean areItemsTheSame(@NonNull Media oldItem, @NonNull Media newItem) {
-            return oldItem.getId() == newItem.getId() && oldItem.getMediaType() == newItem.getMediaType();
+            return oldItem.getId().equals(newItem.getId()) && oldItem.getMediaType() == newItem.getMediaType();
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Media oldItem, @NonNull Media newItem) {
-            return areItemsTheSame(oldItem, newItem);
+            return oldItem.isTheSame(newItem);
         }
     };
 
@@ -52,7 +54,7 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
      * @param viewType The view type of the new View.
-     * @return
+     * @return the View Holder
      */
     @NonNull
     @Override

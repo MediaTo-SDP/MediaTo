@@ -4,12 +4,11 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.model.media.Collection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -17,26 +16,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask.TaskSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
-public class Database {
-
-    public static final String USERS_PATH = "Users/";
-
-    public static final String REVIEWS_PATH = "reviews/";
-
-    public static final String FOLLOWING_PATH = "/following/";
-    public static final String FOLLOWERS_PATH = "/followers/";
-
-    public static final String USER_COLLECTIONS_PATH = "/collections/";
-    public static final String USER_PROFILE_PICS_PATH = "ProfilePics/";
-
-    public static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
+public class UserDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference()
-            .child(USER_PROFILE_PICS_PATH);
+            .child(DatabaseUtils.USER_PROFILE_PICS_PATH);
 
 
     /**
@@ -48,7 +37,7 @@ public class Database {
      */
     public static CompletableFuture<String> addUser(User user, Uri profilePicUri) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(DatabaseUtils.USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -70,7 +59,7 @@ public class Database {
      */
     public static CompletableFuture<String> addUser(User user) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + user.getUsername()).setValue(user,
+        database.getReference().child(DatabaseUtils.USERS_PATH + user.getUsername()).setValue(user,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(user.getUsername());
@@ -104,7 +93,7 @@ public class Database {
      */
     public static CompletableFuture<String> deleteUser(String username) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).setValue(null,
+        database.getReference().child(DatabaseUtils.USERS_PATH + username).setValue(null,
                 (error, ref) -> {
                     if (error == null) {
                         future.complete(username);
@@ -124,7 +113,7 @@ public class Database {
      */
     public static CompletableFuture<User> getUser(String username) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(DatabaseUtils.USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> {
                     if (dataSnapshot.getValue() == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -144,7 +133,7 @@ public class Database {
      */
     public static CompletableFuture<User> getUserByEmail(String email) {
         CompletableFuture<User> future = new CompletableFuture<>();
-        database.getReference(USERS_PATH)
+        database.getReference(DatabaseUtils.USERS_PATH)
                 .orderByChild("email")
                 .equalTo(email)
                 .addValueEventListener(new ValueEventListener() {
@@ -176,7 +165,7 @@ public class Database {
      */
     public static CompletableFuture<Boolean> isUsernameUnique(String username) {
         CompletableFuture<Boolean> unique = new CompletableFuture<>();
-        database.getReference().child(USERS_PATH + username).get().addOnSuccessListener(
+        database.getReference().child(DatabaseUtils.USERS_PATH + username).get().addOnSuccessListener(
                 dataSnapshot -> unique.complete(!dataSnapshot.exists())
         ).addOnFailureListener(unique::completeExceptionally);
         return unique;
@@ -191,7 +180,7 @@ public class Database {
     public static CompletableFuture<byte[]> getProfilePic(String username) {
         CompletableFuture<byte[]> future = new CompletableFuture<>();
         System.out.println("Fetching image at path " + profilePics.child(username + ".jpg").getPath());
-        profilePics.child(username + ".jpg").getBytes(PROFILE_PIC_MAX_SIZE)
+        profilePics.child(username + ".jpg").getBytes(DatabaseUtils.PROFILE_PIC_MAX_SIZE)
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot == null) {
                         future.completeExceptionally(new NoSuchFieldException());
@@ -203,78 +192,6 @@ public class Database {
         return future;
     }
 
-    /**
-     * Adds a collection to the user
-     *
-     * @param username   the concerned user
-     * @param collection the collection to be added
-     */
-    public static void addCollection(String username, Collection collection) {
-        getCollectionReference(username, collection.getCollectionName())
-                .setValue(collection)
-                .addOnCompleteListener(task -> System.out.println("Added " + collection.getCollectionName() + " to " + username));
-    }
-
-    /**
-     * Remove a collection from a user
-     *
-     * @param username
-     * @param collectionName
-     */
-    public static void removeCollection(String username, String collectionName) {
-        getCollectionReference(username, collectionName)
-                .setValue(null)
-                .addOnCompleteListener(task -> System.out.println("Removed " + collectionName + " from " + username));
-    }
-
-    /**
-     * Retrieves a collection
-     *
-     * @param username
-     * @param collectionName
-     * @return
-     */
-    public static CompletableFuture<Collection> getCollection(String username, String collectionName) {
-        CompletableFuture<Collection> future = new CompletableFuture<>();
-        getCollectionReference(username, collectionName).get().addOnSuccessListener(
-                dataSnapshot -> {
-                    if (dataSnapshot.getValue() == null) {
-                        future.completeExceptionally(new NoSuchFieldException());
-                    } else {
-                        future.complete(dataSnapshot.getValue(Collection.class));
-                    }
-                }).addOnFailureListener(future::completeExceptionally);
-
-        return future;
-    }
-
-
-    /**
-     * Adds a review to a collection
-     *
-     * @param username
-     * @param collectionName
-     * @param review
-     */
-    public static void addReviewToCollection(String username, String collectionName, Review review) {
-        getCollectionReference(username, collectionName).child(REVIEWS_PATH + review.getMedia().getTitle()).setValue(review)
-                .addOnCompleteListener(
-                        task -> {
-                            System.out.println("Added review of " + review.getMedia().getTitle() + " for " + username);
-                        }
-                );
-    }
-
-    /**
-     * Helper method that returns the database reference for a collection
-     *
-     * @param username       the username of the user concerned
-     * @param collectionName the name of the collection needed
-     * @return the database reference for the collection
-     */
-    public static DatabaseReference getCollectionReference(String username, String collectionName) {
-        return database.getReference().child(USERS_PATH + username + USER_COLLECTIONS_PATH + collectionName);
-    }
 
     /**
      * Method to follow a user
@@ -307,7 +224,7 @@ public class Database {
      */
     public static void setValueInFollowers(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USERS_PATH + myUsername + FOLLOWING_PATH + targetUserUsername).setValue(value)
+                .child(DatabaseUtils.USERS_PATH + myUsername + DatabaseUtils.FOLLOWING_PATH + targetUserUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(targetUserUsername + " is now set to " + value + " in " + myUsername + " following list."));
     }
 
@@ -320,8 +237,92 @@ public class Database {
      */
     public static void setValueInFollowing(String myUsername, String targetUserUsername, boolean value) {
         database.getReference()
-                .child(USERS_PATH + targetUserUsername + FOLLOWERS_PATH + myUsername).setValue(value)
+                .child(DatabaseUtils.USERS_PATH + targetUserUsername + DatabaseUtils.FOLLOWERS_PATH + myUsername).setValue(value)
                 .addOnCompleteListener(task -> System.out.println(myUsername + " is now set to " + value + " in " + targetUserUsername + " followers list."));
     }
 
+    /**
+     * Updates the user's location in the database
+     *
+     * @param username
+     * @param latitude
+     * @param longitude
+     */
+    public static void updateLocation(String username, double latitude, double longitude) {
+        Location location = new Location(latitude, longitude);
+        Preconditions.checkLocation(location);
+        database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH)
+                .setValue(location);
+    }
+
+    /**
+     * Retrieves the user's saved location from the database
+     *
+     * @param username
+     * @return a completable future with the location in it
+     * @see Location class to check for validity
+     */
+    public static CompletableFuture<Location> getSavedLocation(String username) {
+        CompletableFuture<Location> future = new CompletableFuture<>();
+        database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH).get().addOnSuccessListener(
+                dataSnapshot -> {
+                    if (dataSnapshot.getValue() == null) {
+                        future.completeExceptionally(new NoSuchFieldException());
+                    } else {
+                        future.complete(dataSnapshot.getValue(Location.class));
+                    }
+                }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
+    }
+
+    /**
+     * Gets all the nearby users' usernames
+     * @param username of the reference user
+     * @param radius in which we want to look for users
+     * @return a completable future with a list of strings containing the usernames
+     * @Note For now, DEFAULT_RADIUS is used instead of the radius parameter because the settings aren't implemented yet
+     */
+    public static CompletableFuture<List<String>> getNearbyUsers(String username, double radius) {
+        CompletableFuture<List<String>> future = new CompletableFuture<>();
+        List<String> nearbyUsers = new ArrayList<>();
+        getSavedLocation(username).thenAccept(
+                location -> {
+                    if (!location.isValid())
+                        future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
+                    else {
+                        nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
+                    }
+                });
+        return future;
+    }
+
+    /**
+     * Gets all the users
+     * @param username of the reference user
+     * @return a completable future with a list of users containing all the user other than the
+     *          user itself.
+     */
+    public static CompletableFuture<List<User>> getAllUser(String username) {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+        UserDatabase.database.getReference(DatabaseUtils.USERS_PATH).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot dataSnapshot = task.getResult();
+                List<User> allUsers = new ArrayList<>();
+                dataSnapshot.getChildren().forEach(
+                        userSnapshot -> {
+                            String userKey = userSnapshot.getKey();
+                            if (!userKey.equals(username)) {
+                                allUsers.add(userSnapshot.getValue(User.class));
+                            }
+                        }
+                );
+                future.complete(allUsers);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+        return future;
+    }
 }
+

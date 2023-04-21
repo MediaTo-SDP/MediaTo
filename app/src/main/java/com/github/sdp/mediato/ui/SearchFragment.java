@@ -1,6 +1,6 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
-import static com.github.sdp.mediato.data.Database.getUser;
+import static com.github.sdp.mediato.data.UserDatabase.getAllUser;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -21,15 +20,21 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.sdp.mediato.api.themoviedb.TheMovieDB;
+import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+
+import com.github.sdp.mediato.R;
+
+import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
+import com.github.sdp.mediato.utility.adapters.UserAdapter;
+import com.google.android.material.snackbar.Snackbar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +57,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
-    private TheMovieDB theMovieDB;
+    private TheMovieDBAPI theMovieDB;
 
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
 
@@ -61,7 +66,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         super.onCreate(savedInstanceState);
         USERNAME = getArguments().getString("username");
 
-        theMovieDB = new TheMovieDB(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
+        theMovieDB = new TheMovieDBAPI(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
 
     }
 
@@ -93,6 +98,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
         this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);
@@ -121,12 +128,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextChange(String s) {
-        if (s.length() > 0) {
-            // this.mTextView.setText("Suggested");
-            //search(s);
-            // toDO : call the search function
-            // toDO : update the GridView
-        }
+
         return false;
     }
 
@@ -152,7 +154,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private void searchAndDisplayResult(String toBeSearched) {
         if (this.currentCategory == SearchCategory.PEOPLE) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            recyclerView.setAdapter(new SearchUserAdapter(searchUserViewModel));
+            recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
             searchUser(toBeSearched);
         } else {
             switch (this.currentCategory) {
@@ -175,31 +177,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchUser(String toBeSearched) {
-        //TODO Use a search engine
-        getUser(toBeSearched).thenAccept(user -> {
-            List<User> users = new ArrayList<>();
-            users.add(user);
-            searchUserViewModel.setUserList(users);
-        }).exceptionally(throwable -> {
+        if (toBeSearched.length() > 0) {
+            getAllUser(USERNAME).thenAccept(users -> {
+                List<User> filteredUser = users.stream()
+                    .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
+                    .collect(Collectors.toList());
+                sortUsersByName(filteredUser);
+                searchUserViewModel.setUserList(filteredUser);
+            });
+        } else {
             searchUserViewModel.clearUserList();
-            displaySnackbar(R.string.searchUserFailed);
-            return null;
-        });
+        }
     }
 
-    private void displaySnackbar(int msg) {
-        Snackbar snackbar = Snackbar.make(
-                getActivity().getWindow().getDecorView().findViewById(android.R.id.content),
-                msg,
-                Snackbar.LENGTH_SHORT
-        );
-        snackbar.setAction("Dismiss", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snackbar.dismiss();
-            }
-        });
-        snackbar.show();
+    private static void sortUsersByName(List<User> userList) {
+        Collections.sort(userList, Comparator.comparing(u -> u.getUsername().toLowerCase()));
     }
 
     private enum SearchCategory {
