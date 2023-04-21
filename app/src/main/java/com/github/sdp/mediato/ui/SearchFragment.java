@@ -116,19 +116,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public boolean onQueryTextSubmit(String s) {
         if (s.length() > 0) {
-            //this.mTextView.setText("Results");
             searchAndDisplayResult(s);
-            //gridView.setAdapter(new MediaAdapter(this.getContext(), searchResults));
-
-            // toDO : call the search function
-            // toDO : update the GridView
         }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String s) {
-
+        searchAndDisplayResult(s);
         return false;
     }
 
