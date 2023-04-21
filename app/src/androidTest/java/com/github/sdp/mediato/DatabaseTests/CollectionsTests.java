@@ -6,12 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-<<<<<<< HEAD
-import com.github.sdp.mediato.data.Database;
-=======
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
->>>>>>> main
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;

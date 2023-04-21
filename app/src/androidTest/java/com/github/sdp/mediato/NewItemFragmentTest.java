@@ -46,7 +46,7 @@ import java.util.Locale;
 @RunWith(AndroidJUnit4.class)
 public class NewItemFragmentTest {
 
-    ActivityScenario<TestingActivity> scenario;
+    ActivityScenario<MainActivity> scenario;
     Review review;
 
     private static ViewAction setProgress(final int progress) {
@@ -74,7 +74,7 @@ public class NewItemFragmentTest {
 
         // Launch the TestingActivity
         Intent testingIntent = new Intent(ApplicationProvider.getApplicationContext(),
-                TestingActivity.class);
+                MainActivity.class);
         SampleReviews samples = new SampleReviews();
         review = samples.getMovieReview();
         testingIntent.putExtra("username", review.getUsername());

@@ -133,7 +133,7 @@ public class AuthenticationActivityTest {
     public void testSignInWorks() {
 
         login();
-        Database.deleteUser(databaseUser.getUsername()).thenAccept(u -> {
+        UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(u -> {
 
             ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
             loginButton.perform(click());
