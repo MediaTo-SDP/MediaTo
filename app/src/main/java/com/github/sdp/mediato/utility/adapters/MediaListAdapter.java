@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import com.github.sdp.mediato.FragmentSwitcher;
-import com.github.sdp.mediato.NewItemFragment;
+import com.github.sdp.mediato.ui.NewItemFragment;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;

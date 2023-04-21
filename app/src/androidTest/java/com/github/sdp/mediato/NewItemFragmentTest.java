@@ -13,7 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.github.sdp.mediato.NewItemFragment.MAX_REVIEW_LENGTH;
+import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.ui.NewItemFragment;
 import com.github.sdp.mediato.utility.SampleReviews;
 
 import org.hamcrest.Matcher;
@@ -45,6 +46,11 @@ import java.util.Locale;
  */
 @RunWith(AndroidJUnit4.class)
 public class NewItemFragmentTest {
+    ViewInteraction addItemButton = onView(withId(R.id.item_button_add));
+    ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
+    ViewInteraction editText = onView(withId(R.id.item_review_edittext));
+    ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
+    ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
 
     ActivityScenario<MainActivity> scenario;
     Review review;
@@ -106,10 +112,6 @@ public class NewItemFragmentTest {
     // Check if indicator text is well displayed when using the slide bar
     @Test
     public void checkSlideBarAndIndicator() {
-
-        ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
-        ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
-
         seekBar.perform(setProgress(5));
         seekBarIndicator.check(matches(withText("5")));
     }
@@ -117,17 +119,14 @@ public class NewItemFragmentTest {
     // Test that no error message is displayed when review is correct
     @Test
     public void checkNoErrorsWhenAddingACorrectLengthComment() {
-
-        ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
         seekBar.perform(setProgress(review.getGrade()));
 
-        ViewInteraction editText = onView(withId(R.id.item_review_edittext));
         String comment = review.getComment();
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
 
-        onView(withId(R.id.item_button_add)).perform(click());
+       addItemButton.perform(click());
 
         onView(withId(R.id.main_container))
                 .check(matches(isDisplayed()))
@@ -140,16 +139,13 @@ public class NewItemFragmentTest {
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
-        ViewInteraction editText = onView(withId(R.id.item_review_edittext));
-
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
-        onView(withId(R.id.item_button_add)).perform(click());
+        addItemButton.perform(click());
         //activity.addItem();
 
-        onView(withId(R.id.new_item_review_error_msg))
-                .check(matches(withText(
+        errorText.check(matches(withText(
                         String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
@@ -157,18 +153,15 @@ public class NewItemFragmentTest {
     // It reappears if the length is still to long when adding the review
     @Test
     public void checkErrorMessageDisappearsWhenEditing() {
-        ViewInteraction editText = onView(withId(R.id.item_review_edittext));
-
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
-        onView(withId(R.id.item_button_add)).perform(click());
+        addItemButton.perform(click());
         //activity.addItem();
 
         editText.perform(click(), closeSoftKeyboard());
 
-        onView(withId(R.id.new_item_review_error_msg))
-                .check(matches(withText("")));
+        errorText.check(matches(withText("")));
     }
 
     @After
