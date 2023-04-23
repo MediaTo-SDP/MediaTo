@@ -123,9 +123,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextChange(String s) {
-        if (s.length() > 0) {
-            searchAndDisplayResult(s);
-        }
+        searchAndDisplayResult(s);
         return false;
     }
 
@@ -149,6 +147,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchAndDisplayResult(String toBeSearched) {
+        boolean isEmptySearch = toBeSearched == null || toBeSearched.trim().isEmpty();
+
         if (this.currentCategory == SearchCategory.PEOPLE) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
@@ -156,10 +156,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         } else {
             switch (this.currentCategory) {
                 case MOVIES:
-                    // fetch from API
-                    theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
-                        searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
-                    });
+                    if (!isEmptySearch) {
+                        // fetch from API
+                        theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
+                            searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
+                        });
+                    } else {
+                        searchMediaResults.setValue(Collections.emptyList());
+                    }
                     break;
                 case BOOKS:
                     break;

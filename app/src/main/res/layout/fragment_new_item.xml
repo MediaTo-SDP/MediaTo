@@ -22,7 +22,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
-      android:layout_marginStart="16dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginEnd="24dp"
       android:text="@string/new_item_title"
       android:textAppearance="@style/TextAppearance.AppCompat.Display2"
       android:textSize="40sp"
@@ -43,7 +44,7 @@
           android:id="@+id/item_review_edittext"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
+          android:layout_marginTop="10dp"
           android:layout_marginStart="24dp"
           android:layout_marginEnd="24dp"
           android:autofillHints="Review"
@@ -87,20 +88,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/DisplayLayout"
-      android:layout_width="409dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
+      android:layout_marginTop="15dp"
       app:layout_constraintBottom_toTopOf="@+id/RatingLayout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/item_title"
-      app:layout_constraintVertical_bias="0.0">
+      app:layout_constraintTop_toBottomOf="@+id/item_title">
 
         <ImageView
           android:id="@+id/item_image"
           android:layout_width="150dp"
           android:layout_height="200dp"
-          android:layout_marginStart="16dp"
+          android:layout_marginStart="24dp"
           android:contentDescription="@string/new_item_image_description"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintStart_toStartOf="parent"
@@ -125,11 +125,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/RatingLayout"
-      android:layout_width="409dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toTopOf="@+id/ReviewLayout"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/DisplayLayout">
 
@@ -143,6 +142,8 @@
           android:layout_marginEnd="24dp"
           android:max="@integer/max_rating"
           android:progress="5"
+          android:progressTint="@color/colorPrimary"
+          android:thumbTint="@color/colorPrimary"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
