@@ -2,6 +2,9 @@ package com.github.sdp.mediato.model;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.post.Post;
+import com.github.sdp.mediato.model.post.ReviewPost;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +88,15 @@ public class User {
 
     public Map<String, Collection> getCollections() {
         return collections;
+    }
+
+    public List<ReviewPost> fetchReviewPosts() {
+        List<ReviewPost> reviewPosts = new ArrayList<>();
+        for(Collection collection : collections.values()) {
+            collection.getReviews().values().forEach(
+                    review -> reviewPosts.add( new ReviewPost(getUsername(), review)));
+        }
+        return reviewPosts;
     }
 
     public static class UserBuilder {

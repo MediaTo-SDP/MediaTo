@@ -7,6 +7,11 @@
     android:icon="@drawable/ic_home"/>
 
   <item
+      android:id="@+id/explore"
+      android:title="Explore"
+      android:icon="@drawable/ic_explore"/>
+
+  <item
     android:id="@+id/search"
     android:title="Search"
     android:icon="@drawable/ic_search"/>

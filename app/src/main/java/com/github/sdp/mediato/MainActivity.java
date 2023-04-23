@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
+import com.github.sdp.mediato.ui.ExploreFragment;
 import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
   ActivityMainBinding binding;
   MyProfileFragment myProfileFragment;
   SearchFragment searchFragment;
+  ExploreFragment exploreFragment;
 
   private ProfileViewModel currentUserViewModel;
   private ProfileViewModel otherUsersViewModel;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
       replaceFragment(myProfileFragment);
+    } else if (itemId == R.id.explore) {
+      replaceFragment(exploreFragment);
     }
 
     return true;
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
   private void setDefaultFragment() {
     myProfileFragment = new MyProfileFragment();
     searchFragment = new SearchFragment();
+    exploreFragment = new ExploreFragment();
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     args.putString("username", username);
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
+    exploreFragment.setArguments(args);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);

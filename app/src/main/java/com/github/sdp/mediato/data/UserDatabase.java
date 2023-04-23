@@ -283,7 +283,7 @@ public class UserDatabase {
      * @return a completable future with a list of strings containing the usernames
      * @Note For now, DEFAULT_RADIUS is used instead of the radius parameter because the settings aren't implemented yet
      */
-    public static CompletableFuture<List<String>> getNearbyUsers(String username, double radius) {
+    public static CompletableFuture<List<String>> getNearbyUsernames(String username, double radius) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         List<String> nearbyUsers = new ArrayList<>();
         getSavedLocation(username).thenAccept(
@@ -294,6 +294,21 @@ public class UserDatabase {
                         nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
                     }
                 });
+        return future;
+    }
+
+    public static CompletableFuture<List<User>> getNearbyUsers(String username, double radius) {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+        List<User> users = new ArrayList<>();
+        getNearbyUsernames(username, radius).thenAccept(
+                nearbyUsernames -> {
+                    nearbyUsernames.forEach(
+                            nearbyUsername -> {
+                                getUser(nearbyUsername).thenAccept(user -> users.add(user));
+                            }
+                    );
+                }
+        );
         return future;
     }
 
