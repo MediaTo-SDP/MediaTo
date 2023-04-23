@@ -50,7 +50,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     public ReviewPostListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutReviewPostItemBinding binding = LayoutReviewPostItemBinding.inflate(inflater, parent, false);
-        //REMOVE
         return new ReviewPostListAdapter.MyViewHolder(binding);
     }
 
@@ -85,13 +84,8 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                             .into(holder.binding.profilePic);
                 }
         );
-
-        if (position + 6 == getItemCount()) {
-            // TODO: Download more data through a callback function
-        }
     }
 
-    // Todo can extend View.OnclickListener to implement the OnClickCallback
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private final LayoutReviewPostItemBinding binding;
 
