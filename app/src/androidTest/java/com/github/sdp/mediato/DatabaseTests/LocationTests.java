@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import android.database.DatabaseUtils;
+
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -41,7 +44,7 @@ public class LocationTests {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DatabaseTestsUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample user
@@ -83,7 +86,7 @@ public class LocationTests {
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DatabaseTestsUtil.cleanDatabase();
     }
 
     @Test

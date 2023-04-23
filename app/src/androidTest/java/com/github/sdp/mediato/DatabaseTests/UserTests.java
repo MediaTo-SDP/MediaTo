@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -38,7 +39,7 @@ public class UserTests {
     @Before
     public void setUp() {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DatabaseTestsUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample users
@@ -64,7 +65,7 @@ public class UserTests {
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DatabaseTestsUtil.cleanDatabase();
     }
 
     @Test

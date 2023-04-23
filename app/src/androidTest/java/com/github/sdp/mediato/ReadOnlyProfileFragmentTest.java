@@ -24,6 +24,8 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
+
+import com.github.sdp.mediato.DatabaseTests.DatabaseTestsUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
@@ -37,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +60,7 @@ public class ReadOnlyProfileFragmentTest {
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
     // Use Database emulator
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DatabaseTestsUtil.useEmulator();
     } catch (Exception ignored) {
     }
 
@@ -76,6 +79,11 @@ public class ReadOnlyProfileFragmentTest {
       fragmentManager.beginTransaction().replace(R.id.main_container, readOnlyProfileFragment)
           .commitAllowingStateLoss();
     });
+  }
+
+  @AfterClass
+  public static void cleanDatabase() {
+    DatabaseTestsUtil.cleanDatabase();
   }
 
   // Test whether the "Following" button is displayed and contains the correct text

@@ -12,6 +12,7 @@ import static java.lang.Thread.sleep;
 import static org.junit.Assert.fail;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,7 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
+import com.github.sdp.mediato.DatabaseTests.DatabaseTestsUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,7 +71,7 @@ public class MyProfileFragmentTest {
 
     // Use Database emulator
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DatabaseTestsUtil.useEmulator();
     } catch (Exception ignored) {
     }
 
@@ -104,6 +107,11 @@ public class MyProfileFragmentTest {
       fragmentManager.beginTransaction().replace(R.id.main_container, myProfileFragment)
           .commitAllowingStateLoss();
     });
+  }
+
+  @AfterClass
+  public static void cleanDatabase() {
+    DatabaseTestsUtil.cleanDatabase();
   }
 
   private void storeUsers(){

@@ -18,6 +18,7 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 
 import com.firebase.ui.auth.AuthUI;
+import com.github.sdp.mediato.DatabaseTests.DatabaseTestsUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -113,7 +114,7 @@ public class AuthenticationActivityTest {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
             auth.useEmulator("10.0.2.2", 9099);
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DatabaseTestsUtil.useEmulator();
         } catch (IllegalStateException ignored) {
         }
 
@@ -121,7 +122,7 @@ public class AuthenticationActivityTest {
             auth.signOut();
         }
 
-        UserDatabase.database.getReference().setValue(null);
+        DatabaseTestsUtil.cleanDatabase();
 
         testRule.getScenario().onActivity(activity1 -> activity = activity1);
     }
