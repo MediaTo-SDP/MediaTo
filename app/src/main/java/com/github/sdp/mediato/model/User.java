@@ -93,8 +93,12 @@ public class User {
     public List<ReviewPost> fetchReviewPosts() {
         List<ReviewPost> reviewPosts = new ArrayList<>();
         for(Collection collection : collections.values()) {
+            System.out.println("Reviews from collection " + collection.getCollectionName());
             collection.getReviews().values().forEach(
-                    review -> reviewPosts.add( new ReviewPost(getUsername(), review)));
+                    review -> {
+                        System.out.println("Review of " + review.getMedia().getTitle());
+                        reviewPosts.add(new ReviewPost(getUsername(), review));
+                    });
         }
         return reviewPosts;
     }

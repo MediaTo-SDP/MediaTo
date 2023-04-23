@@ -23,29 +23,37 @@ import java.util.concurrent.CompletableFuture;
 public class ExploreViewModel extends AndroidViewModel {
 
     Application application;
-    private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<List<ReviewPost>>();
+    private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
     String username;
     //add posts cache
 
-    public ExploreViewModel(@NonNull Application application, String username) {
+    public ExploreViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
+    }
+
+    public void setUsername(String username){
         this.username = username;
+        createNearbyUsersPosts();
     }
 
     public LiveData<List<ReviewPost>> getPosts(){
-        createNearbyUsersPosts();
+        System.out.println("Returning " + posts.getValue().size() + " review posts");
         return posts;
     }
 
     public void createNearbyUsersPosts(){
-        CompletableFuture<List<User>> future = UserDatabase.getNearbyUsers(username, 0);
-        List<ReviewPost> reviewPosts = new ArrayList<>();
-        future.thenAccept(nearbyUsers -> nearbyUsers.forEach(
+        CompletableFuture<List<User>> future = UserDatabase.getAllUser(username);
+        List<ReviewPost> post = new ArrayList<>();
+        future.thenAccept(nearbyUsers -> {
+            nearbyUsers.forEach(
                 user -> {
-                    reviewPosts.addAll(user.fetchReviewPosts());
+                    post.addAll(user.fetchReviewPosts());
                 }
-        ));
-        posts.setValue(reviewPosts);
+            );
+            posts.setValue(post);
+            System.out.println("Posts has " + posts.getValue().size() + " values ");
+        }
+        );
     }
 }

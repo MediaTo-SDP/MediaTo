@@ -18,9 +18,9 @@ public class ReviewPost extends Post{
 
     public ReviewPost(String username, Review review){
         super(REVIEW, username);
-        if (review.getUsername() != username){
-            throw new IllegalArgumentException("This review wasn't made by " + username);
-        }
+        //if (review.getUsername() != username){
+         //   throw new IllegalArgumentException("This review wasn't made by " + username);
+        //}
         this.title = review.getMedia().getTitle();
         this.grade = review.getGrade();
         this.comment = review.getComment();

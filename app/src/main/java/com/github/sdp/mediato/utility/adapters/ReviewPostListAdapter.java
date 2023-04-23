@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.utility.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -63,7 +64,11 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         // Todo add placeholder
         holder.binding.textTitle.setText(getItem(position).getTitle());
         holder.binding.textComment.setText(getItem(position).getComment());
-        holder.binding.rating.setText(getItem(position).getGrade());
+        if (getItem(position).getGrade() > 0) {
+            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
+        } else {
+            holder.binding.textRating.setVisibility(View.GONE);
+        }
         holder.binding.username.setText(getItem(position).getUsername());
 
         Glide.with(holder.itemView.getContext())
