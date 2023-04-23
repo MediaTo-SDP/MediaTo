@@ -38,7 +38,6 @@ public class ExploreViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<ReviewPost>> getPosts(){
-        System.out.println("Returning " + posts.getValue().size() + " review posts");
         return posts;
     }
 
@@ -52,7 +51,6 @@ public class ExploreViewModel extends AndroidViewModel {
                 }
             );
             posts.setValue(post);
-            System.out.println("Posts has " + posts.getValue().size() + " values ");
         }
         );
     }
