@@ -109,11 +109,6 @@ public class MyProfileFragmentTest {
     });
   }
 
-  @AfterClass
-  public static void cleanDatabase() {
-    DatabaseTestsUtil.cleanDatabase();
-  }
-
   private void storeUsers(){
 
   }

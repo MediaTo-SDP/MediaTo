@@ -81,11 +81,6 @@ public class ReadOnlyProfileFragmentTest {
     });
   }
 
-  @AfterClass
-  public static void cleanDatabase() {
-    DatabaseTestsUtil.cleanDatabase();
-  }
-
   // Test whether the "Following" button is displayed and contains the correct text
   @Test
   public void testFollowingButton() {

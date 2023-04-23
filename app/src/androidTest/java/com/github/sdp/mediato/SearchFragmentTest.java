@@ -104,11 +104,6 @@ public class SearchFragmentTest {
     });
   }
 
-  @AfterClass
-  public static void cleanDatabase() {
-    DatabaseTestsUtil.cleanDatabase();
-  }
-
   @Test
   public void testUserSearchWithEmptyString() {
     clickOn(androidx.appcompat.R.id.search_button);

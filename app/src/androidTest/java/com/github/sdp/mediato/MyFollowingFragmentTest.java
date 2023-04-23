@@ -83,11 +83,6 @@ public class MyFollowingFragmentTest {
     });
   }
 
-  @AfterClass
-  public static void cleanDatabase() {
-    DatabaseTestsUtil.cleanDatabase();
-  }
-
   @Test
   public void testRecyclerViewWithNoneFollowing() {
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 0);
