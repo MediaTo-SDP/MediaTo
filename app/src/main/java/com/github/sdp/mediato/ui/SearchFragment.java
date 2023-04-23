@@ -147,34 +147,36 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchAndDisplayResult(String toBeSearched) {
-        boolean isEmptySearch = toBeSearched == null || toBeSearched.trim().isEmpty();
-
         if (this.currentCategory == SearchCategory.PEOPLE) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
             searchUser(toBeSearched);
         } else {
-            switch (this.currentCategory) {
-                case MOVIES:
-                    if (!isEmptySearch) {
-                        // fetch from API
-                        theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
-                            searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
-                        });
-                    } else {
-                        searchMediaResults.setValue(Collections.emptyList());
-                    }
-                    break;
-                case BOOKS:
-                    break;
-                case MUSIC:
-                    break;
-            }
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            MediaListAdapter mla = new MediaListAdapter(getActivity());
-            recyclerView.setAdapter(mla);
-            searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
+           searchMedia(toBeSearched);
         }
+    }
+
+    private void searchMedia(String toBeSearched){
+        switch (this.currentCategory) {
+            case MOVIES:
+                if (!toBeSearched.isEmpty()) {
+                    // fetch from API
+                    theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
+                        searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
+                    });
+                } else {
+                    searchMediaResults.setValue(Collections.emptyList());
+                }
+                break;
+            case BOOKS:
+                break;
+            case MUSIC:
+                break;
+        }
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        MediaListAdapter mla = new MediaListAdapter(getActivity());
+        recyclerView.setAdapter(mla);
+        searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
     }
 
     private void searchUser(String toBeSearched) {
