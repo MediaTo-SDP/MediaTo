@@ -123,7 +123,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     @Override
     public boolean onQueryTextChange(String s) {
-        searchAndDisplayResult(s);
+        if (s.length() > 0) {
+            searchAndDisplayResult(s);
+        }
         return false;
     }
 
