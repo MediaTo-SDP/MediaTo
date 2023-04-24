@@ -24,7 +24,8 @@ public class ExploreViewModel extends AndroidViewModel {
 
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
-    String username;
+    private String username;
+    private LiveData<User> user = new MutableLiveData<User>();
     //add posts cache
 
     public ExploreViewModel(@NonNull Application application) {
@@ -41,17 +42,23 @@ public class ExploreViewModel extends AndroidViewModel {
         return posts;
     }
 
-    public void createNearbyUsersPosts(){
+    public void createNearbyUsersPosts() {
         CompletableFuture<List<User>> future = UserDatabase.getAllUser(username);
-        List<ReviewPost> post = new ArrayList<>();
-        future.thenAccept(nearbyUsers -> {
-            nearbyUsers.forEach(
-                user -> {
-                    post.addAll(user.fetchReviewPosts());
-                }
-            );
-            posts.setValue(post);
-        }
-        );
+        future.thenCompose(nearbyUsers -> {
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
+            List<ReviewPost> post = new ArrayList<>();
+            for (User user : nearbyUsers) {
+                CompletableFuture<Boolean> followsFuture = UserDatabase.follows(username, user.getUsername());
+                CompletableFuture<Void> postFuture = followsFuture.thenAccept(follows -> {
+                    if (!follows) {
+                        System.out.println(username + " doesn't follow " + user.getUsername());
+                        post.addAll(user.fetchReviewPosts());
+                    }
+                });
+                futures.add(postFuture);
+            }
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+            return allFutures.thenApply(v -> post);
+        }).thenAccept(posts::setValue);
     }
 }

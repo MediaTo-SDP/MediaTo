@@ -18,11 +18,13 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.FragmentExploreBinding;
 import com.github.sdp.mediato.model.post.ReviewPost;
 import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
+import com.github.sdp.mediato.ui.viewmodel.MyFollowingViewModel;
 import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
 
 import java.util.List;
 
 public class ExploreFragment extends Fragment {
+    private String USERNAME;
     private ExploreViewModel viewModel;
     private FragmentExploreBinding binding;
     private ReviewPostListAdapter adapter;
@@ -38,10 +40,13 @@ public class ExploreFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        System.out.println("Entering on view created");
         super.onViewCreated(view, savedInstanceState);
+
+        USERNAME = getArguments().getString("username");
+
         viewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
-        viewModel.setUsername(getArguments().getString("username"));
+        viewModel.setUsername(USERNAME);
+
         adapter = new ReviewPostListAdapter();
         binding.explorePosts.setAdapter(adapter);
 

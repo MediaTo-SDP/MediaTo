@@ -205,6 +205,22 @@ public class UserDatabase {
         setValueInFollowers(myUsername, usernameToFollow, true);
     }
 
+    public static CompletableFuture<Boolean> follows(String myUsername, String followedUsername) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        database.getReference()
+                .child(DatabaseUtils.USERS_PATH + myUsername + DatabaseUtils.FOLLOWING_PATH + followedUsername).get()
+                .addOnSuccessListener(
+                        dataSnapshot -> {
+                            if ((dataSnapshot.getValue() == null) || (dataSnapshot.getValue() == Boolean.FALSE)) {
+                                future.complete(Boolean.FALSE);
+                            } else {
+                                future.complete(Boolean.TRUE);
+                            }
+                        }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
+    }
+
     /**
      * Method to unfollow a user
      *
