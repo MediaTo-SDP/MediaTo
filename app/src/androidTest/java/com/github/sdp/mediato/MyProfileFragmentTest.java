@@ -36,8 +36,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -122,8 +124,9 @@ public class MyProfileFragmentTest {
 
   // Tests that following a user updates the count on the following button when getting back to the profile page
   @Test
-  public void testAddFollowingUpdatesFollowingButton() {
+  public void testAddFollowingUpdatesFollowingButton() throws InterruptedException {
     UserDatabase.followUser(MY_USERNAME, user2.getUsername());
+    Thread.sleep(1000);
     searchMenuItem.perform(click());
     profileMenuItem.perform(click());
     followingButton.check(matches(withText("1 Following")));
@@ -145,8 +148,9 @@ public class MyProfileFragmentTest {
 
   // Tests getting a new follower updates the count on the following button when getting back to the profile page
   @Test
-  public void testAddFollowerUpdatesFollowerButton() {
+  public void testAddFollowerUpdatesFollowerButton() throws InterruptedException {
     UserDatabase.followUser(user2.getUsername(), MY_USERNAME);
+    Thread.sleep(1000);
     searchMenuItem.perform(click());
     profileMenuItem.perform(click());
     followersButton.check(matches(withText("1 Followers")));
