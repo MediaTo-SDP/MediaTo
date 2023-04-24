@@ -183,6 +183,7 @@ public class UserDatabase {
         profilePics.child(username + ".jpg").getBytes(DatabaseUtils.PROFILE_PIC_MAX_SIZE)
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot == null) {
+                        System.out.println("No profile pic found for " + username);
                         future.completeExceptionally(new NoSuchFieldException());
                     } else {
                         future.complete(dataSnapshot);

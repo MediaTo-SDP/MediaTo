@@ -21,6 +21,7 @@ import com.google.common.base.Converter;
 import com.google.protobuf.Internal;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
     private static final DiffUtil.ItemCallback<ReviewPost> REVIEWPOST_COMPARATOR = new DiffUtil.ItemCallback<>() {
@@ -75,13 +76,25 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                 .placeholder(R.drawable.octopussy)
                 .into(holder.binding.mediaCover);
 
-        UserDatabase.getProfilePic(getItem(position).getUsername()).thenAccept(
-                profilePicBytes -> {
+        CompletableFuture<byte[]> fetchingProfilePic = UserDatabase.getProfilePic(getItem(position).getUsername());
+        fetchingProfilePic.exceptionally(
+                exception -> {
+                    System.out.println("Couldn't fetch pic for " + getItem(position).getUsername());
                     Glide.with(holder.itemView.getContext())
-                            .asBitmap()
-                            .load(profilePicBytes)
-                            .placeholder(R.drawable.profile_picture_default)
+                            .load(R.drawable.profile_picture_default)
                             .into(holder.binding.profilePic);
+                    return new byte[0];
+                })
+                .thenAccept(
+                profilePicBytes -> {
+                        if(!fetchingProfilePic.isCompletedExceptionally() && profilePicBytes.length > 0) {
+                            System.out.println("Fetched pic for " + getItem(position).getUsername());
+                            Glide.with(holder.itemView.getContext())
+                                    .asBitmap()
+                                    .load(profilePicBytes)
+                                    .placeholder(R.drawable.profile_picture_default)
+                                    .into(holder.binding.profilePic);
+                        }
                 }
         );
     }
