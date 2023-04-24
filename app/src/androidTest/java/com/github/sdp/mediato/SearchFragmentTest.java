@@ -222,13 +222,13 @@ public class SearchFragmentTest {
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
 
-    sleep(500);
+    sleep(1000);
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
 
     onView(withId(R.id.searchactivity_recyclerView))
         .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-    sleep(500);
+    sleep(1000);
     assertDisplayed("Your Rating");
   }
 
