@@ -24,7 +24,6 @@ import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 
 import com.github.sdp.mediato.R;
 
-import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
@@ -75,18 +74,18 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                              Bundle savedInstanceState) {
 
         // Inflate the layout for the search fragment
-        View searchView = inflater.inflate(R.layout.search_menu, container, false);
+        View searchView = inflater.inflate(R.layout.fragment_search, container, false);
 
-        this.peopleButton = searchView.findViewById(R.id.searchactivity_setCategorie_people);
+        this.peopleButton = searchView.findViewById(R.id.search_category_people);
         peopleButton.setOnClickListener(this);
 
-        this.booksButton = searchView.findViewById(R.id.searchactivity_setCategorie_books);
+        this.booksButton = searchView.findViewById(R.id.search_category_books);
         booksButton.setOnClickListener(this);
 
-        this.filmButton = searchView.findViewById(R.id.searchactivity_setCategorie_film);
+        this.filmButton = searchView.findViewById(R.id.search_category_movie);
         filmButton.setOnClickListener(this);
 
-        this.musicButton = searchView.findViewById(R.id.searchactivity_setCategorie_music);
+        this.musicButton = searchView.findViewById(R.id.search_category_music);
         musicButton.setOnClickListener(this);
 
         // get the text view
@@ -102,7 +101,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
-        this.searchView = searchView.findViewById(R.id.searchactivity_searchview_searchbar);
+        this.searchView = searchView.findViewById(R.id.searchbar);
         this.searchView.setOnQueryTextListener(this);
 
         // finally warmup the system, the activity starts by searching for peoples

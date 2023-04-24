@@ -40,14 +40,14 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
         }
     };
 
-    final private FragmentSwitcher fs;
+    final private FragmentSwitcher fragmentSwitcher;
 
     /**
      * Default constructor
      */
     public MediaListAdapter(Activity activity) {
         super(MEDIA_COMPARATOR);
-        fs = (FragmentSwitcher) activity;
+        fragmentSwitcher = (FragmentSwitcher) activity;
     }
 
     /**
@@ -66,13 +66,13 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fg = new NewItemFragment();
+                Fragment newItemFragment = new NewItemFragment();
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable("media", getItem(holder.getAdapterPosition()));
 
-                fg.setArguments(bundle);
-                fs.switchCurrentFragmentWithChildFragment(fg);
+                newItemFragment.setArguments(bundle);
+                fragmentSwitcher.switchCurrentFragmentWithChildFragment(newItemFragment);
             }
         });
 
