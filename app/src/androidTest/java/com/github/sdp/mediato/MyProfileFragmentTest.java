@@ -332,7 +332,7 @@ public class MyProfileFragmentTest {
         login();
 
         // Click on the sign out button
-        onView(withId(R.id.signout_button)).perform(scrollTo(), click());
+        onView(withId(R.id.signout_button)).perform(click());
         sleep(500);
 
         // Check whether the user is signed out
