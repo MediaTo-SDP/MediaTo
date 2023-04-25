@@ -2,8 +2,11 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -44,6 +47,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +59,7 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
-    private final static String MY_USERNAME = "test_username";
+    private final static String MY_USERNAME = "test_user";
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;
@@ -131,6 +135,8 @@ public class MyProfileFragmentTest {
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
+
+        init();
 
         // Use Database emulator
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -323,11 +329,10 @@ public class MyProfileFragmentTest {
     // Tests the sign out button, should sign out the user and redirect to authentication page
     @Test
     public void testSignOutButton() throws InterruptedException {
-        Intents.init();
         login();
 
         // Click on the sign out button
-        signoutButton.perform(click());
+        onView(withId(R.id.signout_button)).perform(scrollTo(), click());
         sleep(500);
 
         // Check whether the user is signed out
@@ -337,7 +342,11 @@ public class MyProfileFragmentTest {
         // Check whether we are redirected to the login activity
         intended(hasComponent(AuthenticationActivity.class.getName()));
 
-        Intents.release();
+    }
+
+    @After
+    public void releaseIntents() {
+        release();
     }
 
     /**
