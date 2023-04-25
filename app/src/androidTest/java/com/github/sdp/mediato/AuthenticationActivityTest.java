@@ -10,6 +10,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static java.lang.Thread.sleep;
 
 import android.content.Context;
@@ -44,6 +46,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -232,8 +235,11 @@ public class AuthenticationActivityTest {
         login();
         clearSharedPreferences();
         activity.checkSavedCredentialsAndConnection();
+        activity.authenticateUserWithCredentials(userJson, null);
+        AuthenticationActivity.isNetworkAvailable(activity);
         logout();
     }
+
 
     /**
      * Releases the intents

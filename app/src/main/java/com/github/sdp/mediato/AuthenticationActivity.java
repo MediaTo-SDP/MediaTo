@@ -44,7 +44,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param context: the context of the calling activity
      * @return true if there is an active network connection, false otherwise
      */
-    private static boolean isNetworkAvailable(Context context) {
+    public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -123,7 +123,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param idToken:     the ID token of the user
      * @param accessToken: the access token of the user
      */
-    private void authenticateUserWithCredentials(String idToken, String accessToken) {
+    public void authenticateUserWithCredentials(String idToken, String accessToken) {
         // Authenticate user with Firebase
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
 
