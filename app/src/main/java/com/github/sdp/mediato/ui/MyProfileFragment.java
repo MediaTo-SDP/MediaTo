@@ -1,5 +1,6 @@
 package com.github.sdp.mediato.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.auth.AuthUI;
+import com.github.sdp.mediato.AuthenticationActivity;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
@@ -21,6 +25,9 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +72,13 @@ public class MyProfileFragment extends BaseProfileFragment {
 
     // Observe the view model's live data to update UI components
     observeCollections(collectionlistAdapter);
+
+    Button signoutButton = view.findViewById(R.id.signout_button);
+    signoutButton.setOnClickListener(v -> {
+      FirebaseAuth.getInstance().signOut();
+      Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
+      startActivity(intent);
+    });
 
     return view;
   }

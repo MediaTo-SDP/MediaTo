@@ -3,20 +3,25 @@ package com.github.sdp.mediato;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -29,11 +34,20 @@ import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +56,8 @@ import org.junit.runner.RunWith;
 public class MyProfileFragmentTest {
   private final static int STANDARD_USER_TIMEOUT = 10;
   private final static String MY_USERNAME = "test_username";
-
+  private final String email = "ph@mediato.ch";
+  FirebaseUser user;
   ActivityScenario<MainActivity> scenario;
   ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
   ViewInteraction collectionRecyclerView = onView(withId(R.id.collection_recycler_view));
@@ -59,15 +74,45 @@ public class MyProfileFragmentTest {
   ViewInteraction searchMenuItem = onView(withId(R.id.search));
   ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
   ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
+  ViewInteraction signoutButton = onView(withId(R.id.signout_button));
 
   User user1;
   User user2;
+
+  public void login() {
+
+    // create user json
+    String userJson;
+    try {
+      userJson = new JSONObject()
+              .put("sub", email)
+              .put("email", email)
+              .put("email_verified", "true")
+              .toString();
+    } catch (JSONException e) {
+      throw new IllegalArgumentException(e);
+    }
+
+    // log in user and await result
+    Task<AuthResult> result = FirebaseAuth
+            .getInstance()
+            .signInWithCredential(GoogleAuthProvider
+                    .getCredential(userJson, null));
+    try {
+      Tasks.await(result);
+      user = result.getResult().getUser();
+    } catch (InterruptedException | ExecutionException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   @Before
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
 
     // Use Database emulator
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     try {
+      auth.useEmulator("10.0.2.2", 9099);
       UserDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
@@ -250,6 +295,25 @@ public class MyProfileFragmentTest {
     addCollectionButton.perform(click());
     enterTextInAlertBoxAndClickCancel("duplicate");
     outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+  }
+
+  @Test
+  public void testSignoutButton() throws InterruptedException {
+    Intents.init();
+    login();
+
+    // Click on the sign out button
+    signoutButton.perform(click());
+    sleep(500);
+
+    // Check whether the user is signed out
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    assertNull(currentUser);
+
+    // Check whether we are redirected to the login activity
+    intended(hasComponent(AuthenticationActivity.class.getName()));
+
+    Intents.release();
   }
 
 
