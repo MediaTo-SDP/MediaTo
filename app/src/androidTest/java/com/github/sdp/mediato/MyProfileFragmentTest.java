@@ -78,10 +78,11 @@ public class MyProfileFragmentTest {
     ViewInteraction searchMenuItem = onView(withId(R.id.search));
     ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
     ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
-    ViewInteraction signoutButton = onView(withId(R.id.signout_button));
 
     User user1;
     User user2;
+
+    MainActivity activity;
 
     /**
      * A matcher to check if a RecyclerView has a certain amount of items.
@@ -168,6 +169,7 @@ public class MyProfileFragmentTest {
 
         // Set up the MainActivity to display the ProfileFragment
         scenario.onActivity(activity -> {
+            this.activity = activity;
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
             MyProfileFragment myProfileFragment = new MyProfileFragment();
 
@@ -326,13 +328,13 @@ public class MyProfileFragmentTest {
         outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     }
 
-    // Tests the sign out button, should sign out the user and redirect to authentication page
+    // Tests the sign out, should sign out the user and redirect to authentication page
     @Test
-    public void testSignOutButton() throws InterruptedException {
+    public void testSignOut() throws InterruptedException {
         login();
 
         // Click on the sign out button
-        onView(withId(R.id.signout_button)).perform(click());
+        activity.signOutUser();
         sleep(500);
 
         // Check whether the user is signed out

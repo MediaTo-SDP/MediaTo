@@ -74,11 +74,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Add on click listener to sign out button
         Button signOutButton = view.findViewById(R.id.signout_button);
-        signOutButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut(); // sign out user and go back to auth page
-            Intent intent = new Intent(getActivity(), AuthenticationActivity.class);
-            startActivity(intent);
-        });
+        signOutButton.setOnClickListener(v -> {((MainActivity) getActivity()).signOutUser();});
 
         return view;
     }
@@ -173,6 +169,8 @@ public class MyProfileFragment extends BaseProfileFragment {
             makeToast(toastDuplicateName);
         }
     }
+
+
 
     private void makeToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
