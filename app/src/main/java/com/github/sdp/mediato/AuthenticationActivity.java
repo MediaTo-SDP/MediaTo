@@ -60,6 +60,14 @@ public class AuthenticationActivity extends AppCompatActivity {
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
+                .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
         setUpSignInButton();
 
         checkSavedCredentialsAndConnection();
@@ -69,7 +77,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     /**
      * Checks if credentials already exists or if the user is offline
      */
-    private void checkSavedCredentialsAndConnection() {
+    public void checkSavedCredentialsAndConnection() {
         // Check if there is a saved id token, authentication token and username
         String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
         String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");

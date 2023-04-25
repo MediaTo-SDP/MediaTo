@@ -10,6 +10,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -27,9 +29,11 @@ import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
@@ -60,6 +64,7 @@ public class AuthenticationActivityTest {
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
     private AuthenticationActivity activity;
     private FirebaseUser user;
+    private String userJson;
 
     /**
      * Logs in the user in the firebase authentication
@@ -67,7 +72,6 @@ public class AuthenticationActivityTest {
     public void login() {
 
         // create user json
-        String userJson;
         try {
             userJson = new JSONObject()
                     .put("sub", email)
@@ -113,6 +117,7 @@ public class AuthenticationActivityTest {
     @Before
     public void startTests() {
         init();
+        clearSharedPreferences();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
@@ -220,6 +225,14 @@ public class AuthenticationActivityTest {
             logout();
         });
 
+    }
+
+    @Test
+    public void testAutoLogin() {
+        login();
+        clearSharedPreferences();
+        activity.checkSavedCredentialsAndConnection();
+        logout();
     }
 
     /**
