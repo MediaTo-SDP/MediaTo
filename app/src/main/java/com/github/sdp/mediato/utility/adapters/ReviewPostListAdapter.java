@@ -61,7 +61,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
      */
     @Override
     public void onBindViewHolder(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
-        // Todo add placeholder
         holder.binding.textTitle.setText(getItem(position).getTitle());
         holder.binding.textComment.setText(getItem(position).getComment());
         if (getItem(position).getGrade() > 0) {
@@ -75,28 +74,37 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                 .load(getItem(position).getMediaIconUrl())
                 .placeholder(R.drawable.octopussy)
                 .into(holder.binding.mediaCover);
+        displayProfilePic(holder, position);
+    }
 
+    /**
+     * Helper function that displays the profile pic of the user that posted the review
+     * @param holder
+     * @param position
+     */
+    private void displayProfilePic(ReviewPostListAdapter.MyViewHolder holder, int position) {
         CompletableFuture<byte[]> fetchingProfilePic = UserDatabase.getProfilePic(getItem(position).getUsername());
         fetchingProfilePic.exceptionally(
-                exception -> {
-                    System.out.println("Couldn't fetch pic for " + getItem(position).getUsername());
-                    Glide.with(holder.itemView.getContext())
-                            .load(R.drawable.profile_picture_default)
-                            .into(holder.binding.profilePic);
-                    return new byte[0];
-                })
-                .thenAccept(
-                profilePicBytes -> {
-                        if(!fetchingProfilePic.isCompletedExceptionally() && profilePicBytes.length > 0) {
-                            System.out.println("Fetched pic for " + getItem(position).getUsername());
+                        exception -> {
+                            System.out.println("Couldn't fetch pic for " + getItem(position).getUsername());
                             Glide.with(holder.itemView.getContext())
-                                    .asBitmap()
-                                    .load(profilePicBytes)
-                                    .placeholder(R.drawable.profile_picture_default)
+                                    .load(R.drawable.profile_picture_default)
                                     .into(holder.binding.profilePic);
+                            return new byte[0];
+                        })
+                .thenAccept(
+                        profilePicBytes -> {
+                            if(!fetchingProfilePic.isCompletedExceptionally() && profilePicBytes.length > 0) {
+                                System.out.println("Fetched pic for " + getItem(position).getUsername());
+                                Glide.with(holder.itemView.getContext())
+                                        .asBitmap()
+                                        .load(profilePicBytes)
+                                        .placeholder(R.drawable.profile_picture_default)
+                                        .into(holder.binding.profilePic);
+                            }
                         }
-                }
-        );
+                );
+
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

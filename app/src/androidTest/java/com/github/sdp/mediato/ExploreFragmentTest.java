@@ -76,7 +76,8 @@ public class ExploreFragmentTest {
 
     // Test whether the explore text is displayed and contains the correct text
     @Test
-    public void testExploreFragmentTextView() {
+    public void testExploreFragmentTextView() throws InterruptedException {
+        Thread.sleep(2000);
         ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
