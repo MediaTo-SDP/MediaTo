@@ -234,6 +234,8 @@ public class AuthenticationActivityTest {
     public void testAutoLogin() {
         login();
         clearSharedPreferences();
+        activity.updatePreferencesToken(userJson, null);
+        activity.updatePreferencesUsername("test_user");
         activity.checkSavedCredentialsAndConnection();
         activity.authenticateUserWithCredentials(userJson, null);
         AuthenticationActivity.isNetworkAvailable(activity);

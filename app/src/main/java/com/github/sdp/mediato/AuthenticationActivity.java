@@ -98,7 +98,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param idToken:     the id token
      * @param accessToken: the access token
      */
-    private void updatePreferencesToken(String idToken, String accessToken) {
+    public void updatePreferencesToken(String idToken, String accessToken) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.google_id_token_key), idToken);
         editor.putString(getString(R.string.google_access_token_key), accessToken);
@@ -110,7 +110,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      *
      * @param username: the username
      */
-    private void updatePreferencesUsername(String username) {
+    public void updatePreferencesUsername(String username) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.username_key), username);
         editor.apply();
@@ -212,9 +212,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     launchPostActivity(currentUser);
 
                 })
-                .addOnFailureListener(e -> {
-                    throw new RuntimeException(e);
-                });
+                .addOnFailureListener(e -> {throw new RuntimeException(e);});
     }
 
     /**
