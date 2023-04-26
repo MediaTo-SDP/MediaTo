@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
 import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

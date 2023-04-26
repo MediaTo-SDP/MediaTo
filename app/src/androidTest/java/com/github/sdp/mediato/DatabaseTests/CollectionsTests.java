@@ -13,15 +13,17 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Movie;
+
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -31,7 +33,7 @@ import org.junit.runner.RunWith;
  */
 public class CollectionsTests {
     private final static int STANDARD_COLLECTION_TIMEOUT = 10;
-    private User user1 = new User.UserBuilder("uniqueId1")
+    private final User user1 = new User.UserBuilder("uniqueId1")
         .setUsername("user_test_1")
         .setEmail("email_test_1")
         .setRegisterDate("09/03/2023")
@@ -41,18 +43,18 @@ public class CollectionsTests {
     private Collection collection1;
     private Collection collection2;
 
-    private Review review1 = new Review(user1.getUsername(),
+    private final Review review1 = new Review(user1.getUsername(),
         new Movie("Harry Potter 1", "the chosen one", "url", 1));
-    private Review review2 = new Review(user1.getUsername(),
+    private final Review review2 = new Review(user1.getUsername(),
         new Movie("Harry Potter 2", "the chosen two", "url", 2), 9);
-    private Review review3 = new Review(user1.getUsername(),
+    private final Review review3 = new Review(user1.getUsername(),
         new Movie("Harry Potter 3", "the chosen three", "url", 3), 2, "meh");
 
-    private Map<String, Review> reviews1 = new HashMap<>() {
+    private final Map<String, Review> reviews1 = new HashMap<>() {
     };
-    private Map<String, Review> reviews2 = new HashMap<>() {
+    private final Map<String, Review> reviews2 = new HashMap<>() {
     };
-    private Map<String, Review> reviews3 = new HashMap<>() {
+    private final Map<String, Review> reviews3 = new HashMap<>() {
     };
 
 
