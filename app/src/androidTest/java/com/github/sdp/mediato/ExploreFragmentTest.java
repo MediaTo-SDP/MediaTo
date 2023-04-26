@@ -84,6 +84,7 @@ public class ExploreFragmentTest {
 
     @Test
     public void testItemCount() throws InterruptedException {
+        Thread.sleep(2000);
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
     }
 
@@ -123,8 +124,8 @@ public class ExploreFragmentTest {
         Media media3 = new Media(MediaType.MOVIE, "Harry Potter 3", "In the prison", "validUrl", 12345);
 
         Review review1 = new Review(user1.getUsername(), media1, 4, "Best movie in the world");
-        Review review2 = new Review(user1.getUsername(), media1, 5, "Pretty bad");
-        Review review3 = new Review(user1.getUsername(), media1, 6, "Really bad");
+        Review review2 = new Review(user1.getUsername(), media2, 5, "Pretty bad");
+        Review review3 = new Review(user1.getUsername(), media3, 6, "Really bad");
 
         Map<String, Review> collection1Reviews = new HashMap<>();
         collection1Reviews.put(review1.getMedia().getTitle(), review1);
@@ -142,7 +143,7 @@ public class ExploreFragmentTest {
 
     private void addReviews() throws ExecutionException, InterruptedException, TimeoutException {
         CollectionsDatabase.addCollection(user2.getUsername(), collection1);
-        CollectionsDatabase.addCollection(user2.getUsername(), collection2);
+        CollectionsDatabase.addCollection(user3.getUsername(), collection2);
         CollectionsDatabase.addCollection(user3.getUsername(), collection3);
         Thread.sleep(1000);
     }
