@@ -57,13 +57,17 @@ public class ExploreFragmentTest {
 
         //Setup test data
         createUsers();
+        Thread.sleep(5000);
         createReviews();
+        Thread.sleep(5000);
         addReviews();
+        Thread.sleep(5000);
         UserDatabase.followUser(user1.getUsername(), user2.getUsername());
-        Thread.sleep(1000);
+        Thread.sleep(5000);
 
         // Launch the MainActivity
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        Thread.sleep(5000);
         // Set up the MainActivity to display the ExploreFragment
         scenario.onActivity(activity -> {
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -89,7 +93,7 @@ public class ExploreFragmentTest {
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
-        Thread.sleep(15000);
+        Thread.sleep(5000);
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
     }
 
