@@ -41,7 +41,7 @@ public class MainActivityTest {
     onView(withId(R.id.search)).perform(click());
     onView(withId(R.id.main_container))
         .check(matches(isDisplayed()))
-        .check(matches(hasDescendant(withId(R.id.searchactivity_searchview_searchbar))));
+        .check(matches(hasDescendant(withId(R.id.searchbar))));
   }
 
   // Test that selecting Profile on the bottom bar displays the ProfileFragment

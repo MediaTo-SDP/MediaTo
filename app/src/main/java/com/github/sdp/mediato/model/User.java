@@ -14,10 +14,10 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private Map<String, Boolean> followers = new HashMap<>();
-    private Map<String, Boolean> following = new HashMap<>();
+    private final Map<String, Boolean> followers = new HashMap<>();
+    private final Map<String, Boolean> following = new HashMap<>();
 
-    private Map<String, Collection> collections = new HashMap<>();
+    private final Map<String, Collection> collections = new HashMap<>();
 
     private User() {
     }
@@ -95,10 +95,10 @@ public class User {
         private String registerDate = "";
 
         private Location location = new Location();
-        private Map<String, Boolean> followers = new HashMap<>();
-        private Map<String, Boolean> following = new HashMap<>();
+        private final Map<String, Boolean> followers = new HashMap<>();
+        private final Map<String, Boolean> following = new HashMap<>();
 
-        private Map<String, Collection> collections = new HashMap<>();
+        private final Map<String, Collection> collections = new HashMap<>();
 
         public UserBuilder(String id) {
             Preconditions.checkUID(id);

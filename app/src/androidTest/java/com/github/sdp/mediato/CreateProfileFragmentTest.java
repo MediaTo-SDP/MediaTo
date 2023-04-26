@@ -14,6 +14,7 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.IntDef;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
@@ -23,15 +24,18 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.google.android.material.textfield.TextInputLayout;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -146,7 +150,7 @@ public class CreateProfileFragmentTest {
 
   private interface viewFunction {
 
-    public CharSequence getText(View view);
+    CharSequence getText(View view);
   }
 
   private static Matcher<View> hasText(final String expectedErrorText, viewFunction fct) {
