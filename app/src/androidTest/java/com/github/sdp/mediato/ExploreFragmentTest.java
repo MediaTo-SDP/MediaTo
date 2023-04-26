@@ -78,8 +78,8 @@ public class ExploreFragmentTest {
         });
     }
 
-    @After
-    public void cleanDatabase(){
+    @AfterClass
+    public static void cleanDatabase(){
         UserDatabase.database.getReference().setValue(null);
         CollectionsDatabase.database.getReference().setValue(null);
     }
@@ -87,7 +87,6 @@ public class ExploreFragmentTest {
     // Test whether the explore text is displayed and contains the correct text
     @Test
     public void testExploreFragmentTextView() throws InterruptedException {
-        Thread.sleep(2000);
         ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
@@ -96,7 +95,7 @@ public class ExploreFragmentTest {
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
     }
 
