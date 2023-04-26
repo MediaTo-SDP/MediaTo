@@ -25,6 +25,7 @@ import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.ExploreFragment;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,6 +73,12 @@ public class ExploreFragmentTest {
             fragmentManager.beginTransaction().replace(R.id.main_container, exploreFragment)
                     .commitAllowingStateLoss();
         });
+    }
+
+    @AfterClass
+    public static void cleanDatabase(){
+        UserDatabase.database.getReference().setValue(null);
+        CollectionsDatabase.database.getReference().setValue(null);
     }
 
     // Test whether the explore text is displayed and contains the correct text

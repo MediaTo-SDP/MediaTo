@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -29,6 +30,7 @@ import com.github.sdp.mediato.ui.SearchFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +54,7 @@ public class SearchFragmentTest {
   {
     try {
       UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      CollectionsDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -101,6 +104,13 @@ public class SearchFragmentTest {
               .commitAllowingStateLoss();
     });
   }
+
+  @AfterClass
+  public static void cleanDatabase(){
+    UserDatabase.database.getReference().setValue(null);
+    CollectionsDatabase.database.getReference().setValue(null);
+  }
+
   @Test
   public void testUserSearchWithEmptyString() {
     clickOn(androidx.appcompat.R.id.search_button);
