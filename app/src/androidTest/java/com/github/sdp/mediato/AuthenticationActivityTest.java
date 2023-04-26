@@ -266,6 +266,7 @@ public class AuthenticationActivityTest {
 
         intended(hasComponent(MainActivity.class.getName()));
 
+        activity.clearSharedPreferences();
         logout();
     }
 

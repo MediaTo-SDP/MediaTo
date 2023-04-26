@@ -141,16 +141,19 @@ public class AuthenticationActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // If authentication fails, remove the saved authentication credential
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                    editor.remove(getString(R.string.google_id_token_key));
-                    editor.remove(getString(R.string.google_access_token_key));
-                    editor.remove(getString(R.string.username_key));
-
-                    editor.apply();
-
+                    clearSharedPreferences();
                     setUpSignInButton();
                 });
+    }
+
+    public void clearSharedPreferences() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(getString(R.string.google_id_token_key));
+        editor.remove(getString(R.string.google_access_token_key));
+        editor.remove(getString(R.string.username_key));
+
+        editor.apply();
     }
 
     /**
@@ -175,9 +178,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class); // get the user's google account and login with it
                 firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                throw new RuntimeException(e); // Handle Google Sign-In error
-            }
+            } catch (ApiException e) { throw new RuntimeException(e); } // Handle Google Sign-In error
         }
     }
 
