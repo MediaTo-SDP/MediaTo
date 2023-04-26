@@ -70,21 +70,21 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         setUpSignInButton();
 
-        checkSavedCredentialsAndConnection();
+        checkSavedCredentialsAndConnection(isNetworkAvailable(this));
         setUpSignInButton();
     }
 
     /**
      * Checks if credentials already exists or if the user is offline
      */
-    public void checkSavedCredentialsAndConnection() {
+    public void checkSavedCredentialsAndConnection(boolean networkAvailable) {
         // Check if there is a saved id token, authentication token and username
         String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
         String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
         String username = sharedPreferences.getString(getString(R.string.username_key), "");
 
         if (!idToken.isEmpty()) {
-            if (isNetworkAvailable(this)) {
+            if (networkAvailable) {
                 authenticateUserWithCredentials(idToken, accessToken);
             } else if (!username.isEmpty()) {
                 launchMainActivity(username);

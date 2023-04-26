@@ -10,6 +10,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
+import static com.github.sdp.mediato.AuthenticationActivity.isNetworkAvailable;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static java.lang.Thread.sleep;
@@ -240,7 +241,7 @@ public class AuthenticationActivityTest {
 
         sleep(1000);
 
-        activity.checkSavedCredentialsAndConnection();
+        activity.checkSavedCredentialsAndConnection(true);
 
         sleep(5000);
 
@@ -257,21 +258,20 @@ public class AuthenticationActivityTest {
         activity.updatePreferencesToken(userJson, null);
         activity.updatePreferencesUsername("test_user");
 
-        device.executeShellCommand("svc wifi disable");
-        device.executeShellCommand("svc data disable");
-
         sleep(1000);
 
-        activity.checkSavedCredentialsAndConnection();
+        activity.checkSavedCredentialsAndConnection(false);
 
         sleep(5000);
-
-        device.executeShellCommand("svc wifi enable");
-        device.executeShellCommand("svc data enable");
 
         intended(hasComponent(MainActivity.class.getName()));
 
         logout();
+    }
+
+    @Test
+    public void testIsNetworkAvailable() {
+        assertTrue(isNetworkAvailable(activity));
     }
 
 
@@ -282,11 +282,6 @@ public class AuthenticationActivityTest {
     public void releaseIntents() {
         release();
         clearSharedPreferences();
-
-        try {
-            device.executeShellCommand("svc wifi enable");
-            device.executeShellCommand("svc data enable");
-        } catch (IOException ignored) {}
     }
 
     private void clearSharedPreferences() {
