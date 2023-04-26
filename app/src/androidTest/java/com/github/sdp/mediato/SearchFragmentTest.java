@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.data.CollectionsDatabase;
@@ -47,7 +49,6 @@ public class SearchFragmentTest {
   User user2;
   User user3;
   User user4;
-
 
   @Before
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
@@ -126,6 +127,7 @@ public class SearchFragmentTest {
 
     assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
+
   @Test
   public void testUserSearchWithUnknownUser() {
     clickOn(androidx.appcompat.R.id.search_button);
@@ -185,6 +187,61 @@ public class SearchFragmentTest {
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
   }
+
+  @Test
+  public void testMovieSearchWithEmptyString() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Potter");
+
+    sleep(700);
+
+    clearText(androidx.appcompat.R.id.search_src_text);
+    pressImeActionButton();
+
+    sleep(700);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
+
+  @Test
+  public void testMovieSearchWithUnknownMovie() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "jadvbipehsjdb");
+    pressImeActionButton();
+
+    sleep(1000);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
+
+  @Test
+  public void testMovieSearchWithKnownMovie() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+
+    sleep(500);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
+  }
+
+  @Test
+  public void testClickOnMovieSearchResultOpensRatingScreen() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+
+    sleep(2000);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
+
+    onView(withId(R.id.searchactivity_recyclerView))
+        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+    sleep(2000);
+    assertDisplayed(R.id.item_button_add);
+  }
+
 }
 
 

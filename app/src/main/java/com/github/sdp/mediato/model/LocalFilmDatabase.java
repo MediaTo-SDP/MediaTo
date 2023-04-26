@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class LocalFilmDatabase {
 
-    private List<Media> filmItems;
+    private final List<Media> filmItems;
 
     public LocalFilmDatabase() {
         this.filmItems = new ArrayList<>();
@@ -25,14 +25,14 @@ public class LocalFilmDatabase {
         filmItems.add(new Media(MediaType.MOVIE, " Au service sercret de Sa Majesté ", " 1969 ", "au_service_secret_de_sa_majeste.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Les diaments sont éternels ", " 1971 ", "les_diamants_sont_eternels.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Vivre et laisser mourir ", " 1973 ", "vivre_et_laisser_mourir.jpeg", 0));
-        filmItems.add(new Media(MediaType.MOVIE, " L\'homme au pistolet d\'or", " 1974 ", "l_homme_au_pistolet_d_or.jpeg", 0));
-        filmItems.add(new Media(MediaType.MOVIE, "L\'espion qui m\'aimait", " 1977 ", "l_espion_qui_m_aimait.jpeg", 0));
+        filmItems.add(new Media(MediaType.MOVIE, " L'homme au pistolet d'or", " 1974 ", "l_homme_au_pistolet_d_or.jpeg", 0));
+        filmItems.add(new Media(MediaType.MOVIE, "L'espion qui m'aimait", " 1977 ", "l_espion_qui_m_aimait.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, "Moonraker", " 1979 ", "moonraker.jpeg", 0));
-        filmItems.add(new Media(MediaType.MOVIE, " Rien que pour vos yeux", " 1981 ", "", 0));
+        filmItems.add(new Media(MediaType.MOVIE, " Rien que pour vos yeux", " 1981 ", "rien_que_pour_vos_yeux.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Octopussy ", " 1983 ", "octopussy.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Jamais plus jamais", " 1983 ", "jamais_plus_jamais.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Dangereusement vôtre ", "1985", "dangereusement_votre.jpeg", 0));
-        filmItems.add(new Media(MediaType.MOVIE, " Tuer n\'est pas jouer", " 1987 ", "tuer_nest_pas_jouer.jpeg", 0));
+        filmItems.add(new Media(MediaType.MOVIE, " Tuer n'est pas jouer", " 1987 ", "tuer_nest_pas_jouer.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Permis de tuer", " 1989 ", "permis_de_tuer.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " GoldenEye ", " 1995 ", "golden_eye.jpeg", 0));
         filmItems.add(new Media(MediaType.MOVIE, " Demain ne meurt jamais ", " 1997 ", "demain_ne_meurt_jamais.jpeg", 0));
