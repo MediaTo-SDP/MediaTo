@@ -86,7 +86,7 @@ public class ExploreFragmentTest {
 
     // Test whether the explore text is displayed and contains the correct text
     @Test
-    public void testExploreFragmentTextView() throws InterruptedException {
+    public void testExploreFragmentTextView() {
         ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
@@ -95,7 +95,7 @@ public class ExploreFragmentTest {
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(15000);
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
     }
 
