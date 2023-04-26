@@ -8,6 +8,9 @@ import com.github.sdp.mediato.model.Review;
 
 import java.text.AttributedCharacterIterator;
 
+/**
+ * Class representing a review post
+ */
 public class ReviewPost extends Post{
     private String title;
     private int grade;

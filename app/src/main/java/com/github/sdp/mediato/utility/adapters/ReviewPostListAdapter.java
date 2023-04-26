@@ -23,7 +23,13 @@ import com.google.protobuf.Internal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/*
+* An adapter (that can be used in recycler views) for the review posts
+*/
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
+    /**
+     * Used by the adapter to compare review posts
+     */
     private static final DiffUtil.ItemCallback<ReviewPost> REVIEWPOST_COMPARATOR = new DiffUtil.ItemCallback<>() {
         @Override
         public boolean areItemsTheSame(@NonNull ReviewPost oldItem, @NonNull ReviewPost newItem) {

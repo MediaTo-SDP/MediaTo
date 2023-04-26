@@ -1,6 +1,9 @@
 package com.github.sdp.mediato.model.post;
 
-public class Post {
+/**
+ * Abstract class representing a post
+ */
+public abstract class Post {
     private PostType postType;
     private String username;
 

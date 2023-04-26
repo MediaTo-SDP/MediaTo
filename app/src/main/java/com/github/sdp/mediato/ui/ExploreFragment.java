@@ -23,6 +23,11 @@ import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
 
 import java.util.List;
 
+/**
+ * Fragment for the explore page where the user can see review posts
+ * from the nearby users they don't follow yet
+ * @TODO add a follow button or link the profile of the users
+ */
 public class ExploreFragment extends Fragment {
     private String USERNAME;
     private ExploreViewModel viewModel;
@@ -32,9 +37,7 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        System.out.println("Inflating fragment explore");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container, false);
-        // Inflate the layout for this fragment
         return binding.getRoot();
     }
 

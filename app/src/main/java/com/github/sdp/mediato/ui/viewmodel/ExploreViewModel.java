@@ -21,27 +21,38 @@ import java.util.concurrent.CompletableFuture;
  * The ViewModel for the {@link com.github.sdp.mediato.ui.ExploreFragment}
  */
 public class ExploreViewModel extends AndroidViewModel {
-
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
     private String username;
-    private LiveData<User> user = new MutableLiveData<User>();
-    //add posts cache
 
     public ExploreViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
     }
 
+    /**
+     * Sets the username of the user who is currently logged in and generates the list of posts
+     * @param username the username of the user who is currently logged in
+     */
     public void setUsername(String username){
         this.username = username;
         createNearbyUsersPosts();
     }
 
+    /**
+     * Returns the list of posts
+     * @return the list of posts
+     */
     public LiveData<List<ReviewPost>> getPosts(){
         return posts;
     }
 
+    /**
+     * Generates the list of posts from nearby users that are not followed
+     * @TODO This method retrieves all users instead of the nearby users at the moment
+     * @TODO because the location feature is not implemented / used yet
+     * @TODO it is enough to replace getAllUser by getNearbyUsers
+     */
     public void createNearbyUsersPosts() {
         CompletableFuture<List<User>> future = UserDatabase.getAllUser(username);
         future.thenCompose(nearbyUsers -> {

@@ -25,6 +25,7 @@ import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.ExploreFragment;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,12 +40,12 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
-    User user1;
-    User user2;
-    User user3;
-    Collection collection1;
-    Collection collection2;
-    Collection collection3;
+    private User user1;
+    private User user2;
+    private User user3;
+    private Collection collection1;
+    private Collection collection2;
+    private Collection collection3;
 
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
@@ -53,6 +54,8 @@ public class ExploreFragmentTest {
             CollectionsDatabase.database.useEmulator("10.0.2.2", 9000);
         } catch (Exception ignored) {
         }
+
+        //Setup test data
         createUsers();
         createReviews();
         addReviews();
@@ -66,7 +69,7 @@ public class ExploreFragmentTest {
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
             ExploreFragment exploreFragment = new ExploreFragment();
 
-            // Pass the username to the fragment like at profile creation
+            // Pass the username to the fragment
             Bundle bundle = new Bundle();
             bundle.putString("username", user1.getUsername());
             exploreFragment.setArguments(bundle);
@@ -75,8 +78,8 @@ public class ExploreFragmentTest {
         });
     }
 
-    @AfterClass
-    public static void cleanDatabase(){
+    @After
+    public void cleanDatabase(){
         UserDatabase.database.getReference().setValue(null);
         CollectionsDatabase.database.getReference().setValue(null);
     }
@@ -90,6 +93,7 @@ public class ExploreFragmentTest {
         exploreText.check(matches(withText("Explore")));
     }
 
+    //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
         Thread.sleep(2000);
@@ -101,6 +105,7 @@ public class ExploreFragmentTest {
      * --------------Util functions--------------------
      */
 
+    //Helper function that creates users and adds them to the database
     private void createUsers() throws ExecutionException, InterruptedException, TimeoutException {
         //Create new sample users
         user1 = new User.UserBuilder("uniqueId1")
@@ -126,6 +131,8 @@ public class ExploreFragmentTest {
         UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
     }
+
+    //Helper function that creates reviews and adds them to the collections
     private void createReviews(){
         Media media1 = new Media(MediaType.MOVIE, "Harry Potter 1", "In the closet", "validUrl", 123);
         Media media2 = new Media(MediaType.MOVIE, "Harry Potter 2", "In the WC", "validUrl", 1234);
@@ -149,6 +156,7 @@ public class ExploreFragmentTest {
         collection3 = new Collection("The worst", collection3Reviews);
     }
 
+    //Helper function that adds the reviews to the database
     private void addReviews() throws ExecutionException, InterruptedException, TimeoutException {
         CollectionsDatabase.addCollection(user2.getUsername(), collection1);
         CollectionsDatabase.addCollection(user3.getUsername(), collection2);
