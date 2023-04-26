@@ -83,7 +83,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
         String username = sharedPreferences.getString(getString(R.string.username_key), "");
 
-        if (!idToken.isEmpty() && !accessToken.isEmpty()) {
+        if (!idToken.isEmpty()) {
             if (isNetworkAvailable(this)) {
                 authenticateUserWithCredentials(idToken, accessToken);
             } else if (!username.isEmpty()) {
@@ -125,6 +125,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     public void authenticateUserWithCredentials(String idToken, String accessToken) {
         // Authenticate user with Firebase
+        if (accessToken.length() == 0) accessToken = null;
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, accessToken);
 
         FirebaseAuth.getInstance().signInWithCredential(credential) // we try to sign in using the tokens
@@ -212,7 +213,9 @@ public class AuthenticationActivity extends AppCompatActivity {
                     launchPostActivity(currentUser);
 
                 })
-                .addOnFailureListener(e -> {throw new RuntimeException(e);});
+                .addOnFailureListener(e -> {
+                    throw new RuntimeException(e);
+                });
     }
 
     /**

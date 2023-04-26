@@ -231,14 +231,46 @@ public class AuthenticationActivityTest {
     }
 
     @Test
-    public void testAutoLogin() {
+    public void testAutoLogin() throws InterruptedException {
         login();
         clearSharedPreferences();
+
         activity.updatePreferencesToken(userJson, null);
         activity.updatePreferencesUsername("test_user");
+
+        sleep(1000);
+
         activity.checkSavedCredentialsAndConnection();
-        activity.authenticateUserWithCredentials(userJson, null);
-        AuthenticationActivity.isNetworkAvailable(activity);
+
+        sleep(5000);
+
+        intended(hasComponent(NewProfileActivity.class.getName()));
+
+        logout();
+    }
+
+    @Test
+    public void testOfflineLogin() throws InterruptedException, IOException {
+        login();
+        clearSharedPreferences();
+
+        activity.updatePreferencesToken(userJson, null);
+        activity.updatePreferencesUsername("test_user");
+
+        device.executeShellCommand("svc wifi disable");
+        device.executeShellCommand("svc data disable");
+
+        sleep(1000);
+
+        activity.checkSavedCredentialsAndConnection();
+
+        sleep(5000);
+
+        device.executeShellCommand("svc wifi enable");
+        device.executeShellCommand("svc data enable");
+
+        intended(hasComponent(MainActivity.class.getName()));
+
         logout();
     }
 
@@ -251,7 +283,10 @@ public class AuthenticationActivityTest {
         release();
         clearSharedPreferences();
 
-
+        try {
+            device.executeShellCommand("svc wifi enable");
+            device.executeShellCommand("svc data enable");
+        } catch (IOException ignored) {}
     }
 
     private void clearSharedPreferences() {
