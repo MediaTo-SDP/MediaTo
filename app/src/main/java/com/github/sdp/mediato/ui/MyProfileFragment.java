@@ -74,7 +74,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Add on click listener to sign out button
         Button signOutButton = view.findViewById(R.id.signout_button);
-        signOutButton.setOnClickListener(v -> {((MainActivity) getActivity()).signOutUser();});
+        signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
 
         return view;
     }

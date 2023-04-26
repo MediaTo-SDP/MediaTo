@@ -25,7 +25,7 @@
   <string name="title">Title</string>
   <string name="rating">Rating: </string>
   <string name="add_collection">Add collection</string>
-  <string name="signout">Exit</string>
+  <string name="signout">Sign-out</string>
 
 
   <!--Buttons-->
