@@ -78,12 +78,6 @@ public class ExploreFragmentTest {
         });
     }
 
-    @AfterClass
-    public static void cleanDatabase(){
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
-    }
-
     // Test whether the explore text is displayed and contains the correct text
     @Test
     public void testExploreFragmentTextView() {
