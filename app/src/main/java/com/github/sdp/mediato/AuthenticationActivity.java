@@ -146,6 +146,9 @@ public class AuthenticationActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Clears the stored tokens and user name in android's shared preferences
+     */
     public void clearSharedPreferences() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
