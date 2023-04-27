@@ -2,6 +2,7 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -95,6 +96,8 @@ public class ExploreFragmentTest {
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
+        outerRecyclerView.check(matches(isDisplayed()));
+        outerRecyclerView.check(matches(isCompletelyDisplayed()));
         //assertRecyclerViewItemCount(R.id.explore_posts, 2);
         outerRecyclerView.check(matches(hasItemCount(2)));
 
