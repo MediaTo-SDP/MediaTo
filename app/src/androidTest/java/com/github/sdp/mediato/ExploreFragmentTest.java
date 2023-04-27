@@ -101,7 +101,6 @@ public class ExploreFragmentTest {
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
         //assertRecyclerViewItemCount(R.id.explore_posts, 2);
         outerRecyclerView.check(matches(hasItemCount(2)));
-
     }
 
 

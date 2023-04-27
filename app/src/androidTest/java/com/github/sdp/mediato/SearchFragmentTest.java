@@ -55,7 +55,6 @@ public class SearchFragmentTest {
   {
     try {
       UserDatabase.database.useEmulator("10.0.2.2", 9000);
-      CollectionsDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -104,12 +103,6 @@ public class SearchFragmentTest {
       fragmentManager.beginTransaction().replace(R.id.main_container, searchFragment)
               .commitAllowingStateLoss();
     });
-  }
-
-  @AfterClass
-  public static void cleanDatabase(){
-    UserDatabase.database.getReference().setValue(null);
-    CollectionsDatabase.database.getReference().setValue(null);
   }
 
   @Test
