@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
 
 import android.os.Bundle;
 
@@ -57,17 +58,16 @@ public class ExploreFragmentTest {
 
         //Setup test data
         createUsers();
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         createReviews();
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         addReviews();
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         UserDatabase.followUser(user1.getUsername(), user2.getUsername());
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         // Launch the MainActivity
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
-        Thread.sleep(5000);
         // Set up the MainActivity to display the ExploreFragment
         scenario.onActivity(activity -> {
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -91,11 +91,14 @@ public class ExploreFragmentTest {
     }
 
     //Test that all the reviews from the not followed users are displayed
-    //@Test
-    //public void testItemCount() throws InterruptedException {
-      //  Thread.sleep(5000);
-      //  assertRecyclerViewItemCount(R.id.explore_posts, 2);
-    //}
+    @Test
+    public void testItemCount() throws InterruptedException {
+        Thread.sleep(5000);
+        ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
+        //assertRecyclerViewItemCount(R.id.explore_posts, 2);
+        outerRecyclerView.check(matches(hasItemCount(2)));
+
+    }
 
 
     /**
