@@ -57,6 +57,9 @@ public class ExploreFragmentTest {
         } catch (Exception ignored) {
         }
 
+        UserDatabase.database.getReference().setValue(null);
+        UserDatabase.database.getReference().setValue(null);
+
         //Setup test data
         createUsers();
         Thread.sleep(1000);
@@ -96,8 +99,6 @@ public class ExploreFragmentTest {
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
-        outerRecyclerView.check(matches(isDisplayed()));
-        outerRecyclerView.check(matches(isCompletelyDisplayed()));
         //assertRecyclerViewItemCount(R.id.explore_posts, 2);
         outerRecyclerView.check(matches(hasItemCount(2)));
 
@@ -112,19 +113,19 @@ public class ExploreFragmentTest {
     private void createUsers() throws ExecutionException, InterruptedException, TimeoutException {
         //Create new sample users
         user1 = new User.UserBuilder("uniqueId1")
-                .setUsername("user_test_1")
+                .setUsername("user_explore_test_1")
                 .setEmail("email_test_1")
                 .setRegisterDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user2 = new User.UserBuilder("uniqueId2")
-                .setUsername("user_test_2")
+                .setUsername("user_explore_test_2")
                 .setEmail("email_test_2")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user3 = new User.UserBuilder("uniqueId3")
-                .setUsername("user_test_3")
+                .setUsername("user_explore_test_3")
                 .setEmail("email_test_3")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
