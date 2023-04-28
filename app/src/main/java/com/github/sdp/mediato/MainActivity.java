@@ -17,6 +17,7 @@ import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
@@ -82,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
-    Review review = getIntent().getSerializableExtra("review", Review.class);
+    Review review = new Gson().fromJson(
+            getIntent().getStringExtra("review"), Review.class);
     Bundle args = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it

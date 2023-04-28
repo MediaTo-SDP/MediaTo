@@ -78,7 +78,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
 
         // add a review if there is one
-        Review review = getArguments().getSerializable("review", Review.class);
+        Review review = (Review) getArguments().get("review");
         if (review != null) {
             // TODO: add to the right collection
             viewModel.addReviewToCollection(review, "Recently watched");
