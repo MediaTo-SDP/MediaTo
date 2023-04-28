@@ -111,8 +111,9 @@ public class MyProfileFragmentTest {
     });
   }
 
-  private void storeUsers(){
-
+  @AfterClass
+  public static void cleanDatabase() {
+    DatabaseTestsUtil.cleanDatabase();
   }
 
   // Test whether the "Following" button is displayed and contains the correct text
