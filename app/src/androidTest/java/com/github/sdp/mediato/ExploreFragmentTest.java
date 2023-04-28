@@ -43,11 +43,7 @@ import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
-    @Test
-    public void placeholder(){
-        assertTrue(true);
-    }
-/**
+
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
     private User user2;
@@ -110,15 +106,14 @@ public class ExploreFragmentTest {
         outerRecyclerView.check(matches(hasItemCount(2)));
         UserDatabase.database.getReference().setValue(null);
         CollectionsDatabase.database.getReference().setValue(null);
-    }*/
+    }
 
 
     /**
      * --------------Util functions--------------------
      */
 
-/**
-    //Helper function that creates users and adds them to the database
+   //Helper function that creates users and adds them to the database
     private void createUsers() throws ExecutionException, InterruptedException, TimeoutException {
         //Create new sample users
         user1 = new User.UserBuilder("uniqueId1")
@@ -175,5 +170,5 @@ public class ExploreFragmentTest {
         CollectionsDatabase.addCollection(user3.getUsername(), collection2);
         CollectionsDatabase.addCollection(user3.getUsername(), collection3);
         Thread.sleep(1000);
-    }*/
+    }
 }
