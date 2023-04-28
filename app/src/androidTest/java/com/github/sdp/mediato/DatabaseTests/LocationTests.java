@@ -117,10 +117,22 @@ public class LocationTests {
     }
 
     @Test
-    //Tests that the right nearby users are retrieved
-    public void retrievesNearbyUsersProperly() throws ExecutionException, InterruptedException, TimeoutException {
+    //Tests that the right nearby users' usernames are retrieved
+    public void retrievesNearbyUsernamesProperly() throws ExecutionException, InterruptedException, TimeoutException {
         List<String> nearbyUsers = UserDatabase.getNearbyUsernames(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(nearbyUsers.containsAll(List.of(user3.getUsername(), user4.getUsername()))
                     && !nearbyUsers.contains(user5.getUsername()));
+    }
+
+    @Test
+    //Tests that the right nearby users are retrieved
+    public void retrievesNearbyUsersProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        List<User> nearbyUsers = UserDatabase.getNearbyUsers(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        nearbyUsers.forEach(
+                fetchedUser -> {
+                    assertTrue(fetchedUser.getUsername().equals(user3.getUsername())
+                            || fetchedUser.getUsername().equals(user4.getUsername()));
+                }
+        );
     }
 }
