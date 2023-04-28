@@ -33,6 +33,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.ui.NewItemFragment;
 import com.github.sdp.mediato.utility.SampleReviews;
+import com.google.gson.Gson;
 
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -133,7 +134,7 @@ public class NewItemFragmentTest {
                 .check(matches(isDisplayed()))
                 .check(matches(hasDescendant(withId(R.id.profile_header))));
 
-        intended(hasExtra("review", review));
+        intended(hasExtra("review", new Gson().toJson(review)));
 
     }
 
