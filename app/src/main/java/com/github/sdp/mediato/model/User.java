@@ -90,13 +90,24 @@ public class User {
         return collections;
     }
 
+    /**
+     * Adds a collection to the user's collections
+     * @important: the collection is only added locally, it is not added to the database
+     * @param collection
+     */
+    public void addCollection(Collection collection) {
+        this.collections.put(collection.getCollectionName(), collection);
+    }
+
+    /**
+     * Creates a review post for each review in the user's collections
+     * @return a list of review posts
+     */
     public List<ReviewPost> fetchReviewPosts() {
         List<ReviewPost> reviewPosts = new ArrayList<>();
         for(Collection collection : collections.values()) {
-            System.out.println("Reviews from collection " + collection.getCollectionName());
             collection.getReviews().values().forEach(
                     review -> {
-                        System.out.println("Review of " + review.getMedia().getTitle());
                         reviewPosts.add(new ReviewPost(getUsername(), review));
                     });
         }
