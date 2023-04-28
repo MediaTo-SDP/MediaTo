@@ -10,6 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
 
+import static org.junit.Assert.assertTrue;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
@@ -41,6 +43,10 @@ import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
+    @Test
+    public void placeholder(){
+        assertTrue(true);
+    }
 /**
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
