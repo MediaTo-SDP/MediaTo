@@ -57,6 +57,7 @@ public class SearchFragmentTest {
       UserDatabase.database.useEmulator("10.0.2.2", 9000);
     } catch (Exception ignored) {
     }
+    UserDatabase.database.getReference().setValue(null);
     //Create new sample users
     user1 = new User.UserBuilder("uniqueId1")
             .setUsername("user_test_1")
