@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -37,6 +41,8 @@ public class AuthenticationActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), this::onSignInResult);
     private GoogleSignInClient googleSignInClient;
+    private SignInButton signInButton;
+    private TextView signInText;
 
     /**
      * Checks if there is a network connection available.
@@ -57,6 +63,9 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
+        signInButton = findViewById(R.id.google_sign_in);
+        signInText = findViewById(R.id.authentication_login_text);
+
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
 
@@ -67,8 +76,6 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        setUpSignInButton();
 
         checkSavedCredentialsAndConnection(isNetworkAvailable(this));
         setUpSignInButton();
@@ -84,11 +91,18 @@ public class AuthenticationActivity extends AppCompatActivity {
         String username = sharedPreferences.getString(getString(R.string.username_key), "");
 
         if (!idToken.isEmpty()) {
+
+            signInButton.setVisibility(View.INVISIBLE);
+            signInText.setText(R.string.authentication_page_waiting_text);
+
             if (networkAvailable) {
                 authenticateUserWithCredentials(idToken, accessToken);
             } else if (!username.isEmpty()) {
                 launchMainActivity(username);
             }
+        } else {
+            signInButton.setVisibility(View.VISIBLE);
+            signInText.setText(R.string.authentication_page_login_text);
         }
     }
 
@@ -143,6 +157,8 @@ public class AuthenticationActivity extends AppCompatActivity {
                     // If authentication fails, remove the saved authentication credential
                     clearSharedPreferences();
                     setUpSignInButton();
+                    signInButton.setVisibility(View.VISIBLE);
+                    signInText.setText(R.string.authentication_page_login_text);
                 });
     }
 
@@ -164,7 +180,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     private void setUpSignInButton() {
         // We assign a callback to Google sign in button
-        findViewById(R.id.google_sign_in).setOnClickListener(view -> {
+        signInButton.setOnClickListener(view -> {
             Intent signInIntent = googleSignInClient.getSignInIntent(); // if the button is clicked, try to sign in
             googleSignInActivityResultLauncher.launch(signInIntent);
         });

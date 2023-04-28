@@ -1,6 +1,7 @@
 package com.github.sdp.mediato;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -112,6 +113,18 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
    */
   public void signOutUser() {
     FirebaseAuth.getInstance().signOut(); // sign out user and go back to auth page
+
+    SharedPreferences sharedPreferences =
+            getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
+
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+    editor.remove(getString(R.string.google_id_token_key));
+    editor.remove(getString(R.string.google_access_token_key));
+    editor.remove(getString(R.string.username_key));
+
+    editor.apply();
+
     Intent intent = new Intent(this, AuthenticationActivity.class);
     startActivity(intent);
   }

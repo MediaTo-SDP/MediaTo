@@ -241,7 +241,7 @@ public class AuthenticationActivityTest {
 
         sleep(1000);
 
-        activity.checkSavedCredentialsAndConnection(true);
+        activity.runOnUiThread(() -> activity.checkSavedCredentialsAndConnection(true));
 
         sleep(5000);
 
@@ -251,7 +251,7 @@ public class AuthenticationActivityTest {
     }
 
     @Test
-    public void testOfflineLogin() throws InterruptedException, IOException {
+    public void testOfflineLogin() throws InterruptedException {
         login();
         clearSharedPreferences();
 
@@ -260,7 +260,7 @@ public class AuthenticationActivityTest {
 
         sleep(1000);
 
-        activity.checkSavedCredentialsAndConnection(false);
+        activity.runOnUiThread(() -> activity.checkSavedCredentialsAndConnection(false));
 
         sleep(5000);
 

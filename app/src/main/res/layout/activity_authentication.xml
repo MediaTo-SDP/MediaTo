@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authnetication_login_text" />
+        app:layout_constraintTop_toBottomOf="@+id/authentication_login_text" />
 
     <TextView
         android:id="@+id/authentication_welcome"
@@ -29,14 +29,14 @@
         android:layout_marginBottom="94dp"
         android:text="@string/authentication_page_welcome_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toTopOf="@+id/authnetication_login_text"
+        app:layout_constraintBottom_toTopOf="@+id/authentication_login_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.51" />
 
     <TextView
-        android:id="@+id/authnetication_login_text"
+        android:id="@+id/authentication_login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

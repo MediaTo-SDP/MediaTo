@@ -63,6 +63,8 @@
   <!--Authentication-->
   <string name="authentication_page_welcome_title">Welcome to MediaTo</string>
   <string name="authentication_page_login_text">Please login to continue</string>
+  <string name="authentication_page_waiting_text">Please wait while you are being logged in …</string>
+
 
   <!--Toast messages-->
   <string name="profile_creation_success">Profile creation successful!</string>
