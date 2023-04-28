@@ -41,7 +41,7 @@ import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
-    /**
+/**
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
     private User user2;
@@ -59,13 +59,11 @@ public class ExploreFragmentTest {
         }
 
         UserDatabase.database.getReference().setValue(null);
-        UserDatabase.database.getReference().setValue(null);
+        CollectionsDatabase.database.getReference().setValue(null);
 
         //Setup test data
         createUsers();
-        Thread.sleep(1000);
         createReviews();
-        Thread.sleep(1000);
         addReviews();
         Thread.sleep(1000);
         UserDatabase.followUser(user1.getUsername(), user2.getUsername());
@@ -85,7 +83,7 @@ public class ExploreFragmentTest {
             fragmentManager.beginTransaction().replace(R.id.main_container, exploreFragment)
                     .commitAllowingStateLoss();
         });
-    }*/
+    }
 
     // Test whether the explore text is displayed and contains the correct text
     @Test
@@ -93,9 +91,10 @@ public class ExploreFragmentTest {
         ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
+        UserDatabase.database.getReference().setValue(null);
+        CollectionsDatabase.database.getReference().setValue(null);
     }
 
-    /**
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
@@ -103,6 +102,8 @@ public class ExploreFragmentTest {
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
         //assertRecyclerViewItemCount(R.id.explore_posts, 2);
         outerRecyclerView.check(matches(hasItemCount(2)));
+        UserDatabase.database.getReference().setValue(null);
+        CollectionsDatabase.database.getReference().setValue(null);
     }*/
 
 
@@ -110,7 +111,7 @@ public class ExploreFragmentTest {
      * --------------Util functions--------------------
      */
 
-    /**
+/**
     //Helper function that creates users and adds them to the database
     private void createUsers() throws ExecutionException, InterruptedException, TimeoutException {
         //Create new sample users
