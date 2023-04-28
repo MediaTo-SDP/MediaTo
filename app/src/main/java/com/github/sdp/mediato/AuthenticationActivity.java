@@ -44,6 +44,8 @@ public class AuthenticationActivity extends AppCompatActivity {
     private SignInButton signInButton;
     private TextView signInText;
 
+    private String idToken, accessToken, username;
+
     /**
      * Checks if there is a network connection available.
      *
@@ -82,28 +84,37 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks if credentials already exists or if the user is offline
+     * Logs in the user if it has credentials
      */
     public void checkSavedCredentialsAndConnection(boolean networkAvailable) {
-        // Check if there is a saved id token, authentication token and username
-        String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
-        String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
-        String username = sharedPreferences.getString(getString(R.string.username_key), "");
+        fetchSavedCredentials();
 
         if (!idToken.isEmpty()) {
-
-            signInButton.setVisibility(View.INVISIBLE);
-            signInText.setText(R.string.authentication_page_waiting_text);
-
             if (networkAvailable) {
                 authenticateUserWithCredentials(idToken, accessToken);
             } else if (!username.isEmpty()) {
                 launchMainActivity(username);
             }
+        }
+    }
+
+    /**
+     * Fetches the user's credentials and updates the display accordingly
+     */
+    public void fetchSavedCredentials() {
+        // Check if there is a saved id token, authentication token and username
+        idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
+        accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
+        username = sharedPreferences.getString(getString(R.string.username_key), "");
+
+        if (!idToken.isEmpty()) {
+            signInButton.setVisibility(View.INVISIBLE);
+            signInText.setText(R.string.authentication_page_waiting_text);
         } else {
             signInButton.setVisibility(View.VISIBLE);
             signInText.setText(R.string.authentication_page_login_text);
         }
+
     }
 
     /**
@@ -113,6 +124,9 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param accessToken: the access token
      */
     public void updatePreferencesToken(String idToken, String accessToken) {
+        this.idToken = idToken;
+        this.accessToken = accessToken;
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.google_id_token_key), idToken);
         editor.putString(getString(R.string.google_access_token_key), accessToken);
@@ -125,6 +139,8 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param username: the username
      */
     public void updatePreferencesUsername(String username) {
+        this.username = username;
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.username_key), username);
         editor.apply();
@@ -166,6 +182,10 @@ public class AuthenticationActivity extends AppCompatActivity {
      * Clears the stored tokens and user name in android's shared preferences
      */
     public void clearSharedPreferences() {
+        idToken = "";
+        accessToken = "";
+        username = "";
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.remove(getString(R.string.google_id_token_key));

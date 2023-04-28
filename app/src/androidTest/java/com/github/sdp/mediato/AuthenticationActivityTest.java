@@ -3,15 +3,17 @@ package com.github.sdp.mediato;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-
 import static com.github.sdp.mediato.AuthenticationActivity.isNetworkAvailable;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static java.lang.Thread.sleep;
 
@@ -32,11 +34,9 @@ import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
@@ -47,7 +47,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -148,6 +147,10 @@ public class AuthenticationActivityTest {
         login();
         UserDatabase.addUser(databaseUser).thenAccept(u -> {
             UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(u1 -> {
+
+                onView(withId(R.id.google_sign_in)).check(matches(isDisplayed()));
+                onView(withId(R.id.authentication_login_text)).check(matches(withText(R.string.authentication_page_login_text)));
+
                 ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
                 loginButton.perform(click());
 
@@ -174,6 +177,10 @@ public class AuthenticationActivityTest {
 
         login();
         UserDatabase.addUser(databaseUser).thenAccept(u -> {
+
+            onView(withId(R.id.google_sign_in)).check(matches(isDisplayed()));
+            onView(withId(R.id.authentication_login_text)).check(matches(withText(R.string.authentication_page_login_text)));
+
             ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
             loginButton.perform(click());
 
@@ -231,15 +238,24 @@ public class AuthenticationActivityTest {
 
     }
 
+    /**
+     * tests the automatic login of users who have already logged in once
+     * @throws InterruptedException
+     */
     @Test
     public void testAutoLogin() throws InterruptedException {
         login();
-        clearSharedPreferences();
+        activity.clearSharedPreferences();
 
         activity.updatePreferencesToken(userJson, null);
         activity.updatePreferencesUsername("test_user");
 
         sleep(1000);
+
+        activity.runOnUiThread(() -> activity.fetchSavedCredentials());
+
+        onView(withId(R.id.google_sign_in)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.authentication_login_text)).check(matches(withText(R.string.authentication_page_waiting_text)));
 
         activity.runOnUiThread(() -> activity.checkSavedCredentialsAndConnection(true));
 
@@ -250,15 +266,24 @@ public class AuthenticationActivityTest {
         logout();
     }
 
+    /**
+     * tests the offline login of users who have already logged in once
+     * @throws InterruptedException
+     */
     @Test
     public void testOfflineLogin() throws InterruptedException {
         login();
-        clearSharedPreferences();
+        activity.clearSharedPreferences();
 
         activity.updatePreferencesToken(userJson, null);
         activity.updatePreferencesUsername("test_user");
 
         sleep(1000);
+
+        activity.runOnUiThread(() -> activity.fetchSavedCredentials());
+
+        onView(withId(R.id.google_sign_in)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.authentication_login_text)).check(matches(withText(R.string.authentication_page_waiting_text)));
 
         activity.runOnUiThread(() -> activity.checkSavedCredentialsAndConnection(false));
 
@@ -282,7 +307,7 @@ public class AuthenticationActivityTest {
     @After
     public void releaseIntents() {
         release();
-        clearSharedPreferences();
+        activity.clearSharedPreferences();
     }
 
     private void clearSharedPreferences() {
