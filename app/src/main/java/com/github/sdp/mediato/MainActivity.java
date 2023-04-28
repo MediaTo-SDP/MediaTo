@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // Set the bottomNavigationView
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
-        item -> navigateFragments(item.getItemId()));
+            item -> navigateFragments(item.getItemId()));
   }
 
   private boolean navigateFragments(int itemId) {
@@ -81,10 +82,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
+    Review review = getIntent().getSerializableExtra("review", Review.class);
     Bundle args = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
+    if (review != null) {
+      args.putSerializable("review", review);
+    }
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
 
