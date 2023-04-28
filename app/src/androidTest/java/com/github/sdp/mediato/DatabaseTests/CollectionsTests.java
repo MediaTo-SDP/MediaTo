@@ -72,9 +72,7 @@ public class CollectionsTests {
     }
 
     @AfterClass
-    public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
-    }
+    public static void cleanDatabase() {UserDatabase.database.getReference().setValue(null);}
 
     @Test
     //Tests that the collections are added, retrieved and removed properly
