@@ -1,28 +1,15 @@
 package com.github.sdp.mediato;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Toast;
-import android.Manifest;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
-import com.github.sdp.mediato.location.LocationHelper;
-import com.github.sdp.mediato.location.LocationService;
 import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
-import com.google.android.gms.location.LocationServices;
-
-import javax.annotation.Nonnull;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation

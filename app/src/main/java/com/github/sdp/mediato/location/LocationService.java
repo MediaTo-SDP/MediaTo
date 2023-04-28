@@ -13,28 +13,21 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.protobuf.DescriptorProtos;
-
-import java.util.Locale;
 
 public class LocationService extends Service {
 
     public static final int LOCATION_SERVICE_ID = 175;
     public static String ACTION_START_LOCATION_SERVICE = "startLocationService";
-    public static String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
