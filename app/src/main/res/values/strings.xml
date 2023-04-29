@@ -26,6 +26,8 @@
   <string name="title">Title</string>
   <string name="rating">Rating: </string>
   <string name="add_collection">Add collection</string>
+  <string name="signout">Sign-out</string>
+
 
   <!--Buttons-->
   <string name="edit">Edit</string>
@@ -75,5 +77,9 @@
   <string name="movie_name">movie_name</string>
 
   <string name="default_profile_pic">https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg</string>
+    <string name="login_shared_preferences">sharedPreferencesLogin</string>
+    <string name="google_id_token_key">google_id_token</string>
+  <string name="google_access_token_key">google_access_token</string>
+  <string name="username_key">username</string>
 
 </resources>
