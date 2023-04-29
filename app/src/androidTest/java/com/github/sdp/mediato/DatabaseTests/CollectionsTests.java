@@ -61,7 +61,7 @@ public class CollectionsTests {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
         UserDatabase.addUser(user1).get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
@@ -73,7 +73,7 @@ public class CollectionsTests {
 
     @AfterClass
     public static void cleanDatabase() {
-      UserDatabase.database.getReference().setValue(null);
+        DataBaseTestUtil.cleanDatabase();
     }
 
     @Test
