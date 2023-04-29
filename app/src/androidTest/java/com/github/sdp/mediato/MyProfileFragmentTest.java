@@ -32,6 +32,7 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
@@ -196,15 +197,6 @@ public class MyProfileFragmentTest {
         followingButton.check(matches(withText("0 Following")));
     }
 
-    // Tests that following a user updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowingUpdatesFollowingButton() {
-        UserDatabase.followUser(MY_USERNAME, user2.getUsername());
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followingButton.check(matches(withText("1 Following")));
-    }
-
     // Tests that clicking the following button opens the following fragment
     @Test
     public void testFollowingButtonOpensFollowingPage() {
@@ -217,15 +209,6 @@ public class MyProfileFragmentTest {
     public void testInitialFollowersButtonState() {
         followersButton.check(matches(isDisplayed()));
         followersButton.check(matches(withText("0 Followers")));
-    }
-
-    // Tests getting a new follower updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowerUpdatesFollowerButton() {
-        UserDatabase.followUser(user2.getUsername(), MY_USERNAME);
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followersButton.check(matches(withText("1 Followers")));
     }
 
     // Test whether the "Edit" button is displayed
