@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -18,6 +19,7 @@ import com.github.sdp.mediato.ui.MyFollowingFragment;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +35,7 @@ public class MyFollowersFragmentTest {
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DataBaseTestUtil.useEmulator();
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -75,6 +77,10 @@ public class MyFollowersFragmentTest {
       fragmentManager.beginTransaction().replace(R.id.main_container, myFollowersFragment)
               .commitAllowingStateLoss();
     });
+  }
+  @AfterClass
+  public static void cleanDatabase() {
+    DataBaseTestUtil.cleanDatabase();
   }
 
   @Test

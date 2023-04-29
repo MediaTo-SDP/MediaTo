@@ -19,6 +19,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
@@ -55,8 +56,7 @@ public class ExploreFragmentTest {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
-            CollectionsDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
 
@@ -85,6 +85,11 @@ public class ExploreFragmentTest {
             fragmentManager.beginTransaction().replace(R.id.main_container, exploreFragment)
                     .commitAllowingStateLoss();
         });
+    }
+
+    @AfterClass
+    public static void cleanDatabase() {
+        DataBaseTestUtil.cleanDatabase();
     }
 
     // Test whether the explore text is displayed and contains the correct text
