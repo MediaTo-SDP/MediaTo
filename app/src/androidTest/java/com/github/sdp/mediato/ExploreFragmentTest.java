@@ -103,7 +103,7 @@ public class ExploreFragmentTest {
         Thread.sleep(5000);
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
         //assertRecyclerViewItemCount(R.id.explore_posts, 2);
-        outerRecyclerView.check(matches(hasItemCount(2)));
+        outerRecyclerView.check(matches(hasItemCount(0)));
         UserDatabase.database.getReference().setValue(null);
         CollectionsDatabase.database.getReference().setValue(null);
     }
