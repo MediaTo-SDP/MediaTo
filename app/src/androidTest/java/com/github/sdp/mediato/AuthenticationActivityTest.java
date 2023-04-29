@@ -1,5 +1,6 @@
 package com.github.sdp.mediato;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.init;
@@ -8,6 +9,14 @@ import static androidx.test.espresso.intent.Intents.release;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+
+import static com.github.sdp.mediato.AuthenticationActivity.isNetworkAvailable;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static java.lang.Thread.sleep;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
@@ -23,9 +32,11 @@ import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
@@ -36,6 +47,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -56,6 +68,7 @@ public class AuthenticationActivityTest {
     public ActivityScenarioRule<AuthenticationActivity> testRule = new ActivityScenarioRule<>(AuthenticationActivity.class);
     private AuthenticationActivity activity;
     private FirebaseUser user;
+    private String userJson;
 
     /**
      * Logs in the user in the firebase authentication
@@ -63,7 +76,6 @@ public class AuthenticationActivityTest {
     public void login() {
 
         // create user json
-        String userJson;
         try {
             userJson = new JSONObject()
                     .put("sub", email)
@@ -109,6 +121,7 @@ public class AuthenticationActivityTest {
     @Before
     public void startTests() {
         init();
+        clearSharedPreferences();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
@@ -133,21 +146,23 @@ public class AuthenticationActivityTest {
     public void testSignInWorks() {
 
         login();
-        UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(u -> {
+        UserDatabase.addUser(databaseUser).thenAccept(u -> {
+            UserDatabase.deleteUser(databaseUser.getUsername()).thenAccept(u1 -> {
+                ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
+                loginButton.perform(click());
 
-            ViewInteraction loginButton = onView(withId(R.id.google_sign_in));
-            loginButton.perform(click());
+                // select the account if google account selector pops up
+                try {
+                    device.findObject(By.textContains("@")).click();
+                } catch (NullPointerException e) {
+                    System.out.println("Object wasn't found");
+                }
 
-            // select the account if google account selector pops up
-            try {
-                device.findObject(By.textContains("@")).click();
-            } catch (NullPointerException e) {
-                System.out.println("Object wasn't found");
-            }
+                Intents.intended(hasComponent(NewProfileActivity.class.getName()));
 
-            Intents.intended(hasComponent(NewProfileActivity.class.getName()));
-
-            logout();
+                UserDatabase.deleteUser(databaseUser.getUsername());
+                logout();
+            });
         });
     }
 
@@ -216,12 +231,71 @@ public class AuthenticationActivityTest {
 
     }
 
+    @Test
+    public void testAutoLogin() throws InterruptedException {
+        login();
+        clearSharedPreferences();
+
+        activity.updatePreferencesToken(userJson, null);
+        activity.updatePreferencesUsername("test_user");
+
+        sleep(1000);
+
+        activity.checkSavedCredentialsAndConnection(true);
+
+        sleep(5000);
+
+        intended(hasComponent(NewProfileActivity.class.getName()));
+
+        logout();
+    }
+
+    @Test
+    public void testOfflineLogin() throws InterruptedException, IOException {
+        login();
+        clearSharedPreferences();
+
+        activity.updatePreferencesToken(userJson, null);
+        activity.updatePreferencesUsername("test_user");
+
+        sleep(1000);
+
+        activity.checkSavedCredentialsAndConnection(false);
+
+        sleep(5000);
+
+        intended(hasComponent(MainActivity.class.getName()));
+
+        activity.clearSharedPreferences();
+        logout();
+    }
+
+    @Test
+    public void testIsNetworkAvailable() {
+        assertTrue(isNetworkAvailable(activity));
+    }
+
+
     /**
      * Releases the intents
      */
     @After
     public void releaseIntents() {
         release();
+        clearSharedPreferences();
+    }
+
+    private void clearSharedPreferences() {
+        Context context = ApplicationProvider.getApplicationContext();
+        SharedPreferences sharedPreferences = context.getSharedPreferences(String.valueOf(R.string.login_shared_preferences), MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(String.valueOf(R.string.google_id_token_key));
+        editor.remove(String.valueOf(R.string.google_access_token_key));
+        editor.remove(String.valueOf(R.string.username_key));
+
+        editor.apply();
     }
 
 }
