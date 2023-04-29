@@ -49,6 +49,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         // The username must be stored locally because it is used as a key to access the DB
         // For now it is passed as an argument from the profile creation.
         USERNAME = getArguments().getString("username");
+
     }
 
     @Override
@@ -75,6 +76,13 @@ public class MyProfileFragment extends BaseProfileFragment {
         // Add on click listener to sign out button
         Button signOutButton = view.findViewById(R.id.signout_button);
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
+
+        // add a review if there is one
+        Review review = (Review) getArguments().get("review");
+        if (review != null) {
+            // TODO: add to the right collection
+            viewModel.addReviewToCollection(review, "Recently watched");
+        }
 
         return view;
     }

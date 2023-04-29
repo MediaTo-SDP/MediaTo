@@ -183,6 +183,7 @@ public class UserDatabase {
         profilePics.child(username + ".jpg").getBytes(DatabaseUtils.PROFILE_PIC_MAX_SIZE)
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot == null) {
+                        System.out.println("No profile pic found for " + username);
                         future.completeExceptionally(new NoSuchFieldException());
                     } else {
                         future.complete(dataSnapshot);
@@ -202,6 +203,22 @@ public class UserDatabase {
     public static void followUser(String myUsername, String usernameToFollow) {
         setValueInFollowing(myUsername, usernameToFollow, true);
         setValueInFollowers(myUsername, usernameToFollow, true);
+    }
+
+    public static CompletableFuture<Boolean> follows(String myUsername, String followedUsername) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        database.getReference()
+                .child(DatabaseUtils.USERS_PATH + myUsername + DatabaseUtils.FOLLOWING_PATH + followedUsername).get()
+                .addOnSuccessListener(
+                        dataSnapshot -> {
+                            if ((dataSnapshot.getValue() == null) || (dataSnapshot.getValue() == Boolean.FALSE)) {
+                                future.complete(Boolean.FALSE);
+                            } else {
+                                future.complete(Boolean.TRUE);
+                            }
+                        }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
     }
 
     /**
@@ -283,7 +300,7 @@ public class UserDatabase {
      * @return a completable future with a list of strings containing the usernames
      * @Note For now, DEFAULT_RADIUS is used instead of the radius parameter because the settings aren't implemented yet
      */
-    public static CompletableFuture<List<String>> getNearbyUsers(String username, double radius) {
+    public static CompletableFuture<List<String>> getNearbyUsernames(String username, double radius) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         List<String> nearbyUsers = new ArrayList<>();
         getSavedLocation(username).thenAccept(
@@ -294,6 +311,28 @@ public class UserDatabase {
                         nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
                     }
                 });
+        return future;
+    }
+
+    /**
+     * Gets all the nearby users
+     * @param username of the reference user
+     * @param radius in which we want to look for users
+     * @return a completable future with a list of users
+     */
+    public static CompletableFuture<List<User>> getNearbyUsers(String username, double radius) {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+        List<User> users = new ArrayList<>();
+        getNearbyUsernames(username, radius).thenAccept(
+                nearbyUsernames -> {
+                    CompletableFuture.allOf(
+                            nearbyUsernames.stream()
+                                    .map(nearbyUsername -> getUser(nearbyUsername)
+                                            .thenAccept(user -> users.add(user)))
+                                    .toArray(CompletableFuture[]::new)
+                    ).thenRun(() -> future.complete(users));
+                }
+        );
         return future;
     }
 

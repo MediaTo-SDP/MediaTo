@@ -3,6 +3,7 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+<<<<<<< HEAD
         <entry key="-106582001">
           <value>
             <AndroidTestResultsTableState>
@@ -30,6 +31,9 @@
           </value>
         </entry>
         <entry key="1875722143">
+=======
+        <entry key="-812839046">
+>>>>>>> ab5b0f74b910763e8b7f70775d7378563b33f867
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
