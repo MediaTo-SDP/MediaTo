@@ -20,6 +20,7 @@ import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
+import com.google.gson.Gson;
 
 import java.util.Locale;
 
@@ -142,7 +143,7 @@ public class NewItemFragment extends Fragment {
             intent.putExtra("username", username);
             Review review = new Review(username, media,
                     Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
-            intent.putExtra("review", review);
+            intent.putExtra("review", new Gson().toJson(review));
             startActivity(intent);
         }
     }

@@ -82,6 +82,7 @@ public class UserTests {
         assertTrue(followers.contains(user2.getUsername()));
         assertTrue(following.contains(user3.getUsername()));
 
+        assertTrue(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
@@ -99,6 +100,8 @@ public class UserTests {
 
         assertFalse(followers.contains(user2.getUsername()));
         assertFalse(following.contains(user3.getUsername()));
+
+        assertFalse(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
