@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * This is a DatabaseUtils class for the database classes
  */
-class DatabaseUtils {
+public class DatabaseUtils {
 
     //-----------Constant definitions-------------
 
@@ -29,7 +29,7 @@ class DatabaseUtils {
 
     static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
 
-    static final int DEFAULT_RADIUS = 100;
+    public static final int DEFAULT_RADIUS = 100;
 
     //---------------------Util methods-------------------------------------
 

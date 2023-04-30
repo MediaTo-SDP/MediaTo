@@ -34,19 +34,17 @@ import java.util.List;
  */
 public class ExploreFragment extends Fragment {
     private String USERNAME;
+    private boolean PERMISSION_GRANTED = false;
     private ExploreViewModel viewModel;
     private FragmentExploreBinding binding;
     private ReviewPostListAdapter adapter;
-
-    // Register the permissions callback, which handles the user's response to the
-    // system permissions dialog. Save the return value, an instance of
-    // ActivityResultLauncher, as an instance variable.
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
+                    PERMISSION_GRANTED = true;
                     LocationHelper.startLocationService(getActivity());
                 } else {
-                    System.out.println("LOCATION PERMISSIONS NOT GRANTED");
+                    PERMISSION_GRANTED = false;
                 }
             });
 
@@ -63,11 +61,10 @@ public class ExploreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         USERNAME = getArguments().getString("username");
 
-        Log.d("Location", "Entering Home Fragment");
         LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher, USERNAME);
 
         viewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
-        viewModel.setUsername(USERNAME);
+        viewModel.setData(USERNAME, PERMISSION_GRANTED);
 
         adapter = new ReviewPostListAdapter();
         binding.explorePosts.setAdapter(adapter);

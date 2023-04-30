@@ -87,7 +87,7 @@ public class LocationService extends Service {
                 .setMinUpdateIntervalMillis(0)
                 .build();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("SHOULD CHECK PERMISSIONS");
             return;
         }
