@@ -38,7 +38,7 @@ public class UserTests {
     @Before
     public void setUp() {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample users
@@ -64,7 +64,7 @@ public class UserTests {
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DataBaseTestUtil.cleanDatabase();
     }
 
     @Test

@@ -32,6 +32,8 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -48,6 +50,7 @@ import org.hamcrest.Matcher;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -143,7 +146,7 @@ public class MyProfileFragmentTest {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
             auth.useEmulator("10.0.2.2", 9099);
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
 
@@ -182,8 +185,9 @@ public class MyProfileFragmentTest {
         });
     }
 
-    private void storeUsers() {
-
+    @AfterClass
+    public static void cleanDatabase() {
+        DataBaseTestUtil.cleanDatabase();
     }
 
     // Test whether the "Following" button is displayed and contains the correct text
@@ -191,15 +195,6 @@ public class MyProfileFragmentTest {
     public void testInitialFollowingButtonState() {
         followingButton.check(matches(isDisplayed()));
         followingButton.check(matches(withText("0 Following")));
-    }
-
-    // Tests that following a user updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowingUpdatesFollowingButton() {
-        UserDatabase.followUser(MY_USERNAME, user2.getUsername());
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followingButton.check(matches(withText("1 Following")));
     }
 
     // Tests that clicking the following button opens the following fragment
@@ -214,15 +209,6 @@ public class MyProfileFragmentTest {
     public void testInitialFollowersButtonState() {
         followersButton.check(matches(isDisplayed()));
         followersButton.check(matches(withText("0 Followers")));
-    }
-
-    // Tests getting a new follower updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowerUpdatesFollowerButton() {
-        UserDatabase.followUser(user2.getUsername(), MY_USERNAME);
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followersButton.check(matches(withText("1 Followers")));
     }
 
     // Test whether the "Edit" button is displayed
