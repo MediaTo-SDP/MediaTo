@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/newItemLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:windowSoftInputMode="adjustPan|adjustResize">
+
+    <Button
+      android:id="@+id/item_button_add"
+      android:layout_width="125dp"
+      android:layout_height="60dp"
+      android:layout_marginBottom="80dp"
+      android:layout_marginEnd="24dp"
+      android:text="@string/add"
+      android:textSize="14sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+      android:id="@+id/item_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginStart="24dp"
+      android:layout_marginEnd="24dp"
+      android:text="@string/new_item_title"
+      android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+      android:textSize="40sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/ReviewLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/RatingLayout">
+
+        <EditText
+          android:id="@+id/item_review_edittext"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:layout_marginStart="24dp"
+          android:layout_marginEnd="24dp"
+          android:autofillHints="Review"
+          android:ems="10"
+          android:gravity="start|top"
+          android:hint="@string/new_item_edit_text_initial"
+          android:inputType="textMultiLine"
+          android:maxLines="3"
+          android:scrollbars="vertical"
+          android:singleLine="false"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/item_review_text" />
+
+        <TextView
+          android:id="@+id/item_review_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginStart="24dp"
+          android:text="@string/new_item_review_section_title"
+          android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+          android:textSize="24sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.0"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+          android:id="@+id/new_item_review_error_msg"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="24dp"
+          android:layout_marginEnd="24dp"
+          android:textColor="#FF0000"
+          android:textSize="12sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/DisplayLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      app:layout_constraintBottom_toTopOf="@+id/RatingLayout"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/item_title">
+
+        <ImageView
+          android:id="@+id/item_image"
+          android:layout_width="150dp"
+          android:layout_height="200dp"
+          android:layout_marginStart="24dp"
+          android:contentDescription="@string/new_item_image_description"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.0"
+          app:srcCompat="@drawable/oss117_item_test" />
+
+        <TextView
+          android:id="@+id/item_description_text"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:text="@string/new_item_description"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/item_image"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/RatingLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toTopOf="@+id/ReviewLayout"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/DisplayLayout">
+
+        <SeekBar
+          android:id="@+id/item_rating_slider"
+          style="@style/Widget.AppCompat.SeekBar"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="24dp"
+          android:layout_marginStart="24dp"
+          android:layout_marginEnd="24dp"
+          android:max="@integer/max_rating"
+          android:progress="5"
+          android:progressTint="@color/colorPrimary"
+          android:thumbTint="@color/colorPrimary"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/item_rating_text" />
+
+        <TextView
+          android:id="@+id/item_rating_slider_progress"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+          android:id="@+id/item_rating_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:layout_marginStart="24dp"
+          android:text="@string/new_item_rating_section_title"
+          android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+          android:textSize="24sp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.0"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

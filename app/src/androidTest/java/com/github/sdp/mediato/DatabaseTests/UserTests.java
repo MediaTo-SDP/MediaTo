@@ -38,7 +38,7 @@ public class UserTests {
     @Before
     public void setUp() {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample users
@@ -64,7 +64,7 @@ public class UserTests {
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DataBaseTestUtil.cleanDatabase();
     }
 
     @Test
@@ -82,6 +82,7 @@ public class UserTests {
         assertTrue(followers.contains(user2.getUsername()));
         assertTrue(following.contains(user3.getUsername()));
 
+        assertTrue(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
@@ -99,6 +100,8 @@ public class UserTests {
 
         assertFalse(followers.contains(user2.getUsername()));
         assertFalse(following.contains(user3.getUsername()));
+
+        assertFalse(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test

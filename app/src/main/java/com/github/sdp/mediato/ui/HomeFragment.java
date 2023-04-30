@@ -66,11 +66,17 @@ public class HomeFragment extends Fragment {
     Log.d("Location", "Entering Home Fragment");
     LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher);
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-    adapter = new MediaListAdapter();
+    viewModel.wipeOldData();
+    adapter = new MediaListAdapter(getActivity());
     binding.trendingItems.setAdapter(adapter);
+
+
     binding.trendingItems.setLayoutManager(new GridLayoutManager(getContext(), 3));
     binding.trendingItems.setHasFixedSize(true);
-    viewModel.getMovies().observe(getViewLifecycleOwner(), adapter::submitList);
+    viewModel.getMedias().observe(getViewLifecycleOwner(), adapter::submitList);
+    binding.booksTrending.setOnClickListener(v -> viewModel.getBooks());
+    binding.movieTrending.setOnClickListener(v -> viewModel.getMovies());
+    binding.movieTrending.performClick();
   }
 
 }

@@ -2,6 +2,8 @@ package com.github.sdp.mediato.model;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.post.Post;
+import com.github.sdp.mediato.model.post.ReviewPost;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +17,10 @@ public class User {
     private String registerDate = "";
 
     private Location location = new Location();
-    private Map<String, Boolean> followers = new HashMap<>();
-    private Map<String, Boolean> following = new HashMap<>();
+    private final Map<String, Boolean> followers = new HashMap<>();
+    private final Map<String, Boolean> following = new HashMap<>();
 
-    private Map<String, Collection> collections = new HashMap<>();
+    private final Map<String, Collection> collections = new HashMap<>();
 
     private User() {
     }
@@ -63,31 +65,67 @@ public class User {
     }
 
     /**
-     * Returns a list of the usernames of the users the user is following by adapting the map attribute
+     * Returns a list of the usernames of the users the user is following by adapting the map
+     * attribute
      */
     public List<String> getFollowing() {
         List<String> followingList = new ArrayList<>();
         for (String userFollowing : following.keySet()) {
-            if (following.get(userFollowing)) followingList.add(userFollowing);
+            if (following.get(userFollowing)) {
+                followingList.add(userFollowing);
+            }
         }
         return followingList;
+    }
+
+    public int getFollowingCount() {
+        return getFollowing().size();
+    }
+
+    public int getFollowersCount() {
+        return getFollowers().size();
     }
 
     public Map<String, Collection> getCollections() {
         return collections;
     }
 
+    /**
+     * Adds a collection to the user's collections
+     * @important: the collection is only added locally, it is not added to the database
+     * @param collection
+     */
+    public void addCollection(Collection collection) {
+        this.collections.put(collection.getCollectionName(), collection);
+    }
+
+    /**
+     * Creates a review post for each review in the user's collections
+     * @return a list of review posts
+     */
+    public List<ReviewPost> fetchReviewPosts() {
+        List<ReviewPost> reviewPosts = new ArrayList<>();
+        for(Collection collection : collections.values()) {
+            collection.getReviews().values().forEach(
+                    review -> {
+                        reviewPosts.add(new ReviewPost(getUsername(), review));
+                    });
+        }
+        return reviewPosts;
+    }
+
     public static class UserBuilder {
+
         private String id = "";
         private String username = "";
         private String email = "";
         private String registerDate = "";
 
         private Location location = new Location();
-        private Map<String, Boolean> followers = new HashMap<>();
-        private Map<String, Boolean> following = new HashMap<>();
+        private final Map<String, Boolean> followers = new HashMap<>();
+        private final Map<String, Boolean> following = new HashMap<>();
 
-        private Map<String, Collection> collections = new HashMap<>();
+        private final Map<String, Collection> collections = new HashMap<>();
 
         public UserBuilder(String id) {
             Preconditions.checkUID(id);

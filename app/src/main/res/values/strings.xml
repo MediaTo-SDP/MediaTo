@@ -16,6 +16,7 @@
 
   <!--Navigation Bar-->
   <string name="home">Home</string>
+  <string name="explore">Explore</string>
   <string name="search">Search</string>
   <string name="profile">Profile</string>
 
@@ -24,7 +25,9 @@
   <string name="recently_watched">Recently watched</string>
   <string name="title">Title</string>
   <string name="rating">Rating: </string>
-  <string name="add_collection">add collection</string>
+  <string name="add_collection">Add collection</string>
+  <string name="signout">Sign-out</string>
+
 
   <!--Buttons-->
   <string name="edit">Edit</string>
@@ -32,6 +35,8 @@
   <string name="cancel">Cancel</string>
   <string name="film">Film</string>
   <string name="books">Books</string>
+  <string name="followers_button">%d Followers</string>
+  <string name="following_button">%d Following</string>
 
   <!-- Search Categories -->
   <string name="search_category_movies">Movies</string>
@@ -46,6 +51,7 @@
 
   <!--API Urls-->
   <string name="tmdb_url">https://api.themoviedb.org/</string>
+  <string name="gbook_url">https://www.googleapis.com/</string>
 
   <!-- New Item Page -->
   <string name="new_item_edit_text_initial">Type your review\n</string>
@@ -58,18 +64,24 @@
   <!--Authentication-->
   <string name="authentication_page_welcome_title">Welcome to MediaTo</string>
   <string name="authentication_page_login_text">Please login to continue</string>
+  <string name="authentication_page_waiting_text">Please wait while you are being logged in …</string>
+
 
   <!--Toast messages-->
   <string name="profile_creation_success">Profile creation successful!</string>
   <string name="searchUserFailed">Failed to search users</string>
 
-  <string name="myFollowing_title_bar">My followings</string>
   <string name="following">Following</string>
+  <string name="followers">Followers</string>
 
   <string name="collection_empty_name">Collection name cannot be empty</string>
   <string name="collection_name_already_exists">Collection name already exists</string>
   <string name="movie_name">movie_name</string>
 
   <string name="default_profile_pic">https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg</string>
+    <string name="login_shared_preferences">sharedPreferencesLogin</string>
+    <string name="google_id_token_key">google_id_token</string>
+  <string name="google_access_token_key">google_access_token</string>
+  <string name="username_key">username</string>
 
 </resources>

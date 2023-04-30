@@ -1,25 +1,39 @@
 package com.github.sdp.mediato;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
+import com.github.sdp.mediato.ui.ExploreFragment;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.ui.HomeFragment;
+import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
+import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
  * between the home, search, and profile fragments.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
   ActivityMainBinding binding;
-  ProfileFragment profileFragment;
+  MyProfileFragment myProfileFragment;
   SearchFragment searchFragment;
+  ExploreFragment exploreFragment;
+
+  private ProfileViewModel currentUserViewModel;
+  private ProfileViewModel otherUsersViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +42,15 @@ public class MainActivity extends AppCompatActivity {
     setContentView(binding.getRoot());
     // Choose the default fragment that opens on creation of the MainActivity
     setDefaultFragment();
+
+    // Initialize the ViewModels
+    currentUserViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+    otherUsersViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
     // Set the bottomNavigationView
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
-        item -> navigateFragments(item.getItemId()));
-
+            item -> navigateFragments(item.getItemId()));
   }
 
   private boolean navigateFragments(int itemId) {
@@ -43,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
     } else if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
-      replaceFragment(profileFragment);
+      replaceFragment(myProfileFragment);
+    } else if (itemId == R.id.explore) {
+      replaceFragment(exploreFragment);
     }
 
     return true;
@@ -62,21 +82,62 @@ public class MainActivity extends AppCompatActivity {
    * already logged in.
    */
   private void setDefaultFragment() {
-    profileFragment = new ProfileFragment();
+    myProfileFragment = new MyProfileFragment();
     searchFragment = new SearchFragment();
+    exploreFragment = new ExploreFragment();
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
+    Review review = new Gson().fromJson(
+            getIntent().getStringExtra("review"), Review.class);
     Bundle args = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
+    if (review != null) {
+      args.putSerializable("review", review);
+    }
     searchFragment.setArguments(args);
-    profileFragment.setArguments(args);
+    myProfileFragment.setArguments(args);
+    exploreFragment.setArguments(args);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
 
-    replaceFragment(profileFragment);
+    replaceFragment(myProfileFragment);
+  }
+
+  public ProfileViewModel getCurrentUserViewModel(){
+    return currentUserViewModel;
+  }
+
+  public ProfileViewModel getOtherUsersViewModel(){
+    return otherUsersViewModel;
+  }
+
+  @Override
+  public void switchCurrentFragmentWithChildFragment(Fragment childFragment) {
+    replaceFragment(childFragment);
+  }
+
+  /**
+   * Signs out the user and launches the authentication page
+   */
+  public void signOutUser() {
+    FirebaseAuth.getInstance().signOut(); // sign out user and go back to auth page
+
+    SharedPreferences sharedPreferences =
+            getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
+
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+    editor.remove(getString(R.string.google_id_token_key));
+    editor.remove(getString(R.string.google_access_token_key));
+    editor.remove(getString(R.string.username_key));
+
+    editor.apply();
+
+    Intent intent = new Intent(this, AuthenticationActivity.class);
+    startActivity(intent);
   }
 }

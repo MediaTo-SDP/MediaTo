@@ -12,11 +12,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +38,7 @@ public class MyFollowingFragmentTest {
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DataBaseTestUtil.useEmulator();
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -63,10 +65,10 @@ public class MyFollowingFragmentTest {
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
@@ -75,9 +77,14 @@ public class MyFollowingFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       myFollowingFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, myFollowingFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, myFollowingFragment)
               .commitAllowingStateLoss();
     });
+  }
+
+  @AfterClass
+  public static void cleanDatabase() {
+    DataBaseTestUtil.cleanDatabase();
   }
 
   @Test
@@ -90,7 +97,7 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(500);
+    sleep(1000);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
@@ -103,15 +110,15 @@ public class MyFollowingFragmentTest {
     UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user1.getUsername(), user3.getUsername());
 
-    sleep(500);
+    sleep(700);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 2);
     assertDisplayed(user2.getUsername());
     assertDisplayed(user3.getUsername());
 
-    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
+    clickListItemChild(R.id.myFollowing_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
-    sleep(500);
+    sleep(700);
 
     assertRecyclerViewItemCount(R.id.myFollowing_recyclerView, 1);
   }

@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/movie1"
+        android:icon="@drawable/logo_round"
         android:label="@string/mt_app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MediaTo"
+        android:theme="@style/Theme.one"
         android:windowSoftInputMode="adjustResize"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
@@ -23,13 +23,7 @@
             android:enabled="true"
             android:exported="false"/>
         <activity
-            android:name=".NewItemActivity"
-            android:exported="false" />
-        <activity
             android:name=".NewProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TestingActivity"
             android:exported="false" />
         <activity
             android:name=".GreetingActivity"

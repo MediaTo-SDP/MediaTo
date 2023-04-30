@@ -7,7 +7,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
+import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.pressImeActionButton;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
@@ -17,17 +21,23 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.SearchFragment;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -38,13 +48,13 @@ public class SearchFragmentTest {
   User user1;
   User user2;
   User user3;
-
+  User user4;
 
   @Before
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DataBaseTestUtil.useEmulator();
     } catch (Exception ignored) {
     }
     //Create new sample users
@@ -66,15 +76,22 @@ public class SearchFragmentTest {
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
+    user4 = new User.UserBuilder("uniqueId4")
+            .setUsername("oser_test_4")
+            .setEmail("email_test_3")
+            .setRegisterDate("19/03/2023")
+            .setLocation(new Location(3.14, 3.14))
+            .build();
 
     UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
     UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+    UserDatabase.addUser(user4).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
-    // Launch the TestingActivity
-    ActivityScenario<TestingActivity> scenario = ActivityScenario.launch(TestingActivity.class);
+    // Launch the MainActivity
+    ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
-    // Set up the TestingActivity to display the SearchFragment
+    // Set up the MainActivity to display the SearchFragment
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       SearchFragment searchFragment = new SearchFragment();
@@ -83,9 +100,30 @@ public class SearchFragmentTest {
       Bundle bundle = new Bundle();
       bundle.putString("username", "user_test_1");
       searchFragment.setArguments(bundle);
-      fragmentManager.beginTransaction().replace(R.id.fragment_container, searchFragment)
+      fragmentManager.beginTransaction().replace(R.id.main_container, searchFragment)
               .commitAllowingStateLoss();
     });
+  }
+
+  @AfterClass
+  public static void cleanDatabase() {
+    DataBaseTestUtil.cleanDatabase();
+  }
+
+  @Test
+  public void testUserSearchWithEmptyString() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "user");
+    pressImeActionButton();
+
+    sleep(500);
+
+    clearText(androidx.appcompat.R.id.search_src_text);
+    pressImeActionButton();
+
+    sleep(500);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
 
   @Test
@@ -96,12 +134,7 @@ public class SearchFragmentTest {
 
     sleep(500);
 
-    onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText(R.string.searchUserFailed)))
-            .check(matches(isDisplayed()));
-
-    onView(withId(com.google.android.material.R.id.snackbar_action))
-            .perform(click());
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
 
   @Test
@@ -112,7 +145,21 @@ public class SearchFragmentTest {
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+  }
+
+  @Test
+  public void testUserSearchWithBeginningOfKnownUser() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "user");
+    pressImeActionButton();
+
+    sleep(1000);
+
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user4.getUsername());
+    assertNotDisplayed(R.id.userAdapter_userName, user1.getUsername());
   }
 
   @Test
@@ -123,21 +170,76 @@ public class SearchFragmentTest {
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_unfollowButton, R.string.searchUser_unfollow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_unfollowButton);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(1000);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.searchUserAdapter_followButton, R.string.searchUser_follow);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
   }
+
+  @Test
+  public void testMovieSearchWithEmptyString() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Potter");
+
+    sleep(700);
+
+    clearText(androidx.appcompat.R.id.search_src_text);
+    pressImeActionButton();
+
+    sleep(700);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
+
+  @Test
+  public void testMovieSearchWithUnknownMovie() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "jadvbipehsjdb");
+    pressImeActionButton();
+
+    sleep(1000);
+
+    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+  }
+
+  @Test
+  public void testMovieSearchWithKnownMovie() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+
+    sleep(500);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
+  }
+
+  @Test
+  public void testClickOnMovieSearchResultOpensRatingScreen() {
+    clickOn(R.id.search_category_movie);
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+
+    sleep(2000);
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
+
+    onView(withId(R.id.searchactivity_recyclerView))
+        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+    sleep(2000);
+    assertDisplayed(R.id.item_button_add);
+  }
+
 }
 
 

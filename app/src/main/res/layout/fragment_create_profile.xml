@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/plus_icon"
-        android:theme="@style/Theme.MediaTo"
+        app:backgroundTint="@color/gray"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image"
@@ -54,7 +54,8 @@
         android:layout_width="@dimen/profile_picture_big"
         android:layout_height="@dimen/profile_picture_big"
         android:src="@drawable/profile_picture_default"
-        app:civ_border_color="@color/purple_500"
+        android:theme="@style/Theme.one"
+        app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,13 +105,12 @@
       android:layout_width="match_parent"
       android:layout_height="40dp" />
 
-    <com.google.android.material.button.MaterialButton
-      style="@style/Theme.MediaTo"
+    <Button
       android:id="@+id/create_profile_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textSize="20sp"
-      android:textAllCaps="true"
+      android:textAllCaps="false"
       android:text="@string/mt_button_create_profile" />
 
 
