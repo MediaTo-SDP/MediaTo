@@ -7,18 +7,16 @@ import java.util.List;
 
 public class Media {
 
-    private MediaType mediaType;
-    private String title;
-    private String summary;
-    private String posterUrl;
+    private final MediaType mediaType;
+    private final String title;
+    private final String summary;
+    private final String posterUrl;
 
     // Less than 200px wide
-    private String iconUrl;
+    private final String iconUrl;
 
-    private String id;
+    private final String id;
 
-    Media() {
-    }
 
 
     /**
@@ -63,6 +61,9 @@ public class Media {
         this.posterUrl = posterUrl;
         this.iconUrl = iconUrl;
         this.id = id;
+    }
+    public Media(int mediaType, String title, String summary, String posterUrl, String iconUrl, String id) {
+        this(MediaType.toMediaType(mediaType), title, summary, posterUrl, iconUrl, id);
     }
 
     /**

@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
+
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
   ActivityMainBinding binding;
   MyProfileFragment myProfileFragment;
   SearchFragment searchFragment;
+  AppCache globalCache;
 
   private ProfileViewModel currentUserViewModel;
   private ProfileViewModel otherUsersViewModel;
@@ -44,14 +48,15 @@ public class MainActivity extends AppCompatActivity {
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
         item -> navigateFragments(item.getItemId()));
-
+    globalCache = Room.databaseBuilder(getApplicationContext(), AppCache.class, "global-cache")
+            .build();
   }
 
   private boolean navigateFragments(int itemId) {
     // If/else statement is required instead if a switch case.
     // See: http://tools.android.com/tips/non-constant-fields
     if (itemId == R.id.home) {
-      replaceFragment(new HomeFragment());
+      replaceFragment(new HomeFragment(globalCache));
     } else if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {

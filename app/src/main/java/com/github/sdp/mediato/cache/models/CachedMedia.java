@@ -11,7 +11,7 @@ import com.github.sdp.mediato.model.media.MediaType;
 @Entity(tableName = "medias")
 public class CachedMedia extends Media {
     @PrimaryKey(autoGenerate = true)
-    private int rowid;
+    public int rowid;
     public CachedMedia(MediaType mediaType, String title, String summary, String imageUrl, int id) {
         this(mediaType, title, summary, imageUrl, imageUrl, Integer.toString(id));
     }

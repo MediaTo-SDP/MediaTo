@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.cache.MediaCache;
 import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Book;
@@ -39,7 +40,7 @@ public class HomeViewModel extends AndroidViewModel {
      *
      * @param application the application that holds this ViewModel
      */
-    public HomeViewModel(Application application) {
+    public HomeViewModel(Application application, AppCache globalCache) {
         super(application);
         this.application = application;
         movieApi = new TheMovieDBAPI(application.getApplicationContext().getString(R.string.tmdb_url),
@@ -65,7 +66,8 @@ public class HomeViewModel extends AndroidViewModel {
         String searchTerm = "potter";
         bookApi.searchItems(searchTerm, 40)
                 .thenApply(list -> (list.stream().map(Book::new).collect(Collectors.toList())))
-                .exceptionally( t -> MediaCache.getSearchedBooks(searchTerm, mediaDao))
+                .handle((data, error) ->
+                        (error == null) ? data : MediaCache.searchBooks(searchTerm, mediaDao))
                 .thenAccept(books -> updateMediaList(books, MediaType.BOOK));
     }
 
@@ -98,7 +100,7 @@ public class HomeViewModel extends AndroidViewModel {
             currentType = type;
     }
 
-    public void setMediaDao(MediaDao mediaDao){
+    protected void setGlobalCache(MediaDao mediaDao){
         this.mediaDao = mediaDao;
     }
 }
