@@ -61,10 +61,10 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("Location", "Entering Home Fragment");
-        LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher);
-
         USERNAME = getArguments().getString("username");
+
+        Log.d("Location", "Entering Home Fragment");
+        LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher, USERNAME);
 
         viewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
         viewModel.setUsername(USERNAME);

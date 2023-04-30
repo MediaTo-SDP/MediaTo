@@ -20,11 +20,12 @@ import com.github.sdp.mediato.MainActivity;
 import javax.annotation.Nonnull;
 
 public class LocationHelper {
+    public static String USERNAME;
 
-    public static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
-    public static void startTrackingLocation(Context context, Activity activity, ActivityResultLauncher<String> requestPermissionLauncher) {
+    public static void startTrackingLocation(Context context, Activity activity, ActivityResultLauncher<String> requestPermissionLauncher, String username) {
         Log.d("Location", "Entering startTrackingLocation");
+        USERNAME = username;
         if(ContextCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED) {
@@ -59,6 +60,7 @@ public class LocationHelper {
         if(!isLocationServiceRunning(activity)) {
             Log.d("Location", "Location service not running yet in start location");
             Intent intent = new Intent(activity, LocationService.class);
+            intent.putExtra("username", USERNAME);
             intent.setAction(LocationService.ACTION_START_LOCATION_SERVICE);
             activity.startService(intent);
             Toast.makeText(activity, "Location service started", Toast.LENGTH_SHORT).show();

@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -28,6 +29,7 @@ public class LocationService extends Service {
 
     public static final int LOCATION_SERVICE_ID = 175;
     public static String ACTION_START_LOCATION_SERVICE = "startLocationService";
+    private String username;
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -38,6 +40,7 @@ public class LocationService extends Service {
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
+                UserDatabase.updateLocation(username, latitude, longitude);
                 System.out.println("Location update " + latitude + ", " + longitude);
             }
         }
@@ -104,6 +107,7 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
+            this.username = intent.getStringExtra("username");
             if (action != null) {
                 if (action.equals(ACTION_START_LOCATION_SERVICE)) {
                     startLocationService();
