@@ -305,9 +305,12 @@ public class UserDatabase {
         List<String> nearbyUsers = new ArrayList<>();
         getSavedLocation(username).thenAccept(
                 location -> {
-                    if (!location.isValid())
-                        future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
+                    if (!location.isValid()) {
+                        System.out.println("No location, fetching all usernames");
+                        DatabaseUtils.getAllUsernames(future, username);
+                    }
                     else {
+                        System.out.println("Location found, fetching nearby usernames");
                         nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
                     }
                 });

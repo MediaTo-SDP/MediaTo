@@ -1,5 +1,7 @@
 package com.github.sdp.mediato.data;
 
+import static com.github.sdp.mediato.data.UserDatabase.database;
+
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +47,32 @@ public class DatabaseUtils {
     }
 
     /**
+     * Gets all the usernames in the database
+     * @param username of the reference user
+     * @return a completable future with a list of usernames containing all the usernames other than the
+     *          user's itself.
+     */
+    public static void getAllUsernames(CompletableFuture<List<String>> future, String username) {
+        UserDatabase.database.getReference(DatabaseUtils.USERS_PATH).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot dataSnapshot = task.getResult();
+                List<String> allUsernames = new ArrayList<>();
+                dataSnapshot.getChildren().forEach(
+                        userSnapshot -> {
+                            String userKey = userSnapshot.getKey();
+                            if (!userKey.equals(username)) {
+                                allUsernames.add(userKey);
+                            }
+                        }
+                );
+                future.complete(allUsernames);
+            } else {
+                future.completeExceptionally(task.getException());
+            }
+        });
+    }
+
+    /**
      * Helper method for UserDatabase that returns the nearby users and completes the future
      *
      * @param future to track the state
@@ -54,7 +82,7 @@ public class DatabaseUtils {
      */
     static List<String> findNearbyUsers(CompletableFuture<List<String>> future, Location location, String username, double radius) {
         List<String> nearbyUsers = new ArrayList<>();
-        UserDatabase.database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
+        database.getReference(USERS_PATH).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSnapshot.getChildren().forEach(

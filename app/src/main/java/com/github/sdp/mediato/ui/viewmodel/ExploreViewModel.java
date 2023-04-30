@@ -25,7 +25,6 @@ public class ExploreViewModel extends AndroidViewModel {
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
     private String username;
-    private boolean locationPermissionGranted;
 
     public ExploreViewModel(@NonNull Application application) {
         super(application);
@@ -36,9 +35,8 @@ public class ExploreViewModel extends AndroidViewModel {
      * Sets the username of the user who is currently logged in and generates the list of posts
      * @param username the username of the user who is currently logged in
      */
-    public void setData(String username, boolean locationPermissionGranted) {
+    public void setData(String username) throws InterruptedException {
         this.username = username;
-        this.locationPermissionGranted = locationPermissionGranted;
         createNearbyUsersPosts();
     }
 
@@ -56,14 +54,7 @@ public class ExploreViewModel extends AndroidViewModel {
      * the users' reviews.
      */
     public void createNearbyUsersPosts() {
-        CompletableFuture<List<User>> future;
-        if(locationPermissionGranted) {
-            System.out.println("Location permission granted, fetching nearby users");
-            future = UserDatabase.getNearbyUsers(username, DatabaseUtils.DEFAULT_RADIUS);
-        } else {
-            System.out.println("Location permission not granted, fetching all users");
-            future = UserDatabase.getAllUser(username);
-        }
+        CompletableFuture<List<User>> future = UserDatabase.getNearbyUsers(username, DatabaseUtils.DEFAULT_RADIUS);
         future.thenCompose(nearbyUsers -> {
             List<CompletableFuture<Void>> futures = new ArrayList<>();
             List<ReviewPost> post = new ArrayList<>();

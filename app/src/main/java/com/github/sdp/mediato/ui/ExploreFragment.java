@@ -20,12 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.FragmentExploreBinding;
 import com.github.sdp.mediato.location.LocationHelper;
-import com.github.sdp.mediato.model.post.ReviewPost;
 import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
-import com.github.sdp.mediato.ui.viewmodel.MyFollowingViewModel;
 import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
-
-import java.util.List;
 
 /**
  * Fragment for the explore page where the user can see review posts
@@ -34,17 +30,15 @@ import java.util.List;
  */
 public class ExploreFragment extends Fragment {
     private String USERNAME;
-    private boolean PERMISSION_GRANTED = false;
     private ExploreViewModel viewModel;
     private FragmentExploreBinding binding;
     private ReviewPostListAdapter adapter;
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
-                    PERMISSION_GRANTED = true;
                     LocationHelper.startLocationService(getActivity());
                 } else {
-                    PERMISSION_GRANTED = false;
+                    Log.d("ExploreFragment", "Location permission denied");
                 }
             });
 
@@ -64,7 +58,11 @@ public class ExploreFragment extends Fragment {
         LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher, USERNAME);
 
         viewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
-        viewModel.setData(USERNAME, PERMISSION_GRANTED);
+        try {
+            viewModel.setData(USERNAME);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         adapter = new ReviewPostListAdapter();
         binding.explorePosts.setAdapter(adapter);
