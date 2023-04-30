@@ -29,7 +29,7 @@ public class LocationHelper {
         if(ContextCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("Location", "Launch requestpermission for coarse");
+            Log.d("Location", "Launch request permission for coarse");
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             Log.d("Location", "start location service because permission granted");

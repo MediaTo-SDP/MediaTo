@@ -26,8 +26,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
 public class LocationService extends Service {
-
-    public static final int LOCATION_SERVICE_ID = 175;
     public static String ACTION_START_LOCATION_SERVICE = "startLocationService";
     private String username;
 
@@ -35,13 +33,10 @@ public class LocationService extends Service {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            Log.d("Location", "received result");
-            if (locationResult == null) System.out.println("Location is null");
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
                 UserDatabase.updateLocation(username, latitude, longitude);
-                System.out.println("Location update " + latitude + ", " + longitude);
             }
         }
     };
@@ -86,7 +81,6 @@ public class LocationService extends Service {
                 notificationManager.createNotificationChannel(notificationChannel);
             }
         }
-        Log.d("Location", "creating request");
         LocationRequest locationRequest = new LocationRequest.Builder(100)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .setIntervalMillis(100)
@@ -97,7 +91,6 @@ public class LocationService extends Service {
             System.out.println("SHOULD CHECK PERMISSIONS");
             return;
         }
-        Log.d("Location", "sending request");
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         startForeground(175, builder.build());
