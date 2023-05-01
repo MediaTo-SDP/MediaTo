@@ -1,6 +1,7 @@
 package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -57,6 +58,10 @@ public class ExploreFragmentTest {
     private Collection collection2;
     private Collection collection3;
 
+    ViewInteraction exploreText = onView(withId(R.id.text_explore));
+    ViewInteraction refreshButton = onView(withId(R.id.refresh));
+
+
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
@@ -99,11 +104,21 @@ public class ExploreFragmentTest {
     // Test whether the explore text is displayed and contains the correct text
     @Test
     public void testExploreFragmentTextView() {
-        ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
         UserDatabase.database.getReference().setValue(null);
         CollectionsDatabase.database.getReference().setValue(null);
+    }
+
+    // Test that the refresh button is displayed
+    @Test
+    public void testRefreshButtonIsDisplayed() {
+        refreshButton.check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testRefreshAfterClick() {
+        refreshButton.perform(click());
     }
 
     /**
