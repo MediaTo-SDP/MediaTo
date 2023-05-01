@@ -70,5 +70,9 @@ public class ExploreFragment extends Fragment {
         binding.explorePosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.explorePosts.setHasFixedSize(false);
         viewModel.getPosts().observe(getViewLifecycleOwner(), adapter::submitList);
+
+        binding.refresh.setOnClickListener(v -> {
+            viewModel.createNearbyUsersPosts();
+        });
     }
 }
