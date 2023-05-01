@@ -12,6 +12,7 @@ import com.mifmif.common.regex.Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -80,7 +81,7 @@ public abstract class UserViewModel extends ViewModel {
         CompletableFuture[] futures = new CompletableFuture[listFollowingFollowerUsername.size()];
         int i = 0;
 
-        Collections.sort(listFollowingFollowerUsername);
+        sortUsersByName(listFollowingFollowerUsername);
 
         for (String username : listFollowingFollowerUsername) {
             futures[i++] = UserDatabase.getUser(username).thenAccept(listUser::add);
@@ -88,5 +89,9 @@ public abstract class UserViewModel extends ViewModel {
 
         // Wait for all the CompletableFuture to complete
         CompletableFuture.allOf(futures).thenRun(() -> setUserList(listUser));
+    }
+
+    private static void sortUsersByName(List<String> listFollowingFollowerUsername) {
+        Collections.sort(listFollowingFollowerUsername, Comparator.comparing(u -> u.toLowerCase()));
     }
 }
