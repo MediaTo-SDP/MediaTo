@@ -25,6 +25,8 @@ import androidx.test.rule.GrantPermissionRule;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.location.LocationHelper;
+import com.github.sdp.mediato.location.LocationService;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -69,9 +71,6 @@ public class ExploreFragmentTest {
         } catch (Exception ignored) {
         }
 
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
-
         //Setup test data
         createUsers();
         createReviews();
@@ -106,8 +105,6 @@ public class ExploreFragmentTest {
     public void testExploreFragmentTextView() {
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
     }
 
     // Test that the refresh button is displayed
@@ -121,18 +118,16 @@ public class ExploreFragmentTest {
         refreshButton.perform(click());
     }
 
+
     /**
-     * @TODO Fix this test to work with the CI
+     * @TODO Fix this test to work with the CI*/
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
         ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
-        //assertRecyclerViewItemCount(R.id.explore_posts, 2);
-        //outerRecyclerView.check(matches(hasItemCount(2)));
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
-    }*/
+        assertRecyclerViewItemCount(R.id.explore_posts, 2);
+    }
 
 
     /**
