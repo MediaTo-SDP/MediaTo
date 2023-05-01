@@ -48,39 +48,6 @@ public class LocationService extends Service {
     }
 
     private void startLocationService() {
-        String channelId = "location_notification_channel";
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent resultIntent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                getApplicationContext(),
-                0,
-                resultIntent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-        );
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-            getApplicationContext(),
-                channelId
-        );
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle("Location Service");
-        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-        builder.setContentText("Running");
-        builder.setAutoCancel(false);
-        builder.setPriority(NotificationCompat.PRIORITY_MAX);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if(notificationManager != null
-            && notificationManager.getNotificationChannel(channelId) == null) {
-                NotificationChannel notificationChannel = new NotificationChannel(
-                        channelId,
-                        "Location Service",
-                        NotificationManager.IMPORTANCE_HIGH
-                );
-                notificationChannel.setDescription("This channel is used by location service");
-                notificationManager.createNotificationChannel(notificationChannel);
-            }
-        }
         LocationRequest locationRequest = new LocationRequest.Builder(100)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .setIntervalMillis(100)
@@ -93,7 +60,6 @@ public class LocationService extends Service {
         }
         LocationServices.getFusedLocationProviderClient(this)
                 .requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-        startForeground(175, builder.build());
     }
 
     @Override
