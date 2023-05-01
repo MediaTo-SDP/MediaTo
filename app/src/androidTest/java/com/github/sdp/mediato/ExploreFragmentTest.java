@@ -1,5 +1,8 @@
 package com.github.sdp.mediato;
 
+import static android.app.PendingIntent.getActivity;
+import static androidx.test.InstrumentationRegistry.getContext;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -14,13 +17,16 @@ import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
 import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
+import androidx.test.rule.ServiceTestRule;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
@@ -111,16 +117,9 @@ public class ExploreFragmentTest {
     @Test
     public void testRefreshButtonIsDisplayed() {
         refreshButton.check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testRefreshAfterClick() {
         refreshButton.perform(click());
     }
 
-
-    /**
-     * @TODO Fix this test to work with the CI*/
     //Test that all the reviews from the not followed users are displayed
     @Test
     public void testItemCount() throws InterruptedException {
