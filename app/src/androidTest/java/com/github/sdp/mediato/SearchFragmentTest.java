@@ -28,7 +28,9 @@ import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
+import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
@@ -95,6 +97,7 @@ public class SearchFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       SearchFragment searchFragment = new SearchFragment();
+      activity.getMyProfileViewModel().setUsername("user_test_1");
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();

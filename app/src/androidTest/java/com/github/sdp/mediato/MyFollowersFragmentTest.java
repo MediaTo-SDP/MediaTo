@@ -69,6 +69,7 @@ public class MyFollowersFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
+      activity.getMyProfileViewModel().setUsername("user_test_1");
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();

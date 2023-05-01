@@ -175,6 +175,7 @@ public class MyProfileFragmentTest {
             this.activity = activity;
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
             MyProfileFragment myProfileFragment = new MyProfileFragment();
+            activity.getMyProfileViewModel().setUsername(MY_USERNAME);
 
             // Pass the username to the fragment like at profile creation
             Bundle bundle = new Bundle();

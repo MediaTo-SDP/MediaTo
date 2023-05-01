@@ -70,11 +70,7 @@ public class ReadOnlyProfileFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       ReadOnlyProfileFragment readOnlyProfileFragment = new ReadOnlyProfileFragment();
-
-      // Pass the username to the fragment like at profile creation
-      Bundle bundle = new Bundle();
-      bundle.putString("username", USERNAME);
-      readOnlyProfileFragment.setArguments(bundle);
+      activity.getReadOnlyProfileViewModel().setUsername(USERNAME);
       fragmentManager.beginTransaction().replace(R.id.main_container, readOnlyProfileFragment)
           .commitAllowingStateLoss();
     });
