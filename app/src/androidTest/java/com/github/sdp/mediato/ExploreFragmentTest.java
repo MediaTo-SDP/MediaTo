@@ -12,12 +12,14 @@ import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
 
 import static org.junit.Assert.assertTrue;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
@@ -33,6 +35,7 @@ import com.github.sdp.mediato.ui.ExploreFragment;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,7 +47,8 @@ import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
-
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
     private User user2;
