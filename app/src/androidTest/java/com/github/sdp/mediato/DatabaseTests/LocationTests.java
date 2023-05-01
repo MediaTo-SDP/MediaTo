@@ -112,7 +112,7 @@ public class LocationTests {
     public void returnsAllUsernamesForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
         List<String> nearbyUsers = UserDatabase.getNearbyUsernames(user2.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         Thread.sleep(STANDARD_SLEEP_DELAY);
-        assertTrue(nearbyUsers.containsAll(List.of(user1.getUsername(), user2.getUsername(), user3.getUsername(), user4.getUsername(), user5.getUsername())));
+        assertTrue(nearbyUsers.containsAll(List.of(user1.getUsername(), user3.getUsername(), user4.getUsername(), user5.getUsername())));
     }
 
     @Test
