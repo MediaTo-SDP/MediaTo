@@ -45,7 +45,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class ReadOnlyProfileFragmentTest {
-  private final static String USERNAME = "test_username";
+  private final static String USERNAME = "user_readprofile";
   ActivityScenario<MainActivity> scenario;
   ViewInteraction userNameText = onView(withId(R.id.username_text));
   ViewInteraction followingButton = onView(withId(R.id.profile_following_button));

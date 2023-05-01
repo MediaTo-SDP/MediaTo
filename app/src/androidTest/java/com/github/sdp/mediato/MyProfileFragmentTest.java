@@ -63,7 +63,7 @@ import java.util.concurrent.TimeoutException;
 public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
     private final static int WAIT_TIME = 1000;
-    private final static String MY_USERNAME = "test_user_MyProfileFragmentTest";
+    private final static String MY_USERNAME = "user_profile";
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;

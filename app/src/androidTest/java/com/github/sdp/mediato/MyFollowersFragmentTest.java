@@ -42,19 +42,19 @@ public class MyFollowersFragmentTest {
     }
     //Create new sample users
     user1 = new User.UserBuilder("uniqueId1")
-            .setUsername("user_test_1_MyFollowersFragmentTest")
+            .setUsername("user_1_follower")
             .setEmail("email_test_1")
             .setRegisterDate("09/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user2 = new User.UserBuilder("uniqueId2")
-            .setUsername("user_test_2_MyFollowersFragmentTest")
+            .setUsername("user_2_follower")
             .setEmail("email_test_2")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user3 = new User.UserBuilder("uniqueId3")
-            .setUsername("user_test_3_MyFollowersFragmentTest")
+            .setUsername("user_3_follower")
             .setEmail("email_test_3")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
