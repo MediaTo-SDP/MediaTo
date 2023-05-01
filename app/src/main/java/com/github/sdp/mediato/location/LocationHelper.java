@@ -27,15 +27,12 @@ public class LocationHelper {
     }
 
     private static boolean isLocationServiceRunning(Activity activity) {
-        ActivityManager activityManager =
-                (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        if(activityManager != null) {
-            for(ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
-                if(LocationService.class.getName().equals(service.service.getClassName())) {
-                    if(service.foreground) return true;
-                }
+        ActivityManager activityManager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        if(activityManager != null) return false;
+        for(ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)){
+            if(LocationService.class.getName().equals(service.service.getClassName()) && service.foreground) {
+                return true;
             }
-            return false;
         }
         return false;
     }
