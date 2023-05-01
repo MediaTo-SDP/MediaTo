@@ -53,7 +53,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         downloadProfilePicWithRetry(holder.userProfileImageView, user.getUsername());
 
         // Decide which button to display
-        if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
+        if(userViewModel.getMainActivity().getMyProfileViewModel().getUsername().equals(user.getUsername())) {
+            holder.followButton.setVisibility(View.GONE);
+            holder.unfollowButton.setVisibility(View.GONE);
+        }
+        else if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.VISIBLE);
         } else {

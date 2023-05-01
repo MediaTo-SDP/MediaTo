@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
-import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
+import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class BaseProfileFragment extends Fragment {
 
-  protected ProfileViewModel viewModel;
+  protected ReadOnlyProfileViewModel viewModel;
   protected Button followingButton;
   protected Button followersButton;
   protected TextView usernameView;
@@ -44,7 +46,6 @@ public abstract class BaseProfileFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
-    viewModel.setUsername(USERNAME);
 
     // This function is a temporary fix. The delay of uploading the profile picture should be
     // handled before we create the profile fragment (like with a loading screen). Ideally we

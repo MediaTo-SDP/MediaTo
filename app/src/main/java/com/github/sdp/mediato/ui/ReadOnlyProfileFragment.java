@@ -26,13 +26,12 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
     super.onCreate(savedInstanceState);
 
     // TODO: get the username that was clicked on
-    USERNAME = getArguments().getString("username");
+    USERNAME = viewModel.getUsername();
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    viewModel = ((MainActivity) getActivity()).getOtherUsersViewModel();
 
     // Initializes the profile header, based on USERNAME
     View view = super.onCreateView(inflater, container, savedInstanceState);

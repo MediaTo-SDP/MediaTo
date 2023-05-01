@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.mifmif.common.regex.Main;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class UserViewModel extends ViewModel {
+    protected final MutableLiveData<MainActivity> mainActivityLiveData = new MutableLiveData<>();
     protected final MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
     protected final MutableLiveData<User> userLiveData = new MutableLiveData<>();
     protected final MutableLiveData<List<User>> userListLiveData = new MutableLiveData<>();
@@ -30,6 +33,7 @@ public abstract class UserViewModel extends ViewModel {
         userListLiveData.setValue(new ArrayList<>());
     }
 
+    public MainActivity getMainActivity() {return  mainActivityLiveData.getValue();}
     public String getUserName() {
         return userNameLiveData.getValue();
     }
@@ -64,6 +68,7 @@ public abstract class UserViewModel extends ViewModel {
     }
 
     public abstract void reloadUser();
+    public void setMainActivity(MainActivity mainActivity) {mainActivityLiveData.setValue(mainActivity);}
 
     /**
      * Updates the user's "following" or "followers" list by loading all their followed users

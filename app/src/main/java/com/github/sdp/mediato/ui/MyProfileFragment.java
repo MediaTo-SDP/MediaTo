@@ -23,6 +23,7 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,15 +49,13 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // The username must be stored locally because it is used as a key to access the DB
         // For now it is passed as an argument from the profile creation.
-        USERNAME = getArguments().getString("username");
-
+        viewModel = ((MainActivity)getActivity()).getMyProfileViewModel();
+        USERNAME = viewModel.getUsername();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        viewModel = ((MainActivity) getActivity()).getCurrentUserViewModel();
-
         // Initializes the profile header, based on USERNAME
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -81,7 +80,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         Review review = (Review) getArguments().get("review");
         if (review != null) {
             // TODO: add to the right collection
-            viewModel.addReviewToCollection(review, "Recently watched");
+            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "Recently watched");
         }
 
         return view;
@@ -104,7 +103,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
             CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
             Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
-            viewModel.addReviewToCollection(review, "sample collection");
+            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "sample collection");
 
         };
 
@@ -173,7 +172,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Check if the entered name is the same as an already existing collection and make a toast if yes
         String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
-        if (!viewModel.addCollection(collectionName)) {
+        if (!((MyProfileViewModel)viewModel).addCollection(collectionName)) {
             makeToast(toastDuplicateName);
         }
     }
