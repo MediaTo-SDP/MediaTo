@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
+
     // Choose the default fragment that opens on creation of the MainActivity
     setDefaultFragment();
 

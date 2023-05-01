@@ -17,7 +17,6 @@ import com.github.sdp.mediato.databinding.FragmentHomeBinding;
 import com.github.sdp.mediato.ui.viewmodel.HomeViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
 
-
 /**
  * The View class of the Home fragment
  */
@@ -25,6 +24,7 @@ public class HomeFragment extends Fragment {
   private HomeViewModel viewModel;
   private FragmentHomeBinding binding;
   private MediaListAdapter adapter;
+
 
   @Override
   public View onCreateView(@NonNull LayoutInflater  inflater, ViewGroup container,
@@ -50,5 +50,4 @@ public class HomeFragment extends Fragment {
     binding.movieTrending.setOnClickListener(v -> viewModel.getMovies());
     binding.movieTrending.performClick();
   }
-
 }
