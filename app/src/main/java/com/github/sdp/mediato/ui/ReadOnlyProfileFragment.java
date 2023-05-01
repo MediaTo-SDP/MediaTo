@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
     super.onCreate(savedInstanceState);
 
     // TODO: get the username that was clicked on
+    viewModel = ((MainActivity)getActivity()).getReadOnlyProfileViewModel();
     USERNAME = viewModel.getUsername();
   }
 
@@ -35,6 +39,9 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
 
     // Initializes the profile header, based on USERNAME
     View view = super.onCreateView(inflater, container, savedInstanceState);
+
+    Button signOutButton = view.findViewById(R.id.signout_button);
+    signOutButton.setVisibility(View.GONE);
 
     // Get all UI components
     collectionListRecyclerView = view.findViewById(R.id.collection_list_recycler_view);

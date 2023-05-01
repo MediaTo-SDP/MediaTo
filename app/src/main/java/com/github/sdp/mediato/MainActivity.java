@@ -122,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     return myProfileViewModel;
   }
 
+  public MyProfileFragment getMyProfileFragment() {
+    return myProfileFragment;
+  }
+
+  public ReadOnlyProfileFragment getReadOnlyProfileFragment() {
+    return readOnlyProfileFragment;
+  }
+
   @Override
   public void switchCurrentFragmentWithChildFragment(Fragment childFragment) {
     replaceFragment(childFragment);
