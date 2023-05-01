@@ -88,7 +88,7 @@ public class LocationService extends Service {
                 .build();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            System.out.println("SHOULD CHECK PERMISSIONS");
+            //Permission already checked
             return;
         }
         LocationServices.getFusedLocationProviderClient(this)
@@ -98,14 +98,9 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
-            String action = intent.getAction();
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_START_LOCATION_SERVICE)) {
             this.username = intent.getStringExtra("username");
-            if (action != null) {
-                if (action.equals(ACTION_START_LOCATION_SERVICE)) {
-                    startLocationService();
-                }
-            }
+            startLocationService();
         }
         return super.onStartCommand(intent, flags, startId);
     }
