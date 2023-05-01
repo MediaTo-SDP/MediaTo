@@ -45,7 +45,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class ReadOnlyProfileFragmentTest {
-  private final static String USERNAME = "test_username";
+  private final static String USERNAME = "user_readprofile";
   ActivityScenario<MainActivity> scenario;
   ViewInteraction userNameText = onView(withId(R.id.username_text));
   ViewInteraction followingButton = onView(withId(R.id.profile_following_button));
@@ -70,11 +70,7 @@ public class ReadOnlyProfileFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       ReadOnlyProfileFragment readOnlyProfileFragment = new ReadOnlyProfileFragment();
-
-      // Pass the username to the fragment like at profile creation
-      Bundle bundle = new Bundle();
-      bundle.putString("username", USERNAME);
-      readOnlyProfileFragment.setArguments(bundle);
+      activity.getReadOnlyProfileViewModel().setUsername(USERNAME);
       fragmentManager.beginTransaction().replace(R.id.main_container, readOnlyProfileFragment)
           .commitAllowingStateLoss();
     });

@@ -57,13 +57,13 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/userAdapter_followButton"
+                        style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="@string/searchUser_follow"
-                        android:visibility="gone"
-                        style="?attr/borderlessButtonStyle"
-                        />
+                        android:textColor="#03A9F4"
+                        android:visibility="gone" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/userAdapter_unfollowButton"

@@ -4,16 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class UserViewModel extends ViewModel {
+    protected final MutableLiveData<MainActivity> mainActivityLiveData = new MutableLiveData<>();
     protected final MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
     protected final MutableLiveData<User> userLiveData = new MutableLiveData<>();
     protected final MutableLiveData<List<User>> userListLiveData = new MutableLiveData<>();
@@ -30,6 +33,7 @@ public abstract class UserViewModel extends ViewModel {
         userListLiveData.setValue(new ArrayList<>());
     }
 
+    public MainActivity getMainActivity() {return  mainActivityLiveData.getValue();}
     public String getUserName() {
         return userNameLiveData.getValue();
     }
@@ -64,6 +68,7 @@ public abstract class UserViewModel extends ViewModel {
     }
 
     public abstract void reloadUser();
+    public void setMainActivity(MainActivity mainActivity) {mainActivityLiveData.setValue(mainActivity);}
 
     /**
      * Updates the user's "following" or "followers" list by loading all their followed users
@@ -75,7 +80,7 @@ public abstract class UserViewModel extends ViewModel {
         CompletableFuture[] futures = new CompletableFuture[listFollowingFollowerUsername.size()];
         int i = 0;
 
-        Collections.sort(listFollowingFollowerUsername);
+        sortUsersByName(listFollowingFollowerUsername);
 
         for (String username : listFollowingFollowerUsername) {
             futures[i++] = UserDatabase.getUser(username).thenAccept(listUser::add);
@@ -83,5 +88,9 @@ public abstract class UserViewModel extends ViewModel {
 
         // Wait for all the CompletableFuture to complete
         CompletableFuture.allOf(futures).thenRun(() -> setUserList(listUser));
+    }
+
+    private static void sortUsersByName(List<String> listFollowingFollowerUsername) {
+        Collections.sort(listFollowingFollowerUsername, Comparator.comparing(u -> u.toLowerCase()));
     }
 }

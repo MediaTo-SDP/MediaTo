@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 
 import com.github.sdp.mediato.R;
@@ -63,10 +64,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        USERNAME = getArguments().getString("username");
-
+        USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
         theMovieDB = new TheMovieDBAPI(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
-
     }
 
     @Override
@@ -94,6 +93,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // Create and init the Search User ViewModel
         searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
         searchUserViewModel.setUserName(USERNAME);
+        searchUserViewModel.setMainActivity((MainActivity) getActivity());
 
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
