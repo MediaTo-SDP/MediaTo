@@ -93,7 +93,7 @@ public abstract class BaseProfileFragment extends Fragment {
   }
 
   private void observeProfilePic() {
-    viewModel.getProfilePicLiveData().observeForever(
+    viewModel.getProfilePicLiveData().observe(getViewLifecycleOwner(),
         bitmap -> profileImage.setImageBitmap(bitmap));
   }
 

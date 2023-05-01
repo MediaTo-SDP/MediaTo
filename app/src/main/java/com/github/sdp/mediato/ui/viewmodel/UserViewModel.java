@@ -8,7 +8,6 @@ import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
-import com.mifmif.common.regex.Main;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MyFollowersFragmentTest {
   private final static int STANDARD_USER_TIMEOUT = 10;
+  private final static int WAIT_TIME = 1000;
   User user1;
   User user2;
   User user3;
@@ -41,19 +42,19 @@ public class MyFollowersFragmentTest {
     }
     //Create new sample users
     user1 = new User.UserBuilder("uniqueId1")
-            .setUsername("user_test_1")
+            .setUsername("user_test_1_MyFollowersFragmentTest")
             .setEmail("email_test_1")
             .setRegisterDate("09/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user2 = new User.UserBuilder("uniqueId2")
-            .setUsername("user_test_2")
+            .setUsername("user_test_2_MyFollowersFragmentTest")
             .setEmail("email_test_2")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user3 = new User.UserBuilder("uniqueId3")
-            .setUsername("user_test_3")
+            .setUsername("user_test_3_MyFollowersFragmentTest")
             .setEmail("email_test_3")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
@@ -70,11 +71,11 @@ public class MyFollowersFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
-      activity.getMyProfileViewModel().setUsername("user_test_1");
+      activity.getMyProfileViewModel().setUsername(user1.getUsername());
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();
-      bundle.putString("username", "user_test_1");
+      bundle.putString("username", user1.getUsername());
       myFollowersFragment.setArguments(bundle);
       fragmentManager.beginTransaction().replace(R.id.main_container, myFollowersFragment)
               .commitAllowingStateLoss();
@@ -96,7 +97,7 @@ public class MyFollowersFragmentTest {
     UserDatabase.followUser(user2.getUsername(), user1.getUsername());
     UserDatabase.followUser(user3.getUsername(), user1.getUsername());
 
-    sleep(700);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 2);
     assertDisplayed(user2.getUsername());
@@ -110,7 +111,7 @@ public class MyFollowersFragmentTest {
   public void testCantFollowUnfollowItself() {
     UserDatabase.followUser(user1.getUsername(), user1.getUsername());
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 1);
     assertNotDisplayed(R.id.userAdapter_followButton);
@@ -121,17 +122,17 @@ public class MyFollowersFragmentTest {
   public void testClickOnItsCardOpenMyProfile() {
     UserDatabase.followUser(user1.getUsername(), user1.getUsername());
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 1);
     assertNotDisplayed(R.id.userAdapter_followButton);
     assertNotDisplayed(R.id.userAdapter_unfollowButton);
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     clickListItem(R.id.myFollowers_recyclerView, 0);
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayed(R.id.add_media_button);
   }

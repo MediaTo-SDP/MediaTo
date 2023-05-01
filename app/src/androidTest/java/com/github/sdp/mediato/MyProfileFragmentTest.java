@@ -62,7 +62,8 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
-    private final static String MY_USERNAME = "test_user";
+    private final static int WAIT_TIME = 1000;
+    private final static String MY_USERNAME = "test_user_MyProfileFragmentTest";
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;
@@ -158,7 +159,7 @@ public class MyProfileFragmentTest {
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user2 = new User.UserBuilder("uniqueId2")
-                .setUsername("user_test_2")
+                .setUsername("user_test_2_MyProfileFragmentTest")
                 .setEmail("email_test_2")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
@@ -322,7 +323,7 @@ public class MyProfileFragmentTest {
 
         // Click on the sign out button
         activity.signOutUser();
-        sleep(500);
+        sleep(WAIT_TIME);
 
         // Check whether the user is signed out
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
