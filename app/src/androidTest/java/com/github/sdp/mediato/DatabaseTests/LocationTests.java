@@ -108,12 +108,11 @@ public class LocationTests {
 
 
     @Test
-    //Tests that the future is completed exceptionally when trying to retrieve the nearby users
-    //for a user that has an invalid location on the database
-    public void failsWhenGettingNearbyUsersForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
-        CompletableFuture<List<String>> future = UserDatabase.getNearbyUsernames(user2.getUsername(), RADIUS);
+    //Tests that all the usernames are returned if the location is invalid
+    public void returnsAllUsernamesForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
+        List<String> nearbyUsers = UserDatabase.getNearbyUsernames(user2.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         Thread.sleep(STANDARD_SLEEP_DELAY);
-        assertTrue(future.isCompletedExceptionally());
+        assertTrue(nearbyUsers.containsAll(List.of(user1.getUsername(), user2.getUsername(), user3.getUsername(), user4.getUsername(), user5.getUsername())));
     }
 
     @Test
