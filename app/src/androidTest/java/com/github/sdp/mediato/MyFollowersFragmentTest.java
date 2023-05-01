@@ -133,7 +133,7 @@ public class MyFollowersFragmentTest {
 
     sleep(1000);
 
-    assertDisplayed(R.id.signout_button);
+    assertDisplayed(R.id.add_media_button);
   }
 }
 
