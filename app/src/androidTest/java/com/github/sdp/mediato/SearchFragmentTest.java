@@ -14,6 +14,7 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.pressImeActionButton;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
@@ -187,6 +188,28 @@ public class SearchFragmentTest {
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+  }
+
+  @Test
+  public void testClickOnCard() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, user2.getUsername());
+    pressImeActionButton();
+
+    sleep(1000);
+
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
+
+    sleep(1000);
+
+    clickListItem(R.id.searchactivity_recyclerView, 0);
+
+    sleep(1000);
+
+    assertDisplayed(R.id.profile_header);
+    assertNotDisplayed(R.id.signout_button);
   }
 
   @Test

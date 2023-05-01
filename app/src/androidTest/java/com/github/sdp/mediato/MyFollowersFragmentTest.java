@@ -3,6 +3,7 @@ package com.github.sdp.mediato;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
@@ -105,6 +106,35 @@ public class MyFollowersFragmentTest {
     assertDisplayed(R.id.userAdapter_followButton);
   }
 
+  @Test
+  public void testCantFollowUnfollowItself() {
+    UserDatabase.followUser(user1.getUsername(), user1.getUsername());
+
+    sleep(1000);
+
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 1);
+    assertNotDisplayed(R.id.userAdapter_followButton);
+    assertNotDisplayed(R.id.userAdapter_unfollowButton);
+  }
+
+  @Test
+  public void testClickOnItsCardOpenMyProfile() {
+    UserDatabase.followUser(user1.getUsername(), user1.getUsername());
+
+    sleep(1000);
+
+    assertRecyclerViewItemCount(R.id.myFollowers_recyclerView, 1);
+    assertNotDisplayed(R.id.userAdapter_followButton);
+    assertNotDisplayed(R.id.userAdapter_unfollowButton);
+
+    sleep(1000);
+
+    clickListItem(R.id.myFollowers_recyclerView, 0);
+
+    sleep(1000);
+
+    assertDisplayed(R.id.signout_button);
+  }
 }
 
 
