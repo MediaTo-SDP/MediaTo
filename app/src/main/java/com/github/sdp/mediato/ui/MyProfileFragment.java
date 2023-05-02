@@ -114,7 +114,7 @@ public class MyProfileFragment extends BaseProfileFragment {
             System.out.println("clicked collection name is: " +  collection.getCollectionName());
             Collection currentCollection = viewModel.getCollection(collectionName);
 
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
+           // ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
 
             Bundle args = new Bundle();
 
