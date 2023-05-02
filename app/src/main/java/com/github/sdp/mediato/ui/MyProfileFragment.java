@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarOutputStream;
 
 /**
  * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
@@ -78,9 +79,12 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // add a review if there is one
         Review review = (Review) getArguments().get("review");
-        if (review != null) {
+        String collectionName = (String) getArguments().get("collection");
+
+        if (review != null && collectionName != null) {
             // TODO: add to the right collection
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "Recently watched");
+            ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
+            CollectionsDatabase.addReviewToCollection(USERNAME, collectionName, review);
         }
 
         return view;
@@ -101,10 +105,21 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Define what happens when the add button inside a collection is clicked
         OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
-            CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
-            Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "sample collection");
+       /*     CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);*/
+            String collectionName = collection.getCollectionName();
+            System.out.println("clicked collection name is: " +  collection.getCollectionName());
+            Collection currentCollection = viewModel.getCollection(collectionName);
 
+            ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
+
+            Bundle args = new Bundle();
+
+            // Give the username as an argument to the profile page and switch to it
+            SearchFragment searchFragment = new SearchFragment();
+            args.putString("collection", collectionName);
+            System.out.println("Collection name in 0: " + collectionName);
+            searchFragment.setArguments(args);
+            fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
         };
 
         // Create an adapter to display the list of collections in a RecycleView

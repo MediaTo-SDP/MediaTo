@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -19,20 +18,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.sdp.mediato.MainActivity;
-import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
-
 import com.github.sdp.mediato.R;
-
+import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
-
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,12 +35,10 @@ import java.util.stream.Collectors;
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     private static String USERNAME;
-    private Snackbar failedUserSearch;
     private SearchUserViewModel searchUserViewModel;
 
     private SearchView searchView;
     private TextView textView;
-    private GridView gridView;
 
     private RecyclerView recyclerView;
 
@@ -173,7 +165,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        MediaListAdapter mla = new MediaListAdapter(getActivity());
+        String collectionName = (String) getArguments().get("collection");
+        MediaListAdapter mla = new MediaListAdapter(getActivity(), collectionName);
         recyclerView.setAdapter(mla);
         searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
     }

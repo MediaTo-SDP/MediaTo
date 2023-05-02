@@ -11,18 +11,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.github.sdp.mediato.MainActivity;
+import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
-import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
-
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,6 +35,8 @@ public abstract class BaseProfileFragment extends Fragment {
   protected ImageView profileImage;
   protected CollectionListAdapter collectionlistAdapter;
   protected RecyclerView collectionListRecyclerView;
+  protected FragmentSwitcher fragmentSwitcher;
+  protected Bundle bundle = new Bundle();
 
   // Used as a key to access the database
   protected static String USERNAME;
@@ -51,6 +47,8 @@ public abstract class BaseProfileFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
     USERNAME = viewModel.getUsername();
+    bundle.putString("username", USERNAME);
+    fragmentSwitcher = (FragmentSwitcher) getActivity();
 
     // This function is a temporary fix. The delay of uploading the profile picture should be
     // handled before we create the profile fragment (like with a loading screen). Ideally we
@@ -109,11 +107,19 @@ public abstract class BaseProfileFragment extends Fragment {
   }
 
   private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(v -> switchFragment(new MyFollowingFragment()));
+    followingButton.setOnClickListener(v -> {
+      MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+      myFollowingFragment.setArguments(bundle);
+      fragmentSwitcher.switchCurrentFragmentWithChildFragment(myFollowingFragment);
+    });
   }
   
   private void setupFollowersButton(Button followersButton) {
-    followersButton.setOnClickListener(v -> switchFragment(new MyFollowersFragment()));
+    followersButton.setOnClickListener(v -> {
+      MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
+      myFollowersFragment.setArguments(bundle);
+      fragmentSwitcher.switchCurrentFragmentWithChildFragment(myFollowersFragment);
+    });
   }
 
   private void updateFollowingAndFollowersCount() {
@@ -151,18 +157,6 @@ public abstract class BaseProfileFragment extends Fragment {
       }
       return null;
     });
-  }
-
-  private void switchFragment(Fragment fragment) {
-    Bundle args = new Bundle();
-    args.putString("username", USERNAME);
-    fragment.setArguments(args);
-
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.addToBackStack(null);
-    fragmentTransaction.commit();
   }
 
 }
