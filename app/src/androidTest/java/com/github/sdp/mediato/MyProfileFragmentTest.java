@@ -283,7 +283,7 @@ public class MyProfileFragmentTest {
         assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
 
         // Click on the search result
-        clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.media_cover);
+        clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.text_title);
         BaristaSleepInteractions.sleep(WAIT_TIME);
 
         // Check that the rating screen is displayed
