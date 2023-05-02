@@ -28,6 +28,7 @@ import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarOutputStream;
@@ -77,9 +78,12 @@ public class MyProfileFragment extends BaseProfileFragment {
         Button signOutButton = view.findViewById(R.id.signout_button);
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
 
-        // add a review if there is one
-        Review review = (Review) getArguments().get("review");
-        String collectionName = (String) getArguments().get("collection");
+        // Add a review if there is one
+        Bundle args = getArguments();
+        String reviewSerialized = args.getString("review");
+        String collectionName = args.getString("collection");
+        Review review = new Gson().fromJson(reviewSerialized, Review.class);
+        System.out.println("bundle in main: " + bundle);
 
         if (review != null && collectionName != null) {
             // TODO: add to the right collection

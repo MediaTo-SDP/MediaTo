@@ -143,6 +143,20 @@ public class NewItemFragment extends Fragment {
         } else {
             // Switch back to the profile page
             // Forward the current arguments to the profile page (should be username and the name of the collection to add to)
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            String username = requireActivity().getIntent().getStringExtra("username");
+            String collectionName = getArguments().getString("collection");
+            intent.putExtra("username", username);
+            Review review = new Review(username, media,
+                Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+           /* intent.putExtra("review", new Gson().toJson(review));
+            intent.putExtra("collection", collectionName);
+            startActivity(intent);*/
+
+            Bundle b = getArguments();
+            b.putString("review", new Gson().toJson(review));
+            b.putString("collection", collectionName);
+
             MyProfileFragment myProfileFragment = new MyProfileFragment();
             myProfileFragment.setArguments(getArguments());
             fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);

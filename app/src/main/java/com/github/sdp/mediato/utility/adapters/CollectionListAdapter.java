@@ -15,7 +15,6 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.utility.SampleReviews;
-import com.google.android.material.internal.VisibilityAwareImageButton;
 import java.util.List;
 
 /**
