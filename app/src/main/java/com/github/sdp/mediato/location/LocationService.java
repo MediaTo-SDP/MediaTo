@@ -26,7 +26,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
 public class LocationService extends Service {
-    public static String ACTION_START_LOCATION_SERVICE = "startLocationService";
+    public final static String ACTION_START_LOCATION_SERVICE = "startLocationService";
     private String username;
 
     private LocationCallback locationCallback = new LocationCallback() {

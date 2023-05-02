@@ -35,7 +35,7 @@ public class ExploreViewModel extends AndroidViewModel {
      * Sets the username of the user who is currently logged in and generates the list of posts
      * @param username the username of the user who is currently logged in
      */
-    public void setData(String username) {
+    public void setUsername(String username) {
         this.username = username;
         createNearbyUsersPosts();
     }

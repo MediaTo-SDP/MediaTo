@@ -58,7 +58,7 @@ public class ExploreFragment extends Fragment {
         LocationHelper.startTrackingLocation(getContext(), getActivity(), requestPermissionLauncher, USERNAME);
 
         viewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
-        viewModel.setData(USERNAME);
+        viewModel.setUsername(USERNAME);
 
         adapter = new ReviewPostListAdapter();
         binding.explorePosts.setAdapter(adapter);
