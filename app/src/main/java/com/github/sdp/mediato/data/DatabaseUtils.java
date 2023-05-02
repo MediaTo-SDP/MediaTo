@@ -31,7 +31,10 @@ public class DatabaseUtils {
 
     static final int PROFILE_PIC_MAX_SIZE = 1024 * 1024; //1 Megabyte
 
-    public static final int DEFAULT_RADIUS = 100;
+    //The default radius for the nearby users in Kilometers
+    //It is now used for all the nearby users queries
+    //But a future update may allow the user to choose the radius
+    public static final int DEFAULT_RADIUS = 250;
 
     //---------------------Util methods-------------------------------------
 

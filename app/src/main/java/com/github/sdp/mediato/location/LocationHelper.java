@@ -13,6 +13,13 @@ import androidx.core.content.ContextCompat;
 public class LocationHelper {
     public static String USERNAME;
 
+    /**
+     * Starts tracking the location of the user
+     * @param context the context of the activity that is calling this method
+     * @param activity the activity that is calling this method
+     * @param requestPermissionLauncher the launcher that will request the user permission for the location
+     * @param username of the logged in user
+     */
     public static void startTrackingLocation(Context context, Activity activity, ActivityResultLauncher<String> requestPermissionLauncher, String username) {
         USERNAME = username;
         if(ContextCompat.checkSelfPermission(

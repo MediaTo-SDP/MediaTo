@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.data;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -306,11 +307,11 @@ public class UserDatabase {
         getSavedLocation(username).thenAccept(
                 location -> {
                     if (!location.isValid()) {
-                        System.out.println("No location, fetching all usernames");
+                        Log.d("DatabaseUtils", "No location, fetching all usernames");
                         DatabaseUtils.getAllUsernames(future, username);
                     }
                     else {
-                        System.out.println("Location found, fetching nearby usernames");
+                        Log.d("DatabaseUtils", "Location found, fetching nearby usernames");
                         nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
                     }
                 });
