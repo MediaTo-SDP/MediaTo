@@ -78,7 +78,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
         Glide.with(holder.itemView.getContext())
                 .load(getItem(position).getMediaIconUrl())
-                .placeholder(R.drawable.octopussy)
+                .placeholder(R.drawable.movie)
                 .into(holder.binding.mediaCover);
         displayProfilePic(holder, position);
     }
