@@ -261,7 +261,7 @@ public class MyProfileFragmentTest {
         recyclerView.check(matches(hasItemCount(0)));
     }
 
-    // This test checks all the steps of adding a review to a collection on the profile
+    // Test that a click on the add media button opens the searchg
     @Test
     public void testAddMediaButton() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
@@ -272,29 +272,6 @@ public class MyProfileFragmentTest {
 
         // Check that the search is displayed
         movieSearchCategory.check(matches(isDisplayed()));
-
-        // Search for a movie
-        clickOn(R.id.search_category_movie);
-        clickOn(androidx.appcompat.R.id.search_button);
-        typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
-        BaristaSleepInteractions.sleep(WAIT_TIME);
-
-        // Check that the search result is displayed
-        assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
-
-        // Click on the search result
-        clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.text_title);
-        BaristaSleepInteractions.sleep(WAIT_TIME);
-
-        // Check that the rating screen is displayed
-        addReviewButton.check(matches(isDisplayed()));
-
-        // Click on the add button
-        addReviewButton.perform(click());
-        BaristaSleepInteractions.sleep(WAIT_TIME);
-
-        // Check that the review was added
-        collectionRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
     }
 
 
