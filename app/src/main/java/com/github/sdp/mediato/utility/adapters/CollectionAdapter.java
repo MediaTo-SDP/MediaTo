@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
@@ -57,7 +58,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     holder.mediaRating.setText(ratingString);
 
     // TODO set the movie image retrieved from the API
-    holder.mediaImage.setImageResource(R.drawable.bg_movie);
+    Glide.with(holder.itemView.getContext())
+        .load(media.getIconUrl())
+        .placeholder(R.drawable.movie) // Optional placeholder image while loading
+        .into(holder.mediaImage);
   }
 
   @Override
