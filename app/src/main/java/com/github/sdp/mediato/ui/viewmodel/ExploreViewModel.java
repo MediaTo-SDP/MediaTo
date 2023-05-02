@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.sdp.mediato.data.DatabaseUtils;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -34,7 +35,7 @@ public class ExploreViewModel extends AndroidViewModel {
      * Sets the username of the user who is currently logged in and generates the list of posts
      * @param username the username of the user who is currently logged in
      */
-    public void setUsername(String username){
+    public void setUsername(String username) {
         this.username = username;
         createNearbyUsersPosts();
     }
@@ -48,13 +49,12 @@ public class ExploreViewModel extends AndroidViewModel {
     }
 
     /**
-     * Generates the list of posts from nearby users that are not followed
-     * @TODO This method retrieves all users instead of the nearby users at the moment
-     * @TODO because the location feature is not implemented / used yet
-     * @TODO it is enough to replace getAllUser by getNearbyUsers
+     * Generates the list of posts from nearby users that are not followed.
+     * If the user did not grant location permissions, it will fetch all
+     * the users' reviews.
      */
     public void createNearbyUsersPosts() {
-        CompletableFuture<List<User>> future = UserDatabase.getAllUser(username);
+        CompletableFuture<List<User>> future = UserDatabase.getNearbyUsers(username, DatabaseUtils.DEFAULT_RADIUS);
         future.thenCompose(nearbyUsers -> {
             List<CompletableFuture<Void>> futures = new ArrayList<>();
             List<ReviewPost> post = new ArrayList<>();
@@ -62,7 +62,6 @@ public class ExploreViewModel extends AndroidViewModel {
                 CompletableFuture<Boolean> followsFuture = UserDatabase.follows(username, user.getUsername());
                 CompletableFuture<Void> postFuture = followsFuture.thenAccept(follows -> {
                     if (!follows) {
-                        System.out.println(username + " doesn't follow " + user.getUsername());
                         post.addAll(user.fetchReviewPosts());
                     }
                 });

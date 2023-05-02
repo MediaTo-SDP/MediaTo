@@ -35,6 +35,7 @@
   <string name="cancel">Cancel</string>
   <string name="film">Film</string>
   <string name="books">Books</string>
+  <string name="refresh">Refresh</string>
   <string name="followers_button">%d Followers</string>
   <string name="following_button">%d Following</string>
 

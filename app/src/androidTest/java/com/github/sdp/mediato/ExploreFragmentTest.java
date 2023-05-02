@@ -1,6 +1,10 @@
 package com.github.sdp.mediato;
 
+import static android.app.PendingIntent.getActivity;
+import static androidx.test.InstrumentationRegistry.getContext;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -12,16 +16,23 @@ import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
 
 import static org.junit.Assert.assertTrue;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.rule.ServiceTestRule;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.location.LocationHelper;
+import com.github.sdp.mediato.location.LocationService;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -33,6 +44,7 @@ import com.github.sdp.mediato.ui.ExploreFragment;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,7 +56,8 @@ import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
 public class ExploreFragmentTest {
-
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
     private User user2;
@@ -53,15 +66,16 @@ public class ExploreFragmentTest {
     private Collection collection2;
     private Collection collection3;
 
+    ViewInteraction exploreText = onView(withId(R.id.text_explore));
+    ViewInteraction refreshButton = onView(withId(R.id.refresh));
+
+
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
             DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
-
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
 
         //Setup test data
         createUsers();
@@ -95,25 +109,24 @@ public class ExploreFragmentTest {
     // Test whether the explore text is displayed and contains the correct text
     @Test
     public void testExploreFragmentTextView() {
-        ViewInteraction exploreText = onView(withId(R.id.text_explore));
         exploreText.check(matches(isDisplayed()));
         exploreText.check(matches(withText("Explore")));
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
     }
 
-    /**
-     * @TODO Fix this test to work with the CI
-    //Test that all the reviews from the not followed users are displayed
+    // Test that the refresh button is displayed
+    @Test
+    public void testRefreshButtonIsDisplayed() {
+        refreshButton.check(matches(isDisplayed()));
+        refreshButton.perform(click());
+    }
+
+    // Test that all the reviews from the not followed users are displayed
+    // In this test, the user3 is not followed and they have 2 reviews
     @Test
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
-        ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
-        //assertRecyclerViewItemCount(R.id.explore_posts, 2);
-        //outerRecyclerView.check(matches(hasItemCount(2)));
-        UserDatabase.database.getReference().setValue(null);
-        CollectionsDatabase.database.getReference().setValue(null);
-    }*/
+        assertRecyclerViewItemCount(R.id.explore_posts, 2);
+    }
 
 
     /**
