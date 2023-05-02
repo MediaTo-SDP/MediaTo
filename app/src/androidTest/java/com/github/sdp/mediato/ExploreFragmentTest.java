@@ -120,11 +120,11 @@ public class ExploreFragmentTest {
         refreshButton.perform(click());
     }
 
-    //Test that all the reviews from the not followed users are displayed
+    // Test that all the reviews from the not followed users are displayed
+    // In this test, the user3 is not followed and they have 2 reviews
     @Test
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
-        ViewInteraction outerRecyclerView = onView(withId(R.id.explore_posts));
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
     }
 
