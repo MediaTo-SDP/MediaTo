@@ -63,9 +63,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
       holder.addMediaButton.setOnClickListener(v -> {
         // Can be used to execute some code in the profilePage, such as updating the database
         if (onAddMediaButtonClickListener != null) {
-          Review review = s.getMovieReview();
-          //collection.addReview(review);
-          onAddMediaButtonClickListener.onAddMediaButtonClick(collection, review);
+          onAddMediaButtonClickListener.onAddMediaButtonClick(collection);
         }
         collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
       });

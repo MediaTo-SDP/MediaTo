@@ -93,7 +93,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         }
 
         // Define what happens when the add button inside a collection is clicked
-        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
+        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) -> {
             String collectionName = collection.getCollectionName();
 
             // Pass the name of the collection to add the review to to the search fragment and switch to it
@@ -203,6 +203,6 @@ public class MyProfileFragment extends BaseProfileFragment {
 
     public interface OnAddMediaButtonClickListener {
 
-        void onAddMediaButtonClick(Collection collection, Review review);
+        void onAddMediaButtonClick(Collection collection);
     }
 }

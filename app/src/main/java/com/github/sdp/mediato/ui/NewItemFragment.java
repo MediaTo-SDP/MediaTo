@@ -141,22 +141,16 @@ public class NewItemFragment extends Fragment {
         if (reviewText.getText().length() > MAX_REVIEW_LENGTH) {
             requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
         } else {
-            // Switch back to the profile page
-            // Forward the current arguments to the profile page (should be username and the name of the collection to add to)
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+            // Create the review to forward to the profile page
             String username = requireActivity().getIntent().getStringExtra("username");
-            String collectionName = getArguments().getString("collection");
-            intent.putExtra("username", username);
             Review review = new Review(username, media,
                 Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
-           /* intent.putExtra("review", new Gson().toJson(review));
-            intent.putExtra("collection", collectionName);
-            startActivity(intent);*/
 
-            Bundle b = getArguments();
-            b.putString("review", new Gson().toJson(review));
-            b.putString("collection", collectionName);
+            // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
+            Bundle args = getArguments();
+            args.putString("review", new Gson().toJson(review));
 
+            // Switch back to the profile page
             MyProfileFragment myProfileFragment = new MyProfileFragment();
             myProfileFragment.setArguments(getArguments());
             fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
