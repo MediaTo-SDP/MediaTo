@@ -168,31 +168,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void searchMedia(String toBeSearched){
-        switch (this.currentCategory) {
-            case MOVIES:
-                if (!toBeSearched.isEmpty()) {
+        if(!toBeSearched.isEmpty()){
+            switch (this.currentCategory) {
+                case MOVIES:
                     searchMediaResults.setValue(Collections.emptyList());
                     // fetch from API
                     theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
                         searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
                     });
-                } else {
-                    searchMediaResults.setValue(Collections.emptyList());
-                }
-                break;
-            case BOOKS:
-                if (!toBeSearched.isEmpty()) {
-                    searchMediaResults.setValue(Collections.emptyList());
-                    // fetch from API
-                    gBookAPI.searchItems(toBeSearched, 40).thenAccept(list -> {
-                        searchMediaResults.setValue(list.stream().map(Book::new).collect(Collectors.toList()));
-                    });
-                } else {
-                    searchMediaResults.setValue(Collections.emptyList());
-                }
-                break;
-            case MUSIC:
-                break;
+                    break;
+                case BOOKS:
+                        searchMediaResults.setValue(Collections.emptyList());
+                        // fetch from API
+                        gBookAPI.searchItems(toBeSearched, 40).thenAccept(list -> {
+                            searchMediaResults.setValue(list.stream().map(Book::new).collect(Collectors.toList()));
+                        });
+                    break;
+                case MUSIC:
+                    break;
+            }
+        }
+        else{
+            searchMediaResults.setValue(Collections.emptyList());
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         String collectionName = (String) getArguments().get("collection");
