@@ -54,6 +54,8 @@ public class NewItemFragmentTest {
     ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
     ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
 
+    NewItemFragment newItemFragment = new NewItemFragment();
+
     ActivityScenario<MainActivity> scenario;
     Review review;
 
@@ -91,7 +93,7 @@ public class NewItemFragmentTest {
         // Set up the TestingActivity to display the ProfileFragment
         scenario.onActivity(activity -> {
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            NewItemFragment newItemFragment = new NewItemFragment();
+            newItemFragment = new NewItemFragment();
 
             // Pass the username to the fragment like at profile creation
             Bundle bundle = new Bundle();
@@ -133,9 +135,6 @@ public class NewItemFragmentTest {
         onView(withId(R.id.main_container))
                 .check(matches(isDisplayed()))
                 .check(matches(hasDescendant(withId(R.id.profile_header))));
-
-        intended(hasExtra("review", new Gson().toJson(review)));
-
     }
 
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
@@ -145,7 +144,6 @@ public class NewItemFragmentTest {
         editText.perform(closeSoftKeyboard());
 
         addItemButton.perform(click());
-        //activity.addItem();
 
         errorText.check(matches(withText(
                         String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));

@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     viewModel.wipeOldData();
-    adapter = new MediaListAdapter(getActivity());
+    adapter = new MediaListAdapter(getActivity(), null);
     binding.trendingItems.setAdapter(adapter);
 
 

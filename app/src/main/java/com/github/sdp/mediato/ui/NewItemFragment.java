@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
@@ -30,6 +31,7 @@ public class NewItemFragment extends Fragment {
     public final static int MAX_REVIEW_LENGTH = 100;
     private View view;
     private Media media;
+    private FragmentSwitcher fragmentSwitcher;
 
     @Nullable
     @Override
@@ -40,6 +42,7 @@ public class NewItemFragment extends Fragment {
 
         TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
+        fragmentSwitcher = (FragmentSwitcher) getActivity();
 
         Button addButton = view.findViewById(R.id.item_button_add);
         addButton.setOnClickListener(v -> addItem(view));
@@ -138,13 +141,19 @@ public class NewItemFragment extends Fragment {
         if (reviewText.getText().length() > MAX_REVIEW_LENGTH) {
             requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
         } else {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+            // Create the review to forward to the profile page
             String username = requireActivity().getIntent().getStringExtra("username");
-            intent.putExtra("username", username);
             Review review = new Review(username, media,
-                    Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
-            intent.putExtra("review", new Gson().toJson(review));
-            startActivity(intent);
+                Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+
+            // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
+            Bundle args = getArguments();
+            args.putString("review", new Gson().toJson(review));
+
+            // Switch back to the profile page
+            MyProfileFragment myProfileFragment = new MyProfileFragment();
+            myProfileFragment.setArguments(getArguments());
+            fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
         }
     }
 }

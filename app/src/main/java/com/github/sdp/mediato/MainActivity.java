@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.main_container, fragment);
+    fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }
 

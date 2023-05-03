@@ -12,6 +12,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static java.lang.Thread.sleep;
@@ -32,6 +37,7 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.interaction.BaristaClickInteractions;
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
@@ -82,6 +88,9 @@ public class MyProfileFragmentTest {
     ViewInteraction searchMenuItem = onView(withId(R.id.search));
     ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
     ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
+
+    ViewInteraction movieSearchCategory = onView(withId((R.id.search_category_movie)));
+    ViewInteraction addReviewButton = onView(withId((R.id.item_button_add)));
 
     User user1;
     User user2;
@@ -252,15 +261,19 @@ public class MyProfileFragmentTest {
         recyclerView.check(matches(hasItemCount(0)));
     }
 
-    // Test that an item is added to the collection on click of the AddMediaButton
+    // Test that a click on the add media button opens the searchg
     @Test
     public void testAddMediaButton() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
 
+        // Check that the collection is displayed and click on the add media button
         collectionRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addMediaButton.perform(click());
-        collectionRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+
+        // Check that the search is displayed
+        movieSearchCategory.check(matches(isDisplayed()));
     }
+
 
     // Test the initial state of the list of collections after profile creation
     @Test

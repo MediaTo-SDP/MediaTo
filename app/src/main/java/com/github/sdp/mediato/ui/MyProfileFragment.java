@@ -28,8 +28,10 @@ import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarOutputStream;
 
 /**
  * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
@@ -76,12 +78,8 @@ public class MyProfileFragment extends BaseProfileFragment {
         Button signOutButton = view.findViewById(R.id.signout_button);
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
 
-        // add a review if there is one
-        Review review = (Review) getArguments().get("review");
-        if (review != null) {
-            // TODO: add to the right collection
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "Recently watched");
-        }
+        // Add a review if there is one
+        addReview();
 
         return view;
     }
@@ -91,20 +89,19 @@ public class MyProfileFragment extends BaseProfileFragment {
         // Check if a collection is already in the viewModel, if not create the default one
         List<Collection> collections = viewModel.getCollections();
         if (collections == null) {
-            String defaultTitle = getResources().getString(R.string.recently_watched);
-            Collection defaultCollection = new Collection(defaultTitle);
-            collections = new ArrayList<>();
-            collections.add(defaultCollection);
-            CollectionsDatabase.addCollection(USERNAME, defaultCollection);
-            viewModel.setCollections(collections);
+            collections = createDefaultCollection();
         }
 
         // Define what happens when the add button inside a collection is clicked
-        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection, review) -> {
-            CollectionsDatabase.addReviewToCollection(USERNAME, collection.getCollectionName(), review);
-            Collection currentCollection = viewModel.getCollection(collection.getCollectionName());
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, "sample collection");
+        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) -> {
+            String collectionName = collection.getCollectionName();
 
+            // Pass the name of the collection to add the review to to the search fragment and switch to it
+            SearchFragment searchFragment = new SearchFragment();
+            Bundle args = new Bundle();
+            args.putString("collection", collectionName);
+            searchFragment.setArguments(args);
+            fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
         };
 
         // Create an adapter to display the list of collections in a RecycleView
@@ -114,6 +111,27 @@ public class MyProfileFragment extends BaseProfileFragment {
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         return collectionsAdapter;
+    }
+
+    private void addReview(){
+        Bundle args = getArguments();
+        String reviewSerialized = args.getString("review");
+        String collectionName = args.getString("collection");
+        Review review = new Gson().fromJson(reviewSerialized, Review.class);
+
+        if (review != null && collectionName != null) {
+            ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
+        }
+    }
+
+    private List<Collection> createDefaultCollection(){
+        String defaultTitle = getResources().getString(R.string.recently_watched);
+        Collection defaultCollection = new Collection(defaultTitle);
+        List<Collection> collections = new ArrayList<>();
+        collections.add(defaultCollection);
+        CollectionsDatabase.addCollection(USERNAME, defaultCollection);
+        viewModel.setCollections(collections);
+        return collections;
     }
 
     private void setupAddCollectionsButton(Button addCollectionButton) {
@@ -185,6 +203,6 @@ public class MyProfileFragment extends BaseProfileFragment {
 
     public interface OnAddMediaButtonClickListener {
 
-        void onAddMediaButtonClick(Collection collection, Review review);
+        void onAddMediaButtonClick(Collection collection);
     }
 }
