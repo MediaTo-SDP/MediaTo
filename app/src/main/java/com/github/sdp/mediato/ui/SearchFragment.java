@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
@@ -51,13 +53,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private Button currentHighlightedButton;
     private TheMovieDBAPI theMovieDB;
 
+    private GBookAPI gBookAPI;
+
+    private boolean launchedByCollection;
+
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
+
+    public SearchFragment(){
+        super();
+        this.launchedByCollection = false;
+    }
+
+    public SearchFragment(boolean launchedByCollection){
+        super();
+        this.launchedByCollection = launchedByCollection;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
         theMovieDB = new TheMovieDBAPI(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
+        gBookAPI = new GBookAPI(getString(R.string.gbook_url));
     }
 
     @Override
@@ -69,6 +86,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         this.peopleButton = searchView.findViewById(R.id.search_category_people);
         peopleButton.setOnClickListener(this);
+        if(launchedByCollection){
+            peopleButton.setVisibility(View.GONE);
+        }
 
         this.booksButton = searchView.findViewById(R.id.search_category_books);
         booksButton.setOnClickListener(this);
@@ -123,7 +143,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if (view == peopleButton) {
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
         } else if (view == booksButton) {
-
+            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
         } else if (view == musicButton) {
@@ -143,7 +163,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
             searchUser(toBeSearched);
         } else {
-           searchMedia(toBeSearched);
+            searchMedia(toBeSearched);
         }
     }
 
@@ -151,6 +171,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         switch (this.currentCategory) {
             case MOVIES:
                 if (!toBeSearched.isEmpty()) {
+                    searchMediaResults.setValue(Collections.emptyList());
                     // fetch from API
                     theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
                         searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
@@ -160,6 +181,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 }
                 break;
             case BOOKS:
+                if (!toBeSearched.isEmpty()) {
+                    searchMediaResults.setValue(Collections.emptyList());
+                    // fetch from API
+                    gBookAPI.searchItems(toBeSearched, 40).thenAccept(list -> {
+                        searchMediaResults.setValue(list.stream().map(Book::new).collect(Collectors.toList()));
+                    });
+                } else {
+                    searchMediaResults.setValue(Collections.emptyList());
+                }
                 break;
             case MUSIC:
                 break;
@@ -175,8 +205,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if (toBeSearched.length() > 0) {
             getAllUser(USERNAME).thenAccept(users -> {
                 List<User> filteredUser = users.stream()
-                    .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
-                    .collect(Collectors.toList());
+                        .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
+                        .collect(Collectors.toList());
                 sortUsersByName(filteredUser);
                 searchUserViewModel.setUserList(filteredUser);
             });

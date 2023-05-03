@@ -97,7 +97,7 @@ public class MyProfileFragment extends BaseProfileFragment {
             String collectionName = collection.getCollectionName();
 
             // Pass the name of the collection to add the review to to the search fragment and switch to it
-            SearchFragment searchFragment = new SearchFragment();
+            SearchFragment searchFragment = new SearchFragment(true);
             Bundle args = new Bundle();
             args.putString("collection", collectionName);
             searchFragment.setArguments(args);
