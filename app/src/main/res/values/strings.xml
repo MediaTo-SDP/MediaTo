@@ -16,6 +16,7 @@
 
   <!--Navigation Bar-->
   <string name="home">Home</string>
+  <string name="feed">Feed</string>
   <string name="explore">Explore</string>
   <string name="search">Search</string>
   <string name="profile">Profile</string>

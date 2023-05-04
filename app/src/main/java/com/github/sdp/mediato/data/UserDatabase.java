@@ -367,5 +367,39 @@ public class UserDatabase {
         });
         return future;
     }
+
+    /**
+     * Gets all the users the user is following
+     * @param username of the reference user
+     * @return a completable future with a list of users
+     */
+    public static CompletableFuture<List<User>> getFollowingUsers(String username) {
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+
+        getUser(username).thenApply(user -> {
+            List<String> followingUsernames = user.getFollowing(); // Assuming following is a List<String> in the User object
+            List<User> followingUsers = new ArrayList<>();
+            List<CompletableFuture<User>> futures = new ArrayList<>();
+
+            for (String followingUsername : followingUsernames) {
+                CompletableFuture<User> followingUserFuture = getUser(followingUsername);
+                futures.add(followingUserFuture);
+            }
+
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+            allFutures.thenRun(() -> {
+                for (CompletableFuture<User> followingUserFuture : futures) {
+                    User followingUser = followingUserFuture.join();
+                    followingUsers.add(followingUser);
+                }
+                future.complete(followingUsers);
+            });
+
+            return null;
+        });
+
+        return future;
+    }
 }
 
