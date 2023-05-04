@@ -23,8 +23,8 @@
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="24dp"
             android:layout_marginStart="12dp"
             android:text="Mariem"
             android:textSize="14sp"
@@ -33,7 +33,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/media_cover"
-            app:layout_constraintVertical_bias="0.686" />
+            app:layout_constraintVertical_bias="0.717" />
 
         <ImageView
             android:id="@+id/media_cover"
@@ -101,6 +101,24 @@
             app:layout_constraintStart_toEndOf="@+id/media_cover"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.626" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/explore_followButton"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="103dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/explore_follow"
+            android:textColor="#03A9F4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.018"
+            app:layout_constraintStart_toEndOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/text_comment"
+            app:layout_constraintVertical_bias="0.0"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
