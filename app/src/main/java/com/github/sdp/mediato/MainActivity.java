@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.ExploreFragment;
 import com.github.sdp.mediato.model.Review;
-import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
@@ -24,7 +23,7 @@ import com.google.gson.Gson;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
- * between the home, search, and profile fragments.
+ * between the feeds, search, and profile fragments.
  */
 public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
@@ -64,9 +63,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   private boolean navigateFragments(int itemId) {
     // If/else statement is required instead if a switch case.
     // See: http://tools.android.com/tips/non-constant-fields
-    if (itemId == R.id.home) {
-      replaceFragment(new HomeFragment());
-    } else if (itemId == R.id.search) {
+    if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
       replaceFragment(myProfileFragment);
