@@ -1,6 +1,8 @@
 package com.github.sdp.mediato;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -16,12 +18,13 @@ import com.github.sdp.mediato.ui.HomeFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
 import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
  * between the home, search, and profile fragments.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentSwitcher {
 
   ActivityMainBinding binding;
   MyProfileFragment myProfileFragment;
@@ -103,5 +106,19 @@ public class MainActivity extends AppCompatActivity {
 
   public ProfileViewModel getOtherUsersViewModel(){
     return otherUsersViewModel;
+  }
+
+  @Override
+  public void switchCurrentFragmentWithChildFragment(Fragment childFragment) {
+    replaceFragment(childFragment);
+  }
+
+  /**
+   * Signs out the user and launches the authentication page
+   */
+  public void signOutUser() {
+    FirebaseAuth.getInstance().signOut(); // sign out user and go back to auth page
+    Intent intent = new Intent(this, AuthenticationActivity.class);
+    startActivity(intent);
   }
 }

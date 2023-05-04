@@ -6,11 +6,14 @@ import androidx.room.Index;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 
+import java.io.Serializable;
+
 import java.util.List;
+
 
 @Entity(primaryKeys = {"mediaType", "id"}, tableName = "medias",
         indices = {@Index(value = {"title"}), @Index(value = {"summary"})})
-public class Media {
+public class Media implements Serializable {
 
     @NonNull
     private final MediaType mediaType;

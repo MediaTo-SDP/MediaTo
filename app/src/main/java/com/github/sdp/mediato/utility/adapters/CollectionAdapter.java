@@ -6,21 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 
+
 /**
  * This adapter displays a single collection of Media.
  */
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
-  private Context context;
-  private Collection collection;
+  private final Context context;
+  private final Collection collection;
 
 
   public CollectionAdapter(Context context, Collection collection) {

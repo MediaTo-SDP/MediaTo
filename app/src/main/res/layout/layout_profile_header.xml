@@ -1,14 +1,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/profile_header"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_header"
   android:layout_width="match_parent"
   android:layout_height="160dp"
-  android:background="@color/colorPrimary"
+  android:background="@color/theme_secondary"
   app:layout_constraintBottom_toBottomOf="parent"
   app:layout_constraintLeft_toLeftOf="parent"
   app:layout_constraintRight_toRightOf="parent"
   app:layout_constraintTop_toTopOf="parent"
   app:layout_constraintVertical_bias="0.0">
+
+  <Button
+      android:id="@+id/signout_button"
+      android:layout_width="wrap_content"
+      android:layout_height="50dp"
+      android:layout_marginStart="10dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginEnd="10dp"
+      android:backgroundTint="@color/gray"
+      android:padding="@dimen/button_padding"
+      android:text="@string/signout"
+      android:textAllCaps="false"
+      android:textColor="@color/theme_bright"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/username_text"
+      app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
   <Button
     android:id="@+id/profile_following_button"
@@ -18,7 +35,7 @@
     android:backgroundTint="@color/white"
     android:text="@string/following"
     android:textAllCaps="false"
-    android:textColor="@color/gray"
+    android:textColor="@color/theme_grey"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toStartOf="@+id/username_text" />
 
@@ -31,7 +48,7 @@
     android:backgroundTint="@color/white"
     android:text="@string/followers"
     android:textAllCaps="false"
-    android:textColor="@color/gray"
+    android:textColor="@color/theme_grey"
     app:layout_constraintBottom_toBottomOf="@+id/profile_image"
     app:layout_constraintStart_toEndOf="@+id/profile_following_button" />
   <ImageButton
@@ -46,17 +63,19 @@
     android:translationZ="90dp"
     app:layout_constraintBottom_toBottomOf="@+id/profile_following_button"
     app:layout_constraintStart_toEndOf="@+id/profile_image" />
+
   <TextView
-    android:id="@+id/username_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginStart="25dp"
-    android:text="@string/username"
-    android:textColor="@color/white"
-    android:textSize="26dp"
-    app:layout_constraintStart_toEndOf="@+id/profile_image"
-    app:layout_constraintTop_toTopOf="@+id/profile_image" />
+      android:id="@+id/username_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="25dp"
+      android:layout_marginTop="10dp"
+      android:letterSpacing="0.05"
+      android:text="@string/username"
+      android:textColor="@color/white"
+      android:textSize="26dp"
+      app:layout_constraintStart_toEndOf="@+id/profile_image"
+      app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
   <de.hdodenhof.circleimageview.CircleImageView
     android:id="@+id/profile_image"

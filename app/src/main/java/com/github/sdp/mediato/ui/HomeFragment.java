@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     viewModel.setGlobalCache(globalCache.mediaDao());
     viewModel.wipeOldData();
-    adapter = new MediaListAdapter();
+    adapter = new MediaListAdapter(getActivity());
     binding.trendingItems.setAdapter(adapter);
 
 
