@@ -96,15 +96,11 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     searchFragment = new SearchFragment();
     exploreFragment = new ExploreFragment();
 
-    Review review = new Gson().fromJson(
-            getIntent().getStringExtra("review"), Review.class);
     Bundle args = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
-    if (review != null) {
-      args.putSerializable("review", review);
-    }
+
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
