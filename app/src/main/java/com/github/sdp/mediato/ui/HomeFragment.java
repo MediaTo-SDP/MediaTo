@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment {
   public View onCreateView(@NonNull LayoutInflater  inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+    globalCache = (AppCache) getArguments().get(GLOBAL_CACHE_KEY);
+
     // Inflate the layout for this fragment
     return binding.getRoot();
   }
@@ -48,6 +50,7 @@ public class HomeFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
 
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+    viewModel.setGlobalCache(globalCache.mediaDao());
     viewModel.wipeOldData();
     adapter = new MediaListAdapter();
     binding.trendingItems.setAdapter(adapter);

@@ -5,6 +5,9 @@ import com.github.sdp.mediato.model.media.MediaType;
 
 public class Movie extends Media{
 
+    public Movie(String title, String summary, String posterUrl, String iconUrl, String id) {
+        super(MediaType.BOOK, title, summary, posterUrl, iconUrl, id);
+    }
     public Movie(String title, String summary, String imageUrl, int id) {
         super(MediaType.MOVIE, title, summary, imageUrl, id);
     }

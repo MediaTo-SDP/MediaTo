@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
-import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.cache.MediaCache;
 import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Book;
@@ -19,8 +18,10 @@ import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.model.media.Movie;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -33,14 +34,14 @@ public class HomeViewModel extends AndroidViewModel {
     private final TheMovieDBAPI movieApi;
     private final GBookAPI bookApi;
     private MediaType currentType;
-    private MediaDao mediaDao;
-
+    private MediaCache mediaCache;
+    private MediaDao dao;
     /**
      * Default constructor
      *
      * @param application the application that holds this ViewModel
      */
-    public HomeViewModel(Application application, AppCache globalCache) {
+    public HomeViewModel(Application application) {
         super(application);
         this.application = application;
         movieApi = new TheMovieDBAPI(application.getApplicationContext().getString(R.string.tmdb_url),
@@ -56,19 +57,35 @@ public class HomeViewModel extends AndroidViewModel {
         movieApi.trending(20)
                 .thenApply(downloadedData ->
                         downloadedData.stream().map(Movie::new).collect(Collectors.toList()))
-                .thenAccept(movies -> updateMediaList(movies, MediaType.MOVIE));
+                .handle((data, error) -> {
+                    if (data != null){
+                        saveInLocalCache(new ArrayList<>(data)); // Change the type from Movie to Media
+                    }
+                    List<Media> returned = null;
+                    if (error == null){
+                        returned = new ArrayList<>(data);
+                    } else {
+                        returned = dao.getAllMedia();
+                        System.out.println(returned.toString());
+                    }
+                    return returned;
+                }).thenAccept(movies -> updateMediaList(movies, MediaType.MOVIE));
     }
 
     /**
      * Get new books from the API (40 each call)
      */
     public void getBooks(){
-        String searchTerm = "potter";
+        String searchTerm = "star wars";
         bookApi.searchItems(searchTerm, 40)
                 .thenApply(list -> (list.stream().map(Book::new).collect(Collectors.toList())))
-                .handle((data, error) ->
-                        (error == null) ? data : MediaCache.searchBooks(searchTerm, mediaDao))
-                .thenAccept(books -> updateMediaList(books, MediaType.BOOK));
+                .handle((data, error) -> {
+                    if (data != null){
+                        saveInLocalCache(new ArrayList(data)); // Change the type from Book to Media
+                    }
+                    return (error == null) ? data : mediaCache.searchBooks(searchTerm);
+                })
+                .thenAccept(books -> updateMediaList( books, MediaType.BOOK));
     }
 
     /**
@@ -100,7 +117,21 @@ public class HomeViewModel extends AndroidViewModel {
             currentType = type;
     }
 
-    protected void setGlobalCache(MediaDao mediaDao){
-        this.mediaDao = mediaDao;
+    private void saveInLocalCache(List<Media> medias){
+        CompletableFuture.supplyAsync(() -> {
+                long[] data = dao.insertAll(medias);
+                System.out.println(Arrays.toString(data));
+                return data;
+        });
+
+    }
+
+    public void setGlobalCache(MediaDao mediaDao){
+        dao = mediaDao;
+        mediaCache = new MediaCache(mediaDao);
+        CompletableFuture.supplyAsync(() -> {
+            dao.cleanMedias();
+            return null;
+        });
     }
 }

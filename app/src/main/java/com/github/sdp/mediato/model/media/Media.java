@@ -1,12 +1,18 @@
 package com.github.sdp.mediato.model.media;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Index;
+
 import com.github.sdp.mediato.errorCheck.Preconditions;
 
 import java.util.List;
 
-
+@Entity(primaryKeys = {"mediaType", "id"}, tableName = "medias",
+        indices = {@Index(value = {"title"}), @Index(value = {"summary"})})
 public class Media {
 
+    @NonNull
     private final MediaType mediaType;
     private final String title;
     private final String summary;
@@ -14,7 +20,7 @@ public class Media {
 
     // Less than 200px wide
     private final String iconUrl;
-
+    @NonNull
     private final String id;
 
 
