@@ -20,8 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.gbook.GBookAPI;
+import com.github.sdp.mediato.api.gbook.models.GoogleBook;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
@@ -32,6 +35,9 @@ import com.github.sdp.mediato.utility.adapters.UserAdapter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
@@ -171,23 +177,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if(!toBeSearched.isEmpty()){
             switch (this.currentCategory) {
                 case MOVIES:
-                    // fetch from API
+                    // fetch from movie API
                     theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
                         searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
                     });
                     break;
                 case BOOKS:
-                        // fetch from API
-                        gBookAPI.searchItems(toBeSearched, 40).thenAccept(list -> {
-                            searchMediaResults.setValue(list.stream().map(Book::new).collect(Collectors.toList()));
-                        });
+                    // fetch from book API
+                    gBookAPI.searchItems(toBeSearched, 40).thenAccept(list -> {
+                        searchMediaResults.setValue(list.stream().map(Book::new).collect(Collectors.toList()));
+                    });
                     break;
                 case MUSIC:
                     break;
             }
-        }
-        else{
-            searchMediaResults.setValue(Collections.emptyList());
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         String collectionName = (String) getArguments().get("collection");
