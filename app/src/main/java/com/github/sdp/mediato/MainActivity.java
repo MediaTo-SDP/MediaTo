@@ -64,9 +64,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   private boolean navigateFragments(int itemId) {
     // If/else statement is required instead if a switch case.
     // See: http://tools.android.com/tips/non-constant-fields
-    if (itemId == R.id.home) {
-      replaceFragment(new HomeFragment());
-    } else if (itemId == R.id.search) {
+    if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
       replaceFragment(myProfileFragment);

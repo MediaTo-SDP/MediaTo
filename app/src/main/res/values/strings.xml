@@ -15,7 +15,6 @@
   <string name="mt_button_create_profile">Create</string>
 
   <!--Navigation Bar-->
-  <string name="home">Home</string>
   <string name="explore">Explore</string>
   <string name="search">Search</string>
   <string name="profile">Profile</string>
