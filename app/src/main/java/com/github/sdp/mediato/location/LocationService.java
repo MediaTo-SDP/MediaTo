@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.LocationDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -36,7 +37,7 @@ public class LocationService extends Service {
             if (locationResult != null && locationResult.getLastLocation() != null) {
                 double latitude = locationResult.getLastLocation().getLatitude();
                 double longitude = locationResult.getLastLocation().getLongitude();
-                UserDatabase.updateLocation(username, latitude, longitude);
+                LocationDatabase.updateLocation(username, latitude, longitude);
             }
         }
     };
