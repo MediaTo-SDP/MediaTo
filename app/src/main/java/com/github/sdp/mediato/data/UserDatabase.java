@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * UserDatabase class to handle the user related database operations
+ */
 public class UserDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -293,6 +296,7 @@ public class UserDatabase {
      * @return a completable future with a list of users
      */
     public static CompletableFuture<List<User>> getFollowingUsers(String username) {
+        Preconditions.checkUsername(username);
         CompletableFuture<List<User>> future = new CompletableFuture<>();
 
         getUser(username).thenApply(user -> {

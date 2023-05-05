@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * LocationDatabase class to handle the location related database operations
+ */
 public class LocationDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -24,6 +27,7 @@ public class LocationDatabase {
      */
     public static void updateLocation(String username, double latitude, double longitude) {
         Location location = new Location(latitude, longitude);
+        Preconditions.checkUsername(username);
         Preconditions.checkLocation(location);
         database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH)
                 .setValue(location);
@@ -37,6 +41,7 @@ public class LocationDatabase {
      * @see Location class to check for validity
      */
     public static CompletableFuture<Location> getSavedLocation(String username) {
+        Preconditions.checkUsername(username);
         CompletableFuture<Location> future = new CompletableFuture<>();
         database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH).get().addOnSuccessListener(
                 dataSnapshot -> {
@@ -58,6 +63,8 @@ public class LocationDatabase {
      * @Note For now, DEFAULT_RADIUS is used instead of the radius parameter because the settings aren't implemented yet
      */
     public static CompletableFuture<List<String>> getNearbyUsernames(String username, double radius) {
+        Preconditions.checkPositive(radius);
+        Preconditions.checkUsername(username);
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         List<String> nearbyUsers = new ArrayList<>();
         getSavedLocation(username).thenAccept(
@@ -81,6 +88,8 @@ public class LocationDatabase {
      * @return a completable future with a list of users
      */
     public static CompletableFuture<List<User>> getNearbyUsers(String username, double radius) {
+        Preconditions.checkUsername(username);
+        Preconditions.checkPositive(radius);
         CompletableFuture<List<User>> future = new CompletableFuture<>();
         List<User> users = new ArrayList<>();
         getNearbyUsernames(username, radius).thenAccept(
