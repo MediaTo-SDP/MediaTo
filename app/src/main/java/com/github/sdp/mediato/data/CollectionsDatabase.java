@@ -6,6 +6,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * CollectionsDatabase class to handle the collections related database operations
+ */
 public class CollectionsDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.github.sdp.mediato.data.DatabaseUtils;
+import com.github.sdp.mediato.data.LocationDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -54,7 +55,7 @@ public class ExploreViewModel extends AndroidViewModel {
      * the users' reviews.
      */
     public void createNearbyUsersPosts() {
-        CompletableFuture<List<User>> future = UserDatabase.getNearbyUsers(username, DatabaseUtils.DEFAULT_RADIUS);
+        CompletableFuture<List<User>> future = LocationDatabase.getNearbyUsers(username, DatabaseUtils.DEFAULT_RADIUS);
         future.thenCompose(nearbyUsers -> {
             List<CompletableFuture<Void>> futures = new ArrayList<>();
             List<ReviewPost> post = new ArrayList<>();

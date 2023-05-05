@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.ExploreFragment;
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.ui.FeedFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   ReadOnlyProfileFragment readOnlyProfileFragment;
   SearchFragment searchFragment;
   ExploreFragment exploreFragment;
-
+  FeedFragment feedFragment;
   private MyProfileViewModel myProfileViewModel;
   private ReadOnlyProfileViewModel readOnlyProfileViewModel;
 
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   private boolean navigateFragments(int itemId) {
     // If/else statement is required instead if a switch case.
     // See: http://tools.android.com/tips/non-constant-fields
-    if (itemId == R.id.search) {
+    if (itemId == R.id.feed) {
+      replaceFragment(feedFragment);
+    } else if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
       replaceFragment(myProfileFragment);
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     readOnlyProfileFragment = new ReadOnlyProfileFragment();
     searchFragment = new SearchFragment();
     exploreFragment = new ExploreFragment();
+    feedFragment = new FeedFragment();
 
     Review review = new Gson().fromJson(
             getIntent().getStringExtra("review"), Review.class);
@@ -105,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
+    feedFragment.setArguments(args);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
