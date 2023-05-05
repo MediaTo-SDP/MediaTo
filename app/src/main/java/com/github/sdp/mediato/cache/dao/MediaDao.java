@@ -1,5 +1,6 @@
 package com.github.sdp.mediato.cache.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -22,7 +23,7 @@ public interface MediaDao {
     void delete(Media media);
 
     @Query("SELECT * FROM medias")
-    List<Media> getAllMedia();
+    Media[] getAllMedia();
 
     @Query("SELECT * FROM medias WHERE mediaType = :mediaType AND id = :id LIMIT 1")
     Media getMediaFromTypeAndId(MediaType mediaType, String id);

@@ -2,6 +2,7 @@ package com.github.sdp.mediato.model.media;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
@@ -11,20 +12,19 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@Entity(primaryKeys = {"mediaType", "id"}, tableName = "medias",
-        indices = {@Index(value = {"title"}), @Index(value = {"summary"})})
+@Entity(primaryKeys = {"mediaType", "id"}, tableName = "medias")
 public class Media implements Serializable {
 
     @NonNull
-    private final MediaType mediaType;
-    private final String title;
-    private final String summary;
-    private final String posterUrl;
+    private MediaType mediaType;
+    private String title;
+    private String summary;
+    private String posterUrl;
 
     // Less than 200px wide
-    private final String iconUrl;
+    private String iconUrl;
     @NonNull
-    private final String id;
+    private String id;
 
 
 
@@ -73,6 +73,11 @@ public class Media implements Serializable {
     }
     public Media(int mediaType, String title, String summary, String posterUrl, String iconUrl, String id) {
         this(MediaType.toMediaType(mediaType), title, summary, posterUrl, iconUrl, id);
+    }
+
+    @Ignore
+    Media(){
+
     }
 
     /**

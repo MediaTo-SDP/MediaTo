@@ -61,11 +61,11 @@ public class HomeViewModel extends AndroidViewModel {
                     if (data != null){
                         saveInLocalCache(new ArrayList<>(data)); // Change the type from Movie to Media
                     }
-                    List<Media> returned = null;
+                    List<Media> returned;
                     if (error == null){
                         returned = new ArrayList<>(data);
                     } else {
-                        returned = dao.getAllMedia();
+                        returned = Arrays.asList(dao.getAllMedia());
                         System.out.println(returned.toString());
                     }
                     return returned;
@@ -129,9 +129,5 @@ public class HomeViewModel extends AndroidViewModel {
     public void setGlobalCache(MediaDao mediaDao){
         dao = mediaDao;
         mediaCache = new MediaCache(mediaDao);
-        CompletableFuture.supplyAsync(() -> {
-            dao.cleanMedias();
-            return null;
-        });
     }
 }
