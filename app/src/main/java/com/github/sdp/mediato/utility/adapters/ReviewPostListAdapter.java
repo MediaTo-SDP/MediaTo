@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,10 @@ import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.post.ReviewPost;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.base.Converter;
 import com.google.protobuf.Internal;
 
@@ -27,6 +30,9 @@ import java.util.concurrent.CompletableFuture;
 * An adapter (that can be used in recycler views) for the review posts
 */
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
+    private boolean isInExploreFragment = false;
+    private String username;
+
     /**
      * Used by the adapter to compare review posts
      */
@@ -67,6 +73,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
      */
     @Override
     public void onBindViewHolder(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
+        MaterialButton followButton = holder.binding.exploreFollowButton;
         holder.binding.textTitle.setText(getItem(position).getTitle());
         holder.binding.textComment.setText(getItem(position).getComment());
         if (getItem(position).getGrade() > 0) {
@@ -81,6 +88,15 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                 .placeholder(R.drawable.movie)
                 .into(holder.binding.mediaCover);
         displayProfilePic(holder, position);
+        if(isInExploreFragment) {
+            followButton.setVisibility(View.VISIBLE);
+            followButton.setOnClickListener(
+                    v -> {
+                        UserDatabase.followUser(username, getItem(position).getUsername());
+                        followButton.setVisibility(View.GONE);
+                    }
+            );
+        }
     }
 
     /**
@@ -111,6 +127,14 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                         }
                 );
 
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setInExploreFragment(boolean inExploreFragment) {
+        isInExploreFragment = inExploreFragment;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

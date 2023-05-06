@@ -23,8 +23,8 @@
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="48dp"
-            android:layout_height="24dp"
+            android:layout_width="138dp"
+            android:layout_height="25dp"
             android:layout_marginStart="12dp"
             android:text="Mariem"
             android:textSize="14sp"
@@ -33,7 +33,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/media_cover"
-            app:layout_constraintVertical_bias="0.717" />
+            app:layout_constraintVertical_bias="0.685" />
 
         <ImageView
             android:id="@+id/media_cover"
@@ -91,34 +91,33 @@
 
         <TextView
             android:id="@+id/text_comment"
-            android:layout_width="193dp"
-            android:layout_height="75dp"
+            android:layout_width="240dp"
+            android:layout_height="66dp"
             android:text="Great movie for octopus fans !"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintHorizontal_bias="0.419"
             app:layout_constraintStart_toEndOf="@+id/media_cover"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.626" />
+            app:layout_constraintTop_toBottomOf="@+id/text_rating"
+            app:layout_constraintVertical_bias="0.057" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/explore_followButton"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="103dp"
-            android:layout_height="29dp"
+            android:layout_width="105dp"
+            android:layout_height="46dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="9dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/explore_follow"
+            android:text="@string/review_user_follow_button"
             android:textColor="#03A9F4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.018"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/text_comment"
-            app:layout_constraintVertical_bias="0.0"
-            android:visibility="gone" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

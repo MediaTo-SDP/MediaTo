@@ -61,6 +61,8 @@ public class ExploreFragment extends Fragment {
         viewModel.setUsername(USERNAME);
 
         adapter = new ReviewPostListAdapter();
+        adapter.setUsername(USERNAME);
+        adapter.setInExploreFragment(true);
         binding.explorePosts.setAdapter(adapter);
 
         binding.explorePosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));

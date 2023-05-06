@@ -38,6 +38,7 @@
   <string name="refresh">Refresh</string>
   <string name="followers_button">%d Followers</string>
   <string name="following_button">%d Following</string>
+  <string name="review_user_follow_button">Follow</string>
 
   <!-- Search Categories -->
   <string name="search_category_movies">Movies</string>
