@@ -6,11 +6,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
-import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -38,8 +35,6 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
-import com.github.sdp.mediato.utility.SampleReviews;
-import com.google.gson.Gson;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -55,14 +50,12 @@ import java.util.Locale;
  */
 @RunWith(AndroidJUnit4.class)
 public class NewItemFragmentTest {
+    final UiDevice device = UiDevice.getInstance(getInstrumentation());
     ViewInteraction addItemButton = onView(withId(R.id.item_button_add));
     ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
     ViewInteraction editText = onView(withId(R.id.item_review_edittext));
     ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
     ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
-
-    final UiDevice device = UiDevice.getInstance(getInstrumentation());
-
     NewItemFragment newItemFragment = new NewItemFragment();
 
     ActivityScenario<MainActivity> scenario;
@@ -83,6 +76,20 @@ public class NewItemFragmentTest {
             @Override
             public Matcher<View> getConstraints() {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
+    public static Matcher<View> withUrl(final String url) {
+        return new BoundedMatcher<>(WebView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with url: " + url);
+            }
+
+            @Override
+            protected boolean matchesSafely(WebView webView) {
+                return webView.getUrl().equals(url);
             }
         };
     }
@@ -125,7 +132,6 @@ public class NewItemFragmentTest {
         onView(withId(R.id.item_description_text)).check(matches(withText(review.getMedia().getSummary())));
     }
 
-
     // Check if indicator text is well displayed when using the slide bar
     @Test
     public void checkSlideBarAndIndicator() {
@@ -143,7 +149,7 @@ public class NewItemFragmentTest {
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
 
-       addItemButton.perform(click());
+        addItemButton.perform(click());
 
         onView(withId(R.id.main_container))
                 .check(matches(isDisplayed()))
@@ -159,7 +165,7 @@ public class NewItemFragmentTest {
         addItemButton.perform(click());
 
         errorText.check(matches(withText(
-                        String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
+                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
@@ -178,33 +184,20 @@ public class NewItemFragmentTest {
         errorText.check(matches(withText("")));
     }
 
+    // test the trailer button
     @Test
     public void testWebViewUrl() throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(3000); // wait for youtube api request to complete
 
         onView(withId(R.id.item_image)).perform(click());
         String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
 
-        Thread.sleep(3000);
+        Thread.sleep(3000); // wait for loading of the web view
 
-        device.pressBack();
+        device.pressBack(); // go back to app
         device.pressBack();
 
         onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));
-    }
-
-    public static Matcher<View> withUrl(final String url) {
-        return new BoundedMatcher<>(WebView.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with url: " + url);
-            }
-
-            @Override
-            protected boolean matchesSafely(WebView webView) {
-                return webView.getUrl().equals(url);
-            }
-        };
     }
 
     @After

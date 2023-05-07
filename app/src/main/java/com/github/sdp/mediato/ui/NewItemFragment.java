@@ -76,10 +76,7 @@ public class NewItemFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Launches a youtube search via the API in order to get a trailer url for the item
-     */
-    private void searchTrailer() {
+    private YouTube.Search.List createYoutubeSearch() {
 
         // init the youtube api
         YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), null)
@@ -94,19 +91,23 @@ public class NewItemFragment extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // we set the api key, specifiy the search query, type and result number
         search.setKey(getString(R.string.YTBAPIKEY));
         search.setQ(media.getTitle() + " trailer");
         search.setType("video");
-        search.setMaxResults(1L); // we only need the first result
+        search.setMaxResults(1L);
+        return search;
+    }
 
+    /**
+     * Launches a youtube search via the API in order to get a trailer url for the item
+     */
+    private void searchTrailer() {
         // wrapper
-        final YouTube.Search.List searchFinal = search;
+        final YouTube.Search.List search = createYoutubeSearch();
         Thread searchThread = new Thread(() -> { // we need to use another thread to do web searchs
             SearchListResponse listResponse;
             try {
-                listResponse = searchFinal.execute();
+                listResponse = search.execute();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -114,7 +115,6 @@ public class NewItemFragment extends Fragment {
                     .runOnUiThread(() ->
                             handleTrailerResponse(listResponse.getItems().get(0))); // we go back to ui thread (mandatory)
         });
-
         searchThread.start();
     }
 
