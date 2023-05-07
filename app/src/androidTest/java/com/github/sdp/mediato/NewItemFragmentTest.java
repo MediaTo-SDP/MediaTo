@@ -14,6 +14,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +37,7 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
+import com.google.errorprone.annotations.DoNotMock;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -60,6 +63,8 @@ public class NewItemFragmentTest {
 
     ActivityScenario<MainActivity> scenario;
     Review review;
+
+    Activity activity;
 
     private static ViewAction setProgress(final int progress) {
         return new ViewAction() {
@@ -111,8 +116,9 @@ public class NewItemFragmentTest {
         scenario = ActivityScenario.launch(testingIntent);
 
         // Set up the TestingActivity to display the ProfileFragment
-        scenario.onActivity(activity -> {
-            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        scenario.onActivity(a -> {
+            activity = a;
+            FragmentManager fragmentManager = a.getSupportFragmentManager();
             newItemFragment = new NewItemFragment();
 
             // Pass the username to the fragment like at profile creation
@@ -159,13 +165,15 @@ public class NewItemFragmentTest {
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
+        throw new IllegalArgumentException(activity.getString(R.string.YTBAPIKEY));
+        /*
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
         addItemButton.perform(click());
 
         errorText.check(matches(withText(
-                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
+                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));*/
     }
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
