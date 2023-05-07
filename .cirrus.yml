@@ -7,6 +7,7 @@ container:
 env:
   CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
   TMDBAPIKEY: ENCRYPTED[f69e30806b12ae5a678e8a01a9aeaf77f6982aebe82a82a2e793a0b342f9404b289d4a95c224d1ed0567443b811c934e]
+  YTBAPIKEY: ENCRYPTED[f69e30806b12ae5a678e8a01a9aeaf77f6982aebe82a82a2e793a0b342f9404b289d4a95c224d1ed0567443b811c934e]
   FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
 
 check_android_task:
@@ -29,6 +30,8 @@ check_android_task:
   imports_secrets_script: |
     touch ./secret.local
     echo "$TMDBAPIKEY" | base64 -d > ./secret.local
+    echo "$YTBAPIKEY" | base64 -d > ./secret.local
+
   assemble_instrumented_tests_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest

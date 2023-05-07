@@ -14,11 +14,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentManager;
@@ -27,14 +29,19 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
 
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
 import com.github.sdp.mediato.utility.SampleReviews;
 import com.google.gson.Gson;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -53,6 +60,8 @@ public class NewItemFragmentTest {
     ViewInteraction editText = onView(withId(R.id.item_review_edittext));
     ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
     ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
+
+    final UiDevice device = UiDevice.getInstance(getInstrumentation());
 
     NewItemFragment newItemFragment = new NewItemFragment();
 
@@ -85,8 +94,12 @@ public class NewItemFragmentTest {
         // Launch the TestingActivity
         Intent testingIntent = new Intent(ApplicationProvider.getApplicationContext(),
                 MainActivity.class);
-        SampleReviews samples = new SampleReviews();
-        review = samples.getMovieReview();
+
+        Media movie1 = new Movie("The Godfather",
+                "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+                "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", 1);
+        Review review = new Review("Alice", movie1, 8, "One of the best movies I've ever seen.");
+
         testingIntent.putExtra("username", review.getUsername());
         scenario = ActivityScenario.launch(testingIntent);
 
@@ -163,6 +176,35 @@ public class NewItemFragmentTest {
         editText.perform(click(), closeSoftKeyboard());
 
         errorText.check(matches(withText("")));
+    }
+
+    @Test
+    public void testWebViewUrl() throws InterruptedException {
+        Thread.sleep(5000);
+
+        onView(withId(R.id.item_image)).perform(click());
+        String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
+
+        Thread.sleep(3000);
+
+        device.pressBack();
+        device.pressBack();
+
+        onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));
+    }
+
+    public static Matcher<View> withUrl(final String url) {
+        return new BoundedMatcher<>(WebView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with url: " + url);
+            }
+
+            @Override
+            protected boolean matchesSafely(WebView webView) {
+                return webView.getUrl().equals(url);
+            }
+        };
     }
 
     @After

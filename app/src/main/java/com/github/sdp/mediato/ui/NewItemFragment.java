@@ -1,10 +1,10 @@
 package com.github.sdp.mediato.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,18 +17,26 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.FragmentSwitcher;
-import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.MediaType;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
 
     public final static int MAX_REVIEW_LENGTH = 100;
+    public final static int MAX_SUMMARY_LENGTH = 300;
+
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
@@ -51,7 +59,8 @@ public class NewItemFragment extends Fragment {
         if (bundle != null) {
             media = (Media) bundle.get("media");
         }
-        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
+        String summary = media.getSummary();
+        setItemInformation(media.getTitle(), summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary, media.getPosterUrl());
 
 
         setProgressBarIndicator();
@@ -62,7 +71,74 @@ public class NewItemFragment extends Fragment {
             }
         });
 
+        searchTrailer();
+
         return view;
+    }
+
+    /**
+     * Launches a youtube search via the API in order to get a trailer url for the item
+     */
+    private void searchTrailer() {
+
+        // init the youtube api
+        YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), null)
+                .setApplicationName(getString(R.string.mt_app_name))
+                .setGoogleClientRequestInitializer(request -> request.setDisableGZipContent(true))
+                .build();
+        YouTube.Search.List search;
+
+        // launch the search
+        try {
+            search = youtube.search().list("id,snippet");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // we set the api key, specifiy the search query, type and result number
+        search.setKey(getString(R.string.YTBAPIKEY));
+        search.setQ(media.getTitle() + " trailer");
+        search.setType("video");
+        search.setMaxResults(1L); // we only need the first result
+
+        // wrapper
+        final YouTube.Search.List searchFinal = search;
+        Thread searchThread = new Thread(() -> { // we need to use another thread to do web searchs
+            SearchListResponse listResponse;
+            try {
+                listResponse = searchFinal.execute();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            requireActivity()
+                    .runOnUiThread(() ->
+                            handleTrailerResponse(listResponse.getItems().get(0))); // we go back to ui thread (mandatory)
+        });
+
+        searchThread.start();
+    }
+
+    /**
+     * Once the youtube search has generated results, handle the url given by the first result
+     *
+     * @param result: the first item of the search result
+     */
+    private void handleTrailerResponse(SearchResult result) {
+        ImageView playButton = view.findViewById(R.id.item_play_button);
+        WebView webView = view.findViewById(R.id.trailer_web_view);
+        webView.setVisibility(View.INVISIBLE);
+
+        // set click listener if media is a movie or series
+        if (media.getMediaType() != MediaType.BOOK) {
+            view.findViewById(R.id.item_image).setOnClickListener(v -> {
+                // get the url and load it
+                String url = getString(R.string.ytb_url) + result.getId().getVideoId();
+                webView.loadUrl(url);
+            });
+            // otherwise hide play button
+        } else {
+            playButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -144,7 +220,7 @@ public class NewItemFragment extends Fragment {
             // Create the review to forward to the profile page
             String username = requireActivity().getIntent().getStringExtra("username");
             Review review = new Review(username, media,
-                Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+                    Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
 
             // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
             Bundle args = getArguments();
