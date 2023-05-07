@@ -165,15 +165,14 @@ public class NewItemFragmentTest {
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
-        throw new IllegalArgumentException(activity.getString(R.string.YTBAPIKEY));
-        /*
+
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
         addItemButton.perform(click());
 
         errorText.check(matches(withText(
-                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));*/
+                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
