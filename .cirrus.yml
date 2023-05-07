@@ -30,7 +30,8 @@ check_android_task:
   imports_secrets_script: |
     touch ./secret.local
     echo "$TMDBAPIKEY" | base64 -d > ./secret.local
-    echo -n "$YTBAPIKEY" | xxd -ps | tr -d '\n' > ./secret.local
+    echo -n "$YTBAPIKEY" | urlencode > ./secret.local
+
 
   assemble_instrumented_tests_script: |
     chmod +x gradlew
