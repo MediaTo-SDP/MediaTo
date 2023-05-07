@@ -105,7 +105,7 @@ public class NewItemFragmentTest {
         Media movie1 = new Movie("The Godfather",
                 "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
                 "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", 1);
-        Review review = new Review("Alice", movie1, 8, "One of the best movies I've ever seen.");
+        review = new Review("Alice", movie1, 8, "One of the best movies I've ever seen.");
 
         testingIntent.putExtra("username", review.getUsername());
         scenario = ActivityScenario.launch(testingIntent);

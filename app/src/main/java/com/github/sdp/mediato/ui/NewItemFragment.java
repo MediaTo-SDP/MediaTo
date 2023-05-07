@@ -111,9 +111,11 @@ public class NewItemFragment extends Fragment {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            requireActivity()
-                    .runOnUiThread(() ->
-                            handleTrailerResponse(listResponse.getItems().get(0))); // we go back to ui thread (mandatory)
+            if (getActivity() != null) {
+                getActivity()
+                        .runOnUiThread(() -> // we go back to ui thread (mandatory)
+                                handleTrailerResponse(listResponse.getItems().get(0)));
+            }
         });
         searchThread.start();
     }
@@ -224,6 +226,7 @@ public class NewItemFragment extends Fragment {
 
             // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
             Bundle args = getArguments();
+            assert args != null;
             args.putString("review", new Gson().toJson(review));
 
             // Switch back to the profile page
