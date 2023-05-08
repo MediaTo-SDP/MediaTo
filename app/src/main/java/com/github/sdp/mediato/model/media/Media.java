@@ -25,9 +25,16 @@ public class Media implements Serializable {
     @NonNull
     private String id;
 
-
+    /**
+     * Custom constructor that allows a quick creation of a media from an already defined one
+     * @param media the media we want to adapt / copy
+     * @param <T> Any class extending THIS Media class
+     */
     public <T extends Media> Media(T media){
-        this(media.getMediaType(), media.getTitle(), media.getSummary(), media.getPosterUrl(), media.getIconUrl(), media.getId());
+        this(media.getMediaType(), media);
+    }
+    protected <T extends Media> Media(MediaType type, T media) {
+        this(type, media.getTitle(), media.getSummary(), media.getPosterUrl(), media.getIconUrl(), media.getId());
     }
 
     /**
@@ -38,8 +45,7 @@ public class Media implements Serializable {
      * @param imageUrl the url of the image representing the media
      * @param id the id of the media provided by the API
      */
-    @Deprecated
-    public Media(MediaType mediaType, String title, String summary, String imageUrl, int id) {
+    public Media(MediaType mediaType, String title, String summary, String imageUrl, String id) {
         this(mediaType, title, summary, imageUrl, imageUrl, id);
     }
 
@@ -48,13 +54,12 @@ public class Media implements Serializable {
      * @param mediaType the type of the media
      * @param title the title of the media
      * @param summary the summary of the media (might be empty)
-     * @param iconUrl the url of the icon representing the media (<200 pixel height)
-     * @param posterUrl the url of the poster representing the media (full size)
+     * @param imageURL the url of the image representing the media
      * @param id the id of the media provided by the API as an int
      */
     @Deprecated
-    public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, int id) {
-        this(mediaType, title, summary, posterUrl, iconUrl, Integer.toString(id));
+    public Media(MediaType mediaType, String title, String summary, String imageURL, int id) {
+        this(mediaType, title, summary, imageURL, imageURL, Integer.toString(id));
     }
 
     /**
