@@ -6,11 +6,11 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.gbook.GBookAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
-import com.github.sdp.mediato.cache.MediaCache;
 import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
 public class HomeViewModel extends AndroidViewModel {
 
     Application application;
-    private final MutableLiveData<ArrayList<Media>> medias = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Media>> medias = new MutableLiveData<>(new ArrayList<>());
+    private final Observer<List<Media>> observer = medias::setValue;
     private final TheMovieDBAPI movieApi;
     private final GBookAPI bookApi;
     private MediaType currentType;
-    private MediaCache mediaCache;
     private MediaDao dao;
     /**
      * Default constructor
@@ -53,46 +53,42 @@ public class HomeViewModel extends AndroidViewModel {
     /**
      * Get new movies from the API (20 each call)
      */
-    public void getMovies() {
-        movieApi.trending(20)
-                .thenApply(downloadedData ->
-                        downloadedData.stream().map(Movie::new).collect(Collectors.toList()))
-                .handle((data, error) -> {
-                    if (data != null){
-                        saveInLocalCache(new ArrayList<>(data)); // Change the type from Movie to Media
-                    }
-                    List<Media> returned;
-                    if (error == null){
-                        returned = new ArrayList<>(data);
-                    } else {
-                        returned = Arrays.asList(dao.getAllMedia());
-                        System.out.println(returned.toString());
-                    }
+    public CompletableFuture<Void> getMovies() {
+        return movieApi.trending(20)
+                .thenApply(downloadedData -> {
+                    List<Media> returned = downloadedData.stream().map(Movie::new).collect(Collectors.toList());
+                    saveInLocalCache(returned);
                     return returned;
-                }).thenAccept(movies -> updateMediaList(movies, MediaType.MOVIE));
+                })
+                .thenAccept(movies -> updateMediaList(movies, MediaType.MOVIE));
     }
 
     /**
      * Get new books from the API (40 each call)
      */
-    public void getBooks(){
+    public CompletableFuture<Void> getBooks(){
         String searchTerm = "star wars";
-        bookApi.searchItems(searchTerm, 40)
+        return bookApi.searchItems(searchTerm, 40)
                 .thenApply(list -> (list.stream().map(Book::new).collect(Collectors.toList())))
                 .handle((data, error) -> {
-                    if (data != null){
-                        saveInLocalCache(new ArrayList(data)); // Change the type from Book to Media
+
+                    if (data != null) {
+                        dao.search(MediaType.BOOK, "").removeObserver(observer);
+                        updateMediaList(data, MediaType.BOOK);
+                        saveInLocalCache(new ArrayList<>(data)); // Change the type from Book to Media
+                    } else {
+                        // We don't have access to the lifecycle of the ViewModel
+                        dao.searchInTitle(MediaType.BOOK, "star").observeForever(observer);
                     }
-                    return (error == null) ? data : mediaCache.searchBooks(searchTerm);
-                })
-                .thenAccept(books -> updateMediaList( books, MediaType.BOOK));
+                    return null;
+                });
     }
 
     /**
      * Getter for the LiveData containing the currently displayed medias
      * @return the medias LiveData
      */
-    public LiveData<ArrayList<Media>> getMedias() {
+    public LiveData<List<Media>> getMedias() {
         return medias;
     }
 
@@ -128,6 +124,5 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void setGlobalCache(MediaDao mediaDao){
         dao = mediaDao;
-        mediaCache = new MediaCache(mediaDao);
     }
 }

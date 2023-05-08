@@ -3,7 +3,6 @@ package com.github.sdp.mediato.model.media;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Index;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 
@@ -27,6 +26,9 @@ public class Media implements Serializable {
     private String id;
 
 
+    public <T extends Media> Media(T media){
+        this(media.getMediaType(), media.getTitle(), media.getSummary(), media.getPosterUrl(), media.getIconUrl(), media.getId());
+    }
 
     /**
      * Custom constructor that accepts only one image url
@@ -36,6 +38,7 @@ public class Media implements Serializable {
      * @param imageUrl the url of the image representing the media
      * @param id the id of the media provided by the API
      */
+    @Deprecated
     public Media(MediaType mediaType, String title, String summary, String imageUrl, int id) {
         this(mediaType, title, summary, imageUrl, imageUrl, id);
     }
@@ -49,6 +52,7 @@ public class Media implements Serializable {
      * @param posterUrl the url of the poster representing the media (full size)
      * @param id the id of the media provided by the API as an int
      */
+    @Deprecated
     public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, int id) {
         this(mediaType, title, summary, posterUrl, iconUrl, Integer.toString(id));
     }
@@ -62,7 +66,7 @@ public class Media implements Serializable {
      * @param posterUrl the url of the poster representing the media (full size)
      * @param id the id of the media provided by the API as a string
      */
-    public Media(MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, String id) {
+    public Media(@NonNull MediaType mediaType, String title, String summary, String posterUrl, String iconUrl, @NonNull String id) {
         Preconditions.checkMedia(mediaType, List.of(title, summary, posterUrl, iconUrl));
         this.mediaType = mediaType;
         this.title = title;
@@ -70,9 +74,6 @@ public class Media implements Serializable {
         this.posterUrl = posterUrl;
         this.iconUrl = iconUrl;
         this.id = id;
-    }
-    public Media(int mediaType, String title, String summary, String posterUrl, String iconUrl, String id) {
-        this(MediaType.toMediaType(mediaType), title, summary, posterUrl, iconUrl, id);
     }
 
     @Ignore
@@ -84,6 +85,7 @@ public class Media implements Serializable {
      * Getter for the MediaType
      * @return the media type
      */
+    @NonNull
     public MediaType getMediaType() {
         return mediaType;
     }
@@ -132,6 +134,7 @@ public class Media implements Serializable {
      * Getter for the id
      * @return the id
      */
+    @NonNull
     public String getId() {return id;}
 
     /**
@@ -144,5 +147,4 @@ public class Media implements Serializable {
                 this.title.equals(other.title) && this.summary.equals(other.summary) &&
                 this.iconUrl.equals(other.iconUrl) && this.posterUrl.equals(other.posterUrl);
     }
-
 }
