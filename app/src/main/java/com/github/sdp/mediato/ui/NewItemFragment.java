@@ -36,7 +36,11 @@ public class NewItemFragment extends Fragment {
 
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
+<<<<<<< HEAD
 *
+=======
+    public WebView webView;
+>>>>>>> 14de40c5c192086e5cfcb46d44ca7d9985f58b50
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
@@ -60,7 +64,8 @@ public class NewItemFragment extends Fragment {
             media = (Media) bundle.get("media");
         }
         String summary = media.getSummary();
-        setItemInformation(media.getTitle(), summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary, media.getPosterUrl());
+        summary = summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary;
+        setItemInformation(media.getTitle(), summary, media.getPosterUrl());
 
 
         setProgressBarIndicator();
@@ -73,9 +78,16 @@ public class NewItemFragment extends Fragment {
 
         searchTrailer();
 
+        webView = view.findViewById(R.id.trailer_web_view);
+
         return view;
     }
 
+    /**
+     * The youtube search list creation with the API
+     *
+     * @return the search list
+     */
     private YouTube.Search.List createYoutubeSearch() {
 
         // init the youtube api
@@ -91,10 +103,11 @@ public class NewItemFragment extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        search.setKey(getString(R.string.YTBAPIKEY));
+        search.setKey(getString(R.string.google_api_key));
         search.setQ(media.getTitle() + " trailer");
         search.setType("video");
         search.setMaxResults(1L);
+
         return search;
     }
 
@@ -127,7 +140,6 @@ public class NewItemFragment extends Fragment {
      */
     private void handleTrailerResponse(SearchResult result) {
         ImageView playButton = view.findViewById(R.id.item_play_button);
-        WebView webView = view.findViewById(R.id.trailer_web_view);
         webView.setVisibility(View.INVISIBLE);
 
         // set click listener if media is a movie or series

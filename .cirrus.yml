@@ -6,8 +6,7 @@ container:
 
 env:
   CC_TEST_REPORTER_ID: ENCRYPTED[f7470379a00524284d0c9db2b345619d692200b0550672d7cfb56f7aa4452288aff1b4dbcdbe6419e82ad25e03a2a465]
-  TMDBAPIKEY: ENCRYPTED[f69e30806b12ae5a678e8a01a9aeaf77f6982aebe82a82a2e793a0b342f9404b289d4a95c224d1ed0567443b811c934e]
-  YTBAPIKEY: ENCRYPTED[!2921cc4eaef59993a2054b2b2a504742a00408f0fb0572685255474b80b003b3a8acfa097ace773a53c69d8bfa322a2b!]
+  SECRETCONTENT: ENCRYPTED[1c69d17ee10c54682c57ff3cf3a84cbb159c01b9e7e82dd5aee978f68acd56f605601d0fabab43c26c1715b263e55d3b]
   FIREBASE_TOKEN: ENCRYPTED[1b68792433508b1e5b8f2bb4f7a7ae2cfdf750b6c2d2fd3239b960d16344cbe11c339b5a6a6806d1a0309445c5ae5465]
 
 check_android_task:
@@ -29,9 +28,13 @@ check_android_task:
     -camera-back none
   imports_secrets_script: |
     touch ./secret.local
+<<<<<<< HEAD
     echo "$TMDBAPIKEY" | base64 -d > ./secret.local
     echo "$YTBAPIKEY" | base64 -d > ./secret.local
 
+=======
+    echo "$SECRETCONTENT" | base64 -d > ./secret.local
+>>>>>>> 14de40c5c192086e5cfcb46d44ca7d9985f58b50
 
   assemble_instrumented_tests_script: |
     chmod +x gradlew

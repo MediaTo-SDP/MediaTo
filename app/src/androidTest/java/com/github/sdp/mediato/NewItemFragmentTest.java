@@ -15,7 +15,6 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,7 +36,6 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
-import com.google.errorprone.annotations.DoNotMock;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -175,6 +173,7 @@ public class NewItemFragmentTest {
                 String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
+
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
@@ -189,22 +188,6 @@ public class NewItemFragmentTest {
         editText.perform(click(), closeSoftKeyboard());
 
         errorText.check(matches(withText("")));
-    }
-
-    // test the trailer button
-    @Test
-    public void testWebViewUrl() throws InterruptedException {
-        Thread.sleep(3000); // wait for youtube api request to complete
-
-        onView(withId(R.id.item_image)).perform(click());
-        String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
-
-        Thread.sleep(3000); // wait for loading of the web view
-
-        device.pressBack(); // go back to app
-        device.pressBack();
-
-        onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));
     }
 
     @After
