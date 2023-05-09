@@ -60,7 +60,8 @@ public class NewItemFragment extends Fragment {
             media = (Media) bundle.get("media");
         }
         String summary = media.getSummary();
-        setItemInformation(media.getTitle(), summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary, media.getPosterUrl());
+        summary = summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary;
+        setItemInformation(media.getTitle(), summary, media.getPosterUrl());
 
 
         setProgressBarIndicator();
