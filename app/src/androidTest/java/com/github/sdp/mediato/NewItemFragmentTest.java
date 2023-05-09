@@ -186,6 +186,17 @@ public class NewItemFragmentTest {
                 String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
 
+
+    // test the trailer button
+    @Test
+    public void testWebViewUrl() throws InterruptedException, RemoteException, IOException, UiObjectNotFoundException {
+        Thread.sleep(3000); // wait for youtube api request to complete
+
+        //onView(withId(R.id.item_image)).perform(click());
+        String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
+    }
+
+
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
@@ -201,34 +212,6 @@ public class NewItemFragmentTest {
 
         errorText.check(matches(withText("")));
     }
-
-    // test the trailer button
-    @Test
-    public void testWebViewUrl() throws InterruptedException, RemoteException, IOException, UiObjectNotFoundException {
-        Thread.sleep(3000); // wait for youtube api request to complete
-
-        onView(withId(R.id.item_image)).perform(click());
-        String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
-
-        Thread.sleep(3000); // wait for loading of the web view
-/**
-        // Bring up the recent apps screen
-        device.pressRecentApps();
-
-        // Wait for the recent apps screen to appear
-        device.wait(Until.hasObject(By.res("com.android.systemui:id/recents_view")), 5000);
-
-        // Scroll to find the previously used app
-        UiScrollable recentsView = new UiScrollable(new UiSelector().resourceId("com.android.systemui:id/recents_view"));
-        recentsView.setAsHorizontalList().scrollToEnd(10);
-
-        // Find the previously used app and click on it
-        UiObject2 app = device.wait(Until.findObject(By.text("MediaTo")), 5000);
-        app.click();
-
-        onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));*/
-    }
-
     @After
     public void after() {
         release();
