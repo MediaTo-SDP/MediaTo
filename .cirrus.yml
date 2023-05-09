@@ -28,14 +28,7 @@ check_android_task:
     -camera-back none
   imports_secrets_script: |
     touch ./secret.local
-<<<<<<< HEAD
-    echo "$TMDBAPIKEY" | base64 -d > ./secret.local
-    echo "$YTBAPIKEY" | base64 -d > ./secret.local
-
-=======
     echo "$SECRETCONTENT" | base64 -d > ./secret.local
->>>>>>> 14de40c5c192086e5cfcb46d44ca7d9985f58b50
-
   assemble_instrumented_tests_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
