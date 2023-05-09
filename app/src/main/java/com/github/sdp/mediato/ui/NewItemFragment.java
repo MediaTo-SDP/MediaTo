@@ -36,11 +36,8 @@ public class NewItemFragment extends Fragment {
 
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
-<<<<<<< HEAD
-*
-=======
+
     public WebView webView;
->>>>>>> 14de40c5c192086e5cfcb46d44ca7d9985f58b50
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
