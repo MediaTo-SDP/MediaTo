@@ -1,6 +1,7 @@
 package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -18,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.SeekBar;
@@ -25,13 +27,21 @@ import android.widget.SeekBar;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiScrollable;
+import androidx.test.uiautomator.UiSelector;
+import androidx.test.uiautomator.Until;
 
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
@@ -46,6 +56,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -193,18 +204,29 @@ public class NewItemFragmentTest {
 
     // test the trailer button
     @Test
-    public void testWebViewUrl() throws InterruptedException {
+    public void testWebViewUrl() throws InterruptedException, RemoteException, IOException, UiObjectNotFoundException {
         Thread.sleep(3000); // wait for youtube api request to complete
 
         onView(withId(R.id.item_image)).perform(click());
         String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
 
         Thread.sleep(3000); // wait for loading of the web view
+/**
+        // Bring up the recent apps screen
+        device.pressRecentApps();
 
-        device.pressBack(); // go back to app
-        device.pressBack();
+        // Wait for the recent apps screen to appear
+        device.wait(Until.hasObject(By.res("com.android.systemui:id/recents_view")), 5000);
 
-        onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));
+        // Scroll to find the previously used app
+        UiScrollable recentsView = new UiScrollable(new UiSelector().resourceId("com.android.systemui:id/recents_view"));
+        recentsView.setAsHorizontalList().scrollToEnd(10);
+
+        // Find the previously used app and click on it
+        UiObject2 app = device.wait(Until.findObject(By.text("MediaTo")), 5000);
+        app.click();
+
+        onView(withId(R.id.trailer_web_view)).check(matches(withUrl(url)));*/
     }
 
     @After

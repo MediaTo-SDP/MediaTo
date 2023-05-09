@@ -41,6 +41,8 @@ public class NewItemFragment extends Fragment {
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
 
+    public WebView webView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class NewItemFragment extends Fragment {
 
         searchTrailer();
 
+        webView = view.findViewById(R.id.trailer_web_view);
+
         return view;
     }
 
@@ -91,7 +95,7 @@ public class NewItemFragment extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        search.setKey(getString(R.string.YTBAPIKEY));
+        search.setKey(getString(R.string.google_api_key));
         search.setQ(media.getTitle() + " trailer");
         search.setType("video");
         search.setMaxResults(1L);
@@ -127,7 +131,6 @@ public class NewItemFragment extends Fragment {
      */
     private void handleTrailerResponse(SearchResult result) {
         ImageView playButton = view.findViewById(R.id.item_play_button);
-        WebView webView = view.findViewById(R.id.trailer_web_view);
         webView.setVisibility(View.INVISIBLE);
 
         // set click listener if media is a movie or series
