@@ -1,10 +1,10 @@
 package com.github.sdp.mediato.ui;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +17,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.sdp.mediato.AuthenticationActivity;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.CollectionsDatabase;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarOutputStream;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
@@ -68,11 +67,14 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Initialize components
         photoPicker = setupPhotoPicker();
-        collectionlistAdapter = setupCollections(collectionListRecyclerView);
         setupAddCollectionsButton(addCollectionButton);
 
-        // Observe the view model's live data to update UI components
-        observeCollections(collectionlistAdapter);
+        // Set up collections
+        fetchCollectionsFromDatabaseWithRetry(0).thenAccept(collections -> {
+            collectionlistAdapter = setupCollections(collectionListRecyclerView, collections);
+            // Observe the view model's live data to update UI components
+            observeCollections(collectionlistAdapter);
+        });
 
         // Add on click listener to sign out button
         Button signOutButton = view.findViewById(R.id.signout_button);
@@ -85,12 +87,8 @@ public class MyProfileFragment extends BaseProfileFragment {
     }
 
     @Override
-    public CollectionListAdapter setupCollections(RecyclerView recyclerView) {
-        // Check if a collection is already in the viewModel, if not create the default one
-        List<Collection> collections = viewModel.getCollections();
-        if (collections == null) {
-            collections = createDefaultCollection();
-        }
+    public CollectionListAdapter setupCollections(RecyclerView recyclerView,  List<Collection> collections) {
+        viewModel.setCollections(collections);
 
         // Define what happens when the add button inside a collection is clicked
         OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) -> {
@@ -195,10 +193,33 @@ public class MyProfileFragment extends BaseProfileFragment {
         }
     }
 
-
-
     private void makeToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    private CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
+        CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
+
+        UserDatabase.getUser(USERNAME).thenAccept(user -> {
+            List<Collection> collections = new ArrayList<>(user.getCollections().values());
+            if (collections.isEmpty()) {
+                collections = createDefaultCollection();
+            }
+            viewModel.setCollections(collections);
+            futureCollections.complete(collections);
+        }).exceptionally(throwable -> {
+            if (count < 10) {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    fetchCollectionsFromDatabaseWithRetry(count + 1);
+                }, 200);
+            } else {
+                System.out.println("Couldn't fetch collections for " + USERNAME);
+            }
+            return null;
+        });
+
+        return futureCollections;
     }
 
     public interface OnAddMediaButtonClickListener {

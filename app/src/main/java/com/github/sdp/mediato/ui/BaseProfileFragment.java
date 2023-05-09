@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -75,7 +77,7 @@ public abstract class BaseProfileFragment extends Fragment {
     return view;
   }
 
-  abstract CollectionListAdapter setupCollections(RecyclerView recyclerView);
+  abstract CollectionListAdapter setupCollections(RecyclerView recyclerView, List<Collection> collections);
 
   public void observeCollections(CollectionListAdapter collectionsAdapter) {
     viewModel.getCollectionsLiveData()
