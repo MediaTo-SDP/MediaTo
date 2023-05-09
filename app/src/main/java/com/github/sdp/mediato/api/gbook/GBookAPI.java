@@ -78,7 +78,7 @@ public class GBookAPI implements API<GoogleBook> {
         }
 
         CompletableFuture<GBookSearchResult> future = new CompletableFuture<>();
-        api.search(s, null, index, RES_PER_REQUEST)
+        api.search(s, "en", index, RES_PER_REQUEST)
                 .enqueue(new AdapterRetrofitCallback<>(future));
         indices.put(s, index + RES_PER_REQUEST);
 

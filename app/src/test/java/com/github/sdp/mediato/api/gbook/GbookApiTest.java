@@ -22,8 +22,6 @@ import mockwebserver3.RecordedRequest;
 
 public class GbookApiTest {
     private final String SEARCHTERM = "searchTerm";
-    // private final com.github.sdp.mediato.api.gbook.APITestStrings strings = new com.github.sdp.mediato.api.gbook.APITestStrings();
-    private String search2;
     public final MockWebServer mockApi = new MockWebServer();
     private GBookAPI db;
     final Dispatcher DISPATCHER = new Dispatcher() {
@@ -49,8 +47,8 @@ public class GbookApiTest {
     public void setUp() throws IOException {
         mockApi.setBodyLimit(Long.MAX_VALUE);
         mockApi.setDispatcher(DISPATCHER);
-        mockApi.start(8080);
-        db = new GBookAPI(String.format("http://%s:8080", mockApi.getHostName()));
+        mockApi.start(8081);
+        db = new GBookAPI(String.format("http://%s:8081", mockApi.getHostName()));
     }
 
     @Test
@@ -154,7 +152,6 @@ public class GbookApiTest {
     @After
     public void clearEverything() throws IOException {
         mockApi.shutdown();
-
     }
 
 
