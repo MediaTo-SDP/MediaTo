@@ -1,7 +1,6 @@
 package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -16,10 +15,8 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.SeekBar;
@@ -27,27 +24,18 @@ import android.widget.SeekBar;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiScrollable;
-import androidx.test.uiautomator.UiSelector;
-import androidx.test.uiautomator.Until;
 
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
-import com.google.errorprone.annotations.DoNotMock;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -56,7 +44,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -187,16 +174,6 @@ public class NewItemFragmentTest {
     }
 
 
-    // test the trailer button
-    @Test
-    public void testWebViewUrl() throws InterruptedException, RemoteException, IOException, UiObjectNotFoundException {
-        Thread.sleep(3000); // wait for youtube api request to complete
-
-        //onView(withId(R.id.item_image)).perform(click());
-        String url = "https://www.youtube.com/watch?v=UaVTIH8mujA";
-    }
-
-
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review
     @Test
@@ -212,6 +189,7 @@ public class NewItemFragmentTest {
 
         errorText.check(matches(withText("")));
     }
+
     @After
     public void after() {
         release();

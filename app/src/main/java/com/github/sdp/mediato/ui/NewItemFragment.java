@@ -36,12 +36,10 @@ public class NewItemFragment extends Fragment {
 
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
-
+    public WebView webView;
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
-
-    public WebView webView;
 
     @Nullable
     @Override
@@ -80,6 +78,11 @@ public class NewItemFragment extends Fragment {
         return view;
     }
 
+    /**
+     * The youtube search list creation with the API
+     *
+     * @return the search list
+     */
     private YouTube.Search.List createYoutubeSearch() {
 
         // init the youtube api
@@ -99,6 +102,7 @@ public class NewItemFragment extends Fragment {
         search.setQ(media.getTitle() + " trailer");
         search.setType("video");
         search.setMaxResults(1L);
+
         return search;
     }
 
