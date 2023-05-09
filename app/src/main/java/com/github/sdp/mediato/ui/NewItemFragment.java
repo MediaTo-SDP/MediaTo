@@ -28,7 +28,7 @@ import java.util.Locale;
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
 
-    public final static int MAX_REVIEW_LENGTH = 100;
+    public final static int MAX_REVIEW_LENGTH = 200;
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
