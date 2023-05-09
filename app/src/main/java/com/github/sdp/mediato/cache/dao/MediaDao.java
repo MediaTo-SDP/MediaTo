@@ -19,11 +19,9 @@ public interface MediaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long[] insertAll(List<Media> media);
-    @Delete
-    void delete(Media media);
 
-    @Query("SELECT * FROM medias WHERE mediaType = :mediaType")
-    LiveData<List<Media>> getAllMedia(MediaType mediaType);
+    @Query("SELECT * FROM medias")
+    LiveData<List<Media>> getAllMedia();
 
     @Query("SELECT * FROM medias WHERE mediaType = :mediaType AND id = :id LIMIT 1")
     Media getMediaFromTypeAndId(MediaType mediaType, String id);
