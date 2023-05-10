@@ -8,15 +8,16 @@
   android:windowSoftInputMode="adjustPan|adjustResize">
 
     <Button
-      android:id="@+id/item_button_add"
-      android:layout_width="125dp"
-      android:layout_height="60dp"
-      android:layout_marginBottom="80dp"
-      android:layout_marginEnd="24dp"
-      android:text="@string/add"
-      android:textSize="14sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent" />
+        android:id="@+id/item_button_add"
+        android:layout_width="125dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/add"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ReviewLayout" />
     <TextView
       android:id="@+id/item_title"
       android:layout_width="wrap_content"
@@ -31,6 +32,11 @@
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
+    <WebView
+      android:id="@+id/trailer_web_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/ReviewLayout"
@@ -120,6 +126,16 @@
           app:layout_constraintStart_toEndOf="@+id/item_image"
           app:layout_constraintTop_toTopOf="parent"
           app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/item_play_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_image"
+            app:layout_constraintStart_toStartOf="@+id/item_image"
+            app:layout_constraintTop_toTopOf="@+id/item_image"
+            app:srcCompat="@android:drawable/ic_media_play" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
