@@ -46,7 +46,7 @@ public final class GoogleBook {
      */
     @Nullable
     public String getOverview() {
-        return volumeInfo.description;
+        return (volumeInfo.description != null) ? volumeInfo.description : volumeInfo.subtitle;
     }
 
     /**

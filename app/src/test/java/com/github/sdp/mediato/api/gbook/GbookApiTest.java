@@ -45,7 +45,6 @@ public class GbookApiTest {
 
     @Before
     public void setUp() throws IOException {
-        mockApi.setBodyLimit(Long.MAX_VALUE);
         mockApi.setDispatcher(DISPATCHER);
         mockApi.start(8081);
         db = new GBookAPI(String.format("http://%s:8081", mockApi.getHostName()));
@@ -78,7 +77,7 @@ public class GbookApiTest {
     public void TestSearchingList() {
         List<GoogleBook> books = db.searchItems(SEARCHTERM, 40).join();
         assertThat(books.get(0).getId(), is("LanWAAAAMAAJ"));
-        assertThat(books.get(39).getId(), is("0LNaAAAAYAAJ"));
+        assertThat(books.get(22).getId(), is("9ddqAAAAMAAJ"));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class GbookApiTest {
         List<GoogleBook> books = db.searchItems(SEARCHTERM, 40).join();
         assertThat(oldBooks.get(0).getId(), not(books.get(0).getId()));
         assertThat(books.get(0).getId(), is("njJSDwAAQBAJ"));
-        assertThat(books.get(39).getId(), is("qTgLAAAAQBAJ"));
+        assertThat(books.get(26).getId(), is("qTgLAAAAQBAJ"));
     }
 
     @Test
@@ -97,7 +96,7 @@ public class GbookApiTest {
         List<GoogleBook> books = db.searchItems(SEARCHTERM, 1).thenCompose((val) ->
                 db.searchItems(SEARCHTERM,1)).thenCompose((val) ->
                 db.searchItems(SEARCHTERM,100)).join();
-        assertThat(books.size(), is(78));
+        assertThat(books.size(), is(49));
     }
 
 
@@ -106,8 +105,8 @@ public class GbookApiTest {
     public void TestSearchCache() {
         db.searchItems(SEARCHTERM, 20).join();
         List<GoogleBook> books = db.searchItems(SEARCHTERM, 40).join();
-        assertThat(books.get(0).getId(), is("2QY7AAAAIAAJ"));
-        assertThat(books.get(39).getId(), is("qmmDDwAAQBAJ"));
+        assertThat(books.get(0).getId(), is("C26PDwAAQBAJ"));
+        assertThat(books.get(25).getId(), is("qmmDDwAAQBAJ"));
     }
 
     @Test

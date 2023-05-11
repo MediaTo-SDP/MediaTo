@@ -130,7 +130,7 @@ public class GBookAPI implements API<GoogleBook> {
             boolean validBook = true;
             try {
                 Preconditions.checkMedia(MediaType.BOOK,
-                        List.of(book.getTitle(), book.getId(), book.getSubtitle(), book.getOverview(),
+                        List.of(book.getTitle(), book.getId(), book.getOverview(),
                                 book.getPublishedDate(), book.getIconURL(), book.getPosterURL()));
             } catch (Exception e){
                 validBook = false;
