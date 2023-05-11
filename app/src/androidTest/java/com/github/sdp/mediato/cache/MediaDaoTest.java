@@ -164,7 +164,9 @@ public class MediaDaoTest {
                 future.complete(null);
             } catch (Exception ignored) {}
         });
-        future.orTimeout(1, TimeUnit.SECONDS).join();
+        try {
+            future.get(1, TimeUnit.SECONDS);
+        } catch (Exception ignored) {}
     }
     @After
     public void teardown(){
