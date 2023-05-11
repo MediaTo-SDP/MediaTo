@@ -34,11 +34,12 @@ public class UserTests {
     User user1;
     User user2;
     User user3;
+    User user4;
 
     @Before
     public void setUp() {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample users
@@ -60,11 +61,17 @@ public class UserTests {
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
+        user4 = new User.UserBuilder("uniqueId4")
+                .setUsername("user_test_4")
+                .setEmail("email_test_4")
+                .setRegisterDate("19/03/2023")
+                .setLocation(new Location(3.14, 3.14))
+                .build();
     }
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DataBaseTestUtil.cleanDatabase();
     }
 
     @Test
@@ -82,6 +89,7 @@ public class UserTests {
         assertTrue(followers.contains(user2.getUsername()));
         assertTrue(following.contains(user3.getUsername()));
 
+        assertTrue(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
@@ -99,6 +107,8 @@ public class UserTests {
 
         assertFalse(followers.contains(user2.getUsername()));
         assertFalse(following.contains(user3.getUsername()));
+
+        assertFalse(UserDatabase.follows(user2.getUsername(), user3.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
     }
 
     @Test
@@ -153,6 +163,24 @@ public class UserTests {
     public void isUsernameUniqueReturnsFalseForAlreadyExistingUsername() throws ExecutionException, InterruptedException, TimeoutException {
         UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertFalse(UserDatabase.isUsernameUnique("user_test_1").get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS));
+    }
+
+    @Test
+
+    public void retrievesFollowingUsersProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.addUser(user3).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.addUser(user4).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        UserDatabase.followUser(user1.getUsername(), user2.getUsername());
+        UserDatabase.followUser(user1.getUsername(), user3.getUsername());
+        List<User> following = UserDatabase.getFollowingUsers(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        following.forEach(
+                fetchedUser -> {
+                    assertTrue(fetchedUser.getUsername().equals(user2.getUsername())
+                            || fetchedUser.getUsername().equals(user3.getUsername()));
+                }
+        );
     }
 
 }

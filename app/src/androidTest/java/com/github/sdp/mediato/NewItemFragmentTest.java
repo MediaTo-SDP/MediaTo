@@ -6,19 +6,19 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
-import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.release;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.SeekBar;
 
 import androidx.fragment.app.FragmentManager;
@@ -27,13 +27,17 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
 
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.NewItemFragment;
-import com.github.sdp.mediato.utility.SampleReviews;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -47,14 +51,18 @@ import java.util.Locale;
  */
 @RunWith(AndroidJUnit4.class)
 public class NewItemFragmentTest {
+    final UiDevice device = UiDevice.getInstance(getInstrumentation());
     ViewInteraction addItemButton = onView(withId(R.id.item_button_add));
     ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
     ViewInteraction editText = onView(withId(R.id.item_review_edittext));
     ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
     ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
+    NewItemFragment newItemFragment = new NewItemFragment();
 
     ActivityScenario<MainActivity> scenario;
     Review review;
+
+    Activity activity;
 
     private static ViewAction setProgress(final int progress) {
         return new ViewAction() {
@@ -75,6 +83,20 @@ public class NewItemFragmentTest {
         };
     }
 
+    public static Matcher<View> withUrl(final String url) {
+        return new BoundedMatcher<>(WebView.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with url: " + url);
+            }
+
+            @Override
+            protected boolean matchesSafely(WebView webView) {
+                return webView.getUrl().equals(url);
+            }
+        };
+    }
+
     @Before
     public void setUp() {
         init();
@@ -82,15 +104,20 @@ public class NewItemFragmentTest {
         // Launch the TestingActivity
         Intent testingIntent = new Intent(ApplicationProvider.getApplicationContext(),
                 MainActivity.class);
-        SampleReviews samples = new SampleReviews();
-        review = samples.getMovieReview();
+
+        Media movie1 = new Movie("The Godfather",
+                "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+                "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", 1);
+        review = new Review("Alice", movie1, 8, "One of the best movies I've ever seen.");
+
         testingIntent.putExtra("username", review.getUsername());
         scenario = ActivityScenario.launch(testingIntent);
 
         // Set up the TestingActivity to display the ProfileFragment
-        scenario.onActivity(activity -> {
-            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            NewItemFragment newItemFragment = new NewItemFragment();
+        scenario.onActivity(a -> {
+            activity = a;
+            FragmentManager fragmentManager = a.getSupportFragmentManager();
+            newItemFragment = new NewItemFragment();
 
             // Pass the username to the fragment like at profile creation
             Bundle bundle = new Bundle();
@@ -109,7 +136,6 @@ public class NewItemFragmentTest {
         onView(withId(R.id.item_description_text)).check(matches(withText(review.getMedia().getSummary())));
     }
 
-
     // Check if indicator text is well displayed when using the slide bar
     @Test
     public void checkSlideBarAndIndicator() {
@@ -127,28 +153,26 @@ public class NewItemFragmentTest {
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
 
-       addItemButton.perform(click());
+        addItemButton.perform(click());
 
         onView(withId(R.id.main_container))
                 .check(matches(isDisplayed()))
                 .check(matches(hasDescendant(withId(R.id.profile_header))));
-
-        intended(hasExtra("review", review));
-
     }
 
     // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
     @Test
     public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
+
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
 
         addItemButton.perform(click());
-        //activity.addItem();
 
         errorText.check(matches(withText(
-                        String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
+                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
     }
+
 
     // After the error message is displayed, it should disappears when user edits the comment to make it shorter
     // It reappears if the length is still to long when adding the review

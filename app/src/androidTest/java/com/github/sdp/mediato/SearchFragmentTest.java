@@ -14,6 +14,7 @@ import static com.adevinta.android.barista.interaction.BaristaClickInteractions.
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.clearText;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.pressImeActionButton;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
 
@@ -24,13 +25,17 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
+import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +48,7 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 public class SearchFragmentTest {
   private final static int STANDARD_USER_TIMEOUT = 10;
+  private final static int WAIT_TIME = 1000;
   User user1;
   User user2;
   User user3;
@@ -52,30 +58,30 @@ public class SearchFragmentTest {
   public void setUp() throws ExecutionException, InterruptedException, TimeoutException
   {
     try {
-      UserDatabase.database.useEmulator("10.0.2.2", 9000);
+      DataBaseTestUtil.useEmulator();
     } catch (Exception ignored) {
     }
     //Create new sample users
     user1 = new User.UserBuilder("uniqueId1")
-            .setUsername("user_test_1")
+            .setUsername("user_1_search")
             .setEmail("email_test_1")
             .setRegisterDate("09/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user2 = new User.UserBuilder("uniqueId2")
-            .setUsername("user_test_2")
+            .setUsername("user_2_search")
             .setEmail("email_test_2")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user3 = new User.UserBuilder("uniqueId3")
-            .setUsername("user_test_3")
+            .setUsername("user_3_search")
             .setEmail("email_test_3")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
             .build();
     user4 = new User.UserBuilder("uniqueId4")
-            .setUsername("oser_test_4")
+            .setUsername("oser_1_search")
             .setEmail("email_test_3")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
@@ -93,27 +99,34 @@ public class SearchFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       SearchFragment searchFragment = new SearchFragment();
+      activity.getMyProfileViewModel().setUsername(user1.getUsername());
 
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();
-      bundle.putString("username", "user_test_1");
+      bundle.putString("username", user1.getUsername());
       searchFragment.setArguments(bundle);
       fragmentManager.beginTransaction().replace(R.id.main_container, searchFragment)
               .commitAllowingStateLoss();
     });
   }
+
+  @AfterClass
+  public static void cleanDatabase() {
+    DataBaseTestUtil.cleanDatabase();
+  }
+
   @Test
   public void testUserSearchWithEmptyString() {
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "user");
     pressImeActionButton();
 
-    sleep(500);
+    sleep(WAIT_TIME);
 
     clearText(androidx.appcompat.R.id.search_src_text);
     pressImeActionButton();
 
-    sleep(500);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
@@ -124,7 +137,7 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "something");
     pressImeActionButton();
 
-    sleep(500);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
@@ -135,7 +148,7 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, user2.getUsername());
     pressImeActionButton();
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
   }
@@ -146,7 +159,7 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "user");
     pressImeActionButton();
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
@@ -160,22 +173,44 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, user2.getUsername());
     pressImeActionButton();
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
     clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
     clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+  }
+
+  @Test
+  public void testClickOnCard() {
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, user2.getUsername());
+    pressImeActionButton();
+
+    sleep(WAIT_TIME);
+
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
+
+    sleep(WAIT_TIME);
+
+    clickListItem(R.id.searchactivity_recyclerView, 0);
+
+    sleep(WAIT_TIME);
+
+    assertDisplayed(R.id.profile_header);
+    assertNotDisplayed(R.id.signout_button);
   }
 
   @Test
@@ -184,12 +219,12 @@ public class SearchFragmentTest {
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "Potter");
 
-    sleep(700);
+    sleep(WAIT_TIME);
 
     clearText(androidx.appcompat.R.id.search_src_text);
     pressImeActionButton();
 
-    sleep(700);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
@@ -201,7 +236,7 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "jadvbipehsjdb");
     pressImeActionButton();
 
-    sleep(1000);
+    sleep(WAIT_TIME);
 
     assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
   }
@@ -212,7 +247,7 @@ public class SearchFragmentTest {
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
 
-    sleep(500);
+    sleep(WAIT_TIME);
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
   }
 
@@ -222,14 +257,14 @@ public class SearchFragmentTest {
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
 
-    sleep(2000);
+    sleep(WAIT_TIME);
     assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
 
     onView(withId(R.id.searchactivity_recyclerView))
         .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-    sleep(2000);
-    assertDisplayed(R.id.item_button_add);
+    sleep(WAIT_TIME);
+    assertDisplayed(R.id.item_description_text);
   }
 
 }

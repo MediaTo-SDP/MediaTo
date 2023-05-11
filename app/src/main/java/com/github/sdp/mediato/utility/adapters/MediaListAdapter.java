@@ -3,23 +3,18 @@ package com.github.sdp.mediato.utility.adapters;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-
 import com.github.sdp.mediato.FragmentSwitcher;
-import com.github.sdp.mediato.ui.NewItemFragment;
-
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.ui.NewItemFragment;
 
 /**
  * A general ListAdapter (that can be used in recycler views) for any Media type
@@ -41,13 +36,15 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
     };
 
     final private FragmentSwitcher fragmentSwitcher;
+    final private String collectionName;
 
     /**
      * Default constructor
      */
-    public MediaListAdapter(Activity activity) {
+    public MediaListAdapter(Activity activity, String collectionName) {
         super(MEDIA_COMPARATOR);
         fragmentSwitcher = (FragmentSwitcher) activity;
+        this.collectionName = collectionName;
     }
 
     /**
@@ -63,17 +60,15 @@ public class MediaListAdapter extends ListAdapter<Media, MediaListAdapter.MyView
         LayoutMovieItemBinding binding = LayoutMovieItemBinding.inflate(inflater, parent, false);
         MyViewHolder holder = new MyViewHolder(binding);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment newItemFragment = new NewItemFragment();
-                Bundle bundle = new Bundle();
+        holder.itemView.setOnClickListener(v -> {
+            Fragment newItemFragment = new NewItemFragment();
+            Bundle bundle = new Bundle();
 
-                bundle.putSerializable("media", getItem(holder.getAdapterPosition()));
+            bundle.putSerializable("media", getItem(holder.getAdapterPosition()));
+            bundle.putString("collection", collectionName);
+            newItemFragment.setArguments(bundle);
 
-                newItemFragment.setArguments(bundle);
-                fragmentSwitcher.switchCurrentFragmentWithChildFragment(newItemFragment);
-            }
+            fragmentSwitcher.switchCurrentFragmentWithChildFragment(newItemFragment);
         });
 
         return holder;

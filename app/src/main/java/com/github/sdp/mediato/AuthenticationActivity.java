@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -37,6 +41,10 @@ public class AuthenticationActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), this::onSignInResult);
     private GoogleSignInClient googleSignInClient;
+    private SignInButton signInButton;
+    private TextView signInText;
+
+    private String idToken, accessToken, username;
 
     /**
      * Checks if there is a network connection available.
@@ -57,9 +65,11 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
+        signInButton = findViewById(R.id.google_sign_in);
+        signInText = findViewById(R.id.authentication_login_text);
+
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(getString(R.string.login_shared_preferences), MODE_PRIVATE);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // Request the ID token
                 .requestServerAuthCode(getString(R.string.default_web_client_id)) // Request the server auth code
@@ -68,20 +78,15 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        setUpSignInButton();
-
         checkSavedCredentialsAndConnection(isNetworkAvailable(this));
         setUpSignInButton();
     }
 
     /**
-     * Checks if credentials already exists or if the user is offline
+     * Logs in the user if it has credentials
      */
     public void checkSavedCredentialsAndConnection(boolean networkAvailable) {
-        // Check if there is a saved id token, authentication token and username
-        String idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
-        String accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
-        String username = sharedPreferences.getString(getString(R.string.username_key), "");
+        fetchSavedCredentials();
 
         if (!idToken.isEmpty()) {
             if (networkAvailable) {
@@ -93,12 +98,34 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     /**
+     * Fetches the user's credentials and updates the display accordingly
+     */
+    public void fetchSavedCredentials() {
+        // Check if there is a saved id token, authentication token and username
+        idToken = sharedPreferences.getString(getString(R.string.google_id_token_key), "");
+        accessToken = sharedPreferences.getString(getString(R.string.google_access_token_key), "");
+        username = sharedPreferences.getString(getString(R.string.username_key), "");
+
+        if (!idToken.isEmpty()) {
+            signInButton.setVisibility(View.INVISIBLE);
+            signInText.setText(R.string.authentication_page_waiting_text);
+        } else {
+            signInButton.setVisibility(View.VISIBLE);
+            signInText.setText(R.string.authentication_page_login_text);
+        }
+
+    }
+
+    /**
      * update the tokens in shared preferences
      *
      * @param idToken:     the id token
      * @param accessToken: the access token
      */
     public void updatePreferencesToken(String idToken, String accessToken) {
+        this.idToken = idToken;
+        this.accessToken = accessToken;
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.google_id_token_key), idToken);
         editor.putString(getString(R.string.google_access_token_key), accessToken);
@@ -111,6 +138,8 @@ public class AuthenticationActivity extends AppCompatActivity {
      * @param username: the username
      */
     public void updatePreferencesUsername(String username) {
+        this.username = username;
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.username_key), username);
         editor.apply();
@@ -143,6 +172,8 @@ public class AuthenticationActivity extends AppCompatActivity {
                     // If authentication fails, remove the saved authentication credential
                     clearSharedPreferences();
                     setUpSignInButton();
+                    signInButton.setVisibility(View.VISIBLE);
+                    signInText.setText(R.string.authentication_page_login_text);
                 });
     }
 
@@ -150,6 +181,10 @@ public class AuthenticationActivity extends AppCompatActivity {
      * Clears the stored tokens and user name in android's shared preferences
      */
     public void clearSharedPreferences() {
+        idToken = "";
+        accessToken = "";
+        username = "";
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.remove(getString(R.string.google_id_token_key));
@@ -164,7 +199,7 @@ public class AuthenticationActivity extends AppCompatActivity {
      */
     private void setUpSignInButton() {
         // We assign a callback to Google sign in button
-        findViewById(R.id.google_sign_in).setOnClickListener(view -> {
+        signInButton.setOnClickListener(view -> {
             Intent signInIntent = googleSignInClient.getSignInIntent(); // if the button is clicked, try to sign in
             googleSignInActivityResultLauncher.launch(signInIntent);
         });

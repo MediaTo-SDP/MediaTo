@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import com.github.sdp.mediato.data.LocationDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -41,7 +42,7 @@ public class LocationTests {
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
         //Create new sample user
@@ -83,15 +84,15 @@ public class LocationTests {
 
     @AfterClass
     public static void cleanDatabase() {
-        UserDatabase.database.getReference().setValue(null);
+        DataBaseTestUtil.cleanDatabase();
     }
 
     @Test
     //Tests that the location is updated, set to valid and retrieved properly in the database
     public void updatesAndRetrievesLocationProperly() throws InterruptedException, ExecutionException, TimeoutException {
-        UserDatabase.updateLocation(user1.getUsername(), VALID_LATITUDE, VALID_LONGITUDE);
+        LocationDatabase.updateLocation(user1.getUsername(), VALID_LATITUDE, VALID_LONGITUDE);
         Thread.sleep(STANDARD_SLEEP_DELAY);
-        Location location = UserDatabase.getSavedLocation(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        Location location = LocationDatabase.getSavedLocation(user1.getUsername()).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(location.isValid());
         assertEquals(VALID_LONGITUDE, location.getLongitude(), 0);
         assertEquals(VALID_LATITUDE, location.getLatitude(), 0);
@@ -102,25 +103,36 @@ public class LocationTests {
     public void invalidLocationUpdateThrowsException() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> UserDatabase.updateLocation(user1.getUsername(), INVALID_LATITUDE, INVALID_LONGITUDE)
+                () -> LocationDatabase.updateLocation(user1.getUsername(), INVALID_LATITUDE, INVALID_LONGITUDE)
         );
     }
 
 
     @Test
-    //Tests that the future is completed exceptionally when trying to retrieve the nearby users
-    //for a user that has an invalid location on the database
-    public void failsWhenGettingNearbyUsersForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
-        CompletableFuture<List<String>> future = UserDatabase.getNearbyUsers(user2.getUsername(), RADIUS);
+    //Tests that all the usernames are returned if the location is invalid
+    public void returnsAllUsernamesForInvalidLocation() throws ExecutionException, InterruptedException, TimeoutException {
+        List<String> nearbyUsers = LocationDatabase.getNearbyUsernames(user2.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         Thread.sleep(STANDARD_SLEEP_DELAY);
-        assertTrue(future.isCompletedExceptionally());
+        assertTrue(nearbyUsers.containsAll(List.of(user1.getUsername(), user3.getUsername(), user4.getUsername(), user5.getUsername())));
+    }
+
+    @Test
+    //Tests that the right nearby users' usernames are retrieved
+    public void retrievesNearbyUsernamesProperly() throws ExecutionException, InterruptedException, TimeoutException {
+        List<String> nearbyUsers = LocationDatabase.getNearbyUsernames(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        assertTrue(nearbyUsers.containsAll(List.of(user3.getUsername(), user4.getUsername()))
+                    && !nearbyUsers.contains(user5.getUsername()));
     }
 
     @Test
     //Tests that the right nearby users are retrieved
     public void retrievesNearbyUsersProperly() throws ExecutionException, InterruptedException, TimeoutException {
-        List<String> nearbyUsers = UserDatabase.getNearbyUsers(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
-        assertTrue(nearbyUsers.containsAll(List.of(user3.getUsername(), user4.getUsername()))
-                    && !nearbyUsers.contains(user5.getUsername()));
+        List<User> nearbyUsers = LocationDatabase.getNearbyUsers(user1.getUsername(), RADIUS).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        nearbyUsers.forEach(
+                fetchedUser -> {
+                    assertTrue(fetchedUser.getUsername().equals(user3.getUsername())
+                            || fetchedUser.getUsername().equals(user4.getUsername()));
+                }
+        );
     }
 }

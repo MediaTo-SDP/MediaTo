@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
-import com.github.sdp.mediato.ui.viewmodel.ProfileViewModel;
+import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,13 +28,15 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class BaseProfileFragment extends Fragment {
 
-  protected ProfileViewModel viewModel;
+  protected ReadOnlyProfileViewModel viewModel;
   protected Button followingButton;
   protected Button followersButton;
   protected TextView usernameView;
   protected ImageView profileImage;
   protected CollectionListAdapter collectionlistAdapter;
   protected RecyclerView collectionListRecyclerView;
+  protected FragmentSwitcher fragmentSwitcher;
+  protected Bundle bundle = new Bundle();
 
   // Used as a key to access the database
   protected static String USERNAME;
@@ -44,12 +45,15 @@ public abstract class BaseProfileFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_profile, container, false);
-    viewModel.setUsername(USERNAME);
+
+    USERNAME = viewModel.getUsername();
+    bundle.putString("username", USERNAME);
+    fragmentSwitcher = (FragmentSwitcher) getActivity();
 
     // This function is a temporary fix. The delay of uploading the profile picture should be
     // handled before we create the profile fragment (like with a loading screen). Ideally we
     // could set viewModel.setProfilePic(bitmap) here
-    downloadProfilePicWithRetry(USERNAME);
+    downloadProfilePicWithRetry(USERNAME, 0);
 
     // Get all UI components
     followingButton = view.findViewById(R.id.profile_following_button);
@@ -80,7 +84,10 @@ public abstract class BaseProfileFragment extends Fragment {
 
   private void observeUsername() {
     viewModel.getUsernameLiveData().observe(getViewLifecycleOwner(),
-        username -> usernameView.setText(username));
+        username -> {
+          usernameView.setText(username);
+          updateFollowingAndFollowersCount();
+        });
   }
 
   private void observeProfilePic() {
@@ -100,11 +107,19 @@ public abstract class BaseProfileFragment extends Fragment {
   }
 
   private void setupFollowingButton(Button followingButton) {
-    followingButton.setOnClickListener(v -> switchFragment(new MyFollowingFragment()));
+    followingButton.setOnClickListener(v -> {
+      MyFollowingFragment myFollowingFragment = new MyFollowingFragment();
+      myFollowingFragment.setArguments(bundle);
+      fragmentSwitcher.switchCurrentFragmentWithChildFragment(myFollowingFragment);
+    });
   }
   
   private void setupFollowersButton(Button followersButton) {
-    followersButton.setOnClickListener(v -> switchFragment(new MyFollowersFragment()));
+    followersButton.setOnClickListener(v -> {
+      MyFollowersFragment myFollowersFragment = new MyFollowersFragment();
+      myFollowersFragment.setArguments(bundle);
+      fragmentSwitcher.switchCurrentFragmentWithChildFragment(myFollowersFragment);
+    });
   }
 
   private void updateFollowingAndFollowersCount() {
@@ -115,7 +130,7 @@ public abstract class BaseProfileFragment extends Fragment {
   }
 
   // TODO: Should be improved so it does not need to use the hardcoded retry
-  private void downloadProfilePicWithRetry(String username) {
+  private void downloadProfilePicWithRetry(String username, int count) {
 
     CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(username);
 
@@ -130,26 +145,18 @@ public abstract class BaseProfileFragment extends Fragment {
       // Try to set the profile pic
       viewModel.setProfilePic(bitmap);
     }).exceptionally(throwable -> {
-      // Could not download image, try again in 1 second
-      Handler handler = new Handler();
-      handler.postDelayed(() -> {
-        downloadProfilePicWithRetry(username);
-      }, 1000);
-
+      if (count < 5) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            downloadProfilePicWithRetry(username, count + 1);
+        }, 200);
+      } else {
+        System.out.println("Couldn't fetch pic for " + username);
+        Bitmap profilePic = BitmapFactory.decodeResource(getResources(), R.drawable.profile_picture_default);
+        viewModel.setProfilePic(profilePic);
+      }
       return null;
     });
-  }
-
-  private void switchFragment(Fragment fragment) {
-    Bundle args = new Bundle();
-    args.putString("username", USERNAME);
-    fragment.setArguments(args);
-
-    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.replace(R.id.main_container, fragment);
-    fragmentTransaction.addToBackStack(null);
-    fragmentTransaction.commit();
   }
 
 }

@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.data;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,9 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * UserDatabase class to handle the user related database operations
+ */
 public class UserDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -183,6 +187,7 @@ public class UserDatabase {
         profilePics.child(username + ".jpg").getBytes(DatabaseUtils.PROFILE_PIC_MAX_SIZE)
                 .addOnSuccessListener(dataSnapshot -> {
                     if (dataSnapshot == null) {
+                        System.out.println("No profile pic found for " + username);
                         future.completeExceptionally(new NoSuchFieldException());
                     } else {
                         future.complete(dataSnapshot);
@@ -202,6 +207,22 @@ public class UserDatabase {
     public static void followUser(String myUsername, String usernameToFollow) {
         setValueInFollowing(myUsername, usernameToFollow, true);
         setValueInFollowers(myUsername, usernameToFollow, true);
+    }
+
+    public static CompletableFuture<Boolean> follows(String myUsername, String followedUsername) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        database.getReference()
+                .child(DatabaseUtils.USERS_PATH + myUsername + DatabaseUtils.FOLLOWING_PATH + followedUsername).get()
+                .addOnSuccessListener(
+                        dataSnapshot -> {
+                            if ((dataSnapshot.getValue() == null) || (dataSnapshot.getValue() == Boolean.FALSE)) {
+                                future.complete(Boolean.FALSE);
+                            } else {
+                                future.complete(Boolean.TRUE);
+                            }
+                        }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
     }
 
     /**
@@ -242,62 +263,6 @@ public class UserDatabase {
     }
 
     /**
-     * Updates the user's location in the database
-     *
-     * @param username
-     * @param latitude
-     * @param longitude
-     */
-    public static void updateLocation(String username, double latitude, double longitude) {
-        Location location = new Location(latitude, longitude);
-        Preconditions.checkLocation(location);
-        database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH)
-                .setValue(location);
-    }
-
-    /**
-     * Retrieves the user's saved location from the database
-     *
-     * @param username
-     * @return a completable future with the location in it
-     * @see Location class to check for validity
-     */
-    public static CompletableFuture<Location> getSavedLocation(String username) {
-        CompletableFuture<Location> future = new CompletableFuture<>();
-        database.getReference().child(DatabaseUtils.USERS_PATH + username + DatabaseUtils.LOCATION_PATH).get().addOnSuccessListener(
-                dataSnapshot -> {
-                    if (dataSnapshot.getValue() == null) {
-                        future.completeExceptionally(new NoSuchFieldException());
-                    } else {
-                        future.complete(dataSnapshot.getValue(Location.class));
-                    }
-                }).addOnFailureListener(future::completeExceptionally);
-
-        return future;
-    }
-
-    /**
-     * Gets all the nearby users' usernames
-     * @param username of the reference user
-     * @param radius in which we want to look for users
-     * @return a completable future with a list of strings containing the usernames
-     * @Note For now, DEFAULT_RADIUS is used instead of the radius parameter because the settings aren't implemented yet
-     */
-    public static CompletableFuture<List<String>> getNearbyUsers(String username, double radius) {
-        CompletableFuture<List<String>> future = new CompletableFuture<>();
-        List<String> nearbyUsers = new ArrayList<>();
-        getSavedLocation(username).thenAccept(
-                location -> {
-                    if (!location.isValid())
-                        future.completeExceptionally(new Exception("we don't have the current user's location on the database"));
-                    else {
-                        nearbyUsers.addAll(DatabaseUtils.findNearbyUsers(future, location, username, DatabaseUtils.DEFAULT_RADIUS));
-                    }
-                });
-        return future;
-    }
-
-    /**
      * Gets all the users
      * @param username of the reference user
      * @return a completable future with a list of users containing all the user other than the
@@ -322,6 +287,41 @@ public class UserDatabase {
                 future.completeExceptionally(task.getException());
             }
         });
+        return future;
+    }
+
+    /**
+     * Gets all the users the user is following
+     * @param username of the reference user
+     * @return a completable future with a list of users
+     */
+    public static CompletableFuture<List<User>> getFollowingUsers(String username) {
+        Preconditions.checkUsername(username);
+        CompletableFuture<List<User>> future = new CompletableFuture<>();
+
+        getUser(username).thenApply(user -> {
+            List<String> followingUsernames = user.getFollowing(); // Assuming following is a List<String> in the User object
+            List<User> followingUsers = new ArrayList<>();
+            List<CompletableFuture<User>> futures = new ArrayList<>();
+
+            for (String followingUsername : followingUsernames) {
+                CompletableFuture<User> followingUserFuture = getUser(followingUsername);
+                futures.add(followingUserFuture);
+            }
+
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+            allFutures.thenRun(() -> {
+                for (CompletableFuture<User> followingUserFuture : futures) {
+                    User followingUser = followingUserFuture.join();
+                    followingUsers.add(followingUser);
+                }
+                future.complete(followingUsers);
+            });
+
+            return null;
+        });
+
         return future;
     }
 }

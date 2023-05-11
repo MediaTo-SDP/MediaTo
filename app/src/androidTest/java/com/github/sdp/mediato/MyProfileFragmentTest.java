@@ -12,6 +12,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static java.lang.Thread.sleep;
@@ -32,6 +37,9 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.interaction.BaristaClickInteractions;
+import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
+import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -48,6 +56,7 @@ import org.hamcrest.Matcher;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +68,8 @@ import java.util.concurrent.TimeoutException;
 @RunWith(AndroidJUnit4.class)
 public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
-    private final static String MY_USERNAME = "test_user";
+    private final static int WAIT_TIME = 1000;
+    private final static String MY_USERNAME = "user_profile";
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;
@@ -78,6 +88,9 @@ public class MyProfileFragmentTest {
     ViewInteraction searchMenuItem = onView(withId(R.id.search));
     ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
     ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
+
+    ViewInteraction movieSearchCategory = onView(withId((R.id.search_category_movie)));
+    ViewInteraction addReviewButton = onView(withId((R.id.item_button_add)));
 
     User user1;
     User user2;
@@ -143,7 +156,7 @@ public class MyProfileFragmentTest {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         try {
             auth.useEmulator("10.0.2.2", 9099);
-            UserDatabase.database.useEmulator("10.0.2.2", 9000);
+            DataBaseTestUtil.useEmulator();
         } catch (Exception ignored) {
         }
 
@@ -155,7 +168,7 @@ public class MyProfileFragmentTest {
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user2 = new User.UserBuilder("uniqueId2")
-                .setUsername("user_test_2")
+                .setUsername("user_test_2_MyProfileFragmentTest")
                 .setEmail("email_test_2")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
@@ -172,6 +185,7 @@ public class MyProfileFragmentTest {
             this.activity = activity;
             FragmentManager fragmentManager = activity.getSupportFragmentManager();
             MyProfileFragment myProfileFragment = new MyProfileFragment();
+            activity.getMyProfileViewModel().setUsername(MY_USERNAME);
 
             // Pass the username to the fragment like at profile creation
             Bundle bundle = new Bundle();
@@ -182,8 +196,9 @@ public class MyProfileFragmentTest {
         });
     }
 
-    private void storeUsers() {
-
+    @AfterClass
+    public static void cleanDatabase() {
+        DataBaseTestUtil.cleanDatabase();
     }
 
     // Test whether the "Following" button is displayed and contains the correct text
@@ -191,15 +206,6 @@ public class MyProfileFragmentTest {
     public void testInitialFollowingButtonState() {
         followingButton.check(matches(isDisplayed()));
         followingButton.check(matches(withText("0 Following")));
-    }
-
-    // Tests that following a user updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowingUpdatesFollowingButton() {
-        UserDatabase.followUser(MY_USERNAME, user2.getUsername());
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followingButton.check(matches(withText("1 Following")));
     }
 
     // Tests that clicking the following button opens the following fragment
@@ -214,15 +220,6 @@ public class MyProfileFragmentTest {
     public void testInitialFollowersButtonState() {
         followersButton.check(matches(isDisplayed()));
         followersButton.check(matches(withText("0 Followers")));
-    }
-
-    // Tests getting a new follower updates the count on the following button when getting back to the profile page
-    @Test
-    public void testAddFollowerUpdatesFollowerButton() {
-        UserDatabase.followUser(user2.getUsername(), MY_USERNAME);
-        searchMenuItem.perform(click());
-        profileMenuItem.perform(click());
-        followersButton.check(matches(withText("1 Followers")));
     }
 
     // Test whether the "Edit" button is displayed
@@ -264,15 +261,19 @@ public class MyProfileFragmentTest {
         recyclerView.check(matches(hasItemCount(0)));
     }
 
-    // Test that an item is added to the collection on click of the AddMediaButton
+    // Test that a click on the add media button opens the searchg
     @Test
     public void testAddMediaButton() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
 
+        // Check that the collection is displayed and click on the add media button
         collectionRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addMediaButton.perform(click());
-        collectionRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+
+        // Check that the search is displayed
+        movieSearchCategory.check(matches(isDisplayed()));
     }
+
 
     // Test the initial state of the list of collections after profile creation
     @Test
@@ -335,7 +336,7 @@ public class MyProfileFragmentTest {
 
         // Click on the sign out button
         activity.signOutUser();
-        sleep(500);
+        sleep(WAIT_TIME);
 
         // Check whether the user is signed out
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

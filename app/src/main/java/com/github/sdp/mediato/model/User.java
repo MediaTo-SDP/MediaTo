@@ -2,6 +2,9 @@ package com.github.sdp.mediato.model;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.post.Post;
+import com.github.sdp.mediato.model.post.ReviewPost;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +88,30 @@ public class User {
 
     public Map<String, Collection> getCollections() {
         return collections;
+    }
+
+    /**
+     * Adds a collection to the user's collections
+     * @important: the collection is only added locally, it is not added to the database
+     * @param collection
+     */
+    public void addCollection(Collection collection) {
+        this.collections.put(collection.getCollectionName(), collection);
+    }
+
+    /**
+     * Creates a review post for each review in the user's collections
+     * @return a list of review posts
+     */
+    public List<ReviewPost> fetchReviewPosts() {
+        List<ReviewPost> reviewPosts = new ArrayList<>();
+        for(Collection collection : collections.values()) {
+            collection.getReviews().values().forEach(
+                    review -> {
+                        reviewPosts.add(new ReviewPost(getUsername(), review));
+                    });
+        }
+        return reviewPosts;
     }
 
     public static class UserBuilder {

@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.ui.viewmodel.MyFollowersViewModel;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
@@ -33,6 +35,7 @@ public class MyFollowersFragment extends Fragment {
     MyFollowersViewModel myFollowersViewModel = new ViewModelProvider(this).get(
         MyFollowersViewModel.class);
     myFollowersViewModel.setUserName(USERNAME);
+    myFollowersViewModel.setMainActivity((MainActivity) getActivity());
 
     // Set the Search User RecyclerView with its adapter
     RecyclerView recyclerView = view.findViewById(R.id.myFollowers_recyclerView);
