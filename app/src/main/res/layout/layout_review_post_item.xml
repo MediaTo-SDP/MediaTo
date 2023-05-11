@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.156"
-            app:srcCompat="@drawable/octopussy" />
+            app:srcCompat="@drawable/movie" />
 
         <TextView
             android:id="@+id/text_title"

@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   private ReadOnlyProfileViewModel readOnlyProfileViewModel;
   AppCache globalCache;
 
-  private ProfileViewModel currentUserViewModel;
-  private ProfileViewModel otherUsersViewModel;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
         item -> navigateFragments(item.getItemId()));
     globalCache = Room.databaseBuilder(getApplicationContext(), AppCache.class, "global-cache")
             .build();
-            item -> navigateFragments(item.getItemId()));
   }
 
   private boolean navigateFragments(int itemId) {
@@ -76,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // See: http://tools.android.com/tips/non-constant-fields
     if (itemId == R.id.feed) {
       replaceFragment(feedFragment);
-    if (itemId == R.id.home) {
-      replaceFragment(new HomeFragment(globalCache));
     } else if (itemId == R.id.search) {
       replaceFragment(searchFragment);
     } else if (itemId == R.id.profile) {
