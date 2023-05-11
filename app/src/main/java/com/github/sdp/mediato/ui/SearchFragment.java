@@ -30,6 +30,7 @@ import com.github.sdp.mediato.utility.adapters.UserAdapter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
@@ -37,16 +38,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private static String USERNAME;
     private SearchUserViewModel searchUserViewModel;
 
-    private SearchView searchView;
-    private TextView textView;
-
     private RecyclerView recyclerView;
 
     private Button peopleButton;
     private Button booksButton;
     private Button filmButton;
-    private Button musicButton;
-
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
     private TheMovieDBAPI theMovieDB;
@@ -76,11 +72,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.filmButton = searchView.findViewById(R.id.search_category_movie);
         filmButton.setOnClickListener(this);
 
-        this.musicButton = searchView.findViewById(R.id.search_category_music);
-        musicButton.setOnClickListener(this);
-
-        // get the text view
-        this.textView = searchView.findViewById(R.id.searchactivity_textView_textDuringAfterSearch);
+        String isGeneralSearch = (String) getArguments().get("general_search");
+        if (isGeneralSearch != null && !isGeneralSearch.equals("true")) {
+            peopleButton.setVisibility(View.GONE);
+        }
 
         // Create and init the Search User ViewModel
         searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
@@ -93,8 +88,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
-        this.searchView = searchView.findViewById(R.id.searchbar);
-        this.searchView.setOnQueryTextListener(this);
+        SearchView searchView1 = searchView.findViewById(R.id.searchbar);
+        searchView1.setOnQueryTextListener(this);
 
         // finally warmup the system, the activity starts by searching for peoples
         this.currentHighlightedButton = peopleButton;
@@ -123,11 +118,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if (view == peopleButton) {
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
         } else if (view == booksButton) {
-
+            // TODO: implement books search
+            // this.currentCategory = SearchFragment.SearchCategory.BOOKS;
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
-        } else if (view == musicButton) {
-            this.currentCategory = SearchFragment.SearchCategory.MUSIC;
         }
 
         this.currentHighlightedButton.setTypeface(null, Typeface.NORMAL);
@@ -161,11 +155,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
             case BOOKS:
                 break;
-            case MUSIC:
-                break;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         String collectionName = (String) getArguments().get("collection");
+
         MediaListAdapter mla = new MediaListAdapter(getActivity(), collectionName);
         recyclerView.setAdapter(mla);
         searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
@@ -186,13 +179,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private static void sortUsersByName(List<User> userList) {
-        Collections.sort(userList, Comparator.comparing(u -> u.getUsername().toLowerCase()));
+        userList.sort(Comparator.comparing(u -> u.getUsername().toLowerCase()));
     }
 
     private enum SearchCategory {
         PEOPLE,
         MOVIES,
-        BOOKS,
-        MUSIC
+        BOOKS
     }
 }
