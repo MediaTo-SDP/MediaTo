@@ -4,6 +4,7 @@ package com.github.sdp.mediato.model;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.model.media.Movie;
 
@@ -21,6 +22,14 @@ public class MovieTests {
     @Test
     public void MediaTypeReturnsMovie() {
         assertThat(MOVIE.getMediaType(), is(MediaType.MOVIE));
+    }
+
+    @Test
+    public void CopyConstructorWorks(){
+        Movie copyMovie = new Movie(MOVIE);
+        Media copyMovie2 = new Media(MOVIE);
+        assertThat(copyMovie.getId(), is(MOVIE.getId()));
+        assertThat(copyMovie2.getId(), is(MOVIE.getId()));
     }
 
     @Test

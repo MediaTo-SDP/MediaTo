@@ -26,6 +26,7 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
     private List<TMDBMovie> trendingCache;
     private int trendingPage;
 
+
     /**
      * Default constructor
      *
