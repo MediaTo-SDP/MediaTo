@@ -8,9 +8,39 @@ import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ReviewInteractionDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    public static CompletableFuture<Boolean> likes(String refUsername, String tarUsername, String collectionName, String review) {
+       DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
+       return getReactionValue(reactionPath, refUsername);
+    }
+
+    public static CompletableFuture<Boolean> dislikes(String refUsername, String tarUsername, String collectionName, String review) {
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
+        return getReactionValue(reactionPath, refUsername);
+    }
+
+    private static CompletableFuture<Boolean> getReactionValue(DatabaseReference reactionPath, String refUsername) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        reactionPath
+                .child(refUsername)
+                .get()
+                .addOnSuccessListener(
+                        dataSnapshot -> {
+                            if ((dataSnapshot.getValue() == null) || (dataSnapshot.getValue() == Boolean.FALSE)) {
+                                future.complete(Boolean.FALSE);
+                            } else {
+                                future.complete(Boolean.TRUE);
+                            }
+                        }).addOnFailureListener(future::completeExceptionally);
+
+        return future;
+    }
+
 
     public static void likeReview(String refUsername, String tarUsername, String collectionName, String review) {
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);

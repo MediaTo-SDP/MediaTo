@@ -1,9 +1,11 @@
 package com.github.sdp.mediato.utility.adapters;
 
+import android.media.Image;
 import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -79,6 +81,45 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         return new ReviewPostListAdapter.MyViewHolder(binding);
     }
 
+    private void setLikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        holder.binding.likeButton.setOnClickListener(
+                v -> {
+                    ReviewInteractionDatabase.likes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
+                        .thenAccept(
+                                likes -> {
+                                   if (!likes) {
+                                        ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                        int likeCount = getItem(position).getLikeCount();
+                                        holder.binding.likeCount.setText(String.valueOf(likeCount + 1));
+                                   } else {
+                                        ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                        int likeCount = getItem(position).getLikeCount();
+                                        holder.binding.likeCount.setText(String.valueOf(likeCount - 1));
+                                   }
+                                });}
+        );
+    }
+
+    private void setDislikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        holder.binding.dislikeButton.setOnClickListener(
+                v -> {
+                    ReviewInteractionDatabase.dislikes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
+                            .thenAccept(
+                                    dislikes -> {
+                                        if (!dislikes) {
+                                            ReviewInteractionDatabase.dislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            int dislikeCount = getItem(position).getDislikeCount();
+                                            holder.binding.dislikeCount.setText(String.valueOf(dislikeCount + 1));
+                                        } else {
+                                            ReviewInteractionDatabase.unDislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            int dislikeCount = getItem(position).getDislikeCount();
+                                            holder.binding.dislikeCount.setText(String.valueOf(dislikeCount - 1));
+                                        }
+                                    });
+                }
+        );
+    }
+
     /**
      * @param holder   The ViewHolder which should be updated to represent the contents of the
      *                 item at the given position in the data set.
@@ -87,41 +128,12 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     @Override
     public void onBindViewHolder(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
         MaterialButton followButton = holder.binding.exploreFollowButton;
-        holder.binding.textTitle.setText(getItem(position).getTitle());
-        holder.binding.textComment.setText(getItem(position).getComment());
-        if (getItem(position).getGrade() > 0) {
-            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
-        } else {
-            holder.binding.textRating.setVisibility(View.GONE);
-        }
-        holder.binding.username.setText(getItem(position).getUsername());
-        holder.binding.likeCount.setText(String.valueOf(getItem(position).getLikeCount()));
-        holder.binding.dislikeCount.setText(String.valueOf(getItem(position).getDislikeCount()));
-
-        Glide.with(holder.itemView.getContext())
-                .load(getItem(position).getMediaIconUrl())
-                .placeholder(R.drawable.movie)
-                .into(holder.binding.mediaCover);
-        displayProfilePic(holder, position);
-
-        holder.binding.dislikeButton.setOnClickListener(
-                v -> {
-                    System.out.println("Disliking review");
-                    ReviewInteractionDatabase.dislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                    int dislikeCount = getItem(position).getDislikeCount();
-                    holder.binding.dislikeCount.setText(String.valueOf(dislikeCount + 1));
-                }
-        );
-
-        holder.binding.likeButton.setOnClickListener(
-                v -> {
-                    System.out.println("Liking review");
-                    ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                    int likeCount = getItem(position).getLikeCount();
-                    holder.binding.likeCount.setText(String.valueOf(likeCount + 1));
-                }
-        );
-
+        // Display the content of the review post
+        displayReviewPostContent(holder, position);
+        // Set the like and dislike buttons
+        setLikeListener(holder, position);
+        setDislikeListener(holder, position);
+        // Set fragment specific details
         switch (callerFragment) {
             case EXPLORE:
                 setExploreSpecifics(getItem(position).getUsername(), followButton);
@@ -202,8 +214,27 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         }
     }
 
+    public void displayReviewPostContent(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
+        holder.binding.textTitle.setText(getItem(position).getTitle());
+        holder.binding.textComment.setText(getItem(position).getComment());
+        if (getItem(position).getGrade() > 0) {
+            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
+        } else {
+            holder.binding.textRating.setVisibility(View.GONE);
+        }
+        holder.binding.username.setText(getItem(position).getUsername());
+        holder.binding.likeCount.setText(String.valueOf(getItem(position).getLikeCount()));
+        holder.binding.dislikeCount.setText(String.valueOf(getItem(position).getDislikeCount()));
+
+        Glide.with(holder.itemView.getContext())
+                .load(getItem(position).getMediaIconUrl())
+                .placeholder(R.drawable.movie)
+                .into(holder.binding.mediaCover);
+        displayProfilePic(holder, position);
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        private final LayoutReviewPostItemBinding binding;
+        public final LayoutReviewPostItemBinding binding;
 
         public MyViewHolder(@NonNull LayoutReviewPostItemBinding binding) {
             super(binding.getRoot());
