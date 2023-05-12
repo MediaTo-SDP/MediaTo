@@ -44,6 +44,7 @@ public class FeedFragment extends Fragment {
 
         adapter = new ReviewPostListAdapter();
         binding.feedPosts.setAdapter(adapter);
+        adapter.setCallerFragment(viewModel, ReviewPostListAdapter.CallerFragment.FEED);
 
         binding.feedPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.feedPosts.setHasFixedSize(false);

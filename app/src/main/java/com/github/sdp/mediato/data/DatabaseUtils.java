@@ -34,7 +34,7 @@ public class DatabaseUtils {
     //The default radius for the nearby users in Kilometers
     //It is now used for all the nearby users queries
     //But a future update may allow the user to choose the radius
-    public static final int DEFAULT_RADIUS = 250;
+    public static final int DEFAULT_RADIUS = 100000;
 
     //---------------------Util methods-------------------------------------
 
@@ -92,7 +92,10 @@ public class DatabaseUtils {
                         userSnapshot -> {
                             User user = userSnapshot.getValue(User.class);
                             if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location, radius)) {
+                                System.out.println("User " + userSnapshot.getKey() + " is nearby with location " + user.getLocation().getLatitude() + " " + user.getLocation().getLongitude());
                                 nearbyUsers.add(userSnapshot.getKey());
+                            } else {
+                                System.out.println("User " + userSnapshot.getKey() + " is not nearby with location " + user.getLocation().getLatitude() + " " + user.getLocation().getLongitude());
                             }
                         }
                 );

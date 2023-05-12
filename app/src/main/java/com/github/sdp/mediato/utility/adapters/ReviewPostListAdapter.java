@@ -1,10 +1,13 @@
 package com.github.sdp.mediato.utility.adapters;
 
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -19,6 +22,9 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.post.ReviewPost;
+import com.github.sdp.mediato.ui.ExploreFragment;
+import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
+import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.base.Converter;
 import com.google.protobuf.Internal;
@@ -30,8 +36,14 @@ import java.util.concurrent.CompletableFuture;
 * An adapter (that can be used in recycler views) for the review posts
 */
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
-    private boolean isInExploreFragment = false;
+    public enum CallerFragment {
+        EXPLORE,
+        FEED
+    }
+    private CallerFragment callerFragment;
     private String username;
+    private ExploreViewModel exploreViewModel;
+    private FeedViewModel feedViewModel;
 
     /**
      * Used by the adapter to compare review posts
@@ -88,12 +100,36 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                 .placeholder(R.drawable.movie)
                 .into(holder.binding.mediaCover);
         displayProfilePic(holder, position);
-        if(isInExploreFragment) {
+
+        switch (callerFragment) {
+            case EXPLORE:
+                setExploreSpecifics(getItem(position).getUsername(), followButton);
+                break;
+            case FEED:
+                setFeedSpecifics(getItem(position).getUsername(), followButton);
+                break;
+        }
+    }
+
+    public void setFeedSpecifics(String reviewPostUsername, MaterialButton followButton) {
+        followButton.setVisibility(View.GONE);
+    }
+
+    public void setExploreSpecifics(String reviewPostUsername, MaterialButton followButton) {
+        System.out.println("Setting explore specifics for " + reviewPostUsername);
+        if(exploreViewModel.getFollowedUsers().getValue().contains(reviewPostUsername)) {
+            System.out.println("User " + reviewPostUsername + " is followed");
+            followButton.setText(R.string.following);
+            followButton.setClickable(false);
+        } else {
+            System.out.println("User " + reviewPostUsername + " is not followed");
+            followButton.setText("Follow");
             followButton.setVisibility(View.VISIBLE);
+            followButton.setClickable(true);
             followButton.setOnClickListener(
                     v -> {
-                        UserDatabase.followUser(username, getItem(position).getUsername());
-                        followButton.setVisibility(View.GONE);
+                        UserDatabase.followUser(username, reviewPostUsername);
+                        exploreViewModel.updateFollows(reviewPostUsername);
                     }
             );
         }
@@ -133,8 +169,16 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         this.username = username;
     }
 
-    public void setInExploreFragment(boolean inExploreFragment) {
-        isInExploreFragment = inExploreFragment;
+    public void setCallerFragment(ViewModel viewModel, CallerFragment callerFragment) {
+        this.callerFragment = callerFragment;
+        switch (callerFragment) {
+            case EXPLORE:
+                this.exploreViewModel = (ExploreViewModel) viewModel;
+                break;
+            case FEED:
+                this.feedViewModel = (FeedViewModel) viewModel;
+                break;
+        }
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
