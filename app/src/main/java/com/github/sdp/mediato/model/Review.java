@@ -69,23 +69,16 @@ public class Review implements Serializable {
         this.comment = comment;
     }
     public List<String> getLikes() {
-        List<String> likesList = new ArrayList<>();
-        for (String user : likes.keySet()) {
-            if (likes.get(user)) {
-                likesList.add(user);
-            }
-        }
-        return likesList;
+        return likes.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     public List<String> getDislikes() {
-        List<String> dislikesList = new ArrayList<>();
-        for (String user : dislikes.keySet()) {
-            if (dislikes.get(user)) {
-                dislikesList.add(user);
-            }
-        }
-        return dislikesList;
+        return dislikes.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
     }
     public int getLikeCount() {
         return getLikes().size();

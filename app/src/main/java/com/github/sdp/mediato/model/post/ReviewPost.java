@@ -13,13 +13,7 @@ import java.text.AttributedCharacterIterator;
  * Class representing a review post
  */
 public class ReviewPost extends Post{
-    private String title;
-    private int grade;
-    private String comment;
-    private int id;
     private Review review;
-
-    private String mediaIconUrl;
     private Collection collection;
 
     public ReviewPost(String username, Review review, Collection collection) {
@@ -28,42 +22,21 @@ public class ReviewPost extends Post{
         //if (review.getUsername() != username){
          //   throw new IllegalArgumentException("This review wasn't made by " + username);
         //}
-        this.title = review.getMedia().getTitle();
-        this.grade = review.getGrade();
-        this.comment = review.getComment();
-        this.id = review.hashCode();
-        this.mediaIconUrl = review.getMedia().getIconUrl();
-        this.collection = collection;
         this.review = review;
+        this.collection = collection;
     }
 
     public String getTitle() {
-        return title;
+        return this.review.getMedia().getTitle();
     }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getGrade() {
-        return grade;
+        return this.review.getGrade();
     }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
     public String getComment() {
-        return comment;
+        return this.review.getComment();
     }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public int getId() {return this.id;}
-
-    public String getMediaIconUrl() {return this.mediaIconUrl;}
+    public int getId() {return this.review.hashCode();}
+    public String getMediaIconUrl() {return this.review.getMedia().getIconUrl();}
     public String getCollectionName() {return this.collection.getCollectionName();}
     public int getLikeCount() {return this.review.getLikeCount();}
     public int getDislikeCount() {return this.review.getDislikeCount();}
