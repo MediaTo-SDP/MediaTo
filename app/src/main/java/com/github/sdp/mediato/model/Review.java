@@ -4,6 +4,10 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Media;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Review implements Serializable {
@@ -14,6 +18,8 @@ public class Review implements Serializable {
     private Media media;
     private int grade;
     private String comment;
+    private Map<String, Boolean> likes = new HashMap<>();
+    private Map<String, Boolean> dislikes = new HashMap<>();
 
     private Review() {
     }
@@ -61,6 +67,32 @@ public class Review implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+    public List<String> getLikes() {
+        List<String> likesList = new ArrayList<>();
+        for (String user : likes.keySet()) {
+            if (likes.get(user)) {
+                likesList.add(user);
+            }
+        }
+        return likesList;
+    }
+
+    public List<String> getDislikes() {
+        List<String> dislikesList = new ArrayList<>();
+        for (String user : dislikes.keySet()) {
+            if (dislikes.get(user)) {
+                dislikesList.add(user);
+            }
+        }
+        return dislikesList;
+    }
+    public int getLikeCount() {
+        return getLikes().size();
+    }
+
+    public int getDislikeCount() {
+        return getDislikes().size();
     }
 
     @Override

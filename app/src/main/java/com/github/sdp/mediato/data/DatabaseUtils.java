@@ -38,6 +38,10 @@ public class DatabaseUtils {
 
     //---------------------Util methods-------------------------------------
 
+    static DatabaseReference getReviewReference(String username, String collectionName, String mediaTitle) {
+        return getCollectionReference(username, collectionName).child(REVIEWS_PATH + mediaTitle);
+    }
+
     /**
      * Helper method that returns the database reference for a collection
      *
@@ -90,6 +94,7 @@ public class DatabaseUtils {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSnapshot.getChildren().forEach(
                         userSnapshot -> {
+                            System.out.println("User " + userSnapshot.getKey() + " is being checked");
                             User user = userSnapshot.getValue(User.class);
                             if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location, radius)) {
                                 System.out.println("User " + userSnapshot.getKey() + " is nearby with location " + user.getLocation().getLatitude() + " " + user.getLocation().getLongitude());

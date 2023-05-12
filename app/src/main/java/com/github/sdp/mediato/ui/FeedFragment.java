@@ -40,9 +40,11 @@ public class FeedFragment extends Fragment {
         USERNAME = getArguments().getString("username");
 
         viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+        System.out.println("USERNAME FEED: " + USERNAME);
         viewModel.setUsername(USERNAME);
 
         adapter = new ReviewPostListAdapter();
+        adapter.setUsername(USERNAME);
         binding.feedPosts.setAdapter(adapter);
         adapter.setCallerFragment(viewModel, ReviewPostListAdapter.CallerFragment.FEED);
 

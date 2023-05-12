@@ -5,6 +5,7 @@ import static com.github.sdp.mediato.model.post.PostType.REVIEW;
 import androidx.annotation.Nullable;
 
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.media.Collection;
 
 import java.text.AttributedCharacterIterator;
 
@@ -16,10 +17,12 @@ public class ReviewPost extends Post{
     private int grade;
     private String comment;
     private int id;
+    private Review review;
 
     private String mediaIconUrl;
+    private Collection collection;
 
-    public ReviewPost(String username, Review review){
+    public ReviewPost(String username, Review review, Collection collection) {
         super(REVIEW, username);
         //@TODO Add when username fixed for reviews
         //if (review.getUsername() != username){
@@ -30,6 +33,8 @@ public class ReviewPost extends Post{
         this.comment = review.getComment();
         this.id = review.hashCode();
         this.mediaIconUrl = review.getMedia().getIconUrl();
+        this.collection = collection;
+        this.review = review;
     }
 
     public String getTitle() {
@@ -59,6 +64,9 @@ public class ReviewPost extends Post{
     public int getId() {return this.id;}
 
     public String getMediaIconUrl() {return this.mediaIconUrl;}
+    public String getCollectionName() {return this.collection.getCollectionName();}
+    public int getLikeCount() {return this.review.getLikeCount();}
+    public int getDislikeCount() {return this.review.getDislikeCount();}
 
     @Override
     public boolean equals(@Nullable Object obj) {

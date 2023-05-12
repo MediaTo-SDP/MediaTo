@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
@@ -94,12 +95,32 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
             holder.binding.textRating.setVisibility(View.GONE);
         }
         holder.binding.username.setText(getItem(position).getUsername());
+        holder.binding.likeCount.setText(String.valueOf(getItem(position).getLikeCount()));
+        holder.binding.dislikeCount.setText(String.valueOf(getItem(position).getDislikeCount()));
 
         Glide.with(holder.itemView.getContext())
                 .load(getItem(position).getMediaIconUrl())
                 .placeholder(R.drawable.movie)
                 .into(holder.binding.mediaCover);
         displayProfilePic(holder, position);
+
+        holder.binding.dislikeButton.setOnClickListener(
+                v -> {
+                    System.out.println("Disliking review");
+                    ReviewInteractionDatabase.dislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                    int dislikeCount = getItem(position).getDislikeCount();
+                    holder.binding.dislikeCount.setText(String.valueOf(dislikeCount + 1));
+                }
+        );
+
+        holder.binding.likeButton.setOnClickListener(
+                v -> {
+                    System.out.println("Liking review");
+                    ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                    int likeCount = getItem(position).getLikeCount();
+                    holder.binding.likeCount.setText(String.valueOf(likeCount + 1));
+                }
+        );
 
         switch (callerFragment) {
             case EXPLORE:

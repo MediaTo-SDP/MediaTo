@@ -108,7 +108,7 @@ public class User {
         for(Collection collection : collections.values()) {
             collection.getReviews().values().forEach(
                     review -> {
-                        reviewPosts.add(new ReviewPost(getUsername(), review));
+                        reviewPosts.add(new ReviewPost(getUsername(), review, collection));
                     });
         }
         return reviewPosts;
