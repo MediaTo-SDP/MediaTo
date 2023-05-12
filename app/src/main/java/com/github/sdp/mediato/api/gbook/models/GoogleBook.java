@@ -1,7 +1,5 @@
 package com.github.sdp.mediato.api.gbook.models;
 
-import com.github.sdp.mediato.errorCheck.Preconditions;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -44,11 +42,11 @@ public final class GoogleBook {
 
     /**
      * Get the summary
-     * @return the summary (might be null or empty
+     * @return the summary (might be null or empty)
      */
     @Nullable
     public String getOverview() {
-        return volumeInfo.description;
+        return (volumeInfo.description != null) ? volumeInfo.description : volumeInfo.subtitle;
     }
 
     /**
@@ -74,7 +72,7 @@ public final class GoogleBook {
     public String getIconURL(){
         // Good thumbnail are often provided
         String thumbnail = volumeInfo.imageLinks.thumbnail;
-        return (thumbnail != null && !thumbnail.equals("")) ?
+        return (volumeInfo.imageLinks != null && thumbnail != null && !thumbnail.equals("")) ?
                 thumbnail : BASE_ICON_URL.replace("%id", id);
     }
 

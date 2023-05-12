@@ -29,6 +29,12 @@ public class BookTest {
     }
 
     @Test
+    public void CopyConstructorWorks(){
+        Book copyBook = new Book(BOOK);
+        assertThat(copyBook.getId(), is(BOOK.getId()));
+    }
+
+    @Test
     public void CanGetTheTitle() {
         assertThat(BOOK.getTitle(), is(TITLE));
     }

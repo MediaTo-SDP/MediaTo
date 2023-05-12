@@ -58,15 +58,6 @@
               android:padding="0dp"
               style="?android:attr/buttonBarButtonStyle" />
 
-            <Button
-              android:id="@+id/search_category_music"
-              android:text="@string/search_category_music"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:background="@android:color/transparent"
-              android:textColor="?attr/colorOnPrimary"
-              android:padding="0dp"
-              style="?android:attr/buttonBarButtonStyle" />
         </LinearLayout>
     </LinearLayout>
 

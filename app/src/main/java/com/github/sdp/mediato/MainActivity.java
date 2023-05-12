@@ -10,6 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
+
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.ExploreFragment;
 import com.github.sdp.mediato.model.Review;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   FeedFragment feedFragment;
   private MyProfileViewModel myProfileViewModel;
   private ReadOnlyProfileViewModel readOnlyProfileViewModel;
+  AppCache globalCache;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     // Set the bottomNavigationView
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
-            item -> navigateFragments(item.getItemId()));
+        item -> navigateFragments(item.getItemId()));
+    globalCache = Room.databaseBuilder(getApplicationContext(), AppCache.class, "global-cache")
+            .build();
   }
 
   private boolean navigateFragments(int itemId) {
@@ -97,15 +103,11 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     exploreFragment = new ExploreFragment();
     feedFragment = new FeedFragment();
 
-    Review review = new Gson().fromJson(
-            getIntent().getStringExtra("review"), Review.class);
     Bundle args = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
-    if (review != null) {
-      args.putSerializable("review", review);
-    }
+
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
