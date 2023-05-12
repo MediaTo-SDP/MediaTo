@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
@@ -46,6 +47,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
     private TheMovieDBAPI theMovieDB;
+    private OLAPI oLAPI;
 
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
 
@@ -54,6 +56,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         super.onCreate(savedInstanceState);
         USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
         theMovieDB = new TheMovieDBAPI(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
+        oLAPI = new OLAPI("https://openlibrary.org/");
     }
 
     @Override
@@ -118,8 +121,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if (view == peopleButton) {
             this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
         } else if (view == booksButton) {
-            // TODO: implement books search
-            // this.currentCategory = SearchFragment.SearchCategory.BOOKS;
+            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
         } else if (view == filmButton) {
             this.currentCategory = SearchFragment.SearchCategory.MOVIES;
         }
@@ -154,6 +156,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 }
                 break;
             case BOOKS:
+                oLAPI.trending(10);
                 break;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));

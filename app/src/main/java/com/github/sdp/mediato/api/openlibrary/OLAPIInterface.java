@@ -9,4 +9,8 @@ import retrofit2.http.Query;
 public interface OLAPIInterface {
     @GET("/trending/yearly.json")
     Call<OLTrendingBooks> getTrendingBooks(@Query("page") int page);
+
+    @GET("api/books")
+    Call<BookDetails> getBooks(@Query("bibkeys") String bibkeys, @Query("format") String format, @Query("jscmd") String jscmd);
+}
 }

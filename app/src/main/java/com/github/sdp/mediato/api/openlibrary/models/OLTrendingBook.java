@@ -7,4 +7,8 @@ import java.util.List;
 public class OLTrendingBook {
     @SerializedName("key")
     private String key;
+
+    public String getKey() {
+        return key;
+    }
 }

@@ -7,4 +7,9 @@ import java.util.List;
 public class OLTrendingBooks {
     @SerializedName("works")
     private List<OLTrendingBook> works;
+
+    public List<OLTrendingBook> getWorks() {
+        return works;
+    }
 }
+

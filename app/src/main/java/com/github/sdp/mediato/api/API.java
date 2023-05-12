@@ -8,8 +8,7 @@ public interface API<T> {
 
     CompletableFuture<List<T>> searchItems(String s, int count);
 
-    // Removed since the book API does not provide a trending feature. Might be added again later
-    // CompletableFuture<List<T>> trending(int count);
+    //CompletableFuture<List<T>> trending(int count);
 
     CompletableFuture<T> get(String id);
 

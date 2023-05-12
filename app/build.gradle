@@ -74,6 +74,7 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
     androidTestImplementation('com.adevinta.android:barista:4.2.0')
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'  // Check for the latest version
 
 
     implementation 'com.github.dhaval2404:imagepicker:2.1'
