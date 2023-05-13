@@ -87,6 +87,20 @@ public class Review implements Serializable {
     public int getDislikeCount() {
         return getDislikes().size();
     }
+    public void unLike(String username) {
+        likes.put(username, false);
+    }
+    public void unDislike(String username) {
+        dislikes.put(username, false);
+    }
+    public void like(String username) {
+        likes.put(username, true);
+        dislikes.put(username, false);
+    }
+    public void dislike(String username) {
+        dislikes.put(username, true);
+        likes.put(username, false);
+    }
 
     @Override
     public boolean equals(Object obj) {

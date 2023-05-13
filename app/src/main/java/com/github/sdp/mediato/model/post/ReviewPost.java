@@ -40,6 +40,10 @@ public class ReviewPost extends Post{
     public String getCollectionName() {return this.collection.getCollectionName();}
     public int getLikeCount() {return this.review.getLikeCount();}
     public int getDislikeCount() {return this.review.getDislikeCount();}
+    public void unLike(String username) {this.review.unLike(username);}
+    public void unDislike(String username) {this.review.unDislike(username);}
+    public void like(String username) {this.review.like(username);}
+    public void dislike(String username) {this.review.dislike(username);}
 
     @Override
     public boolean equals(@Nullable Object obj) {

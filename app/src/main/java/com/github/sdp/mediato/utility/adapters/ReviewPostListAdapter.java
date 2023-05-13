@@ -82,25 +82,29 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     }
 
     private void setLikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        ReviewPost reviewPost = getItem(position);
         holder.binding.likeButton.setOnClickListener(
                 v -> {
                     ReviewInteractionDatabase.likes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
                         .thenAccept(
                                 likes -> {
                                    if (!likes) {
-                                        ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                                        int likeCount = getItem(position).getLikeCount();
-                                        holder.binding.likeCount.setText(String.valueOf(likeCount + 1));
+                                       ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                       ReviewInteractionDatabase.unDislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                       reviewPost.like(username);
                                    } else {
-                                        ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                                        int likeCount = getItem(position).getLikeCount();
-                                        holder.binding.likeCount.setText(String.valueOf(likeCount - 1));
+                                       ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                       reviewPost.unLike(username);
                                    }
+                                    holder.binding.likeCount.setText(String.valueOf(reviewPost.getLikeCount()));
+                                    holder.binding.dislikeCount.setText(String.valueOf(reviewPost.getDislikeCount()));
+
                                 });}
         );
     }
 
     private void setDislikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        ReviewPost reviewPost = getItem(position);
         holder.binding.dislikeButton.setOnClickListener(
                 v -> {
                     ReviewInteractionDatabase.dislikes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
@@ -108,13 +112,15 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
                                     dislikes -> {
                                         if (!dislikes) {
                                             ReviewInteractionDatabase.dislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                                            int dislikeCount = getItem(position).getDislikeCount();
-                                            holder.binding.dislikeCount.setText(String.valueOf(dislikeCount + 1));
+                                            ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            reviewPost.dislike(username);
                                         } else {
                                             ReviewInteractionDatabase.unDislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
-                                            int dislikeCount = getItem(position).getDislikeCount();
-                                            holder.binding.dislikeCount.setText(String.valueOf(dislikeCount - 1));
+                                            reviewPost.unDislike(username);
                                         }
+                                        holder.binding.likeCount.setText(String.valueOf(reviewPost.getLikeCount()));
+                                        holder.binding.dislikeCount.setText(String.valueOf(reviewPost.getDislikeCount()));
+
                                     });
                 }
         );
