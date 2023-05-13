@@ -3,15 +3,16 @@ package com.github.sdp.mediato.model.media;
 import com.github.sdp.mediato.api.gbook.models.GoogleBook;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
+import java.util.List;
+
 public class Book extends Media{
     private Book(){super();}
 
-    public Book(String title, String summary, String posterUrl, String iconUrl, String id) {
-        super(MediaType.BOOK, title, summary, posterUrl, iconUrl, id);
-    }
-    public Book(GoogleBook book){
-        this(book.getTitle(), book.getOverview() == null ? " " : book.getOverview(),
-                book.getPosterURL(), book.getIconURL(), book.getId());
+    private List<String> subjects;
+
+    public Book(String id, String title, String summary, int coverId, List<String> subjects) {
+        super(MediaType.BOOK, title, summary, "https://covers.openlibrary.org/b/ID/" + coverId + "-M.jpg", "https://covers.openlibrary.org/b/ID/" + coverId + "-S.jpg", id);
+        this.subjects = subjects;
     }
 
     @Override

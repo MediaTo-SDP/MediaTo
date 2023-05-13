@@ -1,16 +1,15 @@
 package com.github.sdp.mediato.api.openlibrary;
 
 import com.github.sdp.mediato.api.API;
+import com.github.sdp.mediato.api.openlibrary.models.OLBookDetails;
+import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBooks;
-import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPIInterface;
-import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
-import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.github.sdp.mediato.utility.adapters.AdapterRetrofitCallback;
+import com.github.sdp.mediato.model.media.Book;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -23,6 +22,7 @@ public class OLAPI implements API {
 
     private final OLAPIInterface api;
 
+    private static final String TAG = "OLAPI";
     /**
      * Default constructor
      *
@@ -51,19 +51,24 @@ public class OLAPI implements API {
     }
 
     @Override
-    public CompletableFuture<List> searchItems(String s, int count) {
+    public CompletableFuture<List<String>> searchItems(String s, int count) {
         return null;
     }
 
-    public CompletableFuture<OLTrendingBooks> trending(int count) {
-        CompletableFuture<OLTrendingBooks> completableFuture = new CompletableFuture<>();
-        api.getTrendingBooks(1)
-                .enqueue(new AdapterRetrofitCallback<>(completableFuture));
 
-        return completableFuture.thenApply(olTrendingBooks -> {
-            String query = StringBuilder
-            return olTrendingBooks.getWorks().stream().map(x -> x.getKey()).collect(Collectors.toList());
-        });
+    public CompletableFuture<List<CompletableFuture<Book>>> trending(int page) {
+        return api.getTrendingBooks(page)
+                .thenApply(olTrendingBooks -> olTrendingBooks.getWorks().stream()
+                        .map(book -> api.getBookDetails(book.getKey())
+                                .thenApply(bookDetails -> new Book(
+                                        book.getKey(),
+                                        book.getTitle(),
+                                        bookDetails.getDescription().getValue(),
+                                        book.getCoverI(),
+                                        bookDetails.getSubjects())
+                                )
+                        )
+                        .collect(Collectors.toList()));
     }
 
     @Override

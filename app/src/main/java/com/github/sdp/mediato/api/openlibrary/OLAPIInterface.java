@@ -1,16 +1,20 @@
 package com.github.sdp.mediato.api.openlibrary;
 
+import com.github.sdp.mediato.api.openlibrary.models.OLBookDetails;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBooks;
 
-import retrofit2.Call;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface OLAPIInterface {
     @GET("/trending/yearly.json")
-    Call<OLTrendingBooks> getTrendingBooks(@Query("page") int page);
+    CompletableFuture<OLTrendingBooks> getTrendingBooks(@Query("page") int page);
 
-    @GET("api/books")
-    Call<BookDetails> getBooks(@Query("bibkeys") String bibkeys, @Query("format") String format, @Query("jscmd") String jscmd);
-}
+    @GET("/works/{key}.json")
+    CompletableFuture<OLBookDetails> getBookDetails(@Path("key") String key);
+
 }

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
+import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
@@ -156,7 +157,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 }
                 break;
             case BOOKS:
-                oLAPI.trending(10);
+                oLAPI.trending(1).thenAccept(x -> {
+                    x.stream().forEach(y -> y.thenAccept(z -> System.out.println(z.getTitle())));
+                });
                 break;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
