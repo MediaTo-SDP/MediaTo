@@ -39,6 +39,14 @@ public class DatabaseUtils {
 
     //---------------------Util methods-------------------------------------
 
+    /**
+     * Helper method that returns the database reference for a reaction path
+     * @param tarUsername the username of the user who is being reacted to
+     * @param collectionName the name of the collection the review is in
+     * @param mediaTitle the title of the media reviewed
+     * @param reaction the reaction to the review
+     * @return the database reference for the reaction
+     */
     static DatabaseReference getReactionReference(String tarUsername, String collectionName, String mediaTitle, Reaction reaction) {
         if (reaction != Reaction.LIKE && reaction != Reaction.DISLIKE) throw new IllegalArgumentException("Reaction must be either likes or dislikes");
         return DatabaseUtils.getReviewReference(tarUsername, collectionName, mediaTitle)
@@ -111,10 +119,7 @@ public class DatabaseUtils {
                         userSnapshot -> {
                             User user = userSnapshot.getValue(User.class);
                             if (!userSnapshot.getKey().equals(username) && user.getLocation().isValid() && user.getLocation().isInRadius(location, radius)) {
-                                System.out.println("User " + userSnapshot.getKey() + " is nearby with location " + user.getLocation().getLatitude() + " " + user.getLocation().getLongitude());
                                 nearbyUsers.add(userSnapshot.getKey());
-                            } else {
-                                System.out.println("User " + userSnapshot.getKey() + " is not nearby with location " + user.getLocation().getLatitude() + " " + user.getLocation().getLongitude());
                             }
                         }
                 );

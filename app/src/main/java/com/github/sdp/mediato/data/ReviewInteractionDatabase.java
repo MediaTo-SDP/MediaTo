@@ -10,20 +10,106 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class is used to interact with the database for reviews.
+ */
 public class ReviewInteractionDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+    /**
+     * Determines if the user has liked a given review.
+     * @param refUsername the username of the user who is checked
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     * @return a completable future that returns true if the user has liked the review, false otherwise
+     */
     public static CompletableFuture<Boolean> likes(String refUsername, String tarUsername, String collectionName, String review) {
        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
        return getReactionValue(reactionPath, refUsername);
     }
 
+    /**
+     * Determines if the user has disliked a given review.
+     * @param refUsername the username of the user who is checked
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     * @return a completable future that returns true if the user has disliked the review, false otherwise
+     */
     public static CompletableFuture<Boolean> dislikes(String refUsername, String tarUsername, String collectionName, String review) {
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
         return getReactionValue(reactionPath, refUsername);
     }
 
+    /**
+     * Likes a review
+     * @param refUsername the username of the user who is liking the review
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     */
+    public static void likeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
+        setReactionValue(reactionPath, refUsername, true);
+    }
+
+    /**
+     * Unlikes a review
+     * @param refUsername the username of the user who is unliking the review
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     */
+    public static void unLikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
+        setReactionValue(reactionPath, refUsername, false);
+    }
+
+    /**
+     * Dislikes a review
+     * @param refUsername the username of the user who is disliking the review
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     */
+    public static void dislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
+        setReactionValue(reactionPath, refUsername, true);
+    }
+
+    /**
+     * Undislikes a review
+     * @param refUsername the username of the user who is undisliking the review
+     * @param tarUsername the username of the user who made the review
+     * @param collectionName the name of the collection
+     * @param review the review
+     */
+    public static void unDislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
+        setReactionValue(reactionPath, refUsername, false);
+    }
+
+    /**
+     * Sets the reaction value of a review
+     * @param reactionPath the path to the reaction
+     * @param refUsername the username of the user who is reacting
+     * @param value the value of the reaction
+     */
+    private static void setReactionValue(DatabaseReference reactionPath, String refUsername, Boolean value) {
+        reactionPath
+                .child(refUsername)
+                .setValue(value)
+                .addOnCompleteListener(task -> System.out.println("Reaction set to " + value + " for " + refUsername + "in " + reactionPath.toString()));
+    }
+
+    /**
+     * Helper function that determines the boolean value of a reaction given a path
+     * @param reactionPath the path to the reaction
+     * @param refUsername the username of the user who is checked
+     * @return a completable future that returns true if the user has reacted, false otherwise
+     */
     private static CompletableFuture<Boolean> getReactionValue(DatabaseReference reactionPath, String refUsername) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         reactionPath
@@ -39,34 +125,6 @@ public class ReviewInteractionDatabase {
                         }).addOnFailureListener(future::completeExceptionally);
 
         return future;
-    }
-
-
-    public static void likeReview(String refUsername, String tarUsername, String collectionName, String review) {
-        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
-        setReactionValue(reactionPath, refUsername, true);
-    }
-
-    public static void unLikeReview(String refUsername, String tarUsername, String collectionName, String review) {
-        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
-        setReactionValue(reactionPath, refUsername, false);
-    }
-
-    public static void dislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
-        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
-        setReactionValue(reactionPath, refUsername, true);
-    }
-
-    public static void unDislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
-        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
-        setReactionValue(reactionPath, refUsername, false);
-    }
-
-    private static void setReactionValue(DatabaseReference reactionPath, String refUsername, Boolean value) {
-        reactionPath
-                .child(refUsername)
-                .setValue(value)
-                .addOnCompleteListener(task -> System.out.println("Reaction set to " + value + " for " + refUsername + "in " + reactionPath.toString()));
     }
 
 }

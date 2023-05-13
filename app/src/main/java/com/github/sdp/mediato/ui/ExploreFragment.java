@@ -39,7 +39,7 @@ public class ExploreFragment extends Fragment {
     private String USERNAME;
     private ExploreViewModel viewModel;
     private FragmentExploreBinding binding;
-    public ReviewPostListAdapter adapter;
+    private ReviewPostListAdapter adapter;
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
