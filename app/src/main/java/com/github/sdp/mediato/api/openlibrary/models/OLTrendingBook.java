@@ -5,17 +5,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class OLTrendingBook {
+    @SerializedName("key")
+    private String key;
     @SerializedName("title")
     private String title;
     @SerializedName("first_publish_year")
     private int firstPublishYear;
     @SerializedName("cover_i")
     private int coverI;
-    @SerializedName("availability")
-    private Availability availability;
+
 
     public String getKey() {
-        return availability.getOpenlibraryWork();
+        return key.replaceAll("/works/","");
     }
 
     public int getFirstPublishYear() {
@@ -28,14 +29,5 @@ public class OLTrendingBook {
 
     public int getCoverI() {
         return coverI;
-    }
-
-    public static class Availability {
-        @SerializedName("openlibrary_work")
-        private String openlibraryWork;
-
-        public String getOpenlibraryWork() {
-            return openlibraryWork;
-        }
     }
 }

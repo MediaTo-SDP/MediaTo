@@ -24,11 +24,15 @@ import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
+import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -39,6 +43,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private static String USERNAME;
     private SearchUserViewModel searchUserViewModel;
+    private SearchMediaViewModel searchMediaViewModel;
 
     private RecyclerView recyclerView;
 
@@ -50,7 +55,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private TheMovieDBAPI theMovieDB;
     private OLAPI oLAPI;
 
-    private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>();
+    private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>(new ArrayList<>());
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
         searchUserViewModel.setUserName(USERNAME);
         searchUserViewModel.setMainActivity((MainActivity) getActivity());
+
+        searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
 
         // Set the Search User RecyclerView with its adapter
         recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
@@ -157,9 +164,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 }
                 break;
             case BOOKS:
-                oLAPI.trending(1).thenAccept(x -> {
-                    x.stream().forEach(y -> y.thenAccept(z -> System.out.println(z.getTitle())));
-                });
                 break;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
