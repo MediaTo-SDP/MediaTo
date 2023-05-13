@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.internal.matcher.HelperMatchers.atPosition;
 import static org.hamcrest.Matchers.allOf;
