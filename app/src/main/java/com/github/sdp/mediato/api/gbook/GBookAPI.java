@@ -4,6 +4,7 @@ import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.gbook.models.GBookSearchResult;
 import com.github.sdp.mediato.api.gbook.models.GoogleBook;
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.utility.adapters.AdapterRetrofitCallback;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -62,14 +64,12 @@ public class GBookAPI implements API<GoogleBook> {
         // cache.getOrDefault could have been null
         List<GoogleBook> termCache = getNonNullCache(s);
 
-
         // If there is remaining data, do not update
         if (termCache.size() >= count) {
             List<GoogleBook> res = new ArrayList<>(termCache.subList(0, count));
             cache.put(s, termCache.subList(count, termCache.size()));
             return CompletableFuture.completedFuture(res);
         }
-
         Integer index = indices.getOrDefault(s, 0);
         index = (index != null) ? index : 0;
         // No more data to download
@@ -82,7 +82,8 @@ public class GBookAPI implements API<GoogleBook> {
                 .enqueue(new AdapterRetrofitCallback<>(future));
         indices.put(s, index + RES_PER_REQUEST);
 
-        return future.thenApply(searchRes -> updateDataCache(searchRes, count, s));
+        return future.thenApply(searchRes -> updateDataCache(searchRes, count, s))
+                .thenApply(this::filterInvalidData);
     }
 
     /**
@@ -124,5 +125,17 @@ public class GBookAPI implements API<GoogleBook> {
         return new ArrayList<>(sCache.subList(0, resCount));
     }
 
-
+    private List<GoogleBook> filterInvalidData(List<GoogleBook> data){
+        return data.stream().filter((book) -> {
+            boolean validBook = true;
+            try {
+                Preconditions.checkMedia(MediaType.BOOK,
+                        List.of(book.getTitle(), book.getId(), book.getOverview(),
+                                book.getPublishedDate(), book.getIconURL(), book.getPosterURL()));
+            } catch (Exception e){
+                validBook = false;
+            }
+            return validBook;
+        }).collect(Collectors.toList());
+    }
 }

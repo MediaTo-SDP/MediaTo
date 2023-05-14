@@ -57,11 +57,10 @@ public class User {
      * Returns a list of the user's followers' usernames by adapting the map attribute
      */
     public List<String> getFollowers() {
-        List<String> followersList = new ArrayList<>();
-        for (String follower : followers.keySet()) {
-            if (followers.get(follower)) followersList.add(follower);
-        }
-        return followersList;
+        return followers.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
     }
 
     /**
@@ -69,13 +68,10 @@ public class User {
      * attribute
      */
     public List<String> getFollowing() {
-        List<String> followingList = new ArrayList<>();
-        for (String userFollowing : following.keySet()) {
-            if (following.get(userFollowing)) {
-                followingList.add(userFollowing);
-            }
-        }
-        return followingList;
+        return following.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
     }
 
     public int getFollowingCount() {
@@ -108,7 +104,7 @@ public class User {
         for(Collection collection : collections.values()) {
             collection.getReviews().values().forEach(
                     review -> {
-                        reviewPosts.add(new ReviewPost(getUsername(), review));
+                        reviewPosts.add(new ReviewPost(getUsername(), review, collection));
                     });
         }
         return reviewPosts;

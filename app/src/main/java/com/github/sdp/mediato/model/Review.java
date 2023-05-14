@@ -4,6 +4,10 @@ import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Media;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Review implements Serializable {
@@ -14,6 +18,8 @@ public class Review implements Serializable {
     private Media media;
     private int grade;
     private String comment;
+    private Map<String, Boolean> likes = new HashMap<>();
+    private Map<String, Boolean> dislikes = new HashMap<>();
 
     private Review() {
     }
@@ -61,6 +67,39 @@ public class Review implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+    public List<String> getLikes() {
+        return likes.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    public List<String> getDislikes() {
+        return dislikes.entrySet().stream()
+                .filter(Map.Entry::getValue).map(Map.Entry::getKey)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+    }
+    public int getLikeCount() {
+        return getLikes().size();
+    }
+
+    public int getDislikeCount() {
+        return getDislikes().size();
+    }
+    public void unLike(String username) {
+        likes.put(username, false);
+    }
+    public void unDislike(String username) {
+        dislikes.put(username, false);
+    }
+    public void like(String username) {
+        likes.put(username, true);
+        dislikes.put(username, false);
+    }
+    public void dislike(String username) {
+        dislikes.put(username, true);
+        likes.put(username, false);
     }
 
     @Override

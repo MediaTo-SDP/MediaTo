@@ -25,11 +25,31 @@ import java.util.concurrent.CompletableFuture;
 public class ExploreViewModel extends AndroidViewModel {
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
+    //Contains the list of users that the current user followed from the explore fragment
+    private final MutableLiveData<List<String>> followedUsers = new MutableLiveData<>(new ArrayList<>());
+
     private String username;
 
     public ExploreViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
+    }
+
+    public void updateFollows(String username) {
+        // Retrieve the current list
+        List<String> currentList = followedUsers.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+
+        // Add the new value to the list
+        List<String> newList = new ArrayList<>(currentList);
+        newList.add(username);
+
+        // Set the new list as the value of the MutableLiveData object
+        this.followedUsers.setValue(newList);
+        // Update the reviewposts
+        updatePosts();
     }
 
     /**
@@ -47,6 +67,32 @@ public class ExploreViewModel extends AndroidViewModel {
      */
     public LiveData<List<ReviewPost>> getPosts(){
         return posts;
+    }
+
+    /**
+     * Returns the list of users that the current user followed from the explore fragment
+     * @return the list of users that the current user followed from the explore fragment
+     */
+    public LiveData<List<String>> getFollowedUsers() {
+        return followedUsers;
+    }
+
+    public void resetPosts() {
+        posts.setValue(new ArrayList<>());
+    }
+
+    public void resetFollowedUsers() {
+        followedUsers.setValue(new ArrayList<>());
+    }
+
+    public void updatePosts() {
+        // Retrieve the current list of review posts from the MutableLiveData object
+        List<ReviewPost> currentList = posts.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        // Regenerate the MutableLiveData object with the updated list
+        posts.setValue(currentList);
     }
 
     /**

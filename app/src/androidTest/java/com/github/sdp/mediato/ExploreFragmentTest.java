@@ -1,48 +1,50 @@
 package com.github.sdp.mediato;
 
 import static android.app.PendingIntent.getActivity;
-import static androidx.test.InstrumentationRegistry.getContext;
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
-import static com.github.sdp.mediato.MyProfileFragmentTest.hasItemCount;
-
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
+import static com.adevinta.android.barista.internal.matcher.HelperMatchers.atPosition;
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.rule.ServiceTestRule;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
-import com.github.sdp.mediato.location.LocationHelper;
-import com.github.sdp.mediato.location.LocationService;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
+import com.github.sdp.mediato.model.post.ReviewPost;
 import com.github.sdp.mediato.ui.ExploreFragment;
 
-import org.junit.After;
+import org.hamcrest.Matcher;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,6 +70,8 @@ public class ExploreFragmentTest {
 
     ViewInteraction exploreText = onView(withId(R.id.text_explore));
     ViewInteraction refreshButton = onView(withId(R.id.refresh));
+
+    ViewInteraction reviewPosts = onView(withId(R.id.explore_posts));
 
 
     @Before
@@ -126,6 +130,36 @@ public class ExploreFragmentTest {
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
         assertRecyclerViewItemCount(R.id.explore_posts, 2);
+    }
+
+    // Test that following a user from the explore fragment works
+    @Test
+    public void testFollowFromFragment() throws InterruptedException, ExecutionException, TimeoutException {
+        clickListItemChild(R.id.explore_posts, 0, R.id.explore_followButton);
+        Thread.sleep(1000);
+        Assert.assertTrue(UserDatabase.follows(user1.getUsername(), user3.getUsername()).get(10, TimeUnit.SECONDS));
+    }
+
+    //Test that liking and unliking a review post works
+    @Test
+    public void testLikingReviewPost() throws InterruptedException {
+        clickListItemChild(R.id.explore_posts, 0, R.id.like_button);
+        Thread.sleep(1000);
+        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.like_count), withText("1"))))));
+        clickListItemChild(R.id.explore_posts, 0, R.id.like_button);
+        Thread.sleep(1000);
+        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.like_count), withText("0"))))));
+    }
+
+    //Test that disliking and undisliking a review post works
+    @Test
+    public void testDislikingReviewPost() throws InterruptedException {
+        clickListItemChild(R.id.explore_posts, 0, R.id.dislike_button);
+        Thread.sleep(1000);
+        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.dislike_count), withText("1"))))));
+        clickListItemChild(R.id.explore_posts, 0, R.id.dislike_button);
+        Thread.sleep(1000);
+        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.dislike_count), withText("0"))))));
     }
 
 

@@ -264,7 +264,7 @@ public class SearchFragmentTest {
         .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
     sleep(WAIT_TIME);
-    assertDisplayed(R.id.item_button_add);
+    assertDisplayed(R.id.item_description_text);
   }
 
 }
