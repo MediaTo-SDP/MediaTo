@@ -26,8 +26,9 @@ public class ReviewInteractionDatabase {
      * @return a completable future that returns true if the user has liked the review, false otherwise
      */
     public static CompletableFuture<Boolean> likes(String refUsername, String tarUsername, String collectionName, String review) {
-       DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
-       return getReactionValue(reactionPath, refUsername);
+        Preconditions.checkUsername(refUsername);
+        DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
+        return getReactionValue(reactionPath, refUsername);
     }
 
     /**
@@ -39,6 +40,7 @@ public class ReviewInteractionDatabase {
      * @return a completable future that returns true if the user has disliked the review, false otherwise
      */
     public static CompletableFuture<Boolean> dislikes(String refUsername, String tarUsername, String collectionName, String review) {
+        Preconditions.checkUsername(refUsername);
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
         return getReactionValue(reactionPath, refUsername);
     }
@@ -51,6 +53,7 @@ public class ReviewInteractionDatabase {
      * @param review the review
      */
     public static void likeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        Preconditions.checkUsername(refUsername);
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
         setReactionValue(reactionPath, refUsername, true);
     }
@@ -63,6 +66,7 @@ public class ReviewInteractionDatabase {
      * @param review the review
      */
     public static void unLikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        Preconditions.checkUsername(refUsername);
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.LIKE);
         setReactionValue(reactionPath, refUsername, false);
     }
@@ -75,6 +79,7 @@ public class ReviewInteractionDatabase {
      * @param review the review
      */
     public static void dislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        Preconditions.checkUsername(refUsername);
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
         setReactionValue(reactionPath, refUsername, true);
     }
@@ -87,6 +92,7 @@ public class ReviewInteractionDatabase {
      * @param review the review
      */
     public static void unDislikeReview(String refUsername, String tarUsername, String collectionName, String review) {
+        Preconditions.checkUsername(refUsername);
         DatabaseReference reactionPath = getReactionReference(tarUsername, collectionName, review, Reaction.DISLIKE);
         setReactionValue(reactionPath, refUsername, false);
     }

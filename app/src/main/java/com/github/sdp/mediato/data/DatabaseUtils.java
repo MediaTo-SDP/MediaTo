@@ -2,6 +2,7 @@ package com.github.sdp.mediato.data;
 
 import static com.github.sdp.mediato.data.UserDatabase.database;
 
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.post.Reaction;
@@ -49,6 +50,9 @@ public class DatabaseUtils {
      */
     static DatabaseReference getReactionReference(String tarUsername, String collectionName, String mediaTitle, Reaction reaction) {
         if (reaction != Reaction.LIKE && reaction != Reaction.DISLIKE) throw new IllegalArgumentException("Reaction must be either likes or dislikes");
+        Preconditions.checkUsername(tarUsername);
+        Preconditions.checkNullOrEmptyString(collectionName, "Collection name");
+        Preconditions.checkNullOrEmptyString(mediaTitle, "Media title");
         return DatabaseUtils.getReviewReference(tarUsername, collectionName, mediaTitle)
                 .child(reaction.toString());
     }

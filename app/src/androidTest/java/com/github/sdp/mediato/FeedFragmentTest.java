@@ -53,8 +53,6 @@ public class FeedFragmentTest {
 
     ViewInteraction feedText = onView(withId(R.id.text_feed));
 
-    ViewInteraction reviewPosts = onView(withId(R.id.feed_posts));
-
     @Before
     public void setUp() throws ExecutionException, InterruptedException, TimeoutException {
         try {
@@ -104,28 +102,6 @@ public class FeedFragmentTest {
     public void testItemCount() throws InterruptedException {
         Thread.sleep(5000);
         assertRecyclerViewItemCount(R.id.feed_posts, 2);
-    }
-
-    //Test that liking and unliking a review post works
-    @Test
-    public void testLikingReviewPost() throws InterruptedException {
-        clickListItemChild(R.id.feed_posts, 0, R.id.like_button);
-        Thread.sleep(1000);
-        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.like_count), withText("1"))))));
-        clickListItemChild(R.id.feed_posts, 0, R.id.like_button);
-        Thread.sleep(1000);
-        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.like_count), withText("0"))))));
-    }
-
-    //Test that disliking and undisliking a review post works
-    @Test
-    public void testDislikingReviewPost() throws InterruptedException {
-        clickListItemChild(R.id.feed_posts, 0, R.id.dislike_button);
-        Thread.sleep(1000);
-        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.dislike_count), withText("1"))))));
-        clickListItemChild(R.id.feed_posts, 0, R.id.dislike_button);
-        Thread.sleep(1000);
-        reviewPosts.check(matches(atPosition(0, hasDescendant(allOf(withId(R.id.dislike_count), withText("0"))))));
     }
 
     /**

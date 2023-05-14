@@ -36,7 +36,6 @@ public class ExploreViewModel extends AndroidViewModel {
     }
 
     public void updateFollows(String username) {
-        System.out.println("Updating follows");
         // Retrieve the current list
         List<String> currentList = followedUsers.getValue();
         if (currentList == null) {
@@ -49,7 +48,6 @@ public class ExploreViewModel extends AndroidViewModel {
 
         // Set the new list as the value of the MutableLiveData object
         this.followedUsers.setValue(newList);
-        System.out.println("Updated follows: " + followedUsers.getValue());
         // Update the reviewposts
         updatePosts();
     }
@@ -93,7 +91,6 @@ public class ExploreViewModel extends AndroidViewModel {
         if (currentList == null) {
             currentList = new ArrayList<>();
         }
-        System.out.println("Updating posts");
         // Regenerate the MutableLiveData object with the updated list
         posts.setValue(currentList);
     }

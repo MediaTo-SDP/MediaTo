@@ -18,10 +18,6 @@ public class ReviewPost extends Post{
 
     public ReviewPost(String username, Review review, Collection collection) {
         super(REVIEW, username);
-        //@TODO Add when username fixed for reviews
-        //if (review.getUsername() != username){
-         //   throw new IllegalArgumentException("This review wasn't made by " + username);
-        //}
         this.review = review;
         this.collection = collection;
     }
