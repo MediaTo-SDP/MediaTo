@@ -2,7 +2,6 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
@@ -12,11 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
-import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static java.lang.Thread.sleep;
@@ -28,7 +22,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,12 +30,12 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.adevinta.android.barista.interaction.BaristaClickInteractions;
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -70,6 +63,8 @@ public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
     private final static int WAIT_TIME = 1000;
     private final static String MY_USERNAME = "user_profile";
+    private final static String COLLECTION_NAME1 = "Recently watched";
+    private final static String COLLECTION_NAME2 = "Favourites";
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;
@@ -175,6 +170,8 @@ public class MyProfileFragmentTest {
                 .build();
 
         UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
+        Collection emptyCollection = new Collection(COLLECTION_NAME1);
+        CollectionsDatabase.addCollection(user1.getUsername(), emptyCollection);
         UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
         // Launch the MainActivity
@@ -241,7 +238,7 @@ public class MyProfileFragmentTest {
         userNameText.check(matches(withText(MY_USERNAME)));
     }
 
-    // Test the initial state of the default collection after profile creation
+    // Test the initial state of a profile with an empty collection
     @Test
     public void testInitialDefaultCollectionState() {
 
@@ -249,7 +246,7 @@ public class MyProfileFragmentTest {
         defaultCollection.check(matches(isDisplayed()));
 
         // Check that the default title is correct
-        defaultCollection.check(matches(hasDescendant(withText("Recently watched"))));
+        defaultCollection.check(matches(hasDescendant(withText(COLLECTION_NAME1))));
 
         // Check that the collection has an AddMedia button
         defaultCollection.check(matches(hasDescendant(withId(R.id.add_media_button))));
@@ -263,7 +260,7 @@ public class MyProfileFragmentTest {
 
     // Test that a click on the add media button opens the searchg
     @Test
-    public void testAddMediaButton() {
+    public void testAddMediaButton() throws InterruptedException {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
 
         // Check that the collection is displayed and click on the add media button
@@ -285,12 +282,13 @@ public class MyProfileFragmentTest {
 
     // Check that a new collection has been added to the outer RecyclerView if the user chooses a valid collection name
     @Test
-    public void testAddValidCollection() {
+    public void testAddValidCollection() throws InterruptedException {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
-
         outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickAdd("valid");
+        enterTextInAlertBoxAndClickAdd("invalid");
+        searchMenuItem.perform(click());
+        profileMenuItem.perform(click());
         outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
     }
 
