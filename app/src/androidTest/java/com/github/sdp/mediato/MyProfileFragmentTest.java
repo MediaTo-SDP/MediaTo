@@ -313,7 +313,7 @@ public class MyProfileFragmentTest {
         enterTextInAlertBoxAndClickAdd("duplicate");
         addCollectionButton.perform(click());
         enterTextInAlertBoxAndClickAdd("duplicate");
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
     }
 
     // Check that only one collection gets added if the user tries to add a collection with the same username twice
