@@ -74,25 +74,5 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
     return collectionsAdapter;
   }
 
-  private CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
-    CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
 
-    UserDatabase.getUser(USERNAME).thenAccept(user -> {
-      List<Collection> collections = new ArrayList<>(user.getCollections().values());
-      viewModel.setCollections(collections);
-      futureCollections.complete(collections);
-    }).exceptionally(throwable -> {
-      if (count < 10) {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-          fetchCollectionsFromDatabaseWithRetry(count + 1);
-        }, 200);
-      } else {
-        System.out.println("Couldn't fetch collections for " + USERNAME);
-      }
-      return null;
-    });
-
-    return futureCollections;
-  }
 }

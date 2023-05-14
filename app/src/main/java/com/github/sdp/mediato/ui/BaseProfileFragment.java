@@ -18,6 +18,7 @@ import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -159,6 +160,28 @@ public abstract class BaseProfileFragment extends Fragment {
       }
       return null;
     });
+  }
+
+  public CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
+    CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
+
+    UserDatabase.getUser(USERNAME).thenAccept(user -> {
+      List<Collection> collections = new ArrayList<>(user.getCollections().values());
+      viewModel.setCollections(collections);
+      futureCollections.complete(collections);
+    }).exceptionally(throwable -> {
+      if (count < 10) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+          fetchCollectionsFromDatabaseWithRetry(count + 1);
+        }, 200);
+      } else {
+        System.out.println("Couldn't fetch collections for " + USERNAME);
+      }
+      return null;
+    });
+
+    return futureCollections;
   }
 
 }

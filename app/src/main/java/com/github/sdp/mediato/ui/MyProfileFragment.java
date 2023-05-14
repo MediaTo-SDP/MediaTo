@@ -74,14 +74,13 @@ public class MyProfileFragment extends BaseProfileFragment {
             collectionlistAdapter = setupCollections(collectionListRecyclerView, collections);
             // Observe the view model's live data to update UI components
             observeCollections(collectionlistAdapter);
+            // Add a review if there is one
+            addReview();
         });
 
         // Add on click listener to sign out button
         Button signOutButton = view.findViewById(R.id.signout_button);
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
-
-        // Add a review if there is one
-        addReview();
 
         return view;
     }
@@ -195,31 +194,6 @@ public class MyProfileFragment extends BaseProfileFragment {
 
     private void makeToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
-    }
-
-    private CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
-        CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
-
-        UserDatabase.getUser(USERNAME).thenAccept(user -> {
-            List<Collection> collections = new ArrayList<>(user.getCollections().values());
-            if (collections.isEmpty()) {
-                collections = createDefaultCollection();
-            }
-            viewModel.setCollections(collections);
-            futureCollections.complete(collections);
-        }).exceptionally(throwable -> {
-            if (count < 10) {
-                Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    fetchCollectionsFromDatabaseWithRetry(count + 1);
-                }, 200);
-            } else {
-                System.out.println("Couldn't fetch collections for " + USERNAME);
-            }
-            return null;
-        });
-
-        return futureCollections;
     }
 
     public interface OnAddMediaButtonClickListener {
