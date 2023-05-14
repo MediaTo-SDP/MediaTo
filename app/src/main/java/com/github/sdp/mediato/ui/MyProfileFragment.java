@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -87,7 +88,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Define what happens when the delete collection button inside a collection is clicked
         OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener = (collection) ->
-            ((MyProfileViewModel)viewModel).removeCollection(collection.getCollectionName());
+            showDeleteCollectionDialog(collection.getCollectionName());
 
         // Create an adapter to display the list of collections in a RecycleView
         CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
@@ -163,6 +164,32 @@ public class MyProfileFragment extends BaseProfileFragment {
         String cancelText = getResources().getString(R.string.cancel);
         builder.setNegativeButton(cancelText,
                 (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void showDeleteCollectionDialog(String collectionName) {
+        // Build the dialog box
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_remove_collection, null);
+
+        // Set the question text
+        TextView textView = view.findViewById(R.id.delete_collection_question);
+        String question = getString(R.string.delete_collection, collectionName);
+        textView.setText(question);
+
+        builder.setView(view);
+
+        // Set the yes button
+        String yesText = getResources().getString(R.string.yes);
+        builder.setPositiveButton(yesText,
+            (dialog, which) -> ((MyProfileViewModel)viewModel).removeCollection(collectionName));
+
+        // Set the cancel button
+        String cancelText = getResources().getString(R.string.cancel);
+        builder.setNegativeButton(cancelText,
+            (dialog, which) -> dialog.cancel());
 
         builder.show();
     }

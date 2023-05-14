@@ -27,12 +27,14 @@
     <string name="rating">Rating: </string>
     <string name="add_collection">Add collection</string>
     <string name="signout">Sign-out</string>
+    <string name="delete_collection">Are you sure you want to delete the collection:  %1$s ?</string>
 
 
   <!--Buttons-->
   <string name="edit">Edit</string>
   <string name="add">Add</string>
   <string name="cancel">Cancel</string>
+  <string name="yes">Yes</string>
   <string name="film">Film</string>
   <string name="books">Books</string>
   <string name="refresh">Refresh</string>
