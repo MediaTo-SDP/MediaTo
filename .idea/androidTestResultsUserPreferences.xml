@@ -52,6 +52,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_31" value="120" />
+                  <entry key="Test_emulator" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -79,7 +80,9 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_30" value="120" />
                   <entry key="Pixel_2_API_31" value="120" />
+                  <entry key="Test_emulator" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

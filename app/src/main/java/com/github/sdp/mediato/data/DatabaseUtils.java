@@ -2,8 +2,10 @@ package com.github.sdp.mediato.data;
 
 import static com.github.sdp.mediato.data.UserDatabase.database;
 
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +39,35 @@ public class DatabaseUtils {
     public static final int DEFAULT_RADIUS = 250;
 
     //---------------------Util methods-------------------------------------
+
+    /**
+     * Helper method that returns the database reference for a reaction path
+     * @param tarUsername the username of the user who is being reacted to
+     * @param collectionName the name of the collection the review is in
+     * @param mediaTitle the title of the media reviewed
+     * @param reaction the reaction to the review
+     * @return the database reference for the reaction
+     */
+    static DatabaseReference getReactionReference(String tarUsername, String collectionName, String mediaTitle, Reaction reaction) {
+        if (reaction != Reaction.LIKE && reaction != Reaction.DISLIKE) throw new IllegalArgumentException("Reaction must be either likes or dislikes");
+        Preconditions.checkUsername(tarUsername);
+        Preconditions.checkNullOrEmptyString(collectionName, "Collection name");
+        Preconditions.checkNullOrEmptyString(mediaTitle, "Media title");
+        return DatabaseUtils.getReviewReference(tarUsername, collectionName, mediaTitle)
+                .child(reaction.toString());
+    }
+
+    /**
+     * Helper method that returns the database reference for a review given its user and the collection it is in
+     *
+     * @param username the username of the user concerned
+     * @param collectionName the name of the collection needed
+     * @param mediaTitle the title of the media reviewed
+     * @return the database reference for the user
+     */
+    static DatabaseReference getReviewReference(String username, String collectionName, String mediaTitle) {
+        return getCollectionReference(username, collectionName).child(REVIEWS_PATH + mediaTitle);
+    }
 
     /**
      * Helper method that returns the database reference for a collection
