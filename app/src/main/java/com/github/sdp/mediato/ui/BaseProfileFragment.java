@@ -44,6 +44,11 @@ public abstract class BaseProfileFragment extends Fragment {
   // Used as a key to access the database
   protected static String USERNAME;
 
+  // Defines how many retries downloading data from the database uses
+  private final static int RETRY_COUNT = 10;
+  // Defines the time interval between retries for downloading data from the database
+  private final static int RETRY_INTERVAL = 200;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -53,9 +58,7 @@ public abstract class BaseProfileFragment extends Fragment {
     bundle.putString("username", USERNAME);
     fragmentSwitcher = (FragmentSwitcher) getActivity();
 
-    // This function is a temporary fix. The delay of uploading the profile picture should be
-    // handled before we create the profile fragment (like with a loading screen). Ideally we
-    // could set viewModel.setProfilePic(bitmap) here
+    // Start downloading the profile pic in the background
     downloadProfilePicWithRetry(USERNAME, 0);
 
     // Get all UI components
@@ -78,11 +81,47 @@ public abstract class BaseProfileFragment extends Fragment {
     return view;
   }
 
+  /**
+   * Method to define how the collections on the profile are set up.
+   * @param recyclerView the collections recycler view to set up
+   * @param collections the list of collections to display
+   * @return the set up collection list adapter
+   */
   abstract CollectionListAdapter setupCollections(RecyclerView recyclerView, List<Collection> collections);
 
+  /**
+   * Method to make the collection list adapter observe collections in the view model.
+   * @param collectionsAdapter the collection list adapter that should observe the collections
+   */
   public void observeCollections(CollectionListAdapter collectionsAdapter) {
     viewModel.getCollectionsLiveData()
         .observe(getViewLifecycleOwner(), collections -> collectionsAdapter.notifyDataSetChanged());
+  }
+
+
+  /**
+   * Method to download collections from the database with retrying.
+   * @param count how many retries were already done
+   * @return the future list of collections that was downloaded
+   */
+  public CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
+    CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
+
+    UserDatabase.getUser(USERNAME).thenAccept(user -> {
+      List<Collection> collections = new ArrayList<>(user.getCollections().values());
+      viewModel.setCollections(collections);
+      futureCollections.complete(collections);
+    }).exceptionally(throwable -> {
+      if (count < RETRY_COUNT) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> fetchCollectionsFromDatabaseWithRetry(count + 1), RETRY_INTERVAL);
+      } else {
+        System.out.println("Couldn't fetch collections for " + USERNAME);
+      }
+      return null;
+    });
+
+    return futureCollections;
   }
 
   private void observeUsername() {
@@ -132,13 +171,9 @@ public abstract class BaseProfileFragment extends Fragment {
     });
   }
 
-  // TODO: Should be improved so it does not need to use the hardcoded retry
   private void downloadProfilePicWithRetry(String username, int count) {
-
     CompletableFuture<byte[]> imageFuture = UserDatabase.getProfilePic(username);
 
-    // It would probably be better to do this directly in the database class
-    // (getProfilePic would return CompletableFuture<Bitmap>)
     CompletableFuture<Bitmap> future = imageFuture.thenApply(imageBytes -> {
       Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
       return bitmap;
@@ -148,11 +183,9 @@ public abstract class BaseProfileFragment extends Fragment {
       // Try to set the profile pic
       viewModel.setProfilePic(bitmap);
     }).exceptionally(throwable -> {
-      if (count < 5) {
+      if (count < RETRY_COUNT) {
         Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            downloadProfilePicWithRetry(username, count + 1);
-        }, 200);
+        handler.postDelayed(() -> downloadProfilePicWithRetry(username, count + 1), RETRY_INTERVAL);
       } else {
         System.out.println("Couldn't fetch pic for " + username);
         Bitmap profilePic = BitmapFactory.decodeResource(getResources(), R.drawable.profile_picture_default);
@@ -160,28 +193,6 @@ public abstract class BaseProfileFragment extends Fragment {
       }
       return null;
     });
-  }
-
-  public CompletableFuture<List<Collection>> fetchCollectionsFromDatabaseWithRetry(int count) {
-    CompletableFuture<List<Collection>> futureCollections = new CompletableFuture<>();
-
-    UserDatabase.getUser(USERNAME).thenAccept(user -> {
-      List<Collection> collections = new ArrayList<>(user.getCollections().values());
-      viewModel.setCollections(collections);
-      futureCollections.complete(collections);
-    }).exceptionally(throwable -> {
-      if (count < 10) {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-          fetchCollectionsFromDatabaseWithRetry(count + 1);
-        }, 200);
-      } else {
-        System.out.println("Couldn't fetch collections for " + USERNAME);
-      }
-      return null;
-    });
-
-    return futureCollections;
   }
 
 }

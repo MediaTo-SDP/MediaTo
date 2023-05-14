@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,25 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.data.CollectionsDatabase;
-import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
-
 import com.google.gson.Gson;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
@@ -90,23 +82,12 @@ public class MyProfileFragment extends BaseProfileFragment {
         viewModel.setCollections(collections);
 
         // Define what happens when the add button inside a collection is clicked
-        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) -> {
-            String collectionName = collection.getCollectionName();
+        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) ->
+            openSearchAddingToCollection(collection);
 
-            // Pass the name of the collection to add the review to to the search fragment and switch to it
-            SearchFragment searchFragment = new SearchFragment();
-
-            Bundle args = new Bundle();
-            args.putString("collection", collectionName);
-            args.putString("general_search", "false");
-            searchFragment.setArguments(args);
-
-            fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
-        };
-
-        OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener = (collection) -> {
+        // Define what happens when the delete collection button inside a collection is clicked
+        OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener = (collection) ->
             ((MyProfileViewModel)viewModel).removeCollection(collection.getCollectionName());
-        };
 
         // Create an adapter to display the list of collections in a RecycleView
         CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
@@ -115,6 +96,20 @@ public class MyProfileFragment extends BaseProfileFragment {
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         return collectionsAdapter;
+    }
+
+    private void openSearchAddingToCollection(Collection collection){
+        String collectionName = collection.getCollectionName();
+
+        // Pass the name of the collection to add the review to to the search fragment and switch to it
+        SearchFragment searchFragment = new SearchFragment();
+
+        Bundle args = new Bundle();
+        args.putString("collection", collectionName);
+        args.putString("general_search", "false");
+        searchFragment.setArguments(args);
+
+        fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
     }
 
     private void addReview(){
@@ -126,16 +121,6 @@ public class MyProfileFragment extends BaseProfileFragment {
         if (review != null && collectionName != null) {
             ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
         }
-    }
-
-    private List<Collection> createDefaultCollection(){
-        String defaultTitle = getResources().getString(R.string.recently_watched);
-        Collection defaultCollection = new Collection(defaultTitle);
-        List<Collection> collections = new ArrayList<>();
-        collections.add(defaultCollection);
-        CollectionsDatabase.addCollection(USERNAME, defaultCollection);
-        viewModel.setCollections(collections);
-        return collections;
     }
 
     private void setupAddCollectionsButton(Button addCollectionButton) {
@@ -203,11 +188,17 @@ public class MyProfileFragment extends BaseProfileFragment {
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Interface to define click listeners for the add media button
+     */
     public interface OnAddMediaButtonClickListener {
 
         void onAddMediaButtonClick(Collection collection);
     }
 
+    /**
+     * Interface to define click listeners for the delete collection button
+     */
     public interface OnDeleteCollectionButtonClickListener {
 
         void onDeleteCollectionButtonClick(Collection collection);
