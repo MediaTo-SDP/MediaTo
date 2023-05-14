@@ -104,9 +104,13 @@ public class MyProfileFragment extends BaseProfileFragment {
             fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
         };
 
+        OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener = (collection) -> {
+            ((MyProfileViewModel)viewModel).removeCollection(collection.getCollectionName());
+        };
+
         // Create an adapter to display the list of collections in a RecycleView
         CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
-                onAddMediaButtonClickListener);
+                onAddMediaButtonClickListener, onDeleteCollectionButtonClickListener);
         recyclerView.setAdapter(collectionsAdapter);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -202,5 +206,10 @@ public class MyProfileFragment extends BaseProfileFragment {
     public interface OnAddMediaButtonClickListener {
 
         void onAddMediaButtonClick(Collection collection);
+    }
+
+    public interface OnDeleteCollectionButtonClickListener {
+
+        void onDeleteCollectionButtonClick(Collection collection);
     }
 }

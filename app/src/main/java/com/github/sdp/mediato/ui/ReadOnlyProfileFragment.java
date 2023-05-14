@@ -67,7 +67,7 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
     // Create an adapter to display the list of collections in a RecycleView
     // (with no AddMediaButtonClickListener, so that the add media button is not displayed)
     CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
-        null);
+        null, null);
     recyclerView.setAdapter(collectionsAdapter);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

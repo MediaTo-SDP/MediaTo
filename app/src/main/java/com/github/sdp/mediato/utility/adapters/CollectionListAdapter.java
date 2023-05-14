@@ -10,10 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.ui.MyProfileFragment.OnAddMediaButtonClickListener;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.MyProfileFragment.OnDeleteCollectionButtonClickListener;
 import com.github.sdp.mediato.utility.SampleReviews;
 import java.util.List;
 
@@ -26,14 +28,16 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
 
   // Can be used to execute some code in the profilePage, such as updating the database
   private OnAddMediaButtonClickListener onAddMediaButtonClickListener;
+  private OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener;
 
   private List<Collection> collections;
 
   public CollectionListAdapter(Context context, List<Collection> collections,
-      @Nullable OnAddMediaButtonClickListener onAddMediaButtonClickListener) {
+      @Nullable OnAddMediaButtonClickListener onAddMediaButtonClickListener, OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener) {
     this.context = context;
     this.collections = collections;
     this.onAddMediaButtonClickListener = onAddMediaButtonClickListener;
+    this.onDeleteCollectionButtonClickListener = onDeleteCollectionButtonClickListener;
   }
 
   @Override
@@ -53,7 +57,16 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     holder.collectionRecyclerView.setLayoutManager(
         new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-    SampleReviews s = new SampleReviews();
+    // Set up the delete button for the current collection
+    if(onDeleteCollectionButtonClickListener == null){
+      // if no click listener is passed, don't show the button
+      holder.deleteCollectionButton.setVisibility(View.INVISIBLE);
+    }else{
+      holder.deleteCollectionButton.setOnClickListener(v1 -> {
+        onDeleteCollectionButtonClickListener.onDeleteCollectionButtonClick(collection);
+        collectionAdapter.notifyItemRemoved(collectionAdapter.getItemCount());
+      });
+    }
 
     // Set up the add button for the current collection
     if(onAddMediaButtonClickListener == null){
@@ -62,11 +75,10 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     }else{
       holder.addMediaButton.setOnClickListener(v -> {
         // Can be used to execute some code in the profilePage, such as updating the database
-        if (onAddMediaButtonClickListener != null) {
-          onAddMediaButtonClickListener.onAddMediaButtonClick(collection);
-        }
+        onAddMediaButtonClickListener.onAddMediaButtonClick(collection);
         collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
       });
+
     }
 
   }
@@ -80,6 +92,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
 
     TextView collectionTitle;
     ImageButton addMediaButton;
+    ImageButton deleteCollectionButton;
     RecyclerView collectionRecyclerView;
 
     public ViewHolder(@NonNull View itemView) {
@@ -87,6 +100,7 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
 
       collectionTitle = itemView.findViewById(R.id.collection_title);
       addMediaButton = itemView.findViewById(R.id.add_media_button);
+      deleteCollectionButton = itemView.findViewById(R.id.delete_collection_button);
       collectionRecyclerView = itemView.findViewById(R.id.collection_recycler_view);
     }
   }
