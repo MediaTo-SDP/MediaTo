@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.media.Collection;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -52,13 +51,16 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
         new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
     // Set up the buttons for the new collection
-    setUpButton(holder.deleteCollectionButton, collection, collectionAdapter,
+    ButtonAction deleteCollection = new ButtonAction(holder.deleteCollectionButton,
         onDeleteCollectionButtonClickListener,
         adapter -> adapter.notifyItemRemoved(adapter.getItemCount()));
 
-    setUpButton(holder.addMediaButton, collection, collectionAdapter,
+    ButtonAction addMedia = new ButtonAction(holder.addMediaButton,
         onAddMediaButtonClickListener,
         adapter -> adapter.notifyItemInserted(adapter.getItemCount()));
+
+    setUpButton(deleteCollection, collection, collectionAdapter);
+    setUpButton(addMedia, collection, collectionAdapter);
   }
 
   @Override
@@ -66,17 +68,14 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     return collections.size();
   }
 
-  private void setUpButton(ImageButton button, Collection collection,
-      CollectionAdapter collectionAdapter,
-      Consumer<Collection> clickListener,
-      Consumer<CollectionAdapter> updateOperation) {
-    if (clickListener == null) {
+  private void setUpButton(ButtonAction buttonAction, Collection collection, CollectionAdapter collectionAdapter) {
+    if (buttonAction.getClickListener() == null) {
       // if no click listener is passed, don't show the button
-      button.setVisibility(View.INVISIBLE);
+      buttonAction.getButton().setVisibility(View.INVISIBLE);
     } else {
-      button.setOnClickListener(v -> {
-        clickListener.accept(collection);
-        updateOperation.accept(collectionAdapter);
+      buttonAction.getButton().setOnClickListener(v -> {
+        buttonAction.getClickListener().accept(collection);
+        buttonAction.getViewUpdateOperation().accept(collectionAdapter);
       });
     }
   }
@@ -95,6 +94,33 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
       addMediaButton = itemView.findViewById(R.id.add_media_button);
       deleteCollectionButton = itemView.findViewById(R.id.delete_collection_button);
       collectionRecyclerView = itemView.findViewById(R.id.collection_recycler_view);
+    }
+  }
+
+  /**
+   * This class defines a button with it's click listener and action to update the view
+   */
+  private class ButtonAction {
+    private final ImageButton button;
+    private final Consumer<Collection> clickListener;
+    private final Consumer<CollectionAdapter> viewUpdateOperation;
+
+    private ButtonAction(ImageButton button, Consumer<Collection> clickListener, Consumer<CollectionAdapter> viewUpdateOperation) {
+      this.button = button;
+      this.clickListener = clickListener;
+      this.viewUpdateOperation = viewUpdateOperation;
+    }
+
+    public ImageButton getButton(){
+      return button;
+    }
+
+    public Consumer<Collection> getClickListener(){
+      return clickListener;
+    }
+
+    public Consumer<CollectionAdapter> getViewUpdateOperation(){
+      return viewUpdateOperation;
     }
   }
 }
