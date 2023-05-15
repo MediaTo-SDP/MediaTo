@@ -19,6 +19,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private TheMovieDBAPI theMovieDB;
     private OLAPI oLAPI;
 
+    private final MutableLiveData<String> collectionNameLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Movie>> searchMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<Movie>> trendingMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<Book>> searchBooksLiveData = new MutableLiveData<>(new ArrayList<>());
@@ -28,6 +29,9 @@ public class SearchMediaViewModel extends AndroidViewModel {
         super(application);
         theMovieDB = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
         oLAPI = new OLAPI("https://openlibrary.org/");
+
+        collectionNameLiveData.setValue("");
+
         oLAPI.trending(1).thenAccept(x -> trendingBooksLiveData.getValue().addAll(x));
     }
 
@@ -45,5 +49,9 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Book>> getTrendingBooksLiveData() {
         return trendingBooksLiveData;
+    }
+
+    public MutableLiveData<String> getCollectionNameLiveData() {
+        return collectionNameLiveData;
     }
 }

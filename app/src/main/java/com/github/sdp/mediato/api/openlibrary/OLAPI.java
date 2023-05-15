@@ -55,19 +55,6 @@ public class OLAPI implements API {
         return null;
     }
 
-
-//    public CompletableFuture<List<Book>> trending(int page) {
-//        return api.getTrendingBooks(page)
-//                .thenApply(olTrendingBooks -> olTrendingBooks.getWorks().stream()
-//                        .map(book -> new Book(
-//                                        book.getKey(),
-//                                        book.getTitle(),
-//                                        "",
-//                                        book.getCoverI())
-//                        )
-//                        .collect(Collectors.toList()));
-//    }
-
     public CompletableFuture<List<Book>> trending(int page) {
         return api.getTrendingBooks(page)
                 .thenApply(olTrendingBooks -> olTrendingBooks.getWorks().stream()

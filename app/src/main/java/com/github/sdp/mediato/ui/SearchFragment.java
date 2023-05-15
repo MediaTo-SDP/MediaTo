@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -20,13 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.api.openlibrary.OLAPI;
-import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
-import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Media;
-import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
@@ -36,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
@@ -45,15 +39,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private SearchUserViewModel searchUserViewModel;
     private SearchMediaViewModel searchMediaViewModel;
 
-    private RecyclerView recyclerView;
+    private RecyclerView userSearchRecyclerView;
+    private RecyclerView movieSearchRecyclerView;
+    private RecyclerView bookSearchRecyclerView;
+    private RecyclerView movieTrendingRecyclerView;
+    private RecyclerView bookTrendingRecyclerView;
 
     private Button peopleButton;
     private Button booksButton;
     private Button filmButton;
     private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
-    private TheMovieDBAPI theMovieDB;
-    private OLAPI oLAPI;
 
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>(new ArrayList<>());
 
@@ -61,8 +57,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
-        theMovieDB = new TheMovieDBAPI(getString(R.string.tmdb_url), getString(R.string.TMDBAPIKEY));
-        oLAPI = new OLAPI("https://openlibrary.org/");
     }
 
     @Override
@@ -94,9 +88,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
 
         // Set the Search User RecyclerView with its adapter
-        recyclerView = searchView.findViewById(R.id.searchactivity_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
+        userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
+        userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
         // get the search view and bind it to a listener
         SearchView searchView1 = searchView.findViewById(R.id.searchbar);
@@ -143,8 +136,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private void searchAndDisplayResult(String toBeSearched) {
         if (this.currentCategory == SearchCategory.PEOPLE) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            recyclerView.setAdapter(new UserAdapter(searchUserViewModel));
+            userSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
             searchUser(toBeSearched);
         } else {
            searchMedia(toBeSearched);
@@ -155,10 +148,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         switch (this.currentCategory) {
             case MOVIES:
                 if (!toBeSearched.isEmpty()) {
-                    // fetch from API
-                    theMovieDB.searchItems(toBeSearched, 40).thenAccept(list -> {
-                        searchMediaResults.setValue(list.stream().map(Movie::new).collect(Collectors.toList()));
-                    });
+
                 } else {
                     searchMediaResults.setValue(Collections.emptyList());
                 }
@@ -166,11 +156,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             case BOOKS:
                 break;
         }
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        userSearchRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         String collectionName = (String) getArguments().get("collection");
+        searchMediaViewModel.getCollectionNameLiveData().setValue(collectionName);
 
         MediaListAdapter mla = new MediaListAdapter(getActivity(), collectionName);
-        recyclerView.setAdapter(mla);
+        userSearchRecyclerView.setAdapter(mla);
         searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
     }
 
