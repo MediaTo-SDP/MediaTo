@@ -134,7 +134,7 @@ public class MyFollowersFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayed(R.id.add_media_button);
+    assertDisplayed(R.id.add_collection_button);
   }
 }
 
