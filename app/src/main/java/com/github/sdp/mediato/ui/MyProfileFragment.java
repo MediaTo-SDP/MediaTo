@@ -24,6 +24,7 @@ import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.gson.Gson;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A fragment to display the current user's profile. It extends the basic profile fragment to also include:
@@ -82,12 +83,10 @@ public class MyProfileFragment extends BaseProfileFragment {
     public CollectionListAdapter setupCollections(RecyclerView recyclerView,  List<Collection> collections) {
         viewModel.setCollections(collections);
 
-        // Define what happens when the add button inside a collection is clicked
-        OnAddMediaButtonClickListener onAddMediaButtonClickListener = (collection) ->
+        Consumer<Collection> onAddMediaButtonClickListener = (collection) ->
             openSearchAddingToCollection(collection);
 
-        // Define what happens when the delete collection button inside a collection is clicked
-        OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener = (collection) ->
+        Consumer<Collection> onDeleteCollectionButtonClickListener = (collection) ->
             showDeleteCollectionDialog(collection.getCollectionName());
 
         // Create an adapter to display the list of collections in a RecycleView
@@ -205,8 +204,10 @@ public class MyProfileFragment extends BaseProfileFragment {
         }
 
         // Check if the entered name is the same as an already existing collection and make a toast if yes
-        String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
-        if (!((MyProfileViewModel)viewModel).addCollection(collectionName)) {
+        try {
+            ((MyProfileViewModel)viewModel).addCollection(collectionName);
+        } catch (IllegalArgumentException exception){
+            String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
             makeToast(toastDuplicateName);
         }
     }
@@ -215,19 +216,4 @@ public class MyProfileFragment extends BaseProfileFragment {
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * Interface to define click listeners for the add media button
-     */
-    public interface OnAddMediaButtonClickListener {
-
-        void onAddMediaButtonClick(Collection collection);
-    }
-
-    /**
-     * Interface to define click listeners for the delete collection button
-     */
-    public interface OnDeleteCollectionButtonClickListener {
-
-        void onDeleteCollectionButtonClick(Collection collection);
-    }
 }

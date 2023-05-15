@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.media.Collection;
-import com.github.sdp.mediato.ui.MyProfileFragment.OnAddMediaButtonClickListener;
-import com.github.sdp.mediato.ui.MyProfileFragment.OnDeleteCollectionButtonClickListener;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * This adapter displays a list of collections of Media.
@@ -22,12 +22,12 @@ import java.util.List;
 public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAdapter.ViewHolder> {
 
   private final Context context;
-  private final OnAddMediaButtonClickListener onAddMediaButtonClickListener;
-  private final OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener;
+  private final Consumer<Collection> onAddMediaButtonClickListener;
+  private final Consumer<Collection> onDeleteCollectionButtonClickListener;
   private final List<Collection> collections;
 
   public CollectionListAdapter(Context context, List<Collection> collections,
-      @Nullable OnAddMediaButtonClickListener onAddMediaButtonClickListener, OnDeleteCollectionButtonClickListener onDeleteCollectionButtonClickListener) {
+      @Nullable Consumer<Collection> onAddMediaButtonClickListener, @Nullable Consumer<Collection> onDeleteCollectionButtonClickListener) {
     this.context = context;
     this.collections = collections;
     this.onAddMediaButtonClickListener = onAddMediaButtonClickListener;
@@ -52,8 +52,13 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
         new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
     // Set up the buttons for the new collection
-    setUpDeleteCollectionButton(holder, collectionAdapter, collection);
-    setUpAddMediaButton(holder, collectionAdapter, collection);
+    setUpButton(holder.deleteCollectionButton, collection, collectionAdapter,
+        onDeleteCollectionButtonClickListener,
+        adapter -> adapter.notifyItemRemoved(adapter.getItemCount()));
+
+    setUpButton(holder.addMediaButton, collection, collectionAdapter,
+        onAddMediaButtonClickListener,
+        adapter -> adapter.notifyItemInserted(adapter.getItemCount()));
   }
 
   @Override
@@ -61,26 +66,17 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
     return collections.size();
   }
 
-  private void setUpDeleteCollectionButton(ViewHolder holder, CollectionAdapter collectionAdapter, Collection collection){
-    if(onDeleteCollectionButtonClickListener == null){
+  private void setUpButton(ImageButton button, Collection collection,
+      CollectionAdapter collectionAdapter,
+      Consumer<Collection> clickListener,
+      Consumer<CollectionAdapter> updateOperation) {
+    if (clickListener == null) {
       // if no click listener is passed, don't show the button
-      holder.deleteCollectionButton.setVisibility(View.INVISIBLE);
-    }else{
-      holder.deleteCollectionButton.setOnClickListener(v1 -> {
-        onDeleteCollectionButtonClickListener.onDeleteCollectionButtonClick(collection);
-        collectionAdapter.notifyItemRemoved(collectionAdapter.getItemCount());
-      });
-    }
-  }
-
-  private void setUpAddMediaButton(ViewHolder holder, CollectionAdapter collectionAdapter, Collection collection){
-    if(onAddMediaButtonClickListener == null){
-      // if no click listener is passed, don't show the button
-      holder.addMediaButton.setVisibility(View.INVISIBLE);
-    }else{
-      holder.addMediaButton.setOnClickListener(v -> {
-        onAddMediaButtonClickListener.onAddMediaButtonClick(collection);
-        collectionAdapter.notifyItemInserted(collectionAdapter.getItemCount());
+      button.setVisibility(View.INVISIBLE);
+    } else {
+      button.setOnClickListener(v -> {
+        clickListener.accept(collection);
+        updateOperation.accept(collectionAdapter);
       });
     }
   }

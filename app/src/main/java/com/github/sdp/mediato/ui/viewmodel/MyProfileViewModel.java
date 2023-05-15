@@ -35,15 +35,15 @@ public class MyProfileViewModel extends ReadOnlyProfileViewModel {
      * no changes if such a collection already exists.
      *
      * @param collectionName name of the collection to add
-     * @return true if the collection was successfully added, false otherwise
+     * @throws IllegalArgumentException if the collection name is null or empty or is a duplicate of an existing collection
      */
-    public boolean addCollection(String collectionName) {
+    public void addCollection(String collectionName) {
         Preconditions.checkNullOrEmptyString(collectionName, "collectionName");
         List<Collection> collections = getCollections();
 
         for (Collection collection : collections) {
             if (collection.getCollectionName().equals(collectionName)) {
-                return false;
+                throw new IllegalArgumentException("A collection with this name already exists");
             }
         }
         Collection newCollection = new Collection(collectionName);
@@ -53,7 +53,6 @@ public class MyProfileViewModel extends ReadOnlyProfileViewModel {
 
         // Notify observers about the change in collections
         collectionsLiveData.setValue(collections);
-        return true;
     }
 
     /**
