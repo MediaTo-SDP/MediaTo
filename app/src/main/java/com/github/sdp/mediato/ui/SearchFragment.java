@@ -24,6 +24,7 @@ import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.utility.adapters.MediaAdapter;
 import com.github.sdp.mediato.utility.adapters.MediaListAdapter;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
 
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 
 public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
+    private static String COLLECTION_NAME;
     private static String USERNAME;
     private SearchUserViewModel searchUserViewModel;
     private SearchMediaViewModel searchMediaViewModel;
@@ -57,6 +59,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
+        COLLECTION_NAME = (String) getArguments().get("collection");
     }
 
     @Override
@@ -90,6 +93,31 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // Set the Search User RecyclerView with its adapter
         userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
         userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
+
+        movieSearchRecyclerView = searchView.findViewById(R.id.movieSearch_recyclerView);
+        MediaAdapter movieSearchAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
+        searchMediaViewModel.getSearchMoviesLiveData().observe(getViewLifecycleOwner(), movieSearchAdapter::update);
+        movieSearchRecyclerView.setAdapter(movieSearchAdapter);
+
+        movieTrendingRecyclerView = searchView.findViewById(R.id.movieTrending_recyclerView);
+        MediaAdapter movieTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
+        searchMediaViewModel.getTrendingMoviesLiveData().observe(getViewLifecycleOwner(), movieTrendingAdapter::update);
+        movieTrendingRecyclerView.setAdapter(movieTrendingAdapter);
+
+        bookSearchRecyclerView = searchView.findViewById(R.id.bookSearch_recyclerView);
+        MediaAdapter bookSearchAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
+        searchMediaViewModel.getSearchBooksLiveData().observe(getViewLifecycleOwner(), bookSearchAdapter::update);
+        bookSearchRecyclerView.setAdapter(bookSearchAdapter);
+
+        bookTrendingRecyclerView= searchView.findViewById(R.id.bookTrending_recyclerView);
+        MediaAdapter bookTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
+        searchMediaViewModel.getTrendingBooksLiveData().observeForever(books -> {
+            bookTrendingAdapter.update(books);
+            books.forEach(x -> System.out.println(x.getTitle()));
+        });
+        bookTrendingRecyclerView.setAdapter(bookTrendingAdapter);
+
+        bookTrendingRecyclerView.setVisibility(View.VISIBLE);
 
         // get the search view and bind it to a listener
         SearchView searchView1 = searchView.findViewById(R.id.searchbar);
@@ -150,19 +178,17 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 if (!toBeSearched.isEmpty()) {
 
                 } else {
-                    searchMediaResults.setValue(Collections.emptyList());
+
                 }
                 break;
             case BOOKS:
+                if (!toBeSearched.isEmpty()) {
+
+                } else {
+
+                }
                 break;
         }
-        userSearchRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        String collectionName = (String) getArguments().get("collection");
-        searchMediaViewModel.getCollectionNameLiveData().setValue(collectionName);
-
-        MediaListAdapter mla = new MediaListAdapter(getActivity(), collectionName);
-        userSearchRecyclerView.setAdapter(mla);
-        searchMediaResults.observe(getViewLifecycleOwner(), mla::submitList);
     }
 
     private void searchUser(String toBeSearched) {

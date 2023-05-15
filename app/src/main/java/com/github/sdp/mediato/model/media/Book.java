@@ -15,8 +15,8 @@ public class Book extends Media{
                 MediaType.BOOK,
                 olTrendingBook.getTitle(),
                 "None",
+                "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-L.jpg",
                 "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-M.jpg",
-                "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-S.jpg",
                 olTrendingBook.getKey()
         );
         this.year = olTrendingBook.getFirstPublishYear();
