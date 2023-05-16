@@ -1,13 +1,10 @@
 package com.github.sdp.mediato.api.themoviedb;
 
 import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
-import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
 import java.util.concurrent.CompletableFuture;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**

@@ -3,6 +3,7 @@ package com.github.sdp.mediato.api.openlibrary;
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.media.Book;
+import com.github.sdp.mediato.model.media.Media;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class OLAPI implements API<Book> {
+public class OLAPI implements API<Media> {
 
     private final OLAPIInterface api;
 
@@ -44,7 +45,7 @@ public class OLAPI implements API<Book> {
     }
 
     @Override
-    public CompletableFuture<List<Book>> searchItems(String title, int page) {
+    public CompletableFuture<List<Media>> searchItems(String title, int page) {
         return api.getSearchBook(title.replaceAll(" ","+"),page)
                 .thenApply(olTrendingBooks -> olTrendingBooks.getBooks().stream()
                         .map(Book::new)
@@ -52,7 +53,7 @@ public class OLAPI implements API<Book> {
     }
 
     @Override
-    public CompletableFuture<List<Book>> trending(int page) {
+    public CompletableFuture<List<Media>> trending(int page) {
         return api.getTrendingBooks(page)
                 .thenApply(olTrendingBooks -> olTrendingBooks.getWorks().stream()
                         .map(Book::new)

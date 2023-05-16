@@ -6,23 +6,23 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.model.media.Media;
-import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 public class SearchMediaViewModel extends AndroidViewModel {
-
     private SearchFragment.SearchCategory currentCategory = SearchFragment.SearchCategory.PEOPLE;
     private String searchQuery = "";
-    private final TheMovieDBAPI theMovieDB;
-    private final OLAPI oLAPI;
+    private final API<Media> theMovieDBAPI;
+    private final API<Media> oLAPI;
     private String titleSearchBook = "";
     private String titleSearchMovie = "";
     private int searchBooksPage = 1;
@@ -37,11 +37,91 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     public SearchMediaViewModel(Application application) {
         super(application);
-        theMovieDB = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
+        theMovieDBAPI = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
         oLAPI = new OLAPI(application.getString(R.string.openlibrary_url));
 
-        LoadFirstTrendingBooksPage();
-        LoadFirstTrendingMoviesPage();
+        loadFirstBookTrendingPage();
+        loadFirstMovieTrendingPage();
+    }
+
+    public void loadFirstMovieSearchPage(String title) {
+        titleSearchMovie = title;
+        searchMoviesPage = 1;
+        loadFirstSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearchMovie, theMovieDBAPI);
+    }
+
+    public void loadNextMovieSearchPage() {
+        searchMoviesPage += 1;
+        loadNextSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearchMovie, theMovieDBAPI);
+    }
+
+    public void loadFirstMovieTrendingPage() {
+        trendingMoviesPage = 1;
+        loadFirstTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+    }
+
+    public void loadNextMovieTrendingPage() {
+        trendingMoviesPage += 1;
+        loadNextTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+    }
+
+    public void loadFirstBookSearchPage(String title) {
+        titleSearchBook = title;
+        searchBooksPage = 1;
+        loadFirstSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearchBook, oLAPI);
+    }
+
+    public void loadNextBookSearchPage() {
+        searchBooksPage += 1;
+        loadNextSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearchBook, oLAPI);
+    }
+
+    public void loadFirstBookTrendingPage() {
+        trendingBooksPage = 1;
+        loadFirstTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
+    }
+
+    public void loadNextBookTrendingPage() {
+        trendingBooksPage += 1;
+        loadNextTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
+    }
+
+    private void loadFirstSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
+        int page = pageSupplier.getAsInt();
+        String title = titleSupplier.get();
+        liveData.setValue(new ArrayList<>());
+        api.searchItems(title, page).thenAccept(x -> {
+            List<Media> updatedMedia = new ArrayList<>(x);
+            liveData.postValue(updatedMedia);
+        });
+    }
+
+    private void loadNextSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
+        int page = pageSupplier.getAsInt();
+        String title = titleSupplier.get();
+        api.searchItems(title, page).thenAccept(x -> {
+            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+            updatedMedia.addAll(x);
+            liveData.postValue(updatedMedia);
+        });
+    }
+
+    private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
+        int page = pageSupplier.getAsInt();
+        liveData.setValue(new ArrayList<>());
+        api.trending(page).thenAccept(x -> {
+            List<Media> updatedMedia = new ArrayList<>(x);
+            liveData.postValue(updatedMedia);
+        });
+    }
+
+    private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
+        int page = pageSupplier.getAsInt();
+        api.trending(page).thenAccept(x -> {
+            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+            updatedMedia.addAll(x);
+            liveData.postValue(updatedMedia);
+        });
     }
 
     public MutableLiveData<List<Media>> getSearchMoviesLiveData() {
@@ -58,80 +138,6 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Media>> getTrendingBooksLiveData() {
         return trendingBooksLiveData;
-    }
-
-    public void LoadFirstTrendingBooksPage() {
-        trendingBooksPage = 1;
-        trendingBooksLiveData.setValue(new ArrayList<>());
-        oLAPI.trending(trendingBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(x);
-            trendingBooksLiveData.postValue(updatedBooks);
-        });
-    }
-
-    public void LoadNextTrendingBooksPage() {
-        trendingBooksPage += 1;
-        oLAPI.trending(trendingBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(Objects.requireNonNull(trendingBooksLiveData.getValue()));
-            updatedBooks.addAll(x);
-            trendingBooksLiveData.postValue(updatedBooks);
-        });
-    }
-
-    public void LoadFirstSearchBooksPage(String titleSearchBook) {
-        searchBooksPage = 1;
-        this.titleSearchBook = titleSearchBook;
-        this.searchBooksLiveData.setValue(new ArrayList<>());
-        oLAPI.searchItems(this.titleSearchBook, searchBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(x);
-            searchBooksLiveData.postValue(updatedBooks);
-        });
-    }
-
-    public void LoadNextSearchBooksPage() {
-        searchBooksPage += 1;
-        oLAPI.searchItems(this.titleSearchBook, searchBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(Objects.requireNonNull(searchBooksLiveData.getValue()));
-            updatedBooks.addAll(x);
-            searchBooksLiveData.postValue(updatedBooks);
-        });
-    }
-
-    public void LoadFirstTrendingMoviesPage() {
-        trendingMoviesPage = 1;
-        trendingMoviesLiveData.setValue(new ArrayList<>());
-        theMovieDB.trending(trendingBooksPage).thenAccept(x -> {
-            List<Media> updatedMovies = new ArrayList<>(x);
-            trendingMoviesLiveData.postValue(updatedMovies);
-        });
-    }
-
-    public void LoadNextTrendingMoviesPage() {
-        trendingMoviesPage += 1;
-        theMovieDB.trending(trendingMoviesPage).thenAccept(x -> {
-            List<Media> updatedMovies = new ArrayList<>(Objects.requireNonNull(trendingBooksLiveData.getValue()));
-            updatedMovies.addAll(x);
-            trendingMoviesLiveData.postValue(updatedMovies);
-        });
-    }
-
-    public void LoadFirstSearchMoviesPage(String titleSearchMovie) {
-        searchMoviesPage = 1;
-        this.titleSearchMovie = titleSearchMovie;
-        this.searchMoviesLiveData.setValue(new ArrayList<>());
-        theMovieDB.searchItems(this.titleSearchMovie, searchMoviesPage).thenAccept(x -> {
-            List<Media> updatedMovies = new ArrayList<>(x);
-            searchMoviesLiveData.postValue(updatedMovies);
-        });
-    }
-
-    public void LoadNextSearchMoviesPage() {
-        searchMoviesPage += 1;
-        theMovieDB.searchItems(this.titleSearchMovie, searchMoviesPage).thenAccept(x -> {
-            List<Media> updatedMovies = new ArrayList<>(Objects.requireNonNull(searchMoviesLiveData.getValue()));
-            updatedMovies.addAll(x);
-            searchMoviesLiveData.postValue(updatedMovies);
-        });
     }
 
     public SearchFragment.SearchCategory getCurrentCategory() {

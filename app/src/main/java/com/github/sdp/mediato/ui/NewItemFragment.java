@@ -63,16 +63,9 @@ public class NewItemFragment extends Fragment {
             media = (Media) bundle.get("media");
         }
 
-        if (media.getMediaType() == MediaType.BOOK && media.getSummary().equals("Loading Description ...")) {
-            oLAPI.getDescription(media.getId()).thenAccept(description -> {
-                media.setSummary(description);
-                getActivity().runOnUiThread(() -> {
-                    setDescription(media.getSummary());
-                });
-            });
-        }
-
         setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
+
+        loadDescriptionIfMissing();
 
         setProgressBarIndicator();
 
@@ -87,6 +80,17 @@ public class NewItemFragment extends Fragment {
         webView = view.findViewById(R.id.trailer_web_view);
 
         return view;
+    }
+
+    private void loadDescriptionIfMissing() {
+        if (media.getMediaType() == MediaType.BOOK && media.getSummary().equals("Loading Description ...")) {
+            oLAPI.getDescription(media.getId()).thenAccept(description -> {
+                media.setSummary(description);
+                getActivity().runOnUiThread(() -> {
+                    setDescription(media.getSummary());
+                });
+            });
+        }
     }
 
     /**

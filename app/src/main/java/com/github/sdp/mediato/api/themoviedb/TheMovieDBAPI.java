@@ -2,6 +2,7 @@ package com.github.sdp.mediato.api.themoviedb;
 
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Class that implements TheMovieDBAPI API to return movies
  */
-public class TheMovieDBAPI implements API<Movie> {
+public class TheMovieDBAPI implements API<Media> {
     private final TheMovieDBAPIInterface api;
     private final String apikey;
     /**
@@ -38,7 +39,7 @@ public class TheMovieDBAPI implements API<Movie> {
 
 
     @Override
-    public CompletableFuture<List<Movie>> searchItems(String title, int page) {
+    public CompletableFuture<List<Media>> searchItems(String title, int page) {
         return api.getSearchMovie(apikey,false, title.replaceAll(" ","+"),"en-US", page)
                 .thenApply(tmdbMoviePagedResult -> tmdbMoviePagedResult.getResults().stream()
                             .map(Movie::new)
@@ -46,7 +47,7 @@ public class TheMovieDBAPI implements API<Movie> {
     }
 
     @Override
-    public CompletableFuture<List<Movie>> trending(int page) {
+    public CompletableFuture<List<Media>> trending(int page) {
         return api.getTrendingMovies(apikey, false,"en-US", "popularity.desc", null, null, page)
                 .thenApply(tmdbMoviePagedResult -> tmdbMoviePagedResult.getResults().stream()
                         .map(Movie::new)

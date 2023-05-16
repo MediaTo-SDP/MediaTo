@@ -4,7 +4,6 @@ import com.github.sdp.mediato.api.openlibrary.models.OLBookDetails;
 import com.github.sdp.mediato.api.openlibrary.models.OLSearchBookResponse;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBooks;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import retrofit2.http.GET;
