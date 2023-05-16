@@ -120,6 +120,8 @@ public class SearchFragmentTest {
 
   @Test
   public void testUserSearchWithEmptyString() {
+    clickOn(R.id.search_category_people);
+
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "user");
     pressImeActionButton();
@@ -248,6 +250,11 @@ public class SearchFragmentTest {
     assertNotDisplayed(R.id.movieTrending_recyclerView);
 
     assertContains("Harry Potter and the Deathly Hallows");
+
+    clickOn(R.id.search_category_movie);
+    clickOn(R.id.search_category_books);
+
+    assertContains("Harry Potter and the Deathly Hallows");
   }
 
   @Test
@@ -277,59 +284,50 @@ public class SearchFragmentTest {
     assertNotDisplayed(R.id.movieTrending_recyclerView);
   }
 
-//  @Test
-//  public void testMovieSearchWithEmptyString() {
-//    clickOn(R.id.search_category_movie);
-//    clickOn(androidx.appcompat.R.id.search_button);
-//    typeTo(androidx.appcompat.R.id.search_src_text, "Potter");
-//
-//    sleep(WAIT_TIME);
-//
-//    clearText(androidx.appcompat.R.id.search_src_text);
-//    pressImeActionButton();
-//
-//    sleep(WAIT_TIME);
-//
-//    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
-//  }
-//
-//  @Test
-//  public void testMovieSearchWithUnknownMovie() {
-//    clickOn(R.id.search_category_movie);
-//    clickOn(androidx.appcompat.R.id.search_button);
-//    typeTo(androidx.appcompat.R.id.search_src_text, "jadvbipehsjdb");
-//    pressImeActionButton();
-//
-//    sleep(WAIT_TIME);
-//
-//    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
-//  }
-//
-//  @Test
-//  public void testMovieSearchWithKnownMovie() {
-//    clickOn(R.id.search_category_movie);
-//    clickOn(androidx.appcompat.R.id.search_button);
-//    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
-//
-//    sleep(WAIT_TIME);
-//    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
-//  }
-//
-//  @Test
-//  public void testClickOnMovieSearchResultOpensRatingScreen() {
-//    clickOn(R.id.search_category_movie);
-//    clickOn(androidx.appcompat.R.id.search_button);
-//    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
-//
-//    sleep(WAIT_TIME);
-//    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
-//
-//    onView(withId(R.id.searchactivity_recyclerView))
-//        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//
-//    sleep(WAIT_TIME);
-//    assertDisplayed(R.id.item_description_text);
-//  }
+  @Test
+  public void testMovieSearchWithEmptyString() {
+    clickOn(R.id.search_category_movie);
+
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
+    pressImeActionButton();
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
+
+    sleep(WAIT_TIME);
+
+    clickOn(androidx.appcompat.R.id.search_close_btn);
+
+    sleep(WAIT_TIME);
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertDisplayed(R.id.movieTrending_recyclerView);
+  }
+
+  @Test
+  public void testMovieSearchWithKnownMovie() {
+    clickOn(R.id.search_category_movie);
+
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+    pressImeActionButton();
+
+    sleep(5*WAIT_TIME);
+
+    assertContains("Harry Potter and the Half-Blood Prince");
+
+    clickOn(R.id.search_category_books);
+    clickOn(R.id.search_category_movie);
+
+    assertContains("Harry Potter and the Half-Blood Prince");
+  }
 
 }
 

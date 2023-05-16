@@ -11,8 +11,12 @@ public class Movie extends Media{
         super(MediaType.MOVIE, title, summary, imageUrl, id);
     }
     public Movie(TMDBMovie tmdbMovie){
-        this(tmdbMovie.getTitle(), tmdbMovie.getOverview(),
-                tmdbMovie.getPoster_path(), tmdbMovie.getId());
+        this(
+                tmdbMovie.getTitle(),
+                tmdbMovie.getOverview().equals("") ? "No description :(" : tmdbMovie.getOverview(),
+                tmdbMovie.getPoster_path(),
+                tmdbMovie.getId()
+        );
     }
 
     @Override

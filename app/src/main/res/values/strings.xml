@@ -88,5 +88,6 @@
     <string name="username_key">username</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="openlibrary_url">https://openlibrary.org/</string>
 
 </resources>

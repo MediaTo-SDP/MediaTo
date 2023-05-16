@@ -21,7 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class OLAPI implements API {
+public class OLAPI implements API<Book> {
 
     private final OLAPIInterface api;
 
@@ -78,7 +78,7 @@ public class OLAPI implements API {
                 });
     }
 
-    private class DescriptionDeserializer implements JsonDeserializer<String> {
+    private static class DescriptionDeserializer implements JsonDeserializer<String> {
         @Override
         public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             if (json.isJsonPrimitive()) {

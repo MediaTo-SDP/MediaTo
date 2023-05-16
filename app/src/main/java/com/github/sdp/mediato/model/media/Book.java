@@ -1,11 +1,7 @@
 package com.github.sdp.mediato.model.media;
 
-import com.github.sdp.mediato.api.gbook.models.GoogleBook;
 import com.github.sdp.mediato.api.openlibrary.models.OLSearchBook;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
-import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
-
-import java.util.List;
 
 public class Book extends Media{
     private int year;

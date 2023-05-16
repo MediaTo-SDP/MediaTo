@@ -202,7 +202,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
             case BOOKS:
                 this.currentHighlightedButton = booksButton;
-                System.out.println("QUERY = " + this.searchBar.getQuery().toString());
                 if (this.searchBar.getQuery().length() > 0) {
                     if (!this.searchBar.getQuery().toString().equals(searchMediaViewModel.getTitleSearchBook())) {
                         searchMediaViewModel.LoadFirstSearchBooksPage(this.searchBar.getQuery().toString());
@@ -214,7 +213,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
             case MOVIES:
                 this.currentHighlightedButton = filmButton;
-                this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
+                if (this.searchBar.getQuery().length() > 0) {
+                    if (!this.searchBar.getQuery().toString().equals(searchMediaViewModel.getTitleSearchMovie())) {
+                        searchMediaViewModel.LoadFirstSearchMoviesPage(this.searchBar.getQuery().toString());
+                    }
+                    this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
+                }
                 break;
         }
 

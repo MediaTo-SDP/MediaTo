@@ -14,14 +14,15 @@ import com.github.sdp.mediato.ui.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SearchMediaViewModel extends AndroidViewModel {
 
     private SearchFragment.SearchCategory currentCategory = SearchFragment.SearchCategory.PEOPLE;
     private String searchQuery = "";
-    private TheMovieDBAPI theMovieDB;
-    private OLAPI oLAPI;
+    private final TheMovieDBAPI theMovieDB;
+    private final OLAPI oLAPI;
     private String titleSearchBook = "";
     private String titleSearchMovie = "";
     private int searchBooksPage = 1;
@@ -37,7 +38,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public SearchMediaViewModel(Application application) {
         super(application);
         theMovieDB = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
-        oLAPI = new OLAPI("https://openlibrary.org/");
+        oLAPI = new OLAPI(application.getString(R.string.openlibrary_url));
 
         LoadFirstTrendingBooksPage();
         LoadFirstTrendingMoviesPage();
@@ -63,8 +64,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
         trendingBooksPage = 1;
         trendingBooksLiveData.setValue(new ArrayList<>());
         oLAPI.trending(trendingBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>();
-            updatedBooks.addAll(x);
+            List<Media> updatedBooks = new ArrayList<>(x);
             trendingBooksLiveData.postValue(updatedBooks);
         });
     }
@@ -72,7 +72,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void LoadNextTrendingBooksPage() {
         trendingBooksPage += 1;
         oLAPI.trending(trendingBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(trendingBooksLiveData.getValue());
+            List<Media> updatedBooks = new ArrayList<>(Objects.requireNonNull(trendingBooksLiveData.getValue()));
             updatedBooks.addAll(x);
             trendingBooksLiveData.postValue(updatedBooks);
         });
@@ -83,8 +83,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
         this.titleSearchBook = titleSearchBook;
         this.searchBooksLiveData.setValue(new ArrayList<>());
         oLAPI.searchItems(this.titleSearchBook, searchBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>();
-            updatedBooks.addAll(x);
+            List<Media> updatedBooks = new ArrayList<>(x);
             searchBooksLiveData.postValue(updatedBooks);
         });
     }
@@ -92,7 +91,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void LoadNextSearchBooksPage() {
         searchBooksPage += 1;
         oLAPI.searchItems(this.titleSearchBook, searchBooksPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(searchBooksLiveData.getValue());
+            List<Media> updatedBooks = new ArrayList<>(Objects.requireNonNull(searchBooksLiveData.getValue()));
             updatedBooks.addAll(x);
             searchBooksLiveData.postValue(updatedBooks);
         });
@@ -101,8 +100,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void LoadFirstTrendingMoviesPage() {
         trendingMoviesPage = 1;
         trendingMoviesLiveData.setValue(new ArrayList<>());
-        theMovieDB.trending(20).thenAccept(x -> {
-            List<Media> updatedMovies = x.stream().map(Movie::new).collect(Collectors.toList());
+        theMovieDB.trending(trendingBooksPage).thenAccept(x -> {
+            List<Media> updatedMovies = new ArrayList<>(x);
             trendingMoviesLiveData.postValue(updatedMovies);
         });
     }
@@ -110,9 +109,9 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void LoadNextTrendingMoviesPage() {
         trendingMoviesPage += 1;
         theMovieDB.trending(trendingMoviesPage).thenAccept(x -> {
-            List<Media> updatedBooks = new ArrayList<>(trendingBooksLiveData.getValue());
-            updatedBooks.addAll(x.stream().map(Movie::new).collect(Collectors.toList()));
-            trendingMoviesLiveData.postValue(updatedBooks);
+            List<Media> updatedMovies = new ArrayList<>(Objects.requireNonNull(trendingBooksLiveData.getValue()));
+            updatedMovies.addAll(x);
+            trendingMoviesLiveData.postValue(updatedMovies);
         });
     }
 
@@ -120,8 +119,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
         searchMoviesPage = 1;
         this.titleSearchMovie = titleSearchMovie;
         this.searchMoviesLiveData.setValue(new ArrayList<>());
-        theMovieDB.searchItems(this.titleSearchMovie, 20).thenAccept(x -> {
-            List<Media> updatedMovies = x.stream().map(Movie::new).collect(Collectors.toList());
+        theMovieDB.searchItems(this.titleSearchMovie, searchMoviesPage).thenAccept(x -> {
+            List<Media> updatedMovies = new ArrayList<>(x);
             searchMoviesLiveData.postValue(updatedMovies);
         });
     }
@@ -129,8 +128,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void LoadNextSearchMoviesPage() {
         searchMoviesPage += 1;
         theMovieDB.searchItems(this.titleSearchMovie, searchMoviesPage).thenAccept(x -> {
-            List<Media> updatedMovies = new ArrayList<>(searchMoviesLiveData.getValue());
-            updatedMovies.addAll(x.stream().map(Movie::new).collect(Collectors.toList()));
+            List<Media> updatedMovies = new ArrayList<>(Objects.requireNonNull(searchMoviesLiveData.getValue()));
+            updatedMovies.addAll(x);
             searchMoviesLiveData.postValue(updatedMovies);
         });
     }
