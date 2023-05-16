@@ -9,14 +9,14 @@ public class OLTrendingBooks {
     @SerializedName("query")
     private String query;
     @SerializedName("works")
-    private List<OLTrendingBook> works;
+    private List<OLBook> works;
     @SerializedName("days")
     private int days;
 
     @SerializedName("hours")
     private  int hours;
 
-    public List<OLTrendingBook> getWorks() {
+    public List<OLBook> getWorks() {
         return works;
     }
 }

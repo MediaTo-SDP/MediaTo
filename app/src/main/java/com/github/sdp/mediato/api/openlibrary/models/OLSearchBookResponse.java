@@ -6,13 +6,13 @@ import java.util.List;
 
 public class OLSearchBookResponse {
     @SerializedName("docs")
-    private List<OLSearchBook> books;
+    private List<OLBook> books;
     @SerializedName("numFound")
     private int numFound;
     @SerializedName("start")
     private int start;
 
-    public List<OLSearchBook> getBooks() {
+    public List<OLBook> getBooks() {
         return books;
     }
 }

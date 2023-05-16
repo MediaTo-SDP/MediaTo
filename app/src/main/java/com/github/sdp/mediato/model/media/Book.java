@@ -1,33 +1,21 @@
 package com.github.sdp.mediato.model.media;
 
-import com.github.sdp.mediato.api.openlibrary.models.OLSearchBook;
-import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
+import com.github.sdp.mediato.api.openlibrary.models.OLBook;
 
 public class Book extends Media{
     private int year;
     private Book(){super();}
 
-    public Book(OLTrendingBook olTrendingBook) {
+    public Book(OLBook olBook) {
         super(
                 MediaType.BOOK,
-                olTrendingBook.getTitle(),
+                olBook.getTitle(),
                 "Loading Description ...",
-                "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-L.jpg",
-                "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-M.jpg",
-                olTrendingBook.getKey()
+                "https://covers.openlibrary.org/b/ID/" + olBook.getCoverI() + "-L.jpg",
+                "https://covers.openlibrary.org/b/ID/" + olBook.getCoverI() + "-M.jpg",
+                olBook.getKey()
         );
-        this.year = olTrendingBook.getFirstPublishYear();
-    }
-
-    public Book(OLSearchBook olSearchBook) {
-        super(
-                MediaType.BOOK,
-                olSearchBook.getTitle(),
-                "Loading Description ...",
-                "https://covers.openlibrary.org/b/ID/" + olSearchBook.getCoverId() + "-L.jpg",
-                "https://covers.openlibrary.org/b/ID/" + olSearchBook.getCoverId() + "-M.jpg",
-                olSearchBook.getKey()
-        );
+        this.year = olBook.getFirstPublishYear();
     }
 
     @Override

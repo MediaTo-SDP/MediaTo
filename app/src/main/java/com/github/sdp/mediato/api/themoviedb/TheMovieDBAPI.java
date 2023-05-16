@@ -1,21 +1,13 @@
 package com.github.sdp.mediato.api.themoviedb;
 
 import com.github.sdp.mediato.api.API;
-import com.github.sdp.mediato.api.themoviedb.models.PagedResult;
-import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.github.sdp.mediato.model.media.Book;
 import com.github.sdp.mediato.model.media.Movie;
-import com.github.sdp.mediato.utility.adapters.AdapterRetrofitCallback;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,17 +28,9 @@ public class TheMovieDBAPI implements API<Movie> {
         Preconditions.checkNullOrEmptyString(apikey, "apikey");
         this.apikey = apikey;
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.level(HttpLoggingInterceptor.Level.BODY); // Use Level.BASIC for just the request method and URL.
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
                 .build();
 
         this.api = retrofit.create(TheMovieDBAPIInterface.class);

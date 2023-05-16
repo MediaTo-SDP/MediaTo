@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,13 +32,6 @@ public class OLAPI implements API<Book> {
     public OLAPI(String serverUrl) {
         Preconditions.checkNullOrEmptyString(serverUrl, "serverUrl");
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.level(HttpLoggingInterceptor.Level.BODY); // Use Level.BASIC for just the request method and URL.
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(String.class, new DescriptionDeserializer())
                 .create();
@@ -48,7 +39,6 @@ public class OLAPI implements API<Book> {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(client)
                 .build();
         this.api = retrofit.create(OLAPIInterface.class);
     }

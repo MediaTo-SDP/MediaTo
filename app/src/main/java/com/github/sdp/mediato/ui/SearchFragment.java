@@ -97,6 +97,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
         userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
 
+        setMediaRecyclerView(searchView);
+
+        // get the search view and bind it to a listener
+        searchBar = searchView.findViewById(R.id.searchbar);
+        searchBar.setOnQueryTextListener(this);
+        searchBar.setQuery(this.searchMediaViewModel.getSearchQuery(), false);
+
+        setDisplayComponent();
+
+        return searchView;
+    }
+
+    private void setMediaRecyclerView(View searchView) {
         movieSearchRecyclerView = searchView.findViewById(R.id.movieSearch_recyclerView);
         MediaAdapter movieSearchAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
         searchMediaViewModel.getSearchMoviesLiveData().observe(getViewLifecycleOwner(), movieSearchAdapter::update);
@@ -116,15 +129,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         MediaAdapter bookTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
         searchMediaViewModel.getTrendingBooksLiveData().observeForever(bookTrendingAdapter::update);
         bookTrendingRecyclerView.setAdapter(bookTrendingAdapter);
-
-        // get the search view and bind it to a listener
-        searchBar = searchView.findViewById(R.id.searchbar);
-        searchBar.setOnQueryTextListener(this);
-        searchBar.setQuery(this.searchMediaViewModel.getSearchQuery(), false);
-
-        setDisplayComponent();
-
-        return searchView;
     }
 
     @Override
@@ -202,31 +206,40 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
             case BOOKS:
                 this.currentHighlightedButton = booksButton;
-                if (this.searchBar.getQuery().length() > 0) {
-                    if (!this.searchBar.getQuery().toString().equals(searchMediaViewModel.getTitleSearchBook())) {
-                        searchMediaViewModel.LoadFirstSearchBooksPage(this.searchBar.getQuery().toString());
-                    }
-                    this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
-                } else {
-                    this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
-                }
+                setMediaComponents(
+                        bookSearchRecyclerView,
+                        bookTrendingRecyclerView,
+                        searchMediaViewModel.getTitleSearchBook()
+                );
                 break;
             case MOVIES:
                 this.currentHighlightedButton = filmButton;
-                if (this.searchBar.getQuery().length() > 0) {
-                    if (!this.searchBar.getQuery().toString().equals(searchMediaViewModel.getTitleSearchMovie())) {
-                        searchMediaViewModel.LoadFirstSearchMoviesPage(this.searchBar.getQuery().toString());
-                    }
-                    this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
-                } else {
-                    this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
-                }
+                setMediaComponents(
+                        movieSearchRecyclerView,
+                        movieTrendingRecyclerView,
+                        searchMediaViewModel.getTitleSearchMovie()
+                );
                 break;
         }
 
 
         this.currentHighlightedButton.setTypeface(null, Typeface.BOLD);
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+    }
+
+    private void setMediaComponents(RecyclerView searchRecyclerView, RecyclerView trendingRecyclerView, String oldTitle) {
+        if (this.searchBar.getQuery().length() > 0) {
+            if (!this.searchBar.getQuery().toString().equals(oldTitle)) {
+                if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.BOOKS) {
+                    searchMediaViewModel.LoadFirstSearchBooksPage(this.searchBar.getQuery().toString());
+                } else {
+                    searchMediaViewModel.LoadFirstSearchMoviesPage(this.searchBar.getQuery().toString());
+                }
+            }
+            searchRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            trendingRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void searchUser(String toBeSearched) {
