@@ -149,8 +149,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                     searchUser(s);
                     break;
                 default:
-                    searchMediaViewModel.loadFirstBookSearchPage(s);
-                    searchMediaViewModel.loadFirstMovieSearchPage(s);
+                    searchMediaViewModel.loadFirstMovieBookSearchPage(s);
                     if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
                         this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
                         this.movieTrendingRecyclerView.setVisibility(View.GONE);
@@ -215,7 +214,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 setMediaComponents(
                         bookSearchRecyclerView,
                         bookTrendingRecyclerView,
-                        searchMediaViewModel.getTitleSearchBook()
+                        searchMediaViewModel.getTitleSearch()
                 );
                 break;
             case MOVIES:
@@ -223,7 +222,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 setMediaComponents(
                         movieSearchRecyclerView,
                         movieTrendingRecyclerView,
-                        searchMediaViewModel.getTitleSearchMovie()
+                        searchMediaViewModel.getTitleSearch()
                 );
                 break;
         }
@@ -244,19 +243,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private void setMediaComponents(RecyclerView searchRecyclerView, RecyclerView trendingRecyclerView, String oldTitle) {
         if (this.searchBar.getQuery().length() > 0) {
             if (!this.searchBar.getQuery().toString().equals(oldTitle)) {
-                ReloadSearch();
+                searchMediaViewModel.loadFirstMovieBookSearchPage(this.searchBar.getQuery().toString());
             }
             searchRecyclerView.setVisibility(View.VISIBLE);
         } else {
             trendingRecyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void ReloadSearch() {
-        if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.BOOKS) {
-            searchMediaViewModel.loadFirstBookSearchPage(this.searchBar.getQuery().toString());
-        } else {
-            searchMediaViewModel.loadFirstMovieSearchPage(this.searchBar.getQuery().toString());
         }
     }
 

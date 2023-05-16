@@ -23,8 +23,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private String searchQuery = "";
     private final API<Media> theMovieDBAPI;
     private final API<Media> oLAPI;
-    private String titleSearchBook = "";
-    private String titleSearchMovie = "";
+    private String titleSearch = "";
     private int searchBooksPage = 1;
     private int trendingBooksPage = 1;
     private int searchMoviesPage = 1;
@@ -44,15 +43,17 @@ public class SearchMediaViewModel extends AndroidViewModel {
         loadFirstMovieTrendingPage();
     }
 
-    public void loadFirstMovieSearchPage(String title) {
-        titleSearchMovie = title;
+    public void loadFirstMovieBookSearchPage(String title) {
+        titleSearch = title;
+        searchBooksPage = 1;
         searchMoviesPage = 1;
-        loadFirstSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearchMovie, theMovieDBAPI);
+        loadFirstSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
+        loadFirstSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
     }
 
     public void loadNextMovieSearchPage() {
         searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearchMovie, theMovieDBAPI);
+        loadNextSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
     }
 
     public void loadFirstMovieTrendingPage() {
@@ -65,15 +66,9 @@ public class SearchMediaViewModel extends AndroidViewModel {
         loadNextTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
     }
 
-    public void loadFirstBookSearchPage(String title) {
-        titleSearchBook = title;
-        searchBooksPage = 1;
-        loadFirstSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearchBook, oLAPI);
-    }
-
     public void loadNextBookSearchPage() {
         searchBooksPage += 1;
-        loadNextSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearchBook, oLAPI);
+        loadNextSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
     }
 
     public void loadFirstBookTrendingPage() {
@@ -156,11 +151,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
         this.searchQuery = searchQuery;
     }
 
-    public String getTitleSearchBook() {
-        return titleSearchBook;
+    public String getTitleSearch() {
+        return titleSearch;
     }
 
-    public String getTitleSearchMovie() {
-        return titleSearchMovie;
-    }
 }
