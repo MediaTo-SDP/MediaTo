@@ -53,7 +53,6 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
      * @param s the search term
      * @return the first search result not already displayed
      */
-    @Override
     public CompletableFuture<TMDBMovie> searchItem(String s) {
         Preconditions.checkNullOrEmptyString(s, "Argument");
         return searchItems(s, 1).thenApply(array -> array.get(0));
@@ -68,7 +67,6 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
      * @return a future that returns a list containing a maximum of @count movies
      * It might be less since each function call import a maximum of 20 result from the TheMovieDBAPI.
      */
-    @Override
     public CompletableFuture<List<TMDBMovie>> searchItems(String s, int count) {
         Preconditions.checkNullOrEmptyString(s, "Argument");
         Preconditions.checkStrictlyPositive(count);
@@ -142,7 +140,6 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
      * @param id the TMDB id of the movie
      * @return a completable holding the movie data
      */
-    @Override
     public CompletableFuture<TMDBMovie> get(String id) {
         CompletableFuture<TMDBMovie> future = new CompletableFuture<>();
         api.get(id, apikey, "en-US").enqueue(new AdapterRetrofitCallback<>(future));
@@ -152,7 +149,6 @@ public class TheMovieDBAPI implements API<TMDBMovie> {
     /**
      * Clears the local cache. Should be called before each search loop.
      */
-    @Override
     public void clearCache() {
         trendingPage = 0;
         trendingCache.clear();

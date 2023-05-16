@@ -1,6 +1,7 @@
 package com.github.sdp.mediato.model.media;
 
 import com.github.sdp.mediato.api.gbook.models.GoogleBook;
+import com.github.sdp.mediato.api.openlibrary.models.OLSearchBook;
 import com.github.sdp.mediato.api.openlibrary.models.OLTrendingBook;
 import com.github.sdp.mediato.api.themoviedb.models.TMDBMovie;
 
@@ -14,12 +15,23 @@ public class Book extends Media{
         super(
                 MediaType.BOOK,
                 olTrendingBook.getTitle(),
-                "None",
+                "Loading Description ...",
                 "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-L.jpg",
                 "https://covers.openlibrary.org/b/ID/" + olTrendingBook.getCoverI() + "-M.jpg",
                 olTrendingBook.getKey()
         );
         this.year = olTrendingBook.getFirstPublishYear();
+    }
+
+    public Book(OLSearchBook olSearchBook) {
+        super(
+                MediaType.BOOK,
+                olSearchBook.getTitle(),
+                "Loading Description ...",
+                "https://covers.openlibrary.org/b/ID/" + olSearchBook.getCoverId() + "-L.jpg",
+                "https://covers.openlibrary.org/b/ID/" + olSearchBook.getCoverId() + "-M.jpg",
+                olSearchBook.getKey()
+        );
     }
 
     @Override

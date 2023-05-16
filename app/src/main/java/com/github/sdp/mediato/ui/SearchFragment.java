@@ -47,10 +47,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private RecyclerView movieTrendingRecyclerView;
     private RecyclerView bookTrendingRecyclerView;
 
+    private SearchView searchBar;
+
     private Button peopleButton;
     private Button booksButton;
     private Button filmButton;
-    private SearchFragment.SearchCategory currentCategory;
     private Button currentHighlightedButton;
 
     private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>(new ArrayList<>());
@@ -60,6 +61,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         super.onCreate(savedInstanceState);
         USERNAME = ((MainActivity)getActivity()).getMyProfileViewModel().getUsername();
         COLLECTION_NAME = (String) getArguments().get("collection");
+
+        // Create and init the Search User ViewModel
+        searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
+        searchUserViewModel.setUserName(USERNAME);
+        searchUserViewModel.setMainActivity((MainActivity) getActivity());
+
+        searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
+
+        String isGeneralSearch = (String) getArguments().get("general_search");
+        if (isGeneralSearch != null && !isGeneralSearch.equals("true")) {
+            this.searchMediaViewModel.setCurrentCategory(SearchCategory.MOVIES);
+        } else {
+            this.searchMediaViewModel.setCurrentCategory(SearchCategory.PEOPLE);
+        }
     }
 
     @Override
@@ -77,18 +92,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         this.filmButton = searchView.findViewById(R.id.search_category_movie);
         filmButton.setOnClickListener(this);
-
-        String isGeneralSearch = (String) getArguments().get("general_search");
-        if (isGeneralSearch != null && !isGeneralSearch.equals("true")) {
-            peopleButton.setVisibility(View.GONE);
-        }
-
-        // Create and init the Search User ViewModel
-        searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
-        searchUserViewModel.setUserName(USERNAME);
-        searchUserViewModel.setMainActivity((MainActivity) getActivity());
-
-        searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
 
         // Set the Search User RecyclerView with its adapter
         userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
@@ -111,22 +114,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         bookTrendingRecyclerView= searchView.findViewById(R.id.bookTrending_recyclerView);
         MediaAdapter bookTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
-        searchMediaViewModel.getTrendingBooksLiveData().observeForever(books -> {
-            bookTrendingAdapter.update(books);
-            books.forEach(x -> System.out.println(x.getTitle()));
-        });
+        searchMediaViewModel.getTrendingBooksLiveData().observeForever(bookTrendingAdapter::update);
         bookTrendingRecyclerView.setAdapter(bookTrendingAdapter);
 
-        bookTrendingRecyclerView.setVisibility(View.VISIBLE);
-
         // get the search view and bind it to a listener
-        SearchView searchView1 = searchView.findViewById(R.id.searchbar);
-        searchView1.setOnQueryTextListener(this);
+        searchBar = searchView.findViewById(R.id.searchbar);
+        searchBar.setOnQueryTextListener(this);
+        searchBar.setQuery(this.searchMediaViewModel.getSearchQuery(), false);
 
-        // finally warmup the system, the activity starts by searching for peoples
-        this.currentHighlightedButton = peopleButton;
-        this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
+        setDisplayComponent();
 
         return searchView;
     }
@@ -134,82 +130,114 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     @Override
     public boolean onQueryTextSubmit(String s) {
         if (s.length() > 0) {
-            searchAndDisplayResult(s);
+            this.searchMediaViewModel.setSearchQuery(s);
+            switch (this.searchMediaViewModel.getCurrentCategory()) {
+                case PEOPLE:
+                    searchUser(s);
+                    break;
+                case MOVIES:
+                    searchMediaViewModel.LoadFirstSearchMoviesPage(s);
+                    this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
+                    this.movieTrendingRecyclerView.setVisibility(View.GONE);
+                    break;
+                case BOOKS:
+                    searchMediaViewModel.LoadFirstSearchBooksPage(s);
+                    this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
+                    this.bookTrendingRecyclerView.setVisibility(View.GONE);
+                    break;
+            }
         }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String s) {
-        searchAndDisplayResult(s);
+        if (s.length() < 1) {
+            this.searchMediaViewModel.setSearchQuery(s);
+            switch (this.searchMediaViewModel.getCurrentCategory()) {
+                case MOVIES:
+                    this.movieSearchRecyclerView.setVisibility(View.GONE);
+                    this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
+                    break;
+                case BOOKS:
+                    this.bookSearchRecyclerView.setVisibility(View.GONE);
+                    this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
+                    break;
+                case PEOPLE:
+                    this.searchUserViewModel.clearUserList();
+                    break;
+            }
+        }
         return false;
     }
 
     @Override
     public void onClick(View view) {
-        if (view == peopleButton) {
-            this.currentCategory = SearchFragment.SearchCategory.PEOPLE;
-        } else if (view == booksButton) {
-            this.currentCategory = SearchFragment.SearchCategory.BOOKS;
-        } else if (view == filmButton) {
-            this.currentCategory = SearchFragment.SearchCategory.MOVIES;
-        }
 
         this.currentHighlightedButton.setTypeface(null, Typeface.NORMAL);
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-        this.currentHighlightedButton = (Button) view;
+
+        if (view == peopleButton) {
+            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.PEOPLE);
+        } else if (view == booksButton) {
+            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.BOOKS);
+        } else if (view == filmButton) {
+            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.MOVIES);
+        }
+
+        setDisplayComponent();
+    }
+
+    public void setDisplayComponent() {
+        this.movieTrendingRecyclerView.setVisibility(View.GONE);
+        this.movieSearchRecyclerView.setVisibility(View.GONE);
+        this.bookTrendingRecyclerView.setVisibility(View.GONE);
+        this.bookSearchRecyclerView.setVisibility(View.GONE);
+        this.userSearchRecyclerView.setVisibility(View.GONE);
+
+        switch (this.searchMediaViewModel.getCurrentCategory()) {
+            case PEOPLE:
+                this.currentHighlightedButton = peopleButton;
+                this.userSearchRecyclerView.setVisibility(View.VISIBLE);
+                break;
+            case BOOKS:
+                this.currentHighlightedButton = booksButton;
+                System.out.println("QUERY = " + this.searchBar.getQuery().toString());
+                if (this.searchBar.getQuery().length() > 0) {
+                    if (!this.searchBar.getQuery().toString().equals(searchMediaViewModel.getTitleSearchBook())) {
+                        searchMediaViewModel.LoadFirstSearchBooksPage(this.searchBar.getQuery().toString());
+                    }
+                    this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
+                }
+                break;
+            case MOVIES:
+                this.currentHighlightedButton = filmButton;
+                this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
+                break;
+        }
+
+
         this.currentHighlightedButton.setTypeface(null, Typeface.BOLD);
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
-    private void searchAndDisplayResult(String toBeSearched) {
-        if (this.currentCategory == SearchCategory.PEOPLE) {
-            userSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
-            searchUser(toBeSearched);
-        } else {
-           searchMedia(toBeSearched);
-        }
-    }
-
-    private void searchMedia(String toBeSearched){
-        switch (this.currentCategory) {
-            case MOVIES:
-                if (!toBeSearched.isEmpty()) {
-
-                } else {
-
-                }
-                break;
-            case BOOKS:
-                if (!toBeSearched.isEmpty()) {
-
-                } else {
-
-                }
-                break;
-        }
-    }
-
     private void searchUser(String toBeSearched) {
-        if (toBeSearched.length() > 0) {
-            getAllUser(USERNAME).thenAccept(users -> {
-                List<User> filteredUser = users.stream()
-                    .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
-                    .collect(Collectors.toList());
-                sortUsersByName(filteredUser);
-                searchUserViewModel.setUserList(filteredUser);
-            });
-        } else {
-            searchUserViewModel.clearUserList();
-        }
+        getAllUser(USERNAME).thenAccept(users -> {
+            List<User> filteredUser = users.stream()
+                .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
+                .collect(Collectors.toList());
+            sortUsersByName(filteredUser);
+            searchUserViewModel.setUserList(filteredUser);
+        });
     }
 
     private static void sortUsersByName(List<User> userList) {
         userList.sort(Comparator.comparing(u -> u.getUsername().toLowerCase()));
     }
 
-    private enum SearchCategory {
+    public enum SearchCategory {
         PEOPLE,
         MOVIES,
         BOOKS

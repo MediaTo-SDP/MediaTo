@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
@@ -33,6 +34,7 @@ import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
+    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
 
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
@@ -60,10 +62,17 @@ public class NewItemFragment extends Fragment {
         if (bundle != null) {
             media = (Media) bundle.get("media");
         }
-        String summary = media.getSummary();
-        summary = summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary;
-        setItemInformation(media.getTitle(), summary, media.getPosterUrl());
 
+        if (media.getMediaType() == MediaType.BOOK && media.getSummary().equals("Loading Description ...")) {
+            oLAPI.getDescription(media.getId()).thenAccept(description -> {
+                media.setSummary(description);
+                getActivity().runOnUiThread(() -> {
+                    setDescription(media.getSummary());
+                });
+            });
+        }
+
+        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
 
         setProgressBarIndicator();
 
@@ -121,7 +130,7 @@ public class NewItemFragment extends Fragment {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (getActivity() != null) {
+            if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
                 getActivity()
                         .runOnUiThread(() -> // we go back to ui thread (mandatory)
                                 handleTrailerResponse(listResponse.getItems().get(0)));
@@ -204,14 +213,17 @@ public class NewItemFragment extends Fragment {
      * @param url:         the item image resource link
      */
     private void setItemInformation(String title, String description, String url) {
-
         ((TextView) this.view.findViewById(R.id.item_title)).setText(title);
-
-        ((TextView) this.view.findViewById(R.id.item_description_text)).setText(description);
-
+        setDescription(description);
         ImageView img = view.findViewById(R.id.item_image);
         Glide.with(this).load(url).into(img);
 
+    }
+
+    private void setDescription(String description) {
+        String shortDescription = description.length() > MAX_SUMMARY_LENGTH ? description.substring(0, MAX_SUMMARY_LENGTH) : description;
+
+        ((TextView) this.view.findViewById(R.id.item_description_text)).setText(shortDescription);
     }
 
     /**

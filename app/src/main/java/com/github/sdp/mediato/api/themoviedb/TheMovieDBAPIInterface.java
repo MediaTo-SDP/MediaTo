@@ -22,9 +22,4 @@ public interface TheMovieDBAPIInterface {
     Call<PagedResult<TMDBMovie>> trendingFilms(@Query("api_key") String apiKey,
                                                @Query("language") String language,
                                                @Query("page") int page);
-
-    @GET("3/movie/{id}")
-    Call<TMDBMovie> get(@Path("id") String id,
-                        @Query("api_key") String apiKey,
-                        @Query("language") String language);
 }

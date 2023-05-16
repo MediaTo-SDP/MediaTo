@@ -121,6 +121,8 @@ public class Media implements Serializable {
      */
     public String getId() {return id;}
 
+    public void setSummary(String summary) {this.summary = summary;}
+
     /**
      * Checks if two medias are equal
      * @param other the media to compare with
