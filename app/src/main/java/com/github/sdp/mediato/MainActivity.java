@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
+    args.putString("general_search", "true");
+    args.putString("collection", "Recently watched");
 
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);

@@ -179,7 +179,7 @@ public class MyProfileFragmentTest {
 
         // Create a collection with one review for user1 and upload it to the database
         Collection collection = new Collection(COLLECTION_NAME);
-        Movie movie = new Movie(MOVIE_TITLE, "summary", "url", "iconId", "id");
+        Movie movie = new Movie(MOVIE_TITLE, "summary", "url", 1);
         Review review = new Review(MY_USERNAME, movie);
         collection.addReview(review);
         CollectionsDatabase.addCollection(user1.getUsername(), collection);

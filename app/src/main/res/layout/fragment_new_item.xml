@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/newItemLayout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -19,19 +18,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ReviewLayout" />
     <TextView
-      android:id="@+id/item_title"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:layout_marginStart="24dp"
-      android:layout_marginEnd="24dp"
-      android:text="@string/new_item_title"
-      android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-      android:textSize="40sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/new_item_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <WebView
       android:id="@+id/trailer_web_view"
@@ -80,16 +79,6 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-          android:id="@+id/new_item_review_error_msg"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="24dp"
-          android:layout_marginEnd="24dp"
-          android:textColor="#FF0000"
-          android:textSize="12sp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -181,6 +170,7 @@
           android:text="@string/new_item_rating_section_title"
           android:textAppearance="@style/TextAppearance.AppCompat.Display1"
           android:textSize="24sp"
+            android:maxLength="100"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="parent"

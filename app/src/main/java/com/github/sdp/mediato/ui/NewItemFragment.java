@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.FragmentSwitcher;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -33,6 +35,7 @@ import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
+    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
 
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
@@ -49,7 +52,6 @@ public class NewItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
-        TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
         fragmentSwitcher = (FragmentSwitcher) getActivity();
 
@@ -60,24 +62,29 @@ public class NewItemFragment extends Fragment {
         if (bundle != null) {
             media = (Media) bundle.get("media");
         }
-        String summary = media.getSummary();
-        summary = summary.length() > MAX_SUMMARY_LENGTH ? summary.substring(0, MAX_SUMMARY_LENGTH) : summary;
-        setItemInformation(media.getTitle(), summary, media.getPosterUrl());
 
+        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
+
+        loadDescriptionIfMissing();
 
         setProgressBarIndicator();
-
-        review.setOnClickListener(v -> {
-            if (errorTextView.getText().length() > 0) {
-                errorTextView.setText("");
-            }
-        });
 
         searchTrailer();
 
         webView = view.findViewById(R.id.trailer_web_view);
 
         return view;
+    }
+
+    private void loadDescriptionIfMissing() {
+        if (media.getMediaType() == MediaType.BOOK && media.getSummary().equals("Loading Description ...")) {
+            oLAPI.getDescription(media.getId()).thenAccept(description -> {
+                media.setSummary(description);
+                getActivity().runOnUiThread(() -> {
+                    setDescription(media.getSummary());
+                });
+            });
+        }
     }
 
     /**
@@ -121,7 +128,7 @@ public class NewItemFragment extends Fragment {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (getActivity() != null) {
+            if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
                 getActivity()
                         .runOnUiThread(() -> // we go back to ui thread (mandatory)
                                 handleTrailerResponse(listResponse.getItems().get(0)));
@@ -190,10 +197,7 @@ public class NewItemFragment extends Fragment {
      */
     private void setIndicatorToSeekBarPosition(SeekBar seekBar, TextView ratingIndicator, int progress) {
         // get position of slide bar and set the text to match rating and position
-        int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
         ratingIndicator.setText(String.valueOf(progress));
-        ratingIndicator.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.f);
-        ratingIndicator.setY(seekBar.getY() - ratingIndicator.getTextSize() * 1.5f);
     }
 
     /**
@@ -204,14 +208,17 @@ public class NewItemFragment extends Fragment {
      * @param url:         the item image resource link
      */
     private void setItemInformation(String title, String description, String url) {
-
         ((TextView) this.view.findViewById(R.id.item_title)).setText(title);
-
-        ((TextView) this.view.findViewById(R.id.item_description_text)).setText(description);
-
+        setDescription(description);
         ImageView img = view.findViewById(R.id.item_image);
         Glide.with(this).load(url).into(img);
 
+    }
+
+    private void setDescription(String description) {
+        String shortDescription = description.length() > MAX_SUMMARY_LENGTH ? description.substring(0, MAX_SUMMARY_LENGTH) : description;
+
+        ((TextView) this.view.findViewById(R.id.item_description_text)).setText(shortDescription);
     }
 
     /**
@@ -221,27 +228,22 @@ public class NewItemFragment extends Fragment {
      */
     public void addItem(View view) {
 
-        TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText reviewText = view.findViewById(R.id.item_review_edittext);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
-        if (reviewText.getText().length() > MAX_REVIEW_LENGTH) {
-            requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
-        } else {
-            // Create the review to forward to the profile page
-            String username = requireActivity().getIntent().getStringExtra("username");
-            Review review = new Review(username, media,
-                    Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+        // Create the review to forward to the profile page
+        String username = requireActivity().getIntent().getStringExtra("username");
+        Review review = new Review(username, media,
+                Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
 
-            // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
-            Bundle args = getArguments();
-            assert args != null;
-            args.putString("review", new Gson().toJson(review));
+        // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
+        Bundle args = getArguments();
+        assert args != null;
+        args.putString("review", new Gson().toJson(review));
 
-            // Switch back to the profile page
-            MyProfileFragment myProfileFragment = new MyProfileFragment();
-            myProfileFragment.setArguments(getArguments());
-            fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
-        }
+        // Switch back to the profile page
+        MyProfileFragment myProfileFragment = new MyProfileFragment();
+        myProfileFragment.setArguments(getArguments());
+        fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
     }
 }

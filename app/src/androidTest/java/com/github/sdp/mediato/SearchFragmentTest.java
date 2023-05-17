@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
@@ -104,6 +105,8 @@ public class SearchFragmentTest {
       // Pass the username to the fragment like at profile creation
       Bundle bundle = new Bundle();
       bundle.putString("username", user1.getUsername());
+      bundle.putString("general_search", "true");
+      bundle.putString("collection", "Recently watched");
       searchFragment.setArguments(bundle);
       fragmentManager.beginTransaction().replace(R.id.main_container, searchFragment)
               .commitAllowingStateLoss();
@@ -117,6 +120,8 @@ public class SearchFragmentTest {
 
   @Test
   public void testUserSearchWithEmptyString() {
+    clickOn(R.id.search_category_people);
+
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "user");
     pressImeActionButton();
@@ -128,7 +133,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
   }
 
   @Test
@@ -139,7 +144,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
   }
 
   @Test
@@ -150,7 +155,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
   }
 
   @Test
@@ -161,8 +166,8 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
     assertNotDisplayed(R.id.userAdapter_userName, user4.getUsername());
     assertNotDisplayed(R.id.userAdapter_userName, user1.getUsername());
   }
@@ -175,20 +180,20 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_unfollowButton);
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
+    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
   }
 
   @Test
@@ -199,13 +204,13 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.searchactivity_recyclerView, 0, R.id.userAdapter_followButton);
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(WAIT_TIME);
 
-    clickListItem(R.id.searchactivity_recyclerView, 0);
+    clickListItem(R.id.userSearch_recyclerView, 0);
 
     sleep(WAIT_TIME);
 
@@ -214,57 +219,114 @@ public class SearchFragmentTest {
   }
 
   @Test
-  public void testMovieSearchWithEmptyString() {
-    clickOn(R.id.search_category_movie);
-    clickOn(androidx.appcompat.R.id.search_button);
-    typeTo(androidx.appcompat.R.id.search_src_text, "Potter");
+  public void testTrendingBooks() {
+    clickOn(R.id.search_category_books);
 
-    sleep(WAIT_TIME);
+    sleep(15 * WAIT_TIME);
 
-    clearText(androidx.appcompat.R.id.search_src_text);
-    pressImeActionButton();
+    assertDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
-    sleep(WAIT_TIME);
-
-    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.bookTrending_recyclerView, 100);
   }
 
   @Test
-  public void testMovieSearchWithUnknownMovie() {
-    clickOn(R.id.search_category_movie);
+  public void testSearchBooks() {
+    clickOn(R.id.search_category_books);
+
     clickOn(androidx.appcompat.R.id.search_button);
-    typeTo(androidx.appcompat.R.id.search_src_text, "jadvbipehsjdb");
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the Deathly Hallows");
     pressImeActionButton();
+
+    sleep(15 * WAIT_TIME);
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
+
+    assertContains("Harry Potter and the Deathly Hallows");
+
+    clickOn(R.id.search_category_movie);
+    clickOn(R.id.search_category_books);
+
+    assertContains("Harry Potter and the Deathly Hallows");
+  }
+
+  @Test
+  public void testDisplayTrendingWhenEmptyQuery() {
+    clickOn(R.id.search_category_books);
+
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
+    pressImeActionButton();
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
     sleep(WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.searchactivity_recyclerView, 0);
+    clickOn(androidx.appcompat.R.id.search_close_btn);
+
+    sleep(WAIT_TIME);
+
+    assertDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
+  }
+
+  @Test
+  public void testMovieSearchWithEmptyString() {
+    clickOn(R.id.search_category_movie);
+
+    clickOn(androidx.appcompat.R.id.search_button);
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
+    pressImeActionButton();
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertDisplayed(R.id.movieSearch_recyclerView);
+    assertNotDisplayed(R.id.movieTrending_recyclerView);
+
+    sleep(WAIT_TIME);
+
+    clickOn(androidx.appcompat.R.id.search_close_btn);
+
+    sleep(WAIT_TIME);
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertDisplayed(R.id.movieTrending_recyclerView);
   }
 
   @Test
   public void testMovieSearchWithKnownMovie() {
     clickOn(R.id.search_category_movie);
+
     clickOn(androidx.appcompat.R.id.search_button);
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
+    pressImeActionButton();
 
-    sleep(WAIT_TIME);
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
-  }
+    sleep(5*WAIT_TIME);
 
-  @Test
-  public void testClickOnMovieSearchResultOpensRatingScreen() {
+    assertContains("Harry Potter and the Half-Blood Prince");
+
+    clickOn(R.id.search_category_books);
     clickOn(R.id.search_category_movie);
-    clickOn(androidx.appcompat.R.id.search_button);
-    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the half blood prince");
 
-    sleep(WAIT_TIME);
-    assertDisplayedAtPosition(R.id.searchactivity_recyclerView, 0, R.id.text_title, "Harry Potter and the Half-Blood Prince");
-
-    onView(withId(R.id.searchactivity_recyclerView))
-        .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-    sleep(WAIT_TIME);
-    assertDisplayed(R.id.item_description_text);
+    assertContains("Harry Potter and the Half-Blood Prince");
   }
 
 }

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.github.sdp.mediato"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -67,6 +67,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.room:room-common:2.4.2'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'com.squareup.okhttp3:mockwebserver:5.0.0-alpha.11'
@@ -81,6 +82,7 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
     androidTestImplementation('com.adevinta.android:barista:4.2.0')
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'  // Check for the latest version
 
 
     implementation 'com.github.dhaval2404:imagepicker:2.1'
