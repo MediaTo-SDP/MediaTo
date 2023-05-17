@@ -7,4 +7,5 @@
   <dimen name="movie_image_hight">180dp</dimen>
 
   <dimen name="button_padding">7dp</dimen>
+  <dimen name="image_button_size">40dp</dimen>
 </resources>

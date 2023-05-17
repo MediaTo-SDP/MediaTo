@@ -2,7 +2,6 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
@@ -12,11 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
-import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
-import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static java.lang.Thread.sleep;
@@ -28,7 +22,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,12 +30,14 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
-import com.adevinta.android.barista.interaction.BaristaClickInteractions;
-import com.adevinta.android.barista.interaction.BaristaSleepInteractions;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
+import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.media.Movie;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -70,10 +65,17 @@ public class MyProfileFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
     private final static int WAIT_TIME = 1000;
     private final static String MY_USERNAME = "user_profile";
+    private final static String COLLECTION_NAME = "Recently watched";
+    private final static String MOVIE_TITLE = "Title";
+
+    private final static String ADD = "ADD";
+    private final static String CANCEL = "CANCEL";
+    private final static String YES = "YES";
+
     private final String email = "ph@mediato.ch";
     FirebaseUser user;
     ActivityScenario<MainActivity> scenario;
-    ViewInteraction outerRecyclerView = onView(withId(R.id.collection_list_recycler_view));
+    ViewInteraction collectionListRecyclerView = onView(withId(R.id.collection_list_recycler_view));
     ViewInteraction collectionRecyclerView = onView(withId(R.id.collection_recycler_view));
     ViewInteraction recyclerView = onView(withId(R.id.collection_recycler_view));
     ViewInteraction userNameText = onView(withId(R.id.username_text));
@@ -83,14 +85,12 @@ public class MyProfileFragmentTest {
     ViewInteraction defaultCollection = onView(withId(R.id.collection_list));
     ViewInteraction addMediaButton = onView(withId(R.id.add_media_button));
     ViewInteraction addCollectionButton = onView(withId(R.id.add_collection_button));
+    ViewInteraction deleteCollectionButton = onView(withId(R.id.delete_collection_button));
     ViewInteraction profilePic = onView(withId(R.id.profile_image));
     ViewInteraction profileMenuItem = onView(withId(R.id.profile));
     ViewInteraction searchMenuItem = onView(withId(R.id.search));
     ViewInteraction myFollowingBar = onView(withId(R.id.myFollowing_bar));
-    ViewInteraction myFollowersBar = onView(withId(R.id.myFollowers_bar));
-
     ViewInteraction movieSearchCategory = onView(withId((R.id.search_category_movie)));
-    ViewInteraction addReviewButton = onView(withId((R.id.item_button_add)));
 
     User user1;
     User user2;
@@ -177,6 +177,13 @@ public class MyProfileFragmentTest {
         UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
         UserDatabase.addUser(user2).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
 
+        // Create a collection with one review for user1 and upload it to the database
+        Collection collection = new Collection(COLLECTION_NAME);
+        Movie movie = new Movie(MOVIE_TITLE, "summary", "url", "iconId", "id");
+        Review review = new Review(MY_USERNAME, movie);
+        collection.addReview(review);
+        CollectionsDatabase.addCollection(user1.getUsername(), collection);
+
         // Launch the MainActivity
         scenario = ActivityScenario.launch(MainActivity.class);
 
@@ -241,27 +248,44 @@ public class MyProfileFragmentTest {
         userNameText.check(matches(withText(MY_USERNAME)));
     }
 
-    // Test the initial state of the default collection after profile creation
+    // Test that the list of collections displays the collection downloaded from the database
     @Test
-    public void testInitialDefaultCollectionState() {
+    public void testCollectionListState() {
+        collectionListRecyclerView.check(matches(isDisplayed()));
 
-        // Check that the default collection is displayed
+        // Check that the collection list has exactly one item
+        collectionListRecyclerView.check(matches(hasItemCount(1)));
+
+        // Check that the collection list displays the correct collection
+        collectionListRecyclerView.check(matches(hasDescendant(withText(COLLECTION_NAME))));
+    }
+
+    // Test that the collection downloaded from the database is displayed correctly (buttons and reviews)
+    @Test
+    public void testCollectionState() {
+        // Check that the collection is displayed
         defaultCollection.check(matches(isDisplayed()));
 
-        // Check that the default title is correct
-        defaultCollection.check(matches(hasDescendant(withText("Recently watched"))));
+        // Check that the collection title is correct
+        defaultCollection.check(matches(hasDescendant(withText(COLLECTION_NAME))));
 
         // Check that the collection has an AddMedia button
         defaultCollection.check(matches(hasDescendant(withId(R.id.add_media_button))));
 
-        // Check that the collection has a recycler view
+        // Check that the collection has a delete collection button
+        defaultCollection.check(matches(hasDescendant(withId(R.id.delete_collection_button))));
+
+        // Check that the collection has a recycler view to display collections
         defaultCollection.check(matches(hasDescendant(withId(R.id.collection_recycler_view))));
 
-        // Check that the recycler view is initially empty
-        recyclerView.check(matches(hasItemCount(0)));
+        // Check that the recycler view contains the review
+        recyclerView.check(matches(hasItemCount(1)));
+
+        // Check that the review displays the correct title
+        recyclerView.check(matches(hasDescendant(withText(MOVIE_TITLE))));
     }
 
-    // Test that a click on the add media button opens the searchg
+    // Test that a click on the add media button opens the search
     @Test
     public void testAddMediaButton() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
@@ -274,35 +298,27 @@ public class MyProfileFragmentTest {
         movieSearchCategory.check(matches(isDisplayed()));
     }
 
-
-    // Test the initial state of the list of collections after profile creation
-    @Test
-    public void testInitialOuterRecyclerViewState() {
-        outerRecyclerView.check(matches(isDisplayed()));
-        // Check that the outer RecyclerView initially has one item (default collection)
-        outerRecyclerView.check(matches(hasItemCount(1)));
-    }
-
-    // Check that a new collection has been added to the outer RecyclerView if the user chooses a valid collection name
+    // Check that a new collection has been added to the collections list if the user chooses a valid collection name
     @Test
     public void testAddValidCollection() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
-
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickAdd("valid");
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+        enterCollectionNameAndClickButton("valid", ADD);
+        searchMenuItem.perform(click());
+        profileMenuItem.perform(click());
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
     }
 
-    // Check that no new collection has been added to the outer RecyclerView if the user enters an empty collection name
+    // Check that no new collection has been added to the collections list if the user enters an empty collection name
     @Test
     public void testEmptyCollectionNameNotAdded() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickAdd("");
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        enterCollectionNameAndClickButton("", ADD);
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
     }
 
     // Check that only one collection gets added if the user tries to add a collection with the same username twice
@@ -310,23 +326,49 @@ public class MyProfileFragmentTest {
     public void testDuplicateCollectionNameNotAdded() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickAdd("duplicate");
+        enterCollectionNameAndClickButton("duplicate", ADD);
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickAdd("duplicate");
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
+        enterCollectionNameAndClickButton("duplicate", ADD);
+        searchMenuItem.perform(click());
+        profileMenuItem.perform(click());
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount + 1)));
     }
 
-    // Check that only one collection gets added if the user tries to add a collection with the same username twice
+    // Check that the collection does not get added if the user clicks cancel
     @Test
     public void testEnterValidCollectionAndCancelDoesNotAddCollection() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
         addCollectionButton.perform(click());
-        enterTextInAlertBoxAndClickCancel("duplicate");
-        outerRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        enterCollectionNameAndClickButton("don't add this", CANCEL);
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    }
+
+    // Check that the collection does not get deleted if the user clicks cancel
+    @Test
+    public void testCancelingDeleteCollectionDoesNotRemoveCollection() {
+        int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        deleteCollectionButton.perform(click());
+        clickAlertDialogButton(CANCEL);
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
+    }
+
+    // Check that the collection get deleted if the user confirms the deletion
+    @Test
+    public void testConfirmDeleteCollectionRemovesCollection() {
+        int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
+
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
+        deleteCollectionButton.perform(click());
+        clickAlertDialogButton(YES);
+        searchMenuItem.perform(click());
+        profileMenuItem.perform(click());
+        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount - 1)));
     }
 
     // Tests the sign out, should sign out the user and redirect to authentication page
@@ -369,44 +411,34 @@ public class MyProfileFragmentTest {
     }
 
     /**
-     * Used to interact with the AlertDialog to enter the collection name
+     * Used to interact with the AlertDialog to enter the collection name and click a button
      *
      * @param enterText the text to enter into the dialog box
+     * @param buttonText click on the button with this button text (CASE SENSITIVE!)
      */
-    private void enterTextInAlertBoxAndClickAdd(String enterText) {
+    private void enterCollectionNameAndClickButton(String enterText, String buttonText) {
         try {
             UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             UiObject inputField = device.findObject(
                     new UiSelector().resourceId("com.github.sdp.mediato:id/collection_name_input"));
             inputField.setText(enterText);
 
-            UiObject addButton = device.findObject(
-                    // In case the text of the button is ever changed: this is case sensitive!
-                    // If the string resource says Add but the button text is displayed in capital letters, only ADD works!
-                    new UiSelector().text("ADD"));
-            addButton.click();
+            clickAlertDialogButton(buttonText);
         } catch (UiObjectNotFoundException e) {
             fail();
         }
     }
 
     /**
-     * Used to interact with the AlertDialog to enter the collection name
+     * Used to interact with an AlertDialog to click on a button with the given text
      *
-     * @param enterText the text to enter into the dialog box
+     * @param buttonText click on the button with this button text (CASE SENSITIVE!)
      */
-    private void enterTextInAlertBoxAndClickCancel(String enterText) {
+    private void clickAlertDialogButton(String buttonText) {
         try {
             UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-            UiObject inputField = device.findObject(
-                    new UiSelector().resourceId("com.github.sdp.mediato:id/collection_name_input"));
-            inputField.setText(enterText);
-
-            UiObject addButton = device.findObject(
-                    // In case the text of the button is ever changed: this is case sensitive!
-                    // If the string resource says Cancel but the button text is displayed in capital letters, only CANCEL works!
-                    new UiSelector().text("CANCEL"));
-            addButton.click();
+            UiObject button = device.findObject(new UiSelector().text(buttonText));
+            button.click();
         } catch (UiObjectNotFoundException e) {
             fail();
         }

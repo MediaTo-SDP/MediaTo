@@ -1,22 +1,34 @@
 package com.github.sdp.mediato.utility.adapters;
 
+import android.media.Image;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
 import com.github.sdp.mediato.model.Review;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.post.ReviewPost;
+import com.github.sdp.mediato.ui.ExploreFragment;
+import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
+import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.base.Converter;
 import com.google.protobuf.Internal;
 
@@ -27,6 +39,15 @@ import java.util.concurrent.CompletableFuture;
 * An adapter (that can be used in recycler views) for the review posts
 */
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
+    public enum CallerFragment {
+        EXPLORE,
+        FEED
+    }
+    private CallerFragment callerFragment;
+    private String username;
+    private ExploreViewModel exploreViewModel;
+    private FeedViewModel feedViewModel;
+
     /**
      * Used by the adapter to compare review posts
      */
@@ -67,20 +88,45 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
      */
     @Override
     public void onBindViewHolder(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
-        holder.binding.textTitle.setText(getItem(position).getTitle());
-        holder.binding.textComment.setText(getItem(position).getComment());
-        if (getItem(position).getGrade() > 0) {
-            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
-        } else {
-            holder.binding.textRating.setVisibility(View.GONE);
+        MaterialButton followButton = holder.binding.exploreFollowButton;
+        // Display the content of the review post
+        displayReviewPostContent(holder, position);
+        // Set the like and dislike buttons
+        setLikeListener(holder, position);
+        setDislikeListener(holder, position);
+        // Set fragment specific details
+        switch (callerFragment) {
+            case EXPLORE:
+                setExploreSpecifics(getItem(position).getUsername(), followButton);
+                break;
+            case FEED:
+                setFeedSpecifics(getItem(position).getUsername(), followButton);
+                break;
         }
-        holder.binding.username.setText(getItem(position).getUsername());
+    }
 
-        Glide.with(holder.itemView.getContext())
-                .load(getItem(position).getMediaIconUrl())
-                .placeholder(R.drawable.movie)
-                .into(holder.binding.mediaCover);
-        displayProfilePic(holder, position);
+    public void setFeedSpecifics(String reviewPostUsername, MaterialButton followButton) {
+        followButton.setVisibility(View.GONE);
+    }
+
+    public void setExploreSpecifics(String reviewPostUsername, MaterialButton followButton) {
+        System.out.println("Setting explore specifics for " + reviewPostUsername);
+        if(exploreViewModel.getFollowedUsers().getValue().contains(reviewPostUsername)) {
+            System.out.println("User " + reviewPostUsername + " is followed");
+            followButton.setText(R.string.following);
+            followButton.setClickable(false);
+        } else {
+            System.out.println("User " + reviewPostUsername + " is not followed");
+            followButton.setText("Follow");
+            followButton.setVisibility(View.VISIBLE);
+            followButton.setClickable(true);
+            followButton.setOnClickListener(
+                    v -> {
+                        UserDatabase.followUser(username, reviewPostUsername);
+                        exploreViewModel.updateFollows(reviewPostUsername);
+                    }
+            );
+        }
     }
 
     /**
@@ -113,8 +159,88 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setCallerFragment(ViewModel viewModel, CallerFragment callerFragment) {
+        this.callerFragment = callerFragment;
+        switch (callerFragment) {
+            case EXPLORE:
+                this.exploreViewModel = (ExploreViewModel) viewModel;
+                break;
+            case FEED:
+                this.feedViewModel = (FeedViewModel) viewModel;
+                break;
+        }
+    }
+
+    public void displayReviewPostContent(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
+        holder.binding.textTitle.setText(getItem(position).getTitle());
+        holder.binding.textComment.setText(getItem(position).getComment());
+        if (getItem(position).getGrade() > 0) {
+            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
+        } else {
+            holder.binding.textRating.setVisibility(View.GONE);
+        }
+        holder.binding.username.setText(getItem(position).getUsername());
+        holder.binding.likeCount.setText(String.valueOf(getItem(position).getLikeCount()));
+        holder.binding.dislikeCount.setText(String.valueOf(getItem(position).getDislikeCount()));
+
+        Glide.with(holder.itemView.getContext())
+                .load(getItem(position).getMediaIconUrl())
+                .placeholder(R.drawable.movie)
+                .into(holder.binding.mediaCover);
+        displayProfilePic(holder, position);
+    }
+
+    private void setLikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        ReviewPost reviewPost = getItem(position);
+        holder.binding.likeButton.setOnClickListener(
+                v -> {
+                    ReviewInteractionDatabase.likes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
+                            .thenAccept(
+                                    likes -> {
+                                        if (!likes) {
+                                            ReviewInteractionDatabase.likeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            ReviewInteractionDatabase.unDislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            reviewPost.like(username);
+                                        } else {
+                                            ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            reviewPost.unLike(username);
+                                        }
+                                        holder.binding.likeCount.setText(String.valueOf(reviewPost.getLikeCount()));
+                                        holder.binding.dislikeCount.setText(String.valueOf(reviewPost.getDislikeCount()));
+
+                                    });}
+        );
+    }
+
+    private void setDislikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
+        ReviewPost reviewPost = getItem(position);
+        holder.binding.dislikeButton.setOnClickListener(
+                v -> {
+                    ReviewInteractionDatabase.dislikes(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle())
+                            .thenAccept(
+                                    dislikes -> {
+                                        if (!dislikes) {
+                                            ReviewInteractionDatabase.dislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            ReviewInteractionDatabase.unLikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            reviewPost.dislike(username);
+                                        } else {
+                                            ReviewInteractionDatabase.unDislikeReview(username, getItem(position).getUsername(), getItem(position).getCollectionName(), getItem(position).getTitle());
+                                            reviewPost.unDislike(username);
+                                        }
+                                        holder.binding.likeCount.setText(String.valueOf(reviewPost.getLikeCount()));
+                                        holder.binding.dislikeCount.setText(String.valueOf(reviewPost.getDislikeCount()));
+
+                                    });
+                }
+        );
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        private final LayoutReviewPostItemBinding binding;
+        public final LayoutReviewPostItemBinding binding;
 
         public MyViewHolder(@NonNull LayoutReviewPostItemBinding binding) {
             super(binding.getRoot());
