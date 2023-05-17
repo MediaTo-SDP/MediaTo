@@ -238,7 +238,7 @@ public class SearchFragmentTest {
     clickOn(R.id.search_category_books);
 
     clickOn(androidx.appcompat.R.id.search_button);
-    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
+    typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter and the Deathly Hallows");
     pressImeActionButton();
 
     sleep(15 * WAIT_TIME);
