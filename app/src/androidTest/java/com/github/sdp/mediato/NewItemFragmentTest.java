@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.app.Activity;
@@ -152,6 +153,7 @@ public class NewItemFragmentTest {
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
+        closeKeyboard();
 
         addItemButton.perform(click());
 
@@ -166,6 +168,7 @@ public class NewItemFragmentTest {
 
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
+        closeKeyboard();
 
         addItemButton.perform(click());
 
@@ -180,6 +183,7 @@ public class NewItemFragmentTest {
     public void checkErrorMessageDisappearsWhenEditing() {
         editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
         editText.perform(closeSoftKeyboard());
+        closeKeyboard();
 
         addItemButton.perform(click());
         //activity.addItem();
