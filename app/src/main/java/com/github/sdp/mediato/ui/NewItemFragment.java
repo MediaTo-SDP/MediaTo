@@ -22,6 +22,7 @@ import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -51,7 +52,6 @@ public class NewItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
-        TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText review = view.findViewById(R.id.item_review_edittext);
         fragmentSwitcher = (FragmentSwitcher) getActivity();
 
@@ -68,12 +68,6 @@ public class NewItemFragment extends Fragment {
         loadDescriptionIfMissing();
 
         setProgressBarIndicator();
-
-        review.setOnClickListener(v -> {
-            if (errorTextView.getText().length() > 0) {
-                errorTextView.setText("");
-            }
-        });
 
         searchTrailer();
 
@@ -203,10 +197,7 @@ public class NewItemFragment extends Fragment {
      */
     private void setIndicatorToSeekBarPosition(SeekBar seekBar, TextView ratingIndicator, int progress) {
         // get position of slide bar and set the text to match rating and position
-        int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
         ratingIndicator.setText(String.valueOf(progress));
-        ratingIndicator.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2.f);
-        ratingIndicator.setY(seekBar.getY() - ratingIndicator.getTextSize() * 1.5f);
     }
 
     /**
@@ -237,27 +228,22 @@ public class NewItemFragment extends Fragment {
      */
     public void addItem(View view) {
 
-        TextView errorTextView = view.findViewById(R.id.new_item_review_error_msg);
         EditText reviewText = view.findViewById(R.id.item_review_edittext);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
-        if (reviewText.getText().length() > MAX_REVIEW_LENGTH) {
-            requireActivity().runOnUiThread(() -> errorTextView.setText(String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH)));
-        } else {
-            // Create the review to forward to the profile page
-            String username = requireActivity().getIntent().getStringExtra("username");
-            Review review = new Review(username, media,
-                    Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
+        // Create the review to forward to the profile page
+        String username = requireActivity().getIntent().getStringExtra("username");
+        Review review = new Review(username, media,
+                Integer.parseInt(ratingIndicator.getText().toString()), reviewText.getText().toString());
 
-            // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
-            Bundle args = getArguments();
-            assert args != null;
-            args.putString("review", new Gson().toJson(review));
+        // Forward the current arguments (should be username and the name of the collection to add to) as well as the review to the profile page
+        Bundle args = getArguments();
+        assert args != null;
+        args.putString("review", new Gson().toJson(review));
 
-            // Switch back to the profile page
-            MyProfileFragment myProfileFragment = new MyProfileFragment();
-            myProfileFragment.setArguments(getArguments());
-            fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
-        }
+        // Switch back to the profile page
+        MyProfileFragment myProfileFragment = new MyProfileFragment();
+        myProfileFragment.setArguments(getArguments());
+        fragmentSwitcher.switchCurrentFragmentWithChildFragment(myProfileFragment);
     }
 }

@@ -12,6 +12,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
@@ -57,7 +59,6 @@ public class NewItemFragmentTest {
     ViewInteraction seekBar = onView(withId(R.id.item_rating_slider));
     ViewInteraction editText = onView(withId(R.id.item_review_edittext));
     ViewInteraction seekBarIndicator = onView(withId(R.id.item_rating_slider_progress));
-    ViewInteraction errorText = onView(withId(R.id.new_item_review_error_msg));
     NewItemFragment newItemFragment = new NewItemFragment();
 
     ActivityScenario<MainActivity> scenario;
@@ -153,45 +154,12 @@ public class NewItemFragmentTest {
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
-        closeKeyboard();
 
         addItemButton.perform(click());
 
         onView(withId(R.id.main_container))
                 .check(matches(isDisplayed()))
                 .check(matches(hasDescendant(withId(R.id.profile_header))));
-    }
-
-    // Test that error message is displayed after writing a comment exceeding MAX_REVIEW_LENGTH
-    @Test
-    public void checkErrorMessageWhenAddingAIncorrectLengthComment() {
-
-        editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
-        editText.perform(closeSoftKeyboard());
-        closeKeyboard();
-
-        addItemButton.perform(click());
-
-        errorText.check(matches(withText(
-                String.format(Locale.ENGLISH, "Exceeded character limit: %d", MAX_REVIEW_LENGTH))));
-    }
-
-
-    // After the error message is displayed, it should disappears when user edits the comment to make it shorter
-    // It reappears if the length is still to long when adding the review
-    @Test
-    public void checkErrorMessageDisappearsWhenEditing() {
-        editText.perform(typeText("a".repeat(MAX_REVIEW_LENGTH + 1)));
-        editText.perform(closeSoftKeyboard());
-        closeKeyboard();
-
-        addItemButton.perform(click());
-        //activity.addItem();
-
-        editText.perform(closeSoftKeyboard());
-        editText.perform(click(), closeSoftKeyboard());
-
-        errorText.check(matches(withText("")));
     }
 
     @After
