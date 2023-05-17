@@ -40,7 +40,7 @@ public class TheMovieDBAPI implements API<Media> {
 
     @Override
     public CompletableFuture<List<Media>> searchItems(String title, int page) {
-        return api.getSearchMovie(apikey,false, title.replaceAll(" ","+"),"en-US", page)
+        return api.getSearchMovie(apikey, title.replaceAll(" ","+"), page)
                 .thenApply(tmdbMoviePagedResult -> tmdbMoviePagedResult.getResults().stream()
                             .map(Movie::new)
                             .collect(Collectors.toList()));
@@ -48,7 +48,7 @@ public class TheMovieDBAPI implements API<Media> {
 
     @Override
     public CompletableFuture<List<Media>> trending(int page) {
-        return api.getTrendingMovies(apikey, false,"en-US", "popularity.desc", null, null, page)
+        return api.getTrendingMovies(apikey,null, null, page)
                 .thenApply(tmdbMoviePagedResult -> tmdbMoviePagedResult.getResults().stream()
                         .map(Movie::new)
                         .collect(Collectors.toList()));

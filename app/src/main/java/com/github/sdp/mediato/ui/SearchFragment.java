@@ -144,20 +144,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     public boolean onQueryTextSubmit(String s) {
         if (s.length() > 0) {
             this.searchMediaViewModel.setSearchQuery(s);
-            if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.PEOPLE) {
-                searchUser(s);
-            } else {
-                searchMediaViewModel.loadFirstMovieBookSearchPage(s);
-                if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-                    this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
-                    this.movieTrendingRecyclerView.setVisibility(View.GONE);
-                } else {
-                    this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
-                    this.bookTrendingRecyclerView.setVisibility(View.GONE);
-                }
-            }
+            search(s);
         }
         return false;
+    }
+
+    private void search(String s) {
+        if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.PEOPLE) {
+            searchUser(s);
+        } else {
+            searchMediaViewModel.loadFirstMovieBookSearchPage(s);
+            if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
+                this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
+                this.movieTrendingRecyclerView.setVisibility(View.GONE);
+            } else {
+                this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
+                this.bookTrendingRecyclerView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
