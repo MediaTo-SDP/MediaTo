@@ -21,6 +21,7 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaAdapter;
@@ -40,16 +41,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private SearchUserViewModel searchUserViewModel;
     private SearchMediaViewModel searchMediaViewModel;
 
-    private MediaAdapter movieSearchAdapter;
-    private MediaAdapter movieTrendingAdapter;
-    private MediaAdapter bookSearchAdapter;
-    private MediaAdapter bookTrendingAdapter;
+    private MediaAdapter mediaAdapter;
 
     private RecyclerView userSearchRecyclerView;
-    private RecyclerView movieSearchRecyclerView;
-    private RecyclerView bookSearchRecyclerView;
-    private RecyclerView movieTrendingRecyclerView;
-    private RecyclerView bookTrendingRecyclerView;
+    private RecyclerView mediaRecyclerView;
 
     private SearchView searchBar;
 
@@ -85,17 +80,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void setMediaAdapter() {
-        movieSearchAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
-        searchMediaViewModel.getSearchMoviesLiveData().observe(this, movieSearchAdapter::update);
-
-        movieTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
-        searchMediaViewModel.getTrendingMoviesLiveData().observe(this, movieTrendingAdapter::update);
-
-        bookSearchAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
-        searchMediaViewModel.getSearchBooksLiveData().observe(this, bookSearchAdapter::update);
-
-        bookTrendingAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
-        searchMediaViewModel.getTrendingBooksLiveData().observe(this, bookTrendingAdapter::update);
+        mediaAdapter = new MediaAdapter(getActivity(), COLLECTION_NAME);
+        searchMediaViewModel.getLiveData().observe(this, mediaAdapter::update);
     }
 
     @Override
@@ -131,17 +117,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void setMediaRecyclerView(View searchView) {
-        movieSearchRecyclerView = searchView.findViewById(R.id.movieSearch_recyclerView);
-        movieSearchRecyclerView.setAdapter(movieSearchAdapter);
-
-        movieTrendingRecyclerView = searchView.findViewById(R.id.movieTrending_recyclerView);
-        movieTrendingRecyclerView.setAdapter(movieTrendingAdapter);
-
-        bookSearchRecyclerView = searchView.findViewById(R.id.bookSearch_recyclerView);
-        bookSearchRecyclerView.setAdapter(bookSearchAdapter);
-
-        bookTrendingRecyclerView= searchView.findViewById(R.id.bookTrending_recyclerView);
-        bookTrendingRecyclerView.setAdapter(bookTrendingAdapter);
+        mediaRecyclerView = searchView.findViewById(R.id.movieSearch_recyclerView);
+        mediaRecyclerView.setAdapter(mediaAdapter);
     }
 
     @Override
@@ -157,13 +134,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.PEOPLE) {
             searchUser(s);
         } else {
-            searchMediaViewModel.loadFirstMovieBookSearchPage(s);
             if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-                this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
-                this.movieTrendingRecyclerView.setVisibility(View.GONE);
+                this.searchMediaViewModel.loadFirstMovieSearchPage(s);
             } else {
-                this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
-                this.bookTrendingRecyclerView.setVisibility(View.GONE);
+                this.searchMediaViewModel.loadFirstBookSearchPage(s);
             }
         }
     }
@@ -172,18 +146,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     public boolean onQueryTextChange(String s) {
         if (s.length() < 1) {
             this.searchMediaViewModel.setSearchQuery(s);
-            switch (this.searchMediaViewModel.getCurrentCategory()) {
-                case MOVIES:
-                    this.movieSearchRecyclerView.setVisibility(View.GONE);
-                    this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
-                    break;
-                case BOOKS:
-                    this.bookSearchRecyclerView.setVisibility(View.GONE);
-                    this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
-                    break;
-                case PEOPLE:
-                    this.searchUserViewModel.clearUserList();
-                    break;
+            if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.PEOPLE) {
+                this.searchUserViewModel.clearUserList();
             }
         }
         return false;
@@ -217,16 +181,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             case BOOKS:
                 this.currentHighlightedButton = booksButton;
                 setMediaComponents(
-                        bookSearchRecyclerView,
-                        bookTrendingRecyclerView,
+                        mediaRecyclerView,
                         searchMediaViewModel.getTitleSearch()
                 );
                 break;
             case MOVIES:
                 this.currentHighlightedButton = filmButton;
                 setMediaComponents(
-                        movieSearchRecyclerView,
-                        movieTrendingRecyclerView,
+                        mediaRecyclerView,
                         searchMediaViewModel.getTitleSearch()
                 );
                 break;
@@ -238,21 +200,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     }
 
     private void hideAllRecyclerView() {
-        this.movieTrendingRecyclerView.setVisibility(View.GONE);
-        this.movieSearchRecyclerView.setVisibility(View.GONE);
-        this.bookTrendingRecyclerView.setVisibility(View.GONE);
-        this.bookSearchRecyclerView.setVisibility(View.GONE);
+        this.mediaRecyclerView.setVisibility(View.GONE);
         this.userSearchRecyclerView.setVisibility(View.GONE);
     }
 
-    private void setMediaComponents(RecyclerView searchRecyclerView, RecyclerView trendingRecyclerView, String oldTitle) {
+    private void setMediaComponents(RecyclerView recyclerView, String oldTitle) {
         if (this.searchBar.getQuery().length() > 0) {
             if (!this.searchBar.getQuery().toString().equals(oldTitle)) {
-                searchMediaViewModel.loadFirstMovieBookSearchPage(this.searchBar.getQuery().toString());
+                if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
+                    searchMediaViewModel.loadFirstMovieSearchPage(this.searchBar.getQuery().toString());
+                } else {
+                    searchMediaViewModel.loadFirstBookSearchPage(this.searchBar.getQuery().toString());
+                }
+
             }
-            searchRecyclerView.setVisibility(View.VISIBLE);
-        } else {
-            trendingRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 

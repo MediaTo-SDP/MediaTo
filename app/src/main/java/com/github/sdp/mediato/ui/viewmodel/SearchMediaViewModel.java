@@ -1,10 +1,13 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.API;
@@ -16,9 +19,9 @@ import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class SearchMediaViewModel extends AndroidViewModel {
     private SearchFragment.SearchCategory currentCategory = SearchFragment.SearchCategory.PEOPLE;
@@ -31,12 +34,15 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private int searchMoviesPage = 1;
     private int trendingMoviesPage = 1;
 
+    private final Handler mainThread = new Handler(Looper.getMainLooper());
+
     private MediaDao mediaDao;
 
-    private final MutableLiveData<List<Media>> searchMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> trendingMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> searchBooksLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> trendingBooksLiveData = new MutableLiveData<>(new ArrayList<>());
+    private final List<LiveData<List<Media>>> observedLiveDatas = new ArrayList<>();
+
+    private final MutableLiveData<List<Media>> liveData = new MutableLiveData<>(new ArrayList<>());
+    private final Observer<List<Media>> observer = liveData::postValue;
+
 
     public SearchMediaViewModel(Application application) {
         super(application);
@@ -47,116 +53,136 @@ public class SearchMediaViewModel extends AndroidViewModel {
         loadFirstMovieTrendingPage();
     }
 
-    public void loadFirstMovieBookSearchPage(String title) {
+    public void loadFirstBookSearchPage(String title) {
         titleSearch = title;
         searchBooksPage = 1;
+        loadFirstSearchPage(searchBooksPage, titleSearch, MediaType.BOOK);
+    }
+
+
+    public void loadFirstMovieSearchPage(String title) {
+        titleSearch = title;
         searchMoviesPage = 1;
-        loadFirstSearchPage(searchMoviesLiveData, searchMoviesPage, titleSearch, theMovieDBAPI, MediaType.MOVIE);
-        loadFirstSearchPage(searchBooksLiveData, searchBooksPage, titleSearch, oLAPI, MediaType.BOOK);
+        loadFirstSearchPage(searchMoviesPage, titleSearch, MediaType.MOVIE);
     }
 
     public void loadNextMovieSearchPage() {
         searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesLiveData, searchMoviesPage, titleSearch, theMovieDBAPI, MediaType.MOVIE);
+        loadNextSearchPage(searchMoviesPage, titleSearch, MediaType.MOVIE);
     }
 
     public void loadFirstMovieTrendingPage() {
         trendingMoviesPage = 1;
-        loadFirstTrendingPage(trendingMoviesLiveData, trendingMoviesPage, theMovieDBAPI, MediaType.MOVIE);
+        loadFirstTrendingPage(trendingMoviesPage, MediaType.MOVIE);
     }
 
     public void loadNextMovieTrendingPage() {
         trendingMoviesPage += 1;
-        loadNextTrendingPage(trendingMoviesLiveData, trendingMoviesPage, theMovieDBAPI, MediaType.MOVIE);
+        loadNextTrendingPage(trendingMoviesPage, MediaType.MOVIE);
     }
 
     public void loadNextBookSearchPage() {
         searchBooksPage += 1;
-        loadNextSearchPage(searchBooksLiveData, searchBooksPage, titleSearch, oLAPI, MediaType.BOOK);
+        loadNextSearchPage(searchBooksPage, titleSearch, MediaType.BOOK);
     }
 
     public void loadFirstBookTrendingPage() {
         trendingBooksPage = 1;
-        loadFirstTrendingPage(trendingBooksLiveData, trendingBooksPage, oLAPI, MediaType.BOOK);
+        loadFirstTrendingPage( trendingBooksPage, MediaType.BOOK);
     }
 
     public void loadNextBookTrendingPage() {
+
         trendingBooksPage += 1;
-        loadNextTrendingPage(trendingBooksLiveData, trendingBooksPage, oLAPI, MediaType.BOOK);
+        loadNextTrendingPage(trendingBooksPage, MediaType.BOOK);
     }
 
-    private void loadFirstSearchPage(MutableLiveData<List<Media>> liveData, int page, String title, API<Media> api, MediaType type) {
+    private void loadFirstSearchPage(int page, String title, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
+
         liveData.setValue(new ArrayList<>());
         api.searchItems(title, page)
             .handle(((medias, throwable) -> {
-                if (throwable == null){
-                    try {
+                // try catch to avoid silencing error with the handle function
+                try{
+                    removeObservers();
+                    if (throwable == null){
                         mediaDao.insertAll(medias);
                         liveData.postValue(medias);
-                    } catch (Exception e) {
-                        System.out.println(e);
+                    } else {
+                        observe(mediaDao.searchInTitle(type, title), observer);
                     }
-                } else {
-                    try {
-                        LiveData<List<Media>> result = mediaDao.searchInTitle(type, title);
-                        result.observeForever(liveData::postValue);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-
+                } catch (Exception e) {
+                    printException(e);
                 }
                 return null;
-    }));
+            }));
     }
 
-    private void loadNextSearchPage(MutableLiveData<List<Media>> liveData, int page, String title, API<Media> api, MediaType type) {
+    private void loadNextSearchPage(int page, String title, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
         api.searchItems(title, page).handle((medias, throwable) -> {
-            if (throwable == null){
-                List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-                updatedMedia.addAll(medias);
-                liveData.postValue(updatedMedia);
-                mediaDao.insertAll(medias);
-            } else{
-                LiveData<List<Media>> result = mediaDao.searchInTitle(type, title);
-                result.observeForever(liveData::postValue);
+            try{
+                removeObservers();
+                if (throwable == null){
+                    List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+                    updatedMedia.addAll(medias);
+                    liveData.postValue(updatedMedia);
+                    mediaDao.insertAll(medias);
+                } else{
+                    observe(mediaDao.searchInTitle(type, title), observer);
+                }
+            } catch (Exception e) {
+                printException(e);
             }
             return null;
         });
     }
 
-    private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, int page, API<Media> api, MediaType type) {
+    private void loadFirstTrendingPage(int page, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
         liveData.setValue(new ArrayList<>());
-        api.trending(page).thenApply(x -> {
-            List<Media> updatedMedia = new ArrayList<>(x);
-            liveData.postValue(updatedMedia);
-            return updatedMedia;
+        api.trending(page).handle((x, throwable) -> {
+            try {
+                removeObservers();
+                if (throwable == null) {
+                    List<Media> updatedMedia = new ArrayList<>(x);
+                    liveData.postValue(updatedMedia);
+                    mediaDao.insertAll(x);
+                } else {
+                    observe(mediaDao.getAllMediaFromType(type), observer);
+                }
+            } catch (Exception e){
+                printException(e);
+            }
+            return null;
         });
     }
 
-    private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, int page, API<Media> api, MediaType type) {
-        api.trending(page).thenApply(x -> {
-            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-            updatedMedia.addAll(x);
-            liveData.postValue(updatedMedia);
-            return updatedMedia;
+    private void loadNextTrendingPage(int page, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
+        api.trending(page).handle((x, throwable) -> {
+            try{
+                removeObservers();
+                if (throwable == null){
+                    List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+                    updatedMedia.addAll(x);
+                    liveData.postValue(updatedMedia);
+                    mediaDao.insertAll(x);
+                } else {
+                    observe(mediaDao.getAllMediaFromType(type), observer);
+                }
+            } catch (Exception e){
+                printException(e);
+            }
+            return null;
         });
     }
 
-    public MutableLiveData<List<Media>> getSearchMoviesLiveData() {
-        return searchMoviesLiveData;
+    public MutableLiveData<List<Media>> getLiveData() {
+        return liveData;
     }
 
-    public MutableLiveData<List<Media>> getTrendingMoviesLiveData() {
-        return trendingMoviesLiveData;
-    }
-
-    public MutableLiveData<List<Media>> getSearchBooksLiveData() {
-        return searchBooksLiveData;
-    }
-
-    public MutableLiveData<List<Media>> getTrendingBooksLiveData() {
-        return trendingBooksLiveData;
-    }
 
     public SearchFragment.SearchCategory getCurrentCategory() {
         return currentCategory;
@@ -181,6 +207,24 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void setMediaDao(MediaDao mediaDao) {
         this.mediaDao = mediaDao;
     }
+    private void printException(Exception e) {
+        System.out.println(e.getMessage());
+        System.out.println(Arrays.toString(e.getStackTrace()));
+    }
 
+    private void observe(LiveData<List<Media>>liveData, Observer<List<Media>> observer){
+        // Cannot invoke observeForever on a background thread
+        mainThread.post(() -> liveData.observeForever(observer));
+        observedLiveDatas.add(liveData);
+    }
+    private void removeObservers(){
+        if (observedLiveDatas == null) return;
+        mainThread.postAtFrontOfQueue(() -> {
+            for (LiveData<List<Media>> observedLiveData: observedLiveDatas) {
+                observedLiveData.removeObserver(observer);
+            }
+            observedLiveDatas.clear();
+        });
+    }
 
 }
