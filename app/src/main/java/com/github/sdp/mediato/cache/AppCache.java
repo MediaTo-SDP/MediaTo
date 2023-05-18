@@ -5,6 +5,8 @@ import androidx.room.RoomDatabase;
 
 import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.cache.dao.UserDao;
+import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Media;
 
 import java.io.Serializable;

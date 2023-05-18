@@ -2,7 +2,6 @@ package com.github.sdp.mediato.cache.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -17,7 +16,7 @@ public interface MediaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long[] insert(Media... media);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     long[] insertAll(List<Media> media);
 
     @Query("SELECT * FROM medias")

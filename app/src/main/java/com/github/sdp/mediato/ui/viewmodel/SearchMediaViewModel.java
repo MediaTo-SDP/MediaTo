@@ -3,20 +3,22 @@ package com.github.sdp.mediato.ui.viewmodel;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.SearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
 
 public class SearchMediaViewModel extends AndroidViewModel {
     private SearchFragment.SearchCategory currentCategory = SearchFragment.SearchCategory.PEOPLE;
@@ -28,6 +30,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private int trendingBooksPage = 1;
     private int searchMoviesPage = 1;
     private int trendingMoviesPage = 1;
+
+    private MediaDao mediaDao;
 
     private final MutableLiveData<List<Media>> searchMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<Media>> trendingMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
@@ -47,75 +51,94 @@ public class SearchMediaViewModel extends AndroidViewModel {
         titleSearch = title;
         searchBooksPage = 1;
         searchMoviesPage = 1;
-        loadFirstSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
-        loadFirstSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
+        loadFirstSearchPage(searchMoviesLiveData, searchMoviesPage, titleSearch, theMovieDBAPI, MediaType.MOVIE);
+        loadFirstSearchPage(searchBooksLiveData, searchBooksPage, titleSearch, oLAPI, MediaType.BOOK);
     }
 
     public void loadNextMovieSearchPage() {
         searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
+        loadNextSearchPage(searchMoviesLiveData, searchMoviesPage, titleSearch, theMovieDBAPI, MediaType.MOVIE);
     }
 
     public void loadFirstMovieTrendingPage() {
         trendingMoviesPage = 1;
-        loadFirstTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+        loadFirstTrendingPage(trendingMoviesLiveData, trendingMoviesPage, theMovieDBAPI, MediaType.MOVIE);
     }
 
     public void loadNextMovieTrendingPage() {
         trendingMoviesPage += 1;
-        loadNextTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+        loadNextTrendingPage(trendingMoviesLiveData, trendingMoviesPage, theMovieDBAPI, MediaType.MOVIE);
     }
 
     public void loadNextBookSearchPage() {
         searchBooksPage += 1;
-        loadNextSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
+        loadNextSearchPage(searchBooksLiveData, searchBooksPage, titleSearch, oLAPI, MediaType.BOOK);
     }
 
     public void loadFirstBookTrendingPage() {
         trendingBooksPage = 1;
-        loadFirstTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
+        loadFirstTrendingPage(trendingBooksLiveData, trendingBooksPage, oLAPI, MediaType.BOOK);
     }
 
     public void loadNextBookTrendingPage() {
         trendingBooksPage += 1;
-        loadNextTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
+        loadNextTrendingPage(trendingBooksLiveData, trendingBooksPage, oLAPI, MediaType.BOOK);
     }
 
-    private void loadFirstSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        String title = titleSupplier.get();
+    private void loadFirstSearchPage(MutableLiveData<List<Media>> liveData, int page, String title, API<Media> api, MediaType type) {
         liveData.setValue(new ArrayList<>());
-        api.searchItems(title, page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(x);
-            liveData.postValue(updatedMedia);
+        api.searchItems(title, page)
+            .handle(((medias, throwable) -> {
+                if (throwable == null){
+                    try {
+                        mediaDao.insertAll(medias);
+                        liveData.postValue(medias);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } else {
+                    try {
+                        LiveData<List<Media>> result = mediaDao.searchInTitle(type, title);
+                        result.observeForever(liveData::postValue);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+
+                }
+                return null;
+    }));
+    }
+
+    private void loadNextSearchPage(MutableLiveData<List<Media>> liveData, int page, String title, API<Media> api, MediaType type) {
+        api.searchItems(title, page).handle((medias, throwable) -> {
+            if (throwable == null){
+                List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+                updatedMedia.addAll(medias);
+                liveData.postValue(updatedMedia);
+                mediaDao.insertAll(medias);
+            } else{
+                LiveData<List<Media>> result = mediaDao.searchInTitle(type, title);
+                result.observeForever(liveData::postValue);
+            }
+            return null;
         });
     }
 
-    private void loadNextSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        String title = titleSupplier.get();
-        api.searchItems(title, page).thenAccept(x -> {
+    private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, int page, API<Media> api, MediaType type) {
+        liveData.setValue(new ArrayList<>());
+        api.trending(page).thenApply(x -> {
+            List<Media> updatedMedia = new ArrayList<>(x);
+            liveData.postValue(updatedMedia);
+            return updatedMedia;
+        });
+    }
+
+    private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, int page, API<Media> api, MediaType type) {
+        api.trending(page).thenApply(x -> {
             List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
             updatedMedia.addAll(x);
             liveData.postValue(updatedMedia);
-        });
-    }
-
-    private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        liveData.setValue(new ArrayList<>());
-        api.trending(page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(x);
-            liveData.postValue(updatedMedia);
-        });
-    }
-
-    private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        api.trending(page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-            updatedMedia.addAll(x);
-            liveData.postValue(updatedMedia);
+            return updatedMedia;
         });
     }
 
@@ -154,5 +177,10 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public String getTitleSearch() {
         return titleSearch;
     }
+
+    public void setMediaDao(MediaDao mediaDao) {
+        this.mediaDao = mediaDao;
+    }
+
 
 }

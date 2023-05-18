@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
@@ -34,6 +35,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private static String COLLECTION_NAME;
     private static String USERNAME;
+    // Only one instance of the cache should be used
+    public static AppCache OFFLINE_CACHE;
     private SearchUserViewModel searchUserViewModel;
     private SearchMediaViewModel searchMediaViewModel;
 
@@ -69,6 +72,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         searchUserViewModel.setMainActivity((MainActivity) getActivity());
 
         searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
+        searchMediaViewModel.setMediaDao(OFFLINE_CACHE.mediaDao());
 
         setMediaAdapter();
 
