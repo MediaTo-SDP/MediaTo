@@ -21,10 +21,6 @@ import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
 
 public class FeedFragment extends Fragment {
-    public enum FeedType {
-        MY_REVIEWS,
-        FEED
-    }
     private String USERNAME;
     private FeedViewModel viewModel;
     private FragmentFeedBinding binding;
@@ -45,6 +41,8 @@ public class FeedFragment extends Fragment {
         USERNAME = getArguments().getString("username");
         feedType = (FeedType) getArguments().getSerializable("feedType");
 
+        binding.textFeed.setText(feedType.toString());
+
         viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
         viewModel.setData(USERNAME, feedType);
 
@@ -57,4 +55,20 @@ public class FeedFragment extends Fragment {
         binding.feedPosts.setHasFixedSize(false);
         viewModel.getPosts().observe(getViewLifecycleOwner(), adapter::submitList);
     }
+
+    public enum FeedType {
+        MY_REVIEWS, FEED;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case MY_REVIEWS:
+                    return "My Reviews";
+                case FEED:
+                    return "Feed";
+            }
+            return "";
+        }
+    }
+
 }
