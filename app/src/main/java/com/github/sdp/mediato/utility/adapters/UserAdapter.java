@@ -42,6 +42,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         // Refresh when new search
         this.userViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
+
+        this.userViewModel.getMainActivity().getMyProfileViewModel().getUserLiveData().observeForever(user -> notifyDataSetChanged());
     }
 
     @NonNull
@@ -63,7 +65,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.GONE);
         }
-        else if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
+        else if(userViewModel.getMainActivity().getMyProfileViewModel().getUser().getFollowing().contains(user.getUsername())) {
             holder.followButton.setVisibility(View.GONE);
             holder.unfollowButton.setVisibility(View.VISIBLE);
         } else {
@@ -72,14 +74,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         }
 
         holder.followButton.setOnClickListener(v -> {
-                    followUser(userViewModel.getUserName(), user.getUsername());
+                    followUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername(), user.getUsername());
                     userViewModel.reloadUser();
-                }
+                    UserDatabase.getUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())
+                        .thenAccept(u -> userViewModel.getMainActivity().getMyProfileViewModel().setUser(u));
+            }
         );
 
         holder.unfollowButton.setOnClickListener(v -> {
-                    unfollowUser(userViewModel.getUserName(), user.getUsername());
+                    unfollowUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername(), user.getUsername());
                     userViewModel.reloadUser();
+                    UserDatabase.getUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())
+                            .thenAccept(u -> userViewModel.getMainActivity().getMyProfileViewModel().setUser(u));
                 }
         );
     }
