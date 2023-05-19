@@ -21,6 +21,7 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaAdapter;
@@ -135,9 +136,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             searchUser(s);
         } else {
             if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-                this.searchMediaViewModel.loadFirstMovieSearchPage(s);
+                this.searchMediaViewModel.loadFirstSearchPage(s, MediaType.MOVIE);
             } else {
-                this.searchMediaViewModel.loadFirstBookSearchPage(s);
+                this.searchMediaViewModel.loadFirstSearchPage(s, MediaType.BOOK);
             }
         }
     }
@@ -151,10 +152,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                     this.searchUserViewModel.clearUserList();
                     break;
                 case MOVIES:
-                    this.searchMediaViewModel.loadFirstMovieTrendingPage();
-                    break;
+                    this.searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
                 case BOOKS:
-                    this.searchMediaViewModel.loadFirstBookTrendingPage();
+                    this.searchMediaViewModel.loadFirstTrendingPage(MediaType.BOOK);
                     break;
             }
         }
@@ -167,11 +167,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.currentHighlightedButton.setTypeface(null, Typeface.NORMAL);
         this.currentHighlightedButton.setPaintFlags(this.currentHighlightedButton.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
         if (view == peopleButton) {
-            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.PEOPLE);
+            this.searchMediaViewModel.setCurrentCategory(SearchCategory.PEOPLE);
         } else if (view == booksButton) {
-            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.BOOKS);
+            this.searchMediaViewModel.setCurrentCategory(SearchCategory.BOOKS);
         } else if (view == filmButton) {
-            this.searchMediaViewModel.setCurrentCategory(SearchFragment.SearchCategory.MOVIES);
+            this.searchMediaViewModel.setCurrentCategory(SearchCategory.MOVIES);
         }
         setDisplayComponent();
     }
@@ -216,16 +216,22 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private void getTrendingMedias(){
         if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-            searchMediaViewModel.loadFirstMovieTrendingPage();
+            searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
         } else {
-            searchMediaViewModel.loadFirstBookTrendingPage();
+            searchMediaViewModel.loadFirstTrendingPage(MediaType.BOOK);
         }
     }
     private void searchMedias(){
         if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-            searchMediaViewModel.loadFirstMovieSearchPage(this.searchBar.getQuery().toString());
+            searchMediaViewModel.loadFirstSearchPage(
+                    this.searchBar.getQuery().toString(),
+                    MediaType.MOVIE
+            );
         } else {
-            searchMediaViewModel.loadFirstBookSearchPage(this.searchBar.getQuery().toString());
+            searchMediaViewModel.loadFirstSearchPage(
+                    this.searchBar.getQuery().toString(),
+                    MediaType.BOOK
+            );
         }
     }
 

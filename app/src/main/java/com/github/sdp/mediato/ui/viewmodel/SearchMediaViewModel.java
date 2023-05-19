@@ -1,13 +1,9 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
 import android.app.Application;
-import android.os.Handler;
-import android.os.Looper;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.API;
@@ -43,49 +39,31 @@ public class SearchMediaViewModel extends AndroidViewModel {
         oLAPI = new OLAPI(application.getString(R.string.openlibrary_url));
     }
 
-    public void loadFirstBookSearchPage(String title) {
+    public void loadFirstSearchPage(String title, MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         titleSearch = title;
         searchBooksPage = 1;
-        loadFirstSearchPage(searchBooksPage, titleSearch, MediaType.BOOK);
+        loadFirstSearchPage(searchBooksPage, titleSearch, type);
     }
 
-
-    public void loadFirstMovieSearchPage(String title) {
-        titleSearch = title;
-        searchMoviesPage = 1;
-        loadFirstSearchPage(searchMoviesPage, titleSearch, MediaType.MOVIE);
-    }
-
-    public void loadNextMovieSearchPage() {
+    public void loadNextSearchPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesPage, titleSearch, MediaType.MOVIE);
+        loadNextSearchPage(searchMoviesPage, titleSearch, type);
     }
 
-    public void loadFirstMovieTrendingPage() {
+    public void loadFirstTrendingPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         trendingMoviesPage = 1;
-        loadFirstTrendingPage(trendingMoviesPage, MediaType.MOVIE);
+        loadFirstTrendingPage(trendingMoviesPage, type);
     }
 
-    public void loadNextMovieTrendingPage() {
+    public void loadNextTrendingPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         trendingMoviesPage += 1;
-        loadNextTrendingPage(trendingMoviesPage, MediaType.MOVIE);
+        loadNextTrendingPage(trendingMoviesPage, type);
     }
 
-    public void loadNextBookSearchPage() {
-        searchBooksPage += 1;
-        loadNextSearchPage(searchBooksPage, titleSearch, MediaType.BOOK);
-    }
-
-    public void loadFirstBookTrendingPage() {
-        trendingBooksPage = 1;
-        loadFirstTrendingPage( trendingBooksPage, MediaType.BOOK);
-    }
-
-    public void loadNextBookTrendingPage() {
-
-        trendingBooksPage += 1;
-        loadNextTrendingPage(trendingBooksPage, MediaType.BOOK);
-    }
 
     private void loadFirstSearchPage(int page, String title, MediaType type) {
         API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
