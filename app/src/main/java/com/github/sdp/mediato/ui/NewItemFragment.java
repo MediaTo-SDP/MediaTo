@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -47,10 +48,8 @@ public class NewItemFragment extends Fragment {
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
 
-    private ScrollView scrollView;
     public WebView webView;
     public EditText reviewText;
-    private TextWatcher textWatcher;
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
@@ -62,7 +61,6 @@ public class NewItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
-        scrollView = view.findViewById(R.id.scrollView);
         reviewText = view.findViewById(R.id.item_review_edittext);
         InputFilter[] filters = new InputFilter[] { new InputFilter.LengthFilter(MAX_REVIEW_LENGTH) };
         reviewText.setFilters(filters);
@@ -72,42 +70,21 @@ public class NewItemFragment extends Fragment {
         Button addButton = view.findViewById(R.id.item_button_add);
         addButton.setOnClickListener(v -> addItem(view, reviewText));
 
-        reviewText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            scrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                                }
-                            });
-                        }
-                    }, 200); // Adjust the delay time as needed
-                }
-            }
-        });
+        // Get references to the views
+        ScrollView scrollView = view.findViewById(R.id.scrollView);
 
-        reviewText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        // Set an OnLayoutChangeListener to the root view to detect layout changes
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            scrollView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                                }
-                            });
-                        }
-                    }, 200); // Adjust the delay time as needed
+            public void onGlobalLayout() {
+                // Calculate the difference between the root view's height and the visible content height
+                int heightDiff = scrollView.getRootView().getHeight() - scrollView.getHeight();
+
+                // Check if the height difference is above a certain threshold to consider it as the keyboard being open
+                int keyboardThreshold = 200;
+                if (heightDiff > keyboardThreshold) {
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 }
-                return false;
             }
         });
 
