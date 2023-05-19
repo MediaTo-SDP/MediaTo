@@ -78,11 +78,9 @@ public class MediaDaoTest {
     @Test
     public void gettingDataWorks() {
         mediaDao.insert(medias1);
-        testLiveData(mediaDao.getAllMedia(), (List<Media> data) -> {
-            assertThat(data.get(0).getTitle(), is(medias1[0].getTitle()));
-            assertThat(data.size(), is(4));
-            return null;
-        });
+        List<Media> data =  mediaDao.getAllMedia();
+        assertThat(data.get(0).getTitle(), is(medias1[0].getTitle()));
+        assertThat(data.size(), is(4));
     }
 
     /**
@@ -114,18 +112,12 @@ public class MediaDaoTest {
     @Test
     public void searchingWorksWithSummaryTerms(){
         mediaDao.insert(medias1);
-        testLiveData(mediaDao.search(MediaType.BOOK, "s"),
-                (List<Media> data) -> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), is(2));
-                    return null;
-                });
-        testLiveData(mediaDao.search(MediaType.BOOK, "s1"),
-                (List<Media> data) -> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), is(1));
-                    return null;
-                });
+        List<Media> data = mediaDao.search(MediaType.BOOK, "s");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), is(2));
+        data = mediaDao.search(MediaType.BOOK, "s1");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), is(1));
     }
 
     /**
@@ -134,18 +126,13 @@ public class MediaDaoTest {
     @Test
     public void searchingWorksWithTitleTerms(){
         mediaDao.insert(medias1);
-        testLiveData(mediaDao.search(MediaType.BOOK, "t"),
-                (List<Media> data) -> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), is(2));
-                    return null;
-        });
-        testLiveData(mediaDao.search(MediaType.BOOK, "t1"),
-                (List<Media> data) -> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), is(1));
-                    return null;
-                });
+        List<Media> data  = mediaDao.search(MediaType.BOOK, "t");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), is(2));
+
+        data = mediaDao.search(MediaType.BOOK, "t1");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), is(1));
     }
 
     /**
@@ -154,19 +141,12 @@ public class MediaDaoTest {
     @Test
     public void searchInTitleWorksWithTitleTerms(){
         mediaDao.insert(medias1);
-        testLiveData(mediaDao.searchInTitle(MediaType.BOOK,"t1"),
-                (List<Media> data)-> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), (is(1)));
-                    return null;
-                }
-        );
-        testLiveData(mediaDao.searchInTitle(MediaType.BOOK, "t"),
-                (List<Media> data) -> {
-                    assertThat(data.get(0).getTitle(), is("t1"));
-                    assertThat(data.size(), is(2));
-                    return null;
-                });
+        List<Media> data = mediaDao.searchInTitle(MediaType.BOOK,"t1");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), (is(1)));
+        data = mediaDao.searchInTitle(MediaType.BOOK, "t");
+        assertThat(data.get(0).getTitle(), is("t1"));
+        assertThat(data.size(), is(2));
     }
 
     /**
@@ -175,12 +155,9 @@ public class MediaDaoTest {
     @Test
     public void getAllMediaFromTypeWorks(){
         mediaDao.insert(medias1);
-        testLiveData(mediaDao.getAllMediaFromType(MediaType.MOVIE),
-                (List<Media> data) -> {
-                assertThat(data.get(0).getTitle(), is("t2"));
-                assertThat(data.size(), is(2));
-            return null;
-        });
+        List<Media> data = mediaDao.getAllMediaFromType(MediaType.MOVIE);
+        assertThat(data.get(0).getTitle(), is("t2"));
+        assertThat(data.size(), is(2));
     }
 
     /**
@@ -190,10 +167,8 @@ public class MediaDaoTest {
     public void CleanMediasCompletelyCleansMediaCache(){
         mediaDao.insert(medias1);
         mediaDao.cleanMedias();
-        testLiveData(mediaDao.getAllMedia(), (List<Media> data) -> {
-            assertThat(data.size(), is(0));
-            return null;
-        });
+        List<Media> data = mediaDao.getAllMedia();
+        assertThat(data.size(), is(0));
     }
 
 

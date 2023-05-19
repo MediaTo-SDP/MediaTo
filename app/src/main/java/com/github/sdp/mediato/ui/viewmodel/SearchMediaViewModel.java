@@ -34,23 +34,13 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private int searchMoviesPage = 1;
     private int trendingMoviesPage = 1;
 
-    private final Handler mainThread = new Handler(Looper.getMainLooper());
-
     private MediaDao mediaDao;
-
-    private final List<LiveData<List<Media>>> observedLiveDatas = new ArrayList<>();
-
     private final MutableLiveData<List<Media>> liveData = new MutableLiveData<>(new ArrayList<>());
-    private final Observer<List<Media>> observer = liveData::postValue;
-
 
     public SearchMediaViewModel(Application application) {
         super(application);
         theMovieDBAPI = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
         oLAPI = new OLAPI(application.getString(R.string.openlibrary_url));
-
-        loadFirstBookTrendingPage();
-        loadFirstMovieTrendingPage();
     }
 
     public void loadFirstBookSearchPage(String title) {
@@ -105,12 +95,11 @@ public class SearchMediaViewModel extends AndroidViewModel {
             .handle(((medias, throwable) -> {
                 // try catch to avoid silencing error with the handle function
                 try{
-                    removeObservers();
                     if (throwable == null){
                         mediaDao.insertAll(medias);
                         liveData.postValue(medias);
                     } else {
-                        observe(mediaDao.searchInTitle(type, title), observer);
+                        liveData.postValue(mediaDao.searchInTitle(type, title));
                     }
                 } catch (Exception e) {
                     printException(e);
@@ -123,14 +112,13 @@ public class SearchMediaViewModel extends AndroidViewModel {
         API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
         api.searchItems(title, page).handle((medias, throwable) -> {
             try{
-                removeObservers();
                 if (throwable == null){
                     List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
                     updatedMedia.addAll(medias);
                     liveData.postValue(updatedMedia);
                     mediaDao.insertAll(medias);
                 } else{
-                    observe(mediaDao.searchInTitle(type, title), observer);
+                    liveData.postValue(mediaDao.searchInTitle(type, title));
                 }
             } catch (Exception e) {
                 printException(e);
@@ -144,13 +132,12 @@ public class SearchMediaViewModel extends AndroidViewModel {
         liveData.setValue(new ArrayList<>());
         api.trending(page).handle((x, throwable) -> {
             try {
-                removeObservers();
                 if (throwable == null) {
                     List<Media> updatedMedia = new ArrayList<>(x);
                     liveData.postValue(updatedMedia);
                     mediaDao.insertAll(x);
                 } else {
-                    observe(mediaDao.getAllMediaFromType(type), observer);
+                    liveData.postValue(mediaDao.getAllMediaFromType(type));
                 }
             } catch (Exception e){
                 printException(e);
@@ -163,14 +150,13 @@ public class SearchMediaViewModel extends AndroidViewModel {
         API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
         api.trending(page).handle((x, throwable) -> {
             try{
-                removeObservers();
                 if (throwable == null){
                     List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
                     updatedMedia.addAll(x);
                     liveData.postValue(updatedMedia);
                     mediaDao.insertAll(x);
                 } else {
-                    observe(mediaDao.getAllMediaFromType(type), observer);
+                    liveData.postValue(mediaDao.getAllMediaFromType(type));
                 }
             } catch (Exception e){
                 printException(e);
@@ -211,20 +197,4 @@ public class SearchMediaViewModel extends AndroidViewModel {
         System.out.println(e.getMessage());
         System.out.println(Arrays.toString(e.getStackTrace()));
     }
-
-    private void observe(LiveData<List<Media>>liveData, Observer<List<Media>> observer){
-        // Cannot invoke observeForever on a background thread
-        mainThread.post(() -> liveData.observeForever(observer));
-        observedLiveDatas.add(liveData);
-    }
-    private void removeObservers(){
-        if (observedLiveDatas == null) return;
-        mainThread.postAtFrontOfQueue(() -> {
-            for (LiveData<List<Media>> observedLiveData: observedLiveDatas) {
-                observedLiveData.removeObserver(observer);
-            }
-            observedLiveDatas.clear();
-        });
-    }
-
 }

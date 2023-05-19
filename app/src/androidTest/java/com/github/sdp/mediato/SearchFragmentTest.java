@@ -1,9 +1,6 @@
 package com.github.sdp.mediato;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
@@ -23,7 +20,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
@@ -32,16 +28,12 @@ import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.SearchFragment;
-import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -133,7 +125,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 0);
   }
 
   @Test
@@ -144,7 +136,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.userSearch_recyclerView, 0);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 0);
   }
 
   @Test
@@ -155,7 +147,7 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
   }
 
   @Test
@@ -166,8 +158,8 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 1, R.id.userAdapter_userName, user3.getUsername());
     assertNotDisplayed(R.id.userAdapter_userName, user4.getUsername());
     assertNotDisplayed(R.id.userAdapter_userName, user1.getUsername());
   }
@@ -180,20 +172,20 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton);
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.media_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
-    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_unfollowButton);
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_unfollowButton, R.string.searchUser_unfollow);
+    clickListItemChild(R.id.media_recyclerView, 0, R.id.userAdapter_unfollowButton);
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
   }
 
   @Test
@@ -204,13 +196,13 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
-    assertDisplayedAtPosition(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
-    clickListItemChild(R.id.userSearch_recyclerView, 0, R.id.userAdapter_followButton);
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_userName, user2.getUsername());
+    assertDisplayedAtPosition(R.id.media_recyclerView, 0, R.id.userAdapter_followButton, R.string.searchUser_follow);
+    clickListItemChild(R.id.media_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(WAIT_TIME);
 
-    clickListItem(R.id.userSearch_recyclerView, 0);
+    clickListItem(R.id.media_recyclerView, 0);
 
     sleep(WAIT_TIME);
 
@@ -224,13 +216,13 @@ public class SearchFragmentTest {
 
     sleep(15 * WAIT_TIME);
 
-    assertDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
 
-    assertRecyclerViewItemCount(R.id.bookTrending_recyclerView, 100);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 100);
   }
 
   @Test
@@ -243,11 +235,11 @@ public class SearchFragmentTest {
 
     sleep(15 * WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
 
     assertContains("Harry Potter and the Deathly Hallows");
 
@@ -265,11 +257,11 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
     pressImeActionButton();
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
 
     sleep(WAIT_TIME);
 
@@ -277,11 +269,11 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
   }
 
   @Test
@@ -292,11 +284,11 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
     pressImeActionButton();
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
 
     sleep(WAIT_TIME);
 
@@ -304,11 +296,11 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertDisplayed(R.id.movieTrending_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
   }
 
   @Test
