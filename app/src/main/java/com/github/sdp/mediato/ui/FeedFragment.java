@@ -63,7 +63,7 @@ public class FeedFragment extends Fragment {
         public String toString() {
             switch (this) {
                 case MY_REVIEWS:
-                    return "My";
+                    return "My Reviews";
                 case FEED:
                     return "Feed";
             }

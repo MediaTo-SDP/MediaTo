@@ -14,7 +14,7 @@
     android:icon="@drawable/ic_search"/>
   <item
       android:id="@+id/my_reviews"
-      android:title="My Reviews"
+      android:title="My"
       android:icon="@drawable/ic_my_reviews"/>
   <item
     android:id="@+id/profile"
