@@ -66,6 +66,8 @@ public class Review implements Serializable {
         return comment;
     }
 
+    public Map<String, String> getComments() { return comments;}
+
     public void setComment(String comment) {
         this.comment = comment;
     }

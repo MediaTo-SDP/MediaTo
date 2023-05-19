@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.data.CollectionsDatabase;
+import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class CollectionsTests {
     private final static int STANDARD_COLLECTION_TIMEOUT = 10;
+    private final static String COMMENTER_USERNAME = "commenter";
     private final User user1 = new User.UserBuilder("uniqueId1")
         .setUsername("user_test_1")
         .setEmail("email_test_1")
@@ -75,6 +77,7 @@ public class CollectionsTests {
     public static void cleanDatabase() {
         DataBaseTestUtil.cleanDatabase();
     }
+
 
     @Test
     //Tests that the collections are added, retrieved and removed properly
@@ -125,6 +128,28 @@ public class CollectionsTests {
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS);
         assertTrue(retrievedCollection.getReviews().containsKey(review1.getMedia().getTitle())
         && retrievedCollection.getReviews().containsKey(review2.getMedia().getTitle()));
+    }
+
+    @Test
+    public void commentsReviewProperly() throws InterruptedException, ExecutionException, TimeoutException {
+        //Add collection
+        CollectionsDatabase.addCollection(user1.getUsername(), collection2);
+        Thread.sleep(1000);
+
+        //Add review to the collection
+        CollectionsDatabase.addReviewToCollection(user1.getUsername(), collection2.getCollectionName(), review1);
+        Thread.sleep(1000);
+
+        //Comment review
+        ReviewInteractionDatabase.commentReview(COMMENTER_USERNAME, user1.getUsername(), collection2.getCollectionName(), review1.getMedia().getTitle(), "This is a comment");
+        Thread.sleep(1000);
+
+        //Retrieve review
+        Review retrievedReview = CollectionsDatabase.getCollection(user1.getUsername(), collection2.getCollectionName())
+                .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS).getReviews().get(review1.getMedia().getTitle());
+
+        assertTrue(retrievedReview.getComments().containsKey(COMMENTER_USERNAME));
+        assertEquals(retrievedReview.getComments().get(COMMENTER_USERNAME), "This is a comment");
     }
 
 }
