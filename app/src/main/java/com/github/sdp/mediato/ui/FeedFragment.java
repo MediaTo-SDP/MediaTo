@@ -21,10 +21,15 @@ import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
 
 public class FeedFragment extends Fragment {
+    public enum FeedType {
+        MY_REVIEWS,
+        FEED
+    }
     private String USERNAME;
     private FeedViewModel viewModel;
     private FragmentFeedBinding binding;
     private ReviewPostListAdapter adapter;
+    private FeedType feedType;
 
 
     @Override
@@ -38,9 +43,10 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         USERNAME = getArguments().getString("username");
+        feedType = (FeedType) getArguments().getSerializable("feedType");
 
         viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
-        viewModel.setUsername(USERNAME);
+        viewModel.setData(USERNAME, feedType);
 
         adapter = new ReviewPostListAdapter();
         adapter.setUsername(USERNAME);
