@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scrollView"
+    android:id="@+id/root_review"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:windowSoftInputMode="adjustResize|stateHidden">
 
-    <FrameLayout
+    <WebView
+        android:id="@+id/trailer_web_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/newItemLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/item_button_add"
@@ -43,11 +49,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <WebView
-                android:id="@+id/trailer_web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ReviewLayout"
@@ -192,6 +193,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+    </ScrollView>
 
-</ScrollView>
+</FrameLayout>

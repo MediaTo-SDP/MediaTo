@@ -146,14 +146,19 @@ public class NewItemFragment extends Fragment {
             SearchListResponse listResponse;
             try {
                 listResponse = search.execute();
+                if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
+                    getActivity()
+                            .runOnUiThread(() -> // we go back to ui thread (mandatory)
+                                    handleTrailerResponse(listResponse.getItems().get(0)));
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                getActivity().runOnUiThread(() -> {
+                    ImageView playButton = view.findViewById(R.id.item_play_button);
+                    playButton.setVisibility(View.GONE);
+                    webView.setVisibility(View.GONE);
+                });
             }
-            if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
-                getActivity()
-                        .runOnUiThread(() -> // we go back to ui thread (mandatory)
-                                handleTrailerResponse(listResponse.getItems().get(0)));
-            }
+
         });
         searchThread.start();
     }
