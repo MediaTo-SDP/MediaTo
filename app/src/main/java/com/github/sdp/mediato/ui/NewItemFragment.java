@@ -1,16 +1,11 @@
 package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +25,6 @@ import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -39,17 +33,14 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
-    // The maximum allowed length for review field
-    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
-
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
-
     public WebView webView;
     public EditText reviewText;
+    // The maximum allowed length for review field
+    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
