@@ -61,17 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         downloadProfilePicWithRetry(user.getUsername(), 0, holder.userProfileImageView);
 
         // Decide which button to display
-        if(userViewModel.getMainActivity().getMyProfileViewModel().getUsername().equals(user.getUsername())) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.GONE);
-        }
-        else if(userViewModel.getMainActivity().getMyProfileViewModel().getUser().getFollowing().contains(user.getUsername())) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.VISIBLE);
-        } else {
-            holder.unfollowButton.setVisibility(View.GONE);
-            holder.followButton.setVisibility(View.VISIBLE);
-        }
+        setVisibilityFollowUnfollowButtons(holder, user);
 
         holder.followButton.setOnClickListener(v -> {
                     followUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername(), user.getUsername());
@@ -86,6 +76,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                     reloadUser();
                 }
         );
+    }
+
+    private void setVisibilityFollowUnfollowButtons(@NonNull UserViewHolder holder, User user) {
+        if(userViewModel.getMainActivity().getMyProfileViewModel().getUsername().equals(user.getUsername())) {
+            holder.followButton.setVisibility(View.GONE);
+            holder.unfollowButton.setVisibility(View.GONE);
+        }
+        else if(userViewModel.getMainActivity().getMyProfileViewModel().getUser().getFollowing().contains(user.getUsername())) {
+            holder.followButton.setVisibility(View.GONE);
+            holder.unfollowButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.unfollowButton.setVisibility(View.GONE);
+            holder.followButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void reloadUser() {
