@@ -1,13 +1,20 @@
 package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -40,7 +47,10 @@ public class NewItemFragment extends Fragment {
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
 
+    private ScrollView scrollView;
     public WebView webView;
+    public EditText reviewText;
+    private TextWatcher textWatcher;
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
@@ -52,11 +62,54 @@ public class NewItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
-        EditText review = view.findViewById(R.id.item_review_edittext);
+        scrollView = view.findViewById(R.id.scrollView);
+        reviewText = view.findViewById(R.id.item_review_edittext);
+        InputFilter[] filters = new InputFilter[] { new InputFilter.LengthFilter(MAX_REVIEW_LENGTH) };
+        reviewText.setFilters(filters);
+
         fragmentSwitcher = (FragmentSwitcher) getActivity();
 
         Button addButton = view.findViewById(R.id.item_button_add);
-        addButton.setOnClickListener(v -> addItem(view));
+        addButton.setOnClickListener(v -> addItem(view, reviewText));
+
+        reviewText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            });
+                        }
+                    }, 200); // Adjust the delay time as needed
+                }
+            }
+        });
+
+        reviewText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                                }
+                            });
+                        }
+                    }, 200); // Adjust the delay time as needed
+                }
+                return false;
+            }
+        });
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -226,9 +279,8 @@ public class NewItemFragment extends Fragment {
      *
      * @param view: the activity view
      */
-    public void addItem(View view) {
+    public void addItem(View view, EditText reviewText) {
 
-        EditText reviewText = view.findViewById(R.id.item_review_edittext);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
         // Create the review to forward to the profile page
