@@ -78,6 +78,7 @@ public class FeedFragmentTest {
             // Pass the username to the fragment
             Bundle bundle = new Bundle();
             bundle.putString("username", user1.getUsername());
+            bundle.putSerializable("feedType", FeedFragment.FeedType.FEED);
             feedFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.main_container, feedFragment)
                     .commitAllowingStateLoss();
