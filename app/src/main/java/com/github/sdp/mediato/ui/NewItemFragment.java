@@ -48,7 +48,6 @@ public class NewItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
@@ -61,6 +60,23 @@ public class NewItemFragment extends Fragment {
         Button addButton = view.findViewById(R.id.item_button_add);
         addButton.setOnClickListener(v -> addItem(view, reviewText));
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            media = (Media) bundle.get("media");
+        }
+
+        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
+        setObserverOnKeyboard(view);
+        loadDescriptionIfMissing();
+        setProgressBarIndicator();
+        searchTrailer();
+
+        webView = view.findViewById(R.id.trailer_web_view);
+
+        return view;
+    }
+
+    private void setObserverOnKeyboard(View view) {
         // Get references to the views
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
@@ -78,23 +94,6 @@ public class NewItemFragment extends Fragment {
                 }
             }
         });
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            media = (Media) bundle.get("media");
-        }
-
-        setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
-
-        loadDescriptionIfMissing();
-
-        setProgressBarIndicator();
-
-        searchTrailer();
-
-        webView = view.findViewById(R.id.trailer_web_view);
-
-        return view;
     }
 
     private void loadDescriptionIfMissing() {
