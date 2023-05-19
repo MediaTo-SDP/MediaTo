@@ -76,18 +76,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.followButton.setOnClickListener(v -> {
                     followUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername(), user.getUsername());
                     userViewModel.reloadUser();
-                    UserDatabase.getUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())
-                        .thenAccept(u -> userViewModel.getMainActivity().getMyProfileViewModel().setUser(u));
-            }
+                    reloadUser();
+                }
         );
 
         holder.unfollowButton.setOnClickListener(v -> {
                     unfollowUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername(), user.getUsername());
                     userViewModel.reloadUser();
-                    UserDatabase.getUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())
-                            .thenAccept(u -> userViewModel.getMainActivity().getMyProfileViewModel().setUser(u));
+                    reloadUser();
                 }
         );
+    }
+
+    private void reloadUser() {
+        UserDatabase.getUser(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())
+                .thenAccept(u -> userViewModel.getMainActivity().getMyProfileViewModel().setUser(u));
     }
 
     @Override
