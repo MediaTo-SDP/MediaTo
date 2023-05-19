@@ -66,42 +66,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userSearch_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:itemSpacing="4dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bookSearch_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:itemSpacing="4dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bookTrending_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:itemSpacing="4dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/movieSearch_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            app:itemSpacing="4dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/movieTrending_recyclerView"
+            android:id="@+id/media_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
