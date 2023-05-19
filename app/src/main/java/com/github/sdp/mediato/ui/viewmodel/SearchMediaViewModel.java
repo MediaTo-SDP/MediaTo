@@ -113,10 +113,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
         api.searchItems(title, page).handle((medias, throwable) -> {
             try{
                 if (throwable == null){
-                    List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-                    updatedMedia.addAll(medias);
-                    liveData.postValue(updatedMedia);
-                    mediaDao.insertAll(medias);
+                    addToLiveData(medias);
                 } else{
                     liveData.postValue(mediaDao.searchInTitle(type, title));
                 }
@@ -148,13 +145,10 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     private void loadNextTrendingPage(int page, MediaType type) {
         API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
-        api.trending(page).handle((x, throwable) -> {
+        api.trending(page).handle((medias, throwable) -> {
             try{
                 if (throwable == null){
-                    List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-                    updatedMedia.addAll(x);
-                    liveData.postValue(updatedMedia);
-                    mediaDao.insertAll(x);
+                    addToLiveData(medias);
                 } else {
                     liveData.postValue(mediaDao.getAllMediaFromType(type));
                 }
@@ -196,5 +190,12 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private void printException(Exception e) {
         System.out.println(e.getMessage());
         System.out.println(Arrays.toString(e.getStackTrace()));
+    }
+
+    private void addToLiveData(List<Media> medias){
+        List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+        updatedMedia.addAll(medias);
+        liveData.postValue(updatedMedia);
+        mediaDao.insertAll(medias);
     }
 }

@@ -208,17 +208,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
     private void setMediaComponents() {
         if (this.searchBar.getQuery().length() > 0) {
-            if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-                searchMediaViewModel.loadFirstMovieSearchPage(this.searchBar.getQuery().toString());
-            } else {
-                searchMediaViewModel.loadFirstBookSearchPage(this.searchBar.getQuery().toString());
-            }
+            searchMedias();
         } else {
-            if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
-                searchMediaViewModel.loadFirstMovieTrendingPage();
-            } else {
-                searchMediaViewModel.loadFirstBookTrendingPage();
-            }
+            getTrendingMedias();
+        }
+    }
+
+    private void getTrendingMedias(){
+        if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
+            searchMediaViewModel.loadFirstMovieTrendingPage();
+        } else {
+            searchMediaViewModel.loadFirstBookTrendingPage();
+        }
+    }
+    private void searchMedias(){
+        if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
+            searchMediaViewModel.loadFirstMovieSearchPage(this.searchBar.getQuery().toString());
+        } else {
+            searchMediaViewModel.loadFirstBookSearchPage(this.searchBar.getQuery().toString());
         }
     }
 
