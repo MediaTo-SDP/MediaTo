@@ -57,10 +57,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
     holder.mediaRating.setText(ratingString);
 
-    // TODO set the movie image retrieved from the API
     Glide.with(holder.itemView.getContext())
         .load(media.getIconUrl())
-        .placeholder(R.drawable.movie) // Optional placeholder image while loading
+        .placeholder(R.drawable.movie)
         .into(holder.mediaImage);
   }
 

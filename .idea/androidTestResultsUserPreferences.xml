@@ -59,6 +59,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1301915309">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1289276646">
           <value>
             <AndroidTestResultsTableState>
@@ -135,6 +148,19 @@
                   <entry key="RZCW20AFZ8R" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-A536B" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-638428114">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_33" value="120" />
+                  <entry key="Tests" value="360" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

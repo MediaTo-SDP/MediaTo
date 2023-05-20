@@ -21,6 +21,7 @@ import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
+import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
@@ -179,7 +180,8 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         holder.binding.textTitle.setText(getItem(position).getTitle());
         holder.binding.textComment.setText(getItem(position).getComment());
         if (getItem(position).getGrade() > 0) {
-            holder.binding.rating.setText(String.valueOf(getItem(position).getGrade()));
+            String rating = formatRating(getItem(position).getGrade());
+            holder.binding.rating.setText(rating);
         } else {
             holder.binding.textRating.setVisibility(View.GONE);
         }
@@ -246,6 +248,19 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    private static String formatRating(int rating) {
+        Preconditions.checkGrade(rating);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= Review.MAX_GRADE; i++) {
+            if (i <= rating) {
+                sb.append("●");
+            } else {
+                sb.append("○");
+            }
+        }
+        return sb.toString();
     }
 }
 
