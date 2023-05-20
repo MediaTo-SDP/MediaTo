@@ -40,6 +40,7 @@ public class ReviewPost extends Post{
     public void unDislike(String username) {this.review.unDislike(username);}
     public void like(String username) {this.review.like(username);}
     public void dislike(String username) {this.review.dislike(username);}
+    public void addComment(String username, String comment) {this.review.addComment(username, comment);}
 
     @Override
     public boolean equals(@Nullable Object obj) {
