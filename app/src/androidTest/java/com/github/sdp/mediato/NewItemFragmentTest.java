@@ -3,6 +3,7 @@ package com.github.sdp.mediato;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
@@ -35,6 +36,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
+import com.adevinta.android.barista.interaction.BaristaScrollInteractions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
@@ -154,6 +156,8 @@ public class NewItemFragmentTest {
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
         editText.perform(closeSoftKeyboard());
+
+        BaristaScrollInteractions.scrollTo(R.id.item_button_add);
 
         addItemButton.perform(click());
 
