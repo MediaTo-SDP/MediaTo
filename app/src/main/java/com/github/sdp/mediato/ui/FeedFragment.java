@@ -25,6 +25,7 @@ public class FeedFragment extends Fragment {
     private FeedViewModel viewModel;
     private FragmentFeedBinding binding;
     private ReviewPostListAdapter adapter;
+    private FeedType feedType;
 
 
     @Override
@@ -38,9 +39,12 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         USERNAME = getArguments().getString("username");
+        feedType = (FeedType) getArguments().getSerializable("feedType");
+
+        binding.textFeed.setText(feedType.toString());
 
         viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
-        viewModel.setUsername(USERNAME);
+        viewModel.setData(USERNAME, feedType);
 
         adapter = new ReviewPostListAdapter();
         adapter.setUsername(USERNAME);
@@ -51,4 +55,20 @@ public class FeedFragment extends Fragment {
         binding.feedPosts.setHasFixedSize(false);
         viewModel.getPosts().observe(getViewLifecycleOwner(), adapter::submitList);
     }
+
+    public enum FeedType {
+        MY_REVIEWS, FEED;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case MY_REVIEWS:
+                    return "My Reviews";
+                case FEED:
+                    return "Feed";
+            }
+            return "";
+        }
+    }
+
 }

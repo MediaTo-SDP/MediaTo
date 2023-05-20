@@ -15,7 +15,6 @@ import androidx.room.Room;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.ExploreFragment;
-import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.ui.FeedFragment;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
@@ -23,7 +22,6 @@ import com.github.sdp.mediato.ui.SearchFragment;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation
@@ -37,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
   SearchFragment searchFragment;
   ExploreFragment exploreFragment;
   FeedFragment feedFragment;
+  FeedFragment myReviewsFragment;
   private MyProfileViewModel myProfileViewModel;
   private ReadOnlyProfileViewModel readOnlyProfileViewModel;
   AppCache globalCache;
@@ -78,8 +77,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
       replaceFragment(myProfileFragment);
     } else if (itemId == R.id.explore) {
       replaceFragment(exploreFragment);
+    } else if (itemId == R.id.my_reviews) {
+      replaceFragment(myReviewsFragment);
     }
-
     return true;
   }
 
@@ -102,18 +102,29 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     searchFragment = new SearchFragment();
     exploreFragment = new ExploreFragment();
     feedFragment = new FeedFragment();
+    myReviewsFragment = new FeedFragment();
 
     Bundle args = new Bundle();
+
+    Bundle argsFeed = new Bundle();
+    Bundle argsMyReviews = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
     args.putString("general_search", "true");
     args.putString("collection", "Recently watched");
 
+    argsFeed.putString("username", username);
+    argsMyReviews.putString("username", username);
+
+    argsFeed.putSerializable("feedType", FeedFragment.FeedType.FEED);
+    argsMyReviews.putSerializable("feedType", FeedFragment.FeedType.MY_REVIEWS);
+
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
-    feedFragment.setArguments(args);
+    feedFragment.setArguments(argsFeed);
+    myReviewsFragment.setArguments(argsMyReviews);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);

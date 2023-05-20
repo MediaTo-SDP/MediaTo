@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @RunWith(AndroidJUnit4.class)
-public class FeedFragmentTest {
+public class MyReviewsFragmentTest {
     private final static int STANDARD_USER_TIMEOUT = 10;
     private User user1;
     private User user2;
@@ -78,7 +78,7 @@ public class FeedFragmentTest {
             // Pass the username to the fragment
             Bundle bundle = new Bundle();
             bundle.putString("username", user1.getUsername());
-            bundle.putSerializable("feedType", FeedFragment.FeedType.FEED);
+            bundle.putSerializable("feedType", FeedFragment.FeedType.MY_REVIEWS);
             feedFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.main_container, feedFragment)
                     .commitAllowingStateLoss();
@@ -94,7 +94,7 @@ public class FeedFragmentTest {
     @Test
     public void testFeedFragmentTextView() {
         feedText.check(matches(isDisplayed()));
-        feedText.check(matches(withText("Feed")));
+        feedText.check(matches(withText("My Reviews")));
     }
 
     // Test that all the reviews from the followed users are displayed
@@ -113,19 +113,19 @@ public class FeedFragmentTest {
     private void createUsers() throws ExecutionException, InterruptedException, TimeoutException {
         //Create new sample users
         user1 = new User.UserBuilder("uniqueId1")
-                .setUsername("user_feed_test_1")
+                .setUsername("user_myreviews_test_1")
                 .setEmail("email_test_1")
                 .setRegisterDate("09/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user2 = new User.UserBuilder("uniqueId2")
-                .setUsername("user_feed_test_2")
+                .setUsername("user_myreviews_test_2")
                 .setEmail("email_test_2")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
                 .build();
         user3 = new User.UserBuilder("uniqueId3")
-                .setUsername("user_feed_test_3")
+                .setUsername("user_myreviews_test_3")
                 .setEmail("email_test_3")
                 .setRegisterDate("19/03/2023")
                 .setLocation(new Location(3.14, 3.14))
@@ -162,8 +162,8 @@ public class FeedFragmentTest {
 
     //Helper function that adds the reviews to the database
     private void addReviews() throws ExecutionException, InterruptedException, TimeoutException {
-        CollectionsDatabase.addCollection(user2.getUsername(), collection1);
-        CollectionsDatabase.addCollection(user2.getUsername(), collection2);
+        CollectionsDatabase.addCollection(user1.getUsername(), collection1);
+        CollectionsDatabase.addCollection(user1.getUsername(), collection2);
         CollectionsDatabase.addCollection(user3.getUsername(), collection3);
         Thread.sleep(1000);
     }
