@@ -16,6 +16,11 @@ public class Comment {
         this.refUsername = refUsername;
     }
 
+    public Comment(String text, String refUsername) {
+        this.text = text;
+        this.refUsername = refUsername;
+    }
+
     public String getCollectionName() {
         return collectionName;
     }

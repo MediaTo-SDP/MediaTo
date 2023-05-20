@@ -12,5 +12,6 @@
     android:background="@drawable/rounded_border"
     android:hint="Enter collection name"
     android:inputType="text"
+    android:textCursorDrawable="@drawable/cursor"
     android:padding="10dp" />
 </LinearLayout>

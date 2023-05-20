@@ -1,41 +1,28 @@
 package com.github.sdp.mediato.utility.adapters;
 
-import android.media.Image;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
-
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
-import com.github.sdp.mediato.databinding.LayoutMovieItemBinding;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
-import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.Comment;
 import com.github.sdp.mediato.model.Review;
-import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.post.ReviewPost;
-import com.github.sdp.mediato.ui.ExploreFragment;
 import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
 import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.google.common.base.Converter;
-import com.google.protobuf.Internal;
-
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -56,6 +43,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     private String username;
     private ExploreViewModel exploreViewModel;
     private FeedViewModel feedViewModel;
+    private CommentAdapter commentAdapter;
 
     /**
      * Used by the adapter to compare review posts
@@ -74,6 +62,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
     public ReviewPostListAdapter() {
         super(REVIEWPOST_COMPARATOR);
+        commentAdapter = new CommentAdapter();
     }
 
     /**
@@ -87,7 +76,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     public ReviewPostListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutReviewPostItemBinding binding = LayoutReviewPostItemBinding.inflate(inflater, parent, false);
-        return new ReviewPostListAdapter.MyViewHolder(binding);
+        return new ReviewPostListAdapter.MyViewHolder(binding, commentAdapter);
     }
 
     /**
@@ -97,13 +86,15 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
      */
     @Override
     public void onBindViewHolder(@NonNull ReviewPostListAdapter.MyViewHolder holder, int position) {
+
         MaterialButton followButton = holder.binding.exploreFollowButton;
         // Display the content of the review post
         displayReviewPostContent(holder, position);
         // Set the like and dislike buttons
         setLikeListener(holder, position);
         setDislikeListener(holder, position);
-        holder.binding.commentsCard.setOnClickListener(v -> handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
+
+        setUpCommentSection(holder, position);
 
         // Set fragment specific details
         switch (callerFragment) {
@@ -206,6 +197,28 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         displayProfilePic(holder, position);
     }
 
+    private void setUpCommentSection(ReviewPostListAdapter.MyViewHolder holder, int position){
+        holder.binding.commentsCard.setOnClickListener(v -> handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
+        holder.binding.commentList.setAdapter(commentAdapter);
+        holder.binding.commentList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+
+        holder.binding.commentTextField.setOnEditorActionListener((textField, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String commentText = textField.getText().toString();
+                Comment comment = new Comment(commentText, username);
+
+                CommentAdapter currentCommentAdapter = (CommentAdapter) holder.binding.commentList.getAdapter();
+                currentCommentAdapter.addComment(comment);
+
+                // clear the comment text field for the next entry
+                holder.binding.commentTextField.setText("");
+
+                return true;
+            }
+            return false;
+        });
+    }
+
     private void setLikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
         ReviewPost reviewPost = getItem(position);
         holder.binding.likeButton.setOnClickListener(
@@ -253,10 +266,12 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public final LayoutReviewPostItemBinding binding;
+        public final CommentAdapter commentAdapter;
 
-        public MyViewHolder(@NonNull LayoutReviewPostItemBinding binding) {
+        public MyViewHolder(@NonNull LayoutReviewPostItemBinding binding, CommentAdapter commentAdapter) {
             super(binding.getRoot());
             this.binding = binding;
+            this.commentAdapter = commentAdapter;
         }
     }
 
