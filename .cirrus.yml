@@ -26,6 +26,7 @@ check_android_task:
     -no-snapshot
     -no-window
     -camera-back none
+    -skin 1080x1920
   imports_secrets_script: |
     touch ./secret.local
     echo "$SECRETCONTENT" | base64 -d > ./secret.local
