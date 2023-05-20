@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.model.Comment;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
@@ -141,7 +142,8 @@ public class CollectionsTests {
         Thread.sleep(1000);
 
         //Comment review
-        ReviewInteractionDatabase.commentReview(COMMENTER_USERNAME, user1.getUsername(), collection2.getCollectionName(), review1.getMedia().getTitle(), "This is a comment");
+        Comment comment = new Comment(collection2.getCollectionName(), review1.getMedia().getTitle(), "This is a comment", COMMENTER_USERNAME);
+        ReviewInteractionDatabase.commentReview(user1.getUsername(), comment);
         Thread.sleep(1000);
 
         //Retrieve review

@@ -5,6 +5,7 @@ import static com.github.sdp.mediato.data.DatabaseUtils.getReactionReference;
 import static com.github.sdp.mediato.data.DatabaseUtils.getReviewReference;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.Comment;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DatabaseReference;
@@ -21,18 +22,15 @@ public class ReviewInteractionDatabase {
 
     /**
      * Adds a comment to a review.
-     * @param refUsername the username of the user who is commenting
      * @param tarUsername the username of the user who made the review
-     * @param collectionName the name of the collection
-     * @param review the review
      * @param comment the comment
      */
-    public static void commentReview(String refUsername, String tarUsername, String collectionName, String review, String comment) {
-        Preconditions.checkUsername(refUsername);
+    public static void commentReview(String tarUsername, Comment comment) {
+        Preconditions.checkUsername(comment.getRefUsername());
         Preconditions.checkUsername(tarUsername);
-        getReviewReference(tarUsername, collectionName, review).child(COMMENTS_PATH)
-                .child(refUsername)
-                .setValue(comment)
+        getReviewReference(tarUsername, comment.getCollectionName(), comment.getReview()).child(COMMENTS_PATH)
+                .child(comment.getRefUsername())
+                .setValue(comment.getText())
                 .addOnCompleteListener(task -> System.out.println("Commented review"));
     }
 

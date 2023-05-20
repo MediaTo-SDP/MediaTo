@@ -2,7 +2,9 @@ package com.github.sdp.mediato.model;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.CollectionType;
@@ -61,5 +63,18 @@ public class CollectionTests {
                 IllegalArgumentException.class,
                 () -> new Collection(CollectionType.CUSTOM, reviews)
         );
+    }
+
+    @Test
+    //Tests that comment objects are created properly and added to reviews
+    public void createsAndAddsCommentsProperly(){
+        Collection collection = new Collection("MyCustom", reviews);
+        Review review = reviews.get(SAMPLE_TITLE);
+        //Comment the review
+        Comment comment = new Comment(collection.getCollectionName(), review.getMedia().getTitle(), "This is a comment", SAMPLE_USERNAME);
+        review.addComment(SAMPLE_USERNAME, comment.getText());
+        //Check that the comment was added
+        assertTrue(review.getComments().containsKey(SAMPLE_USERNAME));
+        assertEquals(review.getComments().get(SAMPLE_USERNAME), "This is a comment");
     }
 }
