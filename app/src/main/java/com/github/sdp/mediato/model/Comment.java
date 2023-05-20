@@ -20,31 +20,15 @@ public class Comment {
         return collectionName;
     }
 
-    public void setCollectionName(String collectionName) {
-        this.collectionName = collectionName;
-    }
-
     public String getReview() {
         return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getRefUsername() {
         return refUsername;
-    }
-
-    public void setRefUsername(String refUsername) {
-        this.refUsername = refUsername;
     }
 }
