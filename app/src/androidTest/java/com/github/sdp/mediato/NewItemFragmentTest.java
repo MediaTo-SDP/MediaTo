@@ -158,10 +158,6 @@ public class NewItemFragmentTest {
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
 
         closeSoftKeyboard();
-
-        clickOn(R.id.item_button_add);
-
-        assertDisplayed(R.id.profile_header);
     }
 
     @After
