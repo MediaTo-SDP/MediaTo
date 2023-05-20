@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
 import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
@@ -155,15 +156,12 @@ public class NewItemFragmentTest {
         String comment = review.getComment();
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
-        editText.perform(closeSoftKeyboard());
 
-        BaristaScrollInteractions.scrollTo(R.id.item_button_add);
+        closeSoftKeyboard();
 
-        addItemButton.perform(click());
+        clickOn(R.id.item_button_add);
 
-        onView(withId(R.id.main_container))
-                .check(matches(isDisplayed()))
-                .check(matches(hasDescendant(withId(R.id.profile_header))));
+        assertDisplayed(R.id.profile_header);
     }
 
     @After
