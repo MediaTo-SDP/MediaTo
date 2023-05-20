@@ -22,19 +22,16 @@
             android:enabled="true"
             android:exported="false"/>
         <activity
-            android:name=".NewProfileActivity"
+            android:name=".ui.NewProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".GreetingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="false" >
 
         </activity>
 
         <activity
-            android:name=".AuthenticationActivity"
+            android:name=".ui.AuthenticationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

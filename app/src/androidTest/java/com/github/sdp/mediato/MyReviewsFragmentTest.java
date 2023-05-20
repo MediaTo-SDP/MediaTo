@@ -2,13 +2,11 @@ package com.github.sdp.mediato;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
-import static com.adevinta.android.barista.internal.matcher.HelperMatchers.atPosition;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -30,6 +28,7 @@ import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.FeedFragment;
 
+import com.github.sdp.mediato.ui.MainActivity;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;

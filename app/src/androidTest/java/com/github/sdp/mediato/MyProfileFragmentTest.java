@@ -38,6 +38,8 @@ import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.model.media.Movie;
+import com.github.sdp.mediato.ui.AuthenticationActivity;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.MyProfileFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;

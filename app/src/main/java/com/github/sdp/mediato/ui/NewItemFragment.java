@@ -16,13 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.github.sdp.mediato.FragmentSwitcher;
+import com.github.sdp.mediato.utility.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -31,7 +30,6 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
     // The maximum allowed length for review field
