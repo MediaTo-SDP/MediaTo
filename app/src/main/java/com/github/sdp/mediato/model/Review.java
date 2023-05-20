@@ -20,6 +20,7 @@ public class Review implements Serializable {
     private String comment;
     private Map<String, Boolean> likes = new HashMap<>();
     private Map<String, Boolean> dislikes = new HashMap<>();
+    private Map<String, String> comments = new HashMap<>();
 
     private Review() {
     }
@@ -65,6 +66,8 @@ public class Review implements Serializable {
         return comment;
     }
 
+    public Map<String, String> getComments() { return comments;}
+
     public void setComment(String comment) {
         this.comment = comment;
     }
@@ -100,6 +103,9 @@ public class Review implements Serializable {
     public void dislike(String username) {
         dislikes.put(username, true);
         likes.put(username, false);
+    }
+    public void addComment(String username, String comment) {
+        comments.put(username, comment);
     }
 
     @Override
