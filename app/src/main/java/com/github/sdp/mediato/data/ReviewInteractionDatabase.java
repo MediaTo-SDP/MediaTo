@@ -1,8 +1,11 @@
 package com.github.sdp.mediato.data;
 
+import static com.github.sdp.mediato.data.DatabaseUtils.COMMENTS_PATH;
 import static com.github.sdp.mediato.data.DatabaseUtils.getReactionReference;
+import static com.github.sdp.mediato.data.DatabaseUtils.getReviewReference;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.Comment;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DatabaseReference;
@@ -16,6 +19,20 @@ import java.util.concurrent.CompletableFuture;
 public class ReviewInteractionDatabase {
 
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    /**
+     * Adds a comment to a review.
+     * @param tarUsername the username of the user who made the review
+     * @param comment the comment
+     */
+    public static void commentReview(String tarUsername, Comment comment) {
+        Preconditions.checkUsername(comment.getRefUsername());
+        Preconditions.checkUsername(tarUsername);
+        getReviewReference(tarUsername, comment.getCollectionName(), comment.getReview()).child(COMMENTS_PATH)
+                .child(comment.getRefUsername())
+                .setValue(comment.getText())
+                .addOnCompleteListener(task -> System.out.println("Commented review"));
+    }
 
     /**
      * Determines if the user has liked a given review.
