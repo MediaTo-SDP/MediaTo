@@ -53,7 +53,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     int grade = review.getGrade();
     String ratingString = "";
     if (grade > 0) {
-      ratingString = getStarString(grade);
+      ratingString = Review.formatRating(grade);
     }
     holder.mediaRating.setText(ratingString);
 
@@ -81,19 +81,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
       mediaTitle = itemView.findViewById(R.id.movie_title);
       mediaRating = itemView.findViewById(R.id.movie_rating);
     }
-  }
-
-  private static String getStarString(int numDarkStars) {
-    Preconditions.checkGrade(numDarkStars);
-    StringBuilder sb = new StringBuilder();
-    for (int i = 1; i <= Review.MAX_GRADE; i++) {
-      if (i <= numDarkStars) {
-        sb.append("●");
-      } else {
-        sb.append("○");
-      }
-    }
-    return sb.toString();
   }
 
 }

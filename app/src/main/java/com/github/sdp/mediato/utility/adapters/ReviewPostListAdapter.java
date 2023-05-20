@@ -180,7 +180,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         holder.binding.textTitle.setText(getItem(position).getTitle());
         holder.binding.textComment.setText(getItem(position).getComment());
         if (getItem(position).getGrade() > 0) {
-            String rating = formatRating(getItem(position).getGrade());
+            String rating = Review.formatRating(getItem(position).getGrade());
             holder.binding.rating.setText(rating);
         } else {
             holder.binding.textRating.setVisibility(View.GONE);
@@ -248,19 +248,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
             super(binding.getRoot());
             this.binding = binding;
         }
-    }
-
-    private static String formatRating(int rating) {
-        Preconditions.checkGrade(rating);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= Review.MAX_GRADE; i++) {
-            if (i <= rating) {
-                sb.append("●");
-            } else {
-                sb.append("○");
-            }
-        }
-        return sb.toString();
     }
 }
 
