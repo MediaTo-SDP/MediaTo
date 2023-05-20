@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.AsyncDifferConfig;
@@ -36,10 +38,16 @@ import com.google.protobuf.Internal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/*
+/**
 * An adapter (that can be used in recycler views) for the review posts
 */
 public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostListAdapter.MyViewHolder> {
+
+    /** Orientation up along the x axis */
+    public static final float ORIENTATION_UP = 0f;
+
+    /** Orientation down along the x axis */
+    public static final float ORIENTATION_DOWN = 180f;
     public enum CallerFragment {
         EXPLORE,
         FEED
@@ -95,6 +103,8 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         // Set the like and dislike buttons
         setLikeListener(holder, position);
         setDislikeListener(holder, position);
+        holder.binding.commentsCard.setOnClickListener(v -> handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
+
         // Set fragment specific details
         switch (callerFragment) {
             case EXPLORE:
@@ -248,6 +258,23 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    private static void handleExpandArrow(ImageView arrow, ConstraintLayout commentSection) {
+        float newRotation;
+        int visibility;
+        // If the arrow is pointing up, then rotate down and make visible the text
+        if (arrow.getRotation() == ORIENTATION_UP) {
+            newRotation = ORIENTATION_DOWN;
+            visibility = View.VISIBLE;
+        } else { // Otherwise rotate up and hide the text
+            newRotation = ORIENTATION_UP;
+            visibility = View.GONE;
+        }
+
+        // Use an animation to rotate smoothly
+        arrow.animate().rotation(newRotation).setDuration(300).start();
+        commentSection.setVisibility(visibility);
     }
 }
 
