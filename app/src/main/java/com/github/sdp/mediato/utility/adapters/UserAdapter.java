@@ -6,6 +6,7 @@ import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,9 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.AdapterUserItemBinding;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +68,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 if (user.getUsername().equals(connectedUser.getUsername())){
                     fragmentSwitcher.switchCurrentFragmentWithChildFragment(((MainActivity) fragmentSwitcher).getMyProfileFragment());
                 } else {
-                    ((MainActivity) fragmentSwitcher).getReadOnlyProfileViewModel().setUsername(user.getUsername());
-                    fragmentSwitcher.switchCurrentFragmentWithChildFragment(((MainActivity) fragmentSwitcher).getReadOnlyProfileFragment());
+                    Bundle args = new Bundle();
+                    args.putString("username", user.getUsername());
+                    ReadOnlyProfileFragment readOnlyProfileFragment = new ReadOnlyProfileFragment();
+                    readOnlyProfileFragment.setArguments(args);
+                    fragmentSwitcher.switchCurrentFragmentWithChildFragment(readOnlyProfileFragment);
                 }
             }
         });
