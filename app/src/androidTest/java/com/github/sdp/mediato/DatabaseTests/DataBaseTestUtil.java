@@ -7,6 +7,7 @@ import com.github.sdp.mediato.data.UserDatabase;
 
 public class DataBaseTestUtil {
 
+  private static boolean isEmulatorUsed = false;
 
   /**
    * Util function to make the database use the emulator
@@ -16,16 +17,22 @@ public class DataBaseTestUtil {
     CollectionsDatabase.database.useEmulator("10.0.2.2", 9000);
     LocationDatabase.database.useEmulator("10.0.2.2", 9000);
     ReviewInteractionDatabase.database.useEmulator("10.0.2.2", 9000);
+    isEmulatorUsed = true;
   }
 
   /**
    * Clean the databases
    */
   public static void cleanDatabase() {
-    UserDatabase.database.getReference().setValue(null);
-    CollectionsDatabase.database.getReference().setValue(null);
-    LocationDatabase.database.getReference().setValue(null);
-    ReviewInteractionDatabase.database.getReference().setValue(null);
+    if (isEmulatorUsed) {
+      UserDatabase.database.getReference().setValue(null);
+      CollectionsDatabase.database.getReference().setValue(null);
+      LocationDatabase.database.getReference().setValue(null);
+      ReviewInteractionDatabase.database.getReference().setValue(null);
+      isEmulatorUsed = false;
+    } else {
+      System.out.println("Not using emulator");
+    }
   }
 
 }
