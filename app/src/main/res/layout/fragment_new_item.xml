@@ -172,8 +172,14 @@
                     android:id="@+id/item_rating_slider_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/item_rating_slider"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintHorizontal_bias="0.143"
+                    app:layout_constraintStart_toEndOf="@+id/item_rating_text"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.39" />
 
                 <TextView
                     android:id="@+id/item_rating_text"
