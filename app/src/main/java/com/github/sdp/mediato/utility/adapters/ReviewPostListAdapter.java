@@ -3,6 +3,7 @@ package com.github.sdp.mediato.utility.adapters;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,15 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.ReviewInteractionDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.LayoutReviewPostItemBinding;
+import com.github.sdp.mediato.formats.Parser;
 import com.github.sdp.mediato.model.Comment;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.post.ReviewPost;
 import com.github.sdp.mediato.ui.viewmodel.ExploreViewModel;
 import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -101,6 +105,13 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         setDislikeListener(holder, position);
 
         setUpCommentSection(holder, position);
+
+        ReviewPost reviewPost = getItem(position);
+
+        for(Map.Entry<String, String> entry : reviewPost.getComments().entrySet()) {
+            Comment comment = new Comment(reviewPost.getCollectionName(), reviewPost.getTitle(), entry.getValue(), Parser.parseUsername(entry.getKey()));
+            holder.commentAdapter.addComment(comment);
+        }
 
         // Set fragment specific details
         switch (callerFragment) {
@@ -259,11 +270,14 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
         // Handle entered comment text
         holder.binding.commentTextField.setOnEditorActionListener((textField, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT ||
+                    actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_SEND) {
+                System.out.println("Comment entered");
                 String commentText = textField.getText().toString();
                 handleComment(commentText, holder, position);
                 return true;
             }
+            System.out.println("Comment not entered");
             return false;
         });
     }
@@ -274,10 +288,10 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         }else{
             // Add the comment to the adapter
             ReviewPost reviewPost = getItem(position);
-            Comment comment = new Comment(reviewPost.getCollectionName(), String.valueOf(reviewPost.getId()), commentText, username);
+            Comment comment = new Comment(reviewPost.getCollectionName(), reviewPost.getTitle(), commentText, username);
             holder.commentAdapter.addComment(comment);
 
-            // TODO: Add comment to the database
+            ReviewInteractionDatabase.commentReview(reviewPost.getUsername(), comment);
 
             // Clear the comment text field for the next entry
             holder.binding.commentTextField.setText("");
