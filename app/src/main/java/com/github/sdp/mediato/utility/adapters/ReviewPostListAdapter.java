@@ -106,13 +106,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
         setUpCommentSection(holder, position);
 
-        ReviewPost reviewPost = getItem(position);
-
-        for(Map.Entry<String, String> entry : reviewPost.getComments().entrySet()) {
-            Comment comment = new Comment(reviewPost.getCollectionName(), reviewPost.getTitle(), entry.getValue(), Parser.parseUsername(entry.getKey()));
-            holder.commentAdapter.addComment(comment);
-        }
-
         // Set fragment specific details
         switch (callerFragment) {
             case EXPLORE:
@@ -260,6 +253,13 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     }
 
     private void setUpCommentSection(ReviewPostListAdapter.MyViewHolder holder, int position){
+        ReviewPost reviewPost = getItem(position);
+
+        for(Map.Entry<String, String> entry : reviewPost.getComments().entrySet()) {
+            Comment comment = new Comment(reviewPost.getCollectionName(), reviewPost.getTitle(), entry.getValue(), Parser.parseUsername(entry.getKey()));
+            holder.commentAdapter.addComment(comment);
+        }
+
         // Handle expanding the comment section
         holder.binding.commentsCard.setOnClickListener(v ->
             handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
@@ -272,12 +272,10 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         holder.binding.commentTextField.setOnEditorActionListener((textField, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT ||
                     actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_SEND) {
-                System.out.println("Comment entered");
                 String commentText = textField.getText().toString();
                 handleComment(commentText, holder, position);
                 return true;
             }
-            System.out.println("Comment not entered");
             return false;
         });
     }
