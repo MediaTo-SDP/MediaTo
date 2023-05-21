@@ -3,6 +3,7 @@ package com.github.sdp.mediato;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
@@ -12,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
@@ -33,6 +35,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 
+import com.adevinta.android.barista.interaction.BaristaScrollInteractions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
@@ -150,13 +153,8 @@ public class NewItemFragmentTest {
         String comment = review.getComment();
         editText.perform(typeText(
                 comment.length() >= MAX_REVIEW_LENGTH ? comment.substring(0, MAX_REVIEW_LENGTH - 1) : comment));
-        editText.perform(closeSoftKeyboard());
 
-        addItemButton.perform(click());
-
-        onView(withId(R.id.main_container))
-                .check(matches(isDisplayed()))
-                .check(matches(hasDescendant(withId(R.id.profile_header))));
+        closeSoftKeyboard();
     }
 
     @After

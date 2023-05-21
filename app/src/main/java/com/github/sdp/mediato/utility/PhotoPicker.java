@@ -30,9 +30,17 @@ public class PhotoPicker {
     private final ImageView imageView;
     private Uri profileImageUri;
 
-    public PhotoPicker(@NonNull Fragment fragment, @NonNull ImageView imageView) {
+
+    public interface OnImagePickedListener {
+        void onImagePicked(Uri imageUri);
+    }
+
+    private final OnImagePickedListener listener;
+
+    public PhotoPicker(@NonNull Fragment fragment, @NonNull ImageView imageView, OnImagePickedListener listener) {
         this.fragment = fragment;
         this.imageView = imageView;
+        this.listener = listener;
     }
 
     /**
@@ -68,6 +76,9 @@ public class PhotoPicker {
         if (resultCode == Activity.RESULT_OK && data != null) {
             profileImageUri = data.getData();
             imageView.setImageURI(profileImageUri);
+            if (listener != null) {
+                listener.onImagePicked(profileImageUri);
+            }
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(fragment.getContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show();
         } else {

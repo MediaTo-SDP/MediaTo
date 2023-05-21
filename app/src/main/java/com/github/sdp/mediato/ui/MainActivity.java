@@ -28,13 +28,11 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
   ActivityMainBinding binding;
   MyProfileFragment myProfileFragment;
-  ReadOnlyProfileFragment readOnlyProfileFragment;
   SearchFragment searchFragment;
   ExploreFragment exploreFragment;
   FeedFragment feedFragment;
   FeedFragment myReviewsFragment;
   private MyProfileViewModel myProfileViewModel;
-  private ReadOnlyProfileViewModel readOnlyProfileViewModel;
   AppCache globalCache;
 
   @Override
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Initialize the ViewModels
     myProfileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
-    readOnlyProfileViewModel = new ViewModelProvider(this).get(ReadOnlyProfileViewModel.class);
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
@@ -95,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
    */
   private void setDefaultFragment(String username) {
     myProfileFragment = new MyProfileFragment();
-    readOnlyProfileFragment = new ReadOnlyProfileFragment();
     searchFragment = new SearchFragment();
     exploreFragment = new ExploreFragment();
     feedFragment = new FeedFragment();
@@ -129,20 +125,12 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     replaceFragment(myProfileFragment);
   }
 
-  public ReadOnlyProfileViewModel getReadOnlyProfileViewModel(){
-    return readOnlyProfileViewModel;
-  }
-
   public ReadOnlyProfileViewModel getMyProfileViewModel(){
     return myProfileViewModel;
   }
 
   public MyProfileFragment getMyProfileFragment() {
     return myProfileFragment;
-  }
-
-  public ReadOnlyProfileFragment getReadOnlyProfileFragment() {
-    return readOnlyProfileFragment;
   }
 
   @Override

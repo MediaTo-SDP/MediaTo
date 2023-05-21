@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
@@ -22,9 +23,10 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    USERNAME = getArguments().getString("username");
 
-    viewModel = ((MainActivity)getActivity()).getReadOnlyProfileViewModel();
-    USERNAME = viewModel.getUsername();
+    viewModel = new ViewModelProvider(this).get(ReadOnlyProfileViewModel.class);
+    viewModel.setUsername(USERNAME);
   }
 
   @Override
