@@ -1,6 +1,8 @@
 package com.github.sdp.mediato.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,6 @@ public class GenreMovies {
 
     static {
         genre = new HashMap<>();
-        genre.put(0, "Genre");
         genre.put(28, "Action");
         genre.put(12, "Adventure");
         genre.put(16, "Animation");
@@ -42,7 +43,10 @@ public class GenreMovies {
     }
 
     public static List<String> getGenreName() {
-        return new ArrayList<>(genre.values());
+        List<String> genreName = new ArrayList<>(genre.values());
+        sortUsersByName(genreName);
+        genreName.add(0, "Genre");
+        return genreName;
     }
 
     public static Integer getGenreId(String genreName) {
@@ -52,5 +56,9 @@ public class GenreMovies {
             }
         }
         return null;
+    }
+
+    private static void sortUsersByName(List<String> listFollowingFollowerUsername) {
+        Collections.sort(listFollowingFollowerUsername, Comparator.comparing(u -> u.toLowerCase()));
     }
 }
