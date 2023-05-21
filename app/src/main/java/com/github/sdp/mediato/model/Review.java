@@ -116,4 +116,23 @@ public class Review implements Serializable {
         Review other = (Review) obj;
         return Objects.equals(this.username, other.username) && Objects.equals(this.media, other.media) && this.grade == other.grade && Objects.equals(this.comment, other.comment);
     }
+
+    /**
+     * Formats a rating given as an integer to a rating displayed with circle symbols.
+     * @param rating the rating to format
+     * @return the formatted rating
+     */
+    public static String formatRating(int rating) {
+        Preconditions.checkGrade(rating);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= Review.MAX_GRADE; i++) {
+            if (i <= rating) {
+                sb.append("●");
+            } else {
+                sb.append("○");
+            }
+        }
+        return sb.toString();
+    }
+
 }

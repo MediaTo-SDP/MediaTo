@@ -14,14 +14,6 @@ public abstract class Post {
         this.username = username;
     }
 
-    public PostType getPostType() {
-        return postType;
-    }
-
-    public void setPostType(PostType postType) {
-        this.postType = postType;
-    }
-
     public String getUsername() {
         return username;
     }

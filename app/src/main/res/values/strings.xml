@@ -43,6 +43,7 @@
   <string name="review_user_follow_button">Follow</string>
   <string name="like_button">Like</string>
   <string name="dislike_button">Dislike</string>
+  <string name="comments">Comments</string>
 
     <!-- Search Categories -->
     <string name="search_category_movies">Movies</string>

@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +12,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
+import com.github.sdp.mediato.utility.FragmentSwitcher;
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
-import com.github.sdp.mediato.ui.ExploreFragment;
-import com.github.sdp.mediato.ui.FeedFragment;
-import com.github.sdp.mediato.ui.MyProfileFragment;
-import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
-import com.github.sdp.mediato.ui.SearchFragment;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;

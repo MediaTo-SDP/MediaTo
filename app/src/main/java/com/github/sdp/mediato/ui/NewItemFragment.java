@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.github.sdp.mediato.FragmentSwitcher;
+import com.github.sdp.mediato.utility.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;

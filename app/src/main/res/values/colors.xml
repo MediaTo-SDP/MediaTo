@@ -12,8 +12,9 @@
     <color name="transparent">#00FFFFFF</color>
 
     <color name="theme_main">#E45744</color>
-    <color name="theme_secondary">#8E8F89</color>
+    <color name="theme_secondary">#A4A5A0</color>
     <color name="theme_grey">#373431</color>
+    <color name="theme_dark_grey">#FFFFFF</color>
     <color name="theme_bright">#FFFFFF</color>
 
     <color name="colorPrimary">@color/theme_main</color>

@@ -5,5 +5,5 @@
 
   <size
     android:width="@dimen/movie_image_width"
-    android:height="@dimen/movie_image_hight" />
+    android:height="@dimen/movie_image_height" />
 </shape>

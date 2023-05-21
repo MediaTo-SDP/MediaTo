@@ -6,4 +6,5 @@
 
     <!-- Rating -->
     <integer name="max_rating">10</integer>
+    <integer name="max_comment_length">140</integer>
 </resources>

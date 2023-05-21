@@ -16,6 +16,7 @@ import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.MyFollowingFragment;
 
 import org.junit.AfterClass;
