@@ -60,6 +60,8 @@ public class MyFollowingFragment extends Fragment implements UserAdapter.OnUserI
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(userAdapter);
 
+        viewModel.reloadUser();
+
         return view;
     }
 
