@@ -136,10 +136,10 @@
           style="?attr/borderlessButtonStyle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
           android:text="@string/review_user_follow_button"
           android:textColor="@color/theme_main"
           app:layout_constraintBottom_toBottomOf="@+id/like_count"
+          app:layout_constraintEnd_toStartOf="@+id/like_button"
           app:layout_constraintStart_toEndOf="@+id/username"
           app:layout_constraintTop_toTopOf="@+id/like_button" />
 
@@ -220,14 +220,12 @@
           android:id="@+id/comment_text_field"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"
           android:padding="10dp"
           android:background="@drawable/rounded_border"
           android:hint="Enter comment"
-          android:inputType="text"
+          android:inputType="textImeMultiLine"
           android:textSize="14dp"
+          android:maxLength="@integer/max_comment_length"
           android:textCursorDrawable="@drawable/cursor"
           app:layout_constraintTop_toBottomOf="@id/comment_list" />
 
@@ -237,6 +235,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="8dp"
           android:layout_marginRight="8dp"
+          android:paddingBottom="8dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="parent"

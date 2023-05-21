@@ -46,13 +46,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
   public void addComment(Comment comment) {
     comments.add(comment);
     notifyItemInserted(comments.size() - 1);
-    comments.forEach(x -> System.out.println("comment is: " + x.getText()));
   }
 
-  public void addComments(List<Comment> newComments) {
-    int oldSize = comments.size();
-    comments.addAll(newComments);
-    notifyItemRangeInserted(oldSize, newComments.size());
-  }
 }
 

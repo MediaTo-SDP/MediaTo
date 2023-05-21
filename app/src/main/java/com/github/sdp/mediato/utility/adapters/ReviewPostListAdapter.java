@@ -1,10 +1,14 @@
 package com.github.sdp.mediato.utility.adapters;
 
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModel;
@@ -35,6 +39,7 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
     /** Orientation down along the x axis */
     public static final float ORIENTATION_DOWN = 180f;
+    public static final float MAX_COMMENT_LENGTH= 140;
     public enum CallerFragment {
         EXPLORE,
         FEED
@@ -43,7 +48,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     private String username;
     private ExploreViewModel exploreViewModel;
     private FeedViewModel feedViewModel;
-    private CommentAdapter commentAdapter;
 
     /**
      * Used by the adapter to compare review posts
@@ -62,7 +66,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
 
     public ReviewPostListAdapter() {
         super(REVIEWPOST_COMPARATOR);
-        commentAdapter = new CommentAdapter();
     }
 
     /**
@@ -76,6 +79,9 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
     public ReviewPostListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutReviewPostItemBinding binding = LayoutReviewPostItemBinding.inflate(inflater, parent, false);
+        CommentAdapter commentAdapter = new CommentAdapter();
+        binding.commentList.setAdapter(commentAdapter);
+        binding.commentList.setLayoutManager(new LinearLayoutManager(parent.getContext()));
         return new ReviewPostListAdapter.MyViewHolder(binding, commentAdapter);
     }
 
@@ -197,28 +203,6 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         displayProfilePic(holder, position);
     }
 
-    private void setUpCommentSection(ReviewPostListAdapter.MyViewHolder holder, int position){
-        holder.binding.commentsCard.setOnClickListener(v -> handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
-        holder.binding.commentList.setAdapter(commentAdapter);
-        holder.binding.commentList.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-
-        holder.binding.commentTextField.setOnEditorActionListener((textField, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                String commentText = textField.getText().toString();
-                Comment comment = new Comment(commentText, username);
-
-                CommentAdapter currentCommentAdapter = (CommentAdapter) holder.binding.commentList.getAdapter();
-                currentCommentAdapter.addComment(comment);
-
-                // clear the comment text field for the next entry
-                holder.binding.commentTextField.setText("");
-
-                return true;
-            }
-            return false;
-        });
-    }
-
     private void setLikeListener(ReviewPostListAdapter.MyViewHolder holder, int position) {
         ReviewPost reviewPost = getItem(position);
         holder.binding.likeButton.setOnClickListener(
@@ -264,6 +248,79 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         );
     }
 
+    private void setUpCommentSection(ReviewPostListAdapter.MyViewHolder holder, int position){
+        // Handle expanding the comment section
+        holder.binding.commentsCard.setOnClickListener(v ->
+            handleExpandArrow(holder.binding.expandArrow, holder.binding.commentSection));
+
+        // Handle maximum comment length
+        holder.binding.commentTextField.addTextChangedListener(
+            maxLengthTextWatcher(holder.itemView.getContext(), MAX_COMMENT_LENGTH));
+
+        // Handle entered comment text
+        holder.binding.commentTextField.setOnEditorActionListener((textField, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String commentText = textField.getText().toString();
+                handleComment(commentText, holder, position);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void handleComment(String commentText, ReviewPostListAdapter.MyViewHolder holder, int position){
+        if(commentText.isEmpty()){
+            Toast.makeText(holder.itemView.getContext(), "Cannot add empty comment", Toast.LENGTH_LONG).show();
+        }else{
+            // Add the comment to the adapter
+            ReviewPost reviewPost = getItem(position);
+            Comment comment = new Comment(reviewPost.getCollectionName(), String.valueOf(reviewPost.getId()), commentText, username);
+            holder.commentAdapter.addComment(comment);
+
+            // TODO: Add comment to the database
+
+            // Clear the comment text field for the next entry
+            holder.binding.commentTextField.setText("");
+        }
+    }
+
+    private static void handleExpandArrow(ImageView arrow, ConstraintLayout commentSection) {
+        float newRotation;
+        int visibility;
+        // If the arrow is pointing up, then rotate down and make the comment section visible
+        if (arrow.getRotation() == ORIENTATION_UP) {
+            newRotation = ORIENTATION_DOWN;
+            visibility = View.VISIBLE;
+        } else { // Otherwise rotate up and hide the comment section
+            newRotation = ORIENTATION_UP;
+            visibility = View.GONE;
+        }
+
+        // Use an animation to rotate smoothly
+        arrow.animate().rotation(newRotation).setDuration(300).start();
+        commentSection.setVisibility(visibility);
+    }
+
+    private static TextWatcher maxLengthTextWatcher(Context context, float maxTextLength){
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= maxTextLength) {
+                    String message = String.format("Exceeded maximum comment length: %.0f characters", maxTextLength);
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public final LayoutReviewPostItemBinding binding;
         public final CommentAdapter commentAdapter;
@@ -275,21 +332,5 @@ public class ReviewPostListAdapter extends ListAdapter<ReviewPost, ReviewPostLis
         }
     }
 
-    private static void handleExpandArrow(ImageView arrow, ConstraintLayout commentSection) {
-        float newRotation;
-        int visibility;
-        // If the arrow is pointing up, then rotate down and make visible the text
-        if (arrow.getRotation() == ORIENTATION_UP) {
-            newRotation = ORIENTATION_DOWN;
-            visibility = View.VISIBLE;
-        } else { // Otherwise rotate up and hide the text
-            newRotation = ORIENTATION_UP;
-            visibility = View.GONE;
-        }
-
-        // Use an animation to rotate smoothly
-        arrow.animate().rotation(newRotation).setDuration(300).start();
-        commentSection.setVisibility(visibility);
-    }
 }
 

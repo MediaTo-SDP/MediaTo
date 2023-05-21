@@ -14,7 +14,7 @@
   <color name="theme_main">#E45744</color>
   <color name="theme_secondary">#FF21201E</color>
   <color name="theme_grey">#373431</color>
-  <color name="theme_dark_grey">#2C2A28</color>
+  <color name="theme_dark_grey">#2B2927</color>
   <color name="theme_bright">#FFFFFF</color>
 
   <color name="colorPrimary">@color/theme_main</color>
