@@ -65,7 +65,14 @@ public class CreateProfileFragment extends Fragment {
         R.id.profile_image_add_button);
 
     profileImage = view.findViewById(R.id.profile_image);
-    photoPicker = new PhotoPicker(this, profileImage);
+
+    PhotoPicker.OnImagePickedListener listener = new PhotoPicker.OnImagePickedListener() {
+      @Override
+      public void onImagePicked(Uri imageUri) {
+      }
+    };
+
+    photoPicker = new PhotoPicker(this, profileImage, listener);
 
     // Open a photo picker to choose the profile image
     profileImageButton.setOnClickListener(v ->
