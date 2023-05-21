@@ -49,6 +49,7 @@ import com.github.sdp.mediato.ui.FeedFragment;
 import com.github.sdp.mediato.ui.MainActivity;
 import org.hamcrest.Matcher;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -167,6 +168,8 @@ public class FeedFragmentTest {
         onView(withId(R.id.feed_posts)).perform(
             RecyclerViewActions.actionOnItemAtPosition(0, actionOnChildViewWithId(R.id.comment_text_field, pressImeActionButton())));
 
+        Thread.sleep(WAIT_TIME);
+
         // Check that the comment was added with the correct username
         onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(VALID_COMMENT))));
         onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(user1.getUsername()))));
@@ -189,9 +192,11 @@ public class FeedFragmentTest {
         onView(withId(R.id.feed_posts)).perform(
             RecyclerViewActions.actionOnItemAtPosition(0, actionOnChildViewWithId(R.id.comment_text_field, pressImeActionButton())));
 
+        Thread.sleep(WAIT_TIME);
+        String truncatedComment = TOO_LONG_COMMENT.substring(0, MAX_COMMENT_LENGTH);
+
         // Check that only the allowed comment length was added with the correct username
-        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(
-            TOO_LONG_COMMENT.substring(0, MAX_COMMENT_LENGTH)))));
+        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(truncatedComment))));
         onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(user1.getUsername()))));
     }
 
