@@ -10,19 +10,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.data.GenreMovies;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaAdapter;
@@ -59,7 +61,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private Button filmButton;
     private Button currentHighlightedButton;
 
-    private final MutableLiveData<List<Media>> searchMediaResults = new MutableLiveData<>(new ArrayList<>());
+    private Spinner year_filter;
+    private Spinner genre_filter;
+
+    private LinearLayout filter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +117,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         // Inflate the layout for the search fragment
         View searchView = inflater.inflate(R.layout.fragment_search, container, false);
 
+        this.filter = searchView.findViewById(R.id.top_movies_filters);
+
         this.peopleButton = searchView.findViewById(R.id.search_category_people);
         peopleButton.setOnClickListener(this);
 
@@ -132,11 +139,93 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         searchBar.setOnQueryTextListener(this);
         searchBar.setQuery(this.searchMediaViewModel.getSearchQuery(), false);
 
+        setUpYearFilter(searchView);
+
+        // Get reference to the spinner
+        setUpGenreFilter(searchView);
+
+        Button resetFilter = searchView.findViewById(R.id.reset_filter);
+        resetFilter.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                genre_filter.setSelection(0);
+                year_filter.setSelection(0);
+                searchMediaViewModel.setYear_filter("Year");
+                searchMediaViewModel.setGenre_filter("Genre");
+                searchMediaViewModel.loadFirstMovieTrendingPage();
+            }
+        });
+
+
         setDisplayComponent();
 
         userViewModel.reloadUser();
 
         return searchView;
+    }
+
+    private void setUpGenreFilter(View searchView) {
+        genre_filter = searchView.findViewById(R.id.genre_spinner);
+
+        // Create an instance of GenreMovies and get the list of genres
+        List<String> genres = GenreMovies.getGenreName();
+
+        // Create an ArrayAdapter using the genre list
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, genres);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        genre_filter.setAdapter(adapter);
+
+        int position = adapter.getPosition(searchMediaViewModel.getGenre_filter());
+        genre_filter.setSelection(position);
+
+        genre_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                searchMediaViewModel.setGenre_filter((String) parent.getItemAtPosition(position));
+                searchMediaViewModel.loadFirstMovieTrendingPage();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setUpYearFilter(View searchView) {
+        // Get reference to the spinner
+        year_filter = searchView.findViewById(R.id.years_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.years_array, R.layout.spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        year_filter.setAdapter(adapter);
+
+        int position = adapter.getPosition(searchMediaViewModel.getYear_filter());
+        year_filter.setSelection(position);
+
+        year_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                searchMediaViewModel.setYear_filter((String) parent.getItemAtPosition(position));
+                searchMediaViewModel.loadFirstMovieTrendingPage();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void setMediaRecyclerView(View searchView) {
@@ -170,6 +259,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
                 this.movieSearchRecyclerView.setVisibility(View.VISIBLE);
                 this.movieTrendingRecyclerView.setVisibility(View.GONE);
+                this.filter.setVisibility(View.GONE);
             } else {
                 this.bookSearchRecyclerView.setVisibility(View.VISIBLE);
                 this.bookTrendingRecyclerView.setVisibility(View.GONE);
@@ -185,6 +275,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 case MOVIES:
                     this.movieSearchRecyclerView.setVisibility(View.GONE);
                     this.movieTrendingRecyclerView.setVisibility(View.VISIBLE);
+                    this.filter.setVisibility(View.VISIBLE);
                     break;
                 case BOOKS:
                     this.bookSearchRecyclerView.setVisibility(View.GONE);
@@ -226,6 +317,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             case BOOKS:
                 this.currentHighlightedButton = booksButton;
                 setMediaComponents(
+                        null,
                         bookSearchRecyclerView,
                         bookTrendingRecyclerView,
                         searchMediaViewModel.getTitleSearch()
@@ -234,6 +326,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             case MOVIES:
                 this.currentHighlightedButton = filmButton;
                 setMediaComponents(
+                        filter,
                         movieSearchRecyclerView,
                         movieTrendingRecyclerView,
                         searchMediaViewModel.getTitleSearch()
@@ -252,9 +345,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.bookTrendingRecyclerView.setVisibility(View.GONE);
         this.bookSearchRecyclerView.setVisibility(View.GONE);
         this.userSearchRecyclerView.setVisibility(View.GONE);
+        this.filter.setVisibility(View.GONE);
     }
 
-    private void setMediaComponents(RecyclerView searchRecyclerView, RecyclerView trendingRecyclerView, String oldTitle) {
+    private void setMediaComponents(LinearLayout filter, RecyclerView searchRecyclerView, RecyclerView trendingRecyclerView, String oldTitle) {
         if (this.searchBar.getQuery().length() > 0) {
             if (!this.searchBar.getQuery().toString().equals(oldTitle)) {
                 searchMediaViewModel.loadFirstMovieBookSearchPage(this.searchBar.getQuery().toString());
@@ -262,6 +356,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             searchRecyclerView.setVisibility(View.VISIBLE);
         } else {
             trendingRecyclerView.setVisibility(View.VISIBLE);
+            if (filter != null) {
+                filter.setVisibility(View.VISIBLE);
+            }
         }
     }
 

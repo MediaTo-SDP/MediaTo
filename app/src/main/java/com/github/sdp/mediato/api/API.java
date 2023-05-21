@@ -6,5 +6,5 @@ import java.util.concurrent.CompletableFuture;
 public interface API<T> {
     CompletableFuture<List<T>> searchItems(String s, int page);
 
-    CompletableFuture<List<T>> trending(int page);
+    CompletableFuture<List<T>> trending(Integer year, Integer genre,int page);
 }
