@@ -1,6 +1,8 @@
 package com.github.sdp.mediato.ui;
 
+import static com.github.sdp.mediato.data.UserDatabase.followUser;
 import static com.github.sdp.mediato.data.UserDatabase.getAllUser;
+import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -18,10 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
-import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
+import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
 import com.github.sdp.mediato.utility.adapters.MediaAdapter;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
 
@@ -30,13 +33,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
+public class SearchFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener, UserAdapter.OnUserInteractionListener {
 
     private static String COLLECTION_NAME;
     private static String USERNAME;
-    private SearchUserViewModel searchUserViewModel;
+    private UserViewModel userViewModel;
     private SearchMediaViewModel searchMediaViewModel;
 
+    private UserAdapter userAdapter;
     private MediaAdapter movieSearchAdapter;
     private MediaAdapter movieTrendingAdapter;
     private MediaAdapter bookSearchAdapter;
@@ -64,9 +68,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         COLLECTION_NAME = (String) getArguments().get("collection");
 
         // Create and init the Search User ViewModel
-        searchUserViewModel = new ViewModelProvider(this).get(SearchUserViewModel.class);
-        searchUserViewModel.setUserName(USERNAME);
-        searchUserViewModel.setMainActivity((MainActivity) getActivity());
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userAdapter = new UserAdapter(
+                getActivity(),
+                ((MainActivity)getActivity()).getMyProfileViewModel().getUser(),
+                new ArrayList<>()
+        );
+        userAdapter.setOnUserInteractionListener(this);
+        userViewModel.setConnectedUsername(USERNAME);
+        userViewModel.getUserListLiveData().observe(this, userAdapter::updateUserList);
+        userViewModel.getConnectedUserLiveData().observe(this, userAdapter::updateConnectedUser);
 
         searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
 
@@ -112,7 +123,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
 
         // Set the Search User RecyclerView with its adapter
         userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
-        userSearchRecyclerView.setAdapter(new UserAdapter(searchUserViewModel));
+        userSearchRecyclerView.setAdapter(userAdapter);
 
         setMediaRecyclerView(searchView);
 
@@ -122,6 +133,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         searchBar.setQuery(this.searchMediaViewModel.getSearchQuery(), false);
 
         setDisplayComponent();
+
+        userViewModel.reloadUser();
 
         return searchView;
     }
@@ -178,7 +191,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                     this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
                     break;
                 case PEOPLE:
-                    this.searchUserViewModel.clearUserList();
+                    this.userViewModel.clearUserList();
                     break;
             }
         }
@@ -258,12 +271,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 .filter(user -> user.getUsername().toLowerCase().startsWith(toBeSearched.toLowerCase()))
                 .collect(Collectors.toList());
             sortUsersByName(filteredUser);
-            searchUserViewModel.setUserList(filteredUser);
+            userViewModel.setUserList(filteredUser);
         });
     }
 
     private static void sortUsersByName(List<User> userList) {
         userList.sort(Comparator.comparing(u -> u.getUsername().toLowerCase()));
+    }
+
+    @Override
+    public void onFollowClick(User user) {
+        followUser(userViewModel.getConnectedUser().getUsername(), user.getUsername());
+        userViewModel.reloadUser();
+    }
+
+    @Override
+    public void onUnfollowClick(User user) {
+        unfollowUser(userViewModel.getConnectedUser().getUsername(), user.getUsername());
+        userViewModel.reloadUser();
     }
 
     public enum SearchCategory {

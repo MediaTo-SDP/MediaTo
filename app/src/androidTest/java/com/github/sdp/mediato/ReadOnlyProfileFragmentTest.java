@@ -7,6 +7,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibilit
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
@@ -48,7 +50,9 @@ public class ReadOnlyProfileFragmentTest {
     scenario.onActivity(activity -> {
       FragmentManager fragmentManager = activity.getSupportFragmentManager();
       ReadOnlyProfileFragment readOnlyProfileFragment = new ReadOnlyProfileFragment();
-      activity.getReadOnlyProfileViewModel().setUsername(USERNAME);
+      Bundle bundle = new Bundle();
+      bundle.putString("username", USERNAME);
+      readOnlyProfileFragment.setArguments(bundle);
       fragmentManager.beginTransaction().replace(R.id.main_container, readOnlyProfileFragment)
           .commitAllowingStateLoss();
     });

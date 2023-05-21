@@ -3,6 +3,7 @@ package com.github.sdp.mediato.utility.adapters;
 import static com.github.sdp.mediato.data.UserDatabase.followUser;
 import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,100 +21,127 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.sdp.mediato.FragmentSwitcher;
+import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
+import com.github.sdp.mediato.databinding.AdapterUserItemBinding;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.viewmodel.SearchUserViewModel;
-import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
+import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private final UserViewModel userViewModel;
+    private final FragmentSwitcher fragmentSwitcher;
+    private User connectedUser;
+    private List<User> userList;
 
-    public UserAdapter(UserViewModel userViewModel) {
-        this.userViewModel = userViewModel;
+    private OnUserInteractionListener userInteractionListener;
 
-        // Refresh when follow or unfollow
-        this.userViewModel.getUserLiveData().observeForever(user -> notifyDataSetChanged());
+    public UserAdapter(Activity activity, User connectedUser, List<User> userList) {
+        this.fragmentSwitcher = (FragmentSwitcher) activity;
+        this.connectedUser = connectedUser;
+        this.userList = new ArrayList<>(userList);
+    }
 
-        // Refresh when new search
-        this.userViewModel.getUserListLiveData().observeForever(users -> notifyDataSetChanged());
+    public void setOnUserInteractionListener(OnUserInteractionListener listener) {
+        this.userInteractionListener = listener;
     }
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_user_item, parent, false);
-        return new UserViewHolder(view, userViewModel);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        AdapterUserItemBinding binding = AdapterUserItemBinding.inflate(inflater, parent, false);
+        UserViewHolder holder = new UserViewHolder(binding);
+
+        holder.itemView.setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                User user = userList.get(position);
+                if (user.getUsername().equals(connectedUser.getUsername())){
+                    fragmentSwitcher.switchCurrentFragmentWithChildFragment(((MainActivity) fragmentSwitcher).getMyProfileFragment());
+                } else {
+                    Bundle args = new Bundle();
+                    args.putString("username", user.getUsername());
+                    ReadOnlyProfileFragment readOnlyProfileFragment = new ReadOnlyProfileFragment();
+                    readOnlyProfileFragment.setArguments(args);
+                    fragmentSwitcher.switchCurrentFragmentWithChildFragment(readOnlyProfileFragment);
+                }
+            }
+        });
+
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User user = userViewModel.getUserListLiveData().getValue().get(position);
-        holder.userNameTextView.setText(user.getUsername());
+        User user = userList.get(position);
+        holder.binding.userAdapterUserName.setText(user.getUsername());
 
-        downloadProfilePicWithRetry(user.getUsername(), 0, holder.userProfileImageView);
+        downloadProfilePicWithRetry(user.getUsername(), 0, holder.binding.userAdapterImageView);
+
+        Button follow = holder.binding.userAdapterFollowButton;
+        Button unfollow = holder.binding.userAdapterUnfollowButton;
 
         // Decide which button to display
-        if(userViewModel.getMainActivity().getMyProfileViewModel().getUsername().equals(user.getUsername())) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.GONE);
+        setVisibilityFollowUnfollowButtons(follow, unfollow, user);
+
+        follow.setOnClickListener(v -> {
+            if (userInteractionListener != null) {
+                userInteractionListener.onFollowClick(user);
+            }
+        });
+
+        unfollow.setOnClickListener(v -> {
+            if (userInteractionListener != null) {
+                userInteractionListener.onUnfollowClick(user);
+            }
+        });
+    }
+
+    private void setVisibilityFollowUnfollowButtons(Button follow, Button unfollow, User user) {
+        if(connectedUser.getUsername().equals(user.getUsername())) {
+            follow.setVisibility(View.GONE);
+            unfollow.setVisibility(View.GONE);
         }
-        else if(userViewModel.getUser().getFollowing().contains(user.getUsername())) {
-            holder.followButton.setVisibility(View.GONE);
-            holder.unfollowButton.setVisibility(View.VISIBLE);
+        else if(connectedUser.getFollowing().contains(user.getUsername())) {
+            follow.setVisibility(View.GONE);
+            unfollow.setVisibility(View.VISIBLE);
         } else {
-            holder.unfollowButton.setVisibility(View.GONE);
-            holder.followButton.setVisibility(View.VISIBLE);
+            follow.setVisibility(View.VISIBLE);
+            unfollow.setVisibility(View.GONE);
         }
+    }
 
-        holder.followButton.setOnClickListener(v -> {
-                    followUser(userViewModel.getUserName(), user.getUsername());
-                    userViewModel.reloadUser();
-                }
-        );
+    public void updateConnectedUser(User connectedUser) {
+        this.connectedUser = connectedUser;
+        notifyDataSetChanged();
+    }
 
-        holder.unfollowButton.setOnClickListener(v -> {
-                    unfollowUser(userViewModel.getUserName(), user.getUsername());
-                    userViewModel.reloadUser();
-                }
-        );
+    public void updateUserList(List<User> userList) {
+        this.userList = new ArrayList<>(userList);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return userViewModel.getUserList().size();
+        return userList.size();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView userProfileImageView;
-        TextView userNameTextView;
-        Button followButton;
-        Button unfollowButton;
+        private final AdapterUserItemBinding binding;
 
-        public UserViewHolder(@NonNull View itemView, UserViewModel userViewModel) {
-            super(itemView);
-            userProfileImageView = itemView.findViewById(R.id.userAdapter_imageView);
-            userNameTextView = itemView.findViewById(R.id.userAdapter_userName);
-            followButton = itemView.findViewById(R.id.userAdapter_followButton);
-            unfollowButton = itemView.findViewById(R.id.userAdapter_unfollowButton);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    User user = userViewModel.getUserListLiveData().getValue().get(position);
-                    if (user.getUsername().equals(userViewModel.getMainActivity().getMyProfileViewModel().getUsername())){
-                        switchFragment(userViewModel.getMainActivity().getMyProfileFragment(), userViewModel.getMainActivity());
-                    } else {
-                        userViewModel.getMainActivity().getReadOnlyProfileViewModel().setUsername(user.getUsername());
-                        switchFragment(userViewModel.getMainActivity().getReadOnlyProfileFragment(),userViewModel.getMainActivity());
-                    }
-                }
-            });
+        public UserViewHolder(@NonNull AdapterUserItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
@@ -140,7 +167,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 } else {
                     System.out.println("Couldn't fetch pic for " + username);
                     Bitmap profilePic = BitmapFactory.decodeResource(
-                            userViewModel.getMainActivity().getResources(),
+                            ((Activity) fragmentSwitcher).getResources(),
                             R.drawable.profile_picture_default);
                     userProfileImageView.setImageBitmap(profilePic);
                 }
@@ -148,11 +175,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             });
     }
 
-    private static void switchFragment(Fragment fragment, FragmentActivity activity) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    public interface OnUserInteractionListener {
+        void onFollowClick(User user);
+        void onUnfollowClick(User user);
     }
 }
