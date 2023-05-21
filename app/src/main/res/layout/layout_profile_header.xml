@@ -70,7 +70,7 @@
       android:letterSpacing="0.05"
       android:text="@string/username"
       android:textColor="@color/white"
-      android:textSize="20dp"
+      android:textSize="23dp"
       app:layout_constraintStart_toEndOf="@+id/profile_image"
       app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
