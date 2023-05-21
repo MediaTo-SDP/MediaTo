@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import java.util.List;
 

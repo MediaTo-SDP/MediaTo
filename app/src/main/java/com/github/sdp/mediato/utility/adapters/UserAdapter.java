@@ -1,8 +1,5 @@
 package com.github.sdp.mediato.utility.adapters;
 
-import static com.github.sdp.mediato.data.UserDatabase.followUser;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,24 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.github.sdp.mediato.FragmentSwitcher;
-import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.databinding.AdapterUserItemBinding;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
-import com.google.gson.Gson;
-
+import com.github.sdp.mediato.utility.FragmentSwitcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
