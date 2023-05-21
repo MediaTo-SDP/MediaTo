@@ -15,6 +15,7 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers.Visibility;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;

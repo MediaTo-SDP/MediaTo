@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.utility;
 
 import androidx.fragment.app.Fragment;
 

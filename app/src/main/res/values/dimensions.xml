@@ -4,7 +4,9 @@
   <dimen name="profile_picture_small">110dp</dimen>
 
   <dimen name="movie_image_width">120dp</dimen>
-  <dimen name="movie_image_hight">180dp</dimen>
+  <dimen name="movie_image_small_width">90dp</dimen>
+  <dimen name="movie_image_height">180dp</dimen>
+  <dimen name="movie_image_small_height">140dp</dimen>
 
   <dimen name="button_padding">7dp</dimen>
   <dimen name="image_button_size">40dp</dimen>

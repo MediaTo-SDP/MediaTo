@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;

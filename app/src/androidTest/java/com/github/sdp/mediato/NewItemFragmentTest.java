@@ -15,8 +15,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.adevinta.android.barista.interaction.BaristaEditTextInteractions.typeTo;
-import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractions.closeKeyboard;
 import static com.github.sdp.mediato.ui.NewItemFragment.MAX_REVIEW_LENGTH;
 
 import android.app.Activity;
@@ -41,6 +39,7 @@ import com.adevinta.android.barista.interaction.BaristaScrollInteractions;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.Movie;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.NewItemFragment;
 
 import org.hamcrest.Description;
@@ -49,8 +48,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Locale;
 
 /**
  * Test class for new item activity, used to add ratings and comments

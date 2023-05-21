@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
