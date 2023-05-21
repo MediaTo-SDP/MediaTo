@@ -3,6 +3,7 @@ package com.github.sdp.mediato.ui;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
@@ -129,13 +131,21 @@ public class MyProfileFragment extends BaseProfileFragment {
     }
 
     private PhotoPicker setupPhotoPicker() {
-        PhotoPicker photoPicker = new PhotoPicker(this, profileImage);
+        PhotoPicker.OnImagePickedListener listener = new PhotoPicker.OnImagePickedListener() {
+            @Override
+            public void onImagePicked(Uri imageUri) {
+                // Update your ViewModel here with the new URI
+                UserDatabase.setProfilePic(viewModel.getUsername(), imageUri);
+            }
+        };
+
+        // Pass the listener to the PhotoPicker
+        PhotoPicker photoPicker = new PhotoPicker(this, profileImage, listener);
         editButton.setVisibility(View.VISIBLE);
 
         // On click on the edit button, open a photo picker to choose the profile image
         editButton.setOnClickListener(v -> {
                     photoPicker.getOnClickListener(requireActivity().getActivityResultRegistry()).onClick(v);
-                    //TODO This does not work (does not update the viewModel), change the PhotoPicker to return a Bitmap instead
                     Drawable drawable = profileImage.getDrawable();
                     BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
                     Bitmap bitmap = bitmapDrawable.getBitmap();
