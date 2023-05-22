@@ -167,6 +167,12 @@ public class FeedFragmentTest {
         // Hit Enter
         onView(withId(R.id.feed_posts)).perform(
             RecyclerViewActions.actionOnItemAtPosition(0, actionOnChildViewWithId(R.id.comment_text_field, pressImeActionButton())));
+
+        Thread.sleep(WAIT_TIME);
+
+        // Check that the comment was added with the correct username
+        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(VALID_COMMENT))));
+        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(user1.getUsername()))));
     }
 
     // Test that entering a too long comment only adds a comment with the allowed comment length
@@ -185,6 +191,13 @@ public class FeedFragmentTest {
         // Hit Enter
         onView(withId(R.id.feed_posts)).perform(
             RecyclerViewActions.actionOnItemAtPosition(0, actionOnChildViewWithId(R.id.comment_text_field, pressImeActionButton())));
+
+        Thread.sleep(WAIT_TIME);
+        String truncatedComment = TOO_LONG_COMMENT.substring(0, MAX_COMMENT_LENGTH);
+
+        // Check that only the allowed comment length was added with the correct username
+        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(truncatedComment))));
+        onView(withId(R.id.feed_posts)).check(matches(hasDescendant(withText(user1.getUsername()))));
     }
 
     // Test that adding an empty comment does not work

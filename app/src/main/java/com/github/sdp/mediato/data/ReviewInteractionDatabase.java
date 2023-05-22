@@ -6,7 +6,6 @@ import static com.github.sdp.mediato.data.DatabaseUtils.getReviewReference;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
 import com.github.sdp.mediato.model.Comment;
-import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +28,7 @@ public class ReviewInteractionDatabase {
         Preconditions.checkUsername(comment.getRefUsername());
         Preconditions.checkUsername(tarUsername);
         getReviewReference(tarUsername, comment.getCollectionName(), comment.getReview()).child(COMMENTS_PATH)
-                .child(comment.getRefUsername())
+                .child(comment.getRefUsername() + " " + comment.hashCode())
                 .setValue(comment.getText())
                 .addOnCompleteListener(task -> System.out.println("Commented review"));
     }

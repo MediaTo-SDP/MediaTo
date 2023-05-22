@@ -150,8 +150,8 @@ public class CollectionsTests {
         Review retrievedReview = CollectionsDatabase.getCollection(user1.getUsername(), collection2.getCollectionName())
                 .get(STANDARD_COLLECTION_TIMEOUT, TimeUnit.SECONDS).getReviews().get(review1.getMedia().getTitle());
 
-        assertTrue(retrievedReview.getComments().containsKey(COMMENTER_USERNAME));
-        assertEquals(retrievedReview.getComments().get(COMMENTER_USERNAME), "This is a comment");
+        assertTrue(retrievedReview.getComments().containsKey(COMMENTER_USERNAME + " " + comment.hashCode()));
+        assertEquals(retrievedReview.getComments().get(COMMENTER_USERNAME + " " + comment.hashCode()), "This is a comment");
     }
 
 }
