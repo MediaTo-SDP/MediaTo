@@ -119,7 +119,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         filmButton.setOnClickListener(this);
 
         // Set the Search User RecyclerView with its adapter
-        userSearchRecyclerView = searchView.findViewById(R.id.media_recyclerView);
+        userSearchRecyclerView = searchView.findViewById(R.id.userSearch_recyclerView);
         userSearchRecyclerView.setAdapter(userAdapter);
 
         setMediaRecyclerView(searchView);
