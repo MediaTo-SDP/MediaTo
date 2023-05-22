@@ -26,10 +26,8 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private final API<Media> theMovieDBAPI;
     private final API<Media> oLAPI;
     private String titleSearch = "";
-    private int searchBooksPage = 1;
-    private int trendingBooksPage = 1;
-    private int searchMoviesPage = 1;
-    private int trendingMoviesPage = 1;
+    private int searchPage = 1;
+    private int trendingPage = 1;
     private String year_filter = "Year";
     private String genre_filter = "Genre";
 
@@ -48,26 +46,26 @@ public class SearchMediaViewModel extends AndroidViewModel {
     public void loadFirstSearchPage(String title, MediaType type) {
         if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         titleSearch = title;
-        searchBooksPage = 1;
-        loadFirstSearchPage(searchBooksPage, titleSearch, type);
+        searchPage = 1;
+        loadFirstSearchPage(searchPage, titleSearch, type);
     }
 
     public void loadNextSearchPage(MediaType type) {
         if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
-        searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesPage, titleSearch, type);
+        searchPage += 1;
+        loadNextSearchPage(searchPage, titleSearch, type);
     }
 
     public void loadFirstTrendingPage(MediaType type) {
         if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
-        trendingMoviesPage = 1;
-        loadFirstTrendingPage(trendingMoviesPage, type);
+        trendingPage = 1;
+        loadFirstTrendingPage(trendingPage, type);
     }
 
     public void loadNextTrendingPage(MediaType type) {
         if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
-        trendingMoviesPage += 1;
-        loadNextTrendingPage(trendingMoviesPage, type);
+        trendingPage += 1;
+        loadNextTrendingPage(trendingPage, type);
     }
 
 
@@ -129,7 +127,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     private void loadNextTrendingPage(int page, MediaType type) {
         API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
-        api.trending(page).handle((medias, throwable) -> {
+        api.trending(year, genre, page).handle((medias, throwable) -> {
             try{
                 if (throwable == null){
                     addToLiveData(medias);
@@ -162,10 +160,6 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
-    }
-
-    public String getTitleSearch() {
-        return titleSearch;
     }
 
     public void setMediaDao(MediaDao mediaDao) {

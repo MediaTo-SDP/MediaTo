@@ -16,16 +16,9 @@ import com.github.sdp.mediato.utility.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
-import com.github.sdp.mediato.ui.ExploreFragment;
-import com.github.sdp.mediato.model.Review;
-import com.github.sdp.mediato.ui.FeedFragment;
-import com.github.sdp.mediato.ui.MyProfileFragment;
-import com.github.sdp.mediato.ui.ReadOnlyProfileFragment;
-import com.github.sdp.mediato.ui.SearchFragment;
 import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
 
 /**
  * The main activity of the app that displays a bottom navigation bar and manages the navigation

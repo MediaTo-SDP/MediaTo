@@ -25,7 +25,6 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.GenreMovies;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.viewmodel.SearchMediaViewModel;
 import com.github.sdp.mediato.ui.viewmodel.UserViewModel;
@@ -43,7 +42,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private static String USERNAME;
     // Only one instance of the cache should be used
     public static AppCache OFFLINE_CACHE;
-    private SearchUserViewModel searchUserViewModel;
     private UserViewModel userViewModel;
     private SearchMediaViewModel searchMediaViewModel;
 
@@ -59,7 +57,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private Button booksButton;
     private Button filmButton;
     private Button currentHighlightedButton;
-    private SearchCategory displayedCategory;
 
     private Spinner year_filter;
     private Spinner genre_filter;
@@ -85,6 +82,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         userViewModel.getConnectedUserLiveData().observe(this, userAdapter::updateConnectedUser);
 
         searchMediaViewModel = new ViewModelProvider(this).get(SearchMediaViewModel.class);
+
+        searchMediaViewModel.setMediaDao(OFFLINE_CACHE.mediaDao());
 
         setMediaAdapter();
 
@@ -136,18 +135,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         setUpGenreFilter(searchView);
 
         Button resetFilter = searchView.findViewById(R.id.reset_filter);
-        resetFilter.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                genre_filter.setSelection(0);
-                year_filter.setSelection(0);
-                searchMediaViewModel.setYear_filter("Year");
-                searchMediaViewModel.setGenre_filter("Genre");
-                searchMediaViewModel.loadFirstMovieTrendingPage();
-            }
+        resetFilter.setOnClickListener((View v) -> {
+            genre_filter.setSelection(0);
+            year_filter.setSelection(0);
+            searchMediaViewModel.setYear_filter("Year");
+            searchMediaViewModel.setGenre_filter("Genre");
+            searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
         });
-
 
         setDisplayComponent();
 
@@ -178,7 +172,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 searchMediaViewModel.setGenre_filter((String) parent.getItemAtPosition(position));
-                searchMediaViewModel.loadFirstMovieTrendingPage();
+                searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
             }
 
             @Override
@@ -209,7 +203,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 searchMediaViewModel.setYear_filter((String) parent.getItemAtPosition(position));
-                searchMediaViewModel.loadFirstMovieTrendingPage();
+                searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
             }
 
             @Override
@@ -256,8 +250,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                     this.filter.setVisibility(View.VISIBLE);
                     break;
                 case BOOKS:
-                    this.bookSearchRecyclerView.setVisibility(View.GONE);
-                    this.bookTrendingRecyclerView.setVisibility(View.VISIBLE);
+                    this.searchMediaViewModel.loadFirstTrendingPage(MediaType.BOOK);
                     break;
                 case PEOPLE:
                     this.userViewModel.clearUserList();
@@ -292,11 +285,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
                 break;
             case BOOKS:
                 this.currentHighlightedButton = booksButton;
-                setMediaComponents(null);
+                this.mediaRecyclerView.setVisibility(View.VISIBLE);
+                setMediaComponents();
                 break;
             case MOVIES:
                 this.currentHighlightedButton = filmButton;
-                setMediaComponents(filter);
+                this.mediaRecyclerView.setVisibility(View.VISIBLE);
+                setMediaComponents();
                 break;
         }
 
@@ -311,7 +306,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
         this.filter.setVisibility(View.GONE);
     }
 
-    private void setMediaComponents(LinearLayout filter) {
+    private void setMediaComponents() {
         if (this.searchBar.getQuery().length() > 0) {
             searchMedias();
         } else {
@@ -322,11 +317,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener, Se
     private void getTrendingMedias(){
         if (this.searchMediaViewModel.getCurrentCategory() == SearchCategory.MOVIES) {
             searchMediaViewModel.loadFirstTrendingPage(MediaType.MOVIE);
-        } else {
-            searchMediaViewModel.loadFirstTrendingPage(MediaType.BOOK);
             if (filter != null) {
                 filter.setVisibility(View.VISIBLE);
             }
+        } else {
+            searchMediaViewModel.loadFirstTrendingPage(MediaType.BOOK);
         }
     }
     private void searchMedias(){
