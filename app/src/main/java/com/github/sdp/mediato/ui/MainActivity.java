@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
+    globalCache = Room.databaseBuilder(getApplicationContext(), AppCache.class, "global-cache")
+            .build();
+
     // Initialize the ViewModels
     myProfileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
 
@@ -56,8 +59,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     binding.bottomNavigationView.setBackground(null);
     binding.bottomNavigationView.setOnItemSelectedListener(
         item -> navigateFragments(item.getItemId()));
-    globalCache = Room.databaseBuilder(getApplicationContext(), AppCache.class, "global-cache")
-            .build();
+
   }
 
   private boolean navigateFragments(int itemId) {
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     argsFeed.putSerializable("feedType", FeedFragment.FeedType.FEED);
     argsMyReviews.putSerializable("feedType", FeedFragment.FeedType.MY_REVIEWS);
 
+    SearchFragment.OFFLINE_CACHE = globalCache;
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);

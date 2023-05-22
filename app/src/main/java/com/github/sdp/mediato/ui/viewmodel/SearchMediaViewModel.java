@@ -10,14 +10,15 @@ import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
 import com.github.sdp.mediato.data.GenreMovies;
+import com.github.sdp.mediato.cache.dao.MediaDao;
 import com.github.sdp.mediato.model.media.Media;
+import com.github.sdp.mediato.model.media.MediaType;
 import com.github.sdp.mediato.ui.SearchFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 public class SearchMediaViewModel extends AndroidViewModel {
     private SearchFragment.SearchCategory currentCategory = SearchFragment.SearchCategory.PEOPLE;
@@ -25,121 +26,125 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private final API<Media> theMovieDBAPI;
     private final API<Media> oLAPI;
     private String titleSearch = "";
-    private int searchBooksPage = 1;
-    private int trendingBooksPage = 1;
-    private int searchMoviesPage = 1;
-    private int trendingMoviesPage = 1;
+    private int searchPage = 1;
+    private int trendingPage = 1;
     private String year_filter = "Year";
     private String genre_filter = "Genre";
 
     private Integer year;
     private Integer genre;
 
-    private final MutableLiveData<List<Media>> searchMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> trendingMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> searchBooksLiveData = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<List<Media>> trendingBooksLiveData = new MutableLiveData<>(new ArrayList<>());
+    private MediaDao mediaDao;
+    private final MutableLiveData<List<Media>> liveData = new MutableLiveData<>(new ArrayList<>());
 
     public SearchMediaViewModel(Application application) {
         super(application);
         theMovieDBAPI = new TheMovieDBAPI(application.getString(R.string.tmdb_url), application.getString(R.string.TMDBAPIKEY));
         oLAPI = new OLAPI(application.getString(R.string.openlibrary_url));
-
-        loadFirstBookTrendingPage();
-        loadFirstMovieTrendingPage();
     }
 
-    public void loadFirstMovieBookSearchPage(String title) {
+    public void loadFirstSearchPage(String title, MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
         titleSearch = title;
-        searchBooksPage = 1;
-        searchMoviesPage = 1;
-        loadFirstSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
-        loadFirstSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
+        searchPage = 1;
+        loadFirstSearchPage(searchPage, titleSearch, type);
     }
 
-    public void loadNextMovieSearchPage() {
-        searchMoviesPage += 1;
-        loadNextSearchPage(searchMoviesLiveData, () -> searchMoviesPage, () -> titleSearch, theMovieDBAPI);
+    public void loadNextSearchPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
+        searchPage += 1;
+        loadNextSearchPage(searchPage, titleSearch, type);
     }
 
-    public void loadFirstMovieTrendingPage() {
-        trendingMoviesPage = 1;
-        loadFirstTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+    public void loadFirstTrendingPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
+        trendingPage = 1;
+        loadFirstTrendingPage(trendingPage, type);
     }
 
-    public void loadNextMovieTrendingPage() {
-        trendingMoviesPage += 1;
-        loadNextTrendingPage(trendingMoviesLiveData, () -> trendingMoviesPage, theMovieDBAPI);
+    public void loadNextTrendingPage(MediaType type) {
+        if (type != MediaType.BOOK && type != MediaType.MOVIE) return;
+        trendingPage += 1;
+        loadNextTrendingPage(trendingPage, type);
     }
 
-    public void loadNextBookSearchPage() {
-        searchBooksPage += 1;
-        loadNextSearchPage(searchBooksLiveData, () -> searchBooksPage, () -> titleSearch, oLAPI);
-    }
 
-    public void loadFirstBookTrendingPage() {
-        trendingBooksPage = 1;
-        loadFirstTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
-    }
+    private void loadFirstSearchPage(int page, String title, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
 
-    public void loadNextBookTrendingPage() {
-        trendingBooksPage += 1;
-        loadNextTrendingPage(trendingBooksLiveData, () -> trendingBooksPage, oLAPI);
-    }
-
-    private void loadFirstSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        String title = titleSupplier.get();
         liveData.setValue(new ArrayList<>());
-        api.searchItems(title, page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(x);
-            liveData.postValue(updatedMedia);
+        api.searchItems(title, page)
+            .handle(((medias, throwable) -> {
+                // try catch to avoid silencing error with the handle function
+                try{
+                    if (throwable == null){
+                        mediaDao.insertAll(medias);
+                        liveData.postValue(medias);
+                    } else {
+                        liveData.postValue(mediaDao.searchInTitle(type, title));
+                    }
+                } catch (Exception e) {
+                    printException(e);
+                }
+                return null;
+            }));
+    }
+
+    private void loadNextSearchPage(int page, String title, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
+        api.searchItems(title, page).handle((medias, throwable) -> {
+            try{
+                if (throwable == null){
+                    addToLiveData(medias);
+                } else{
+                    liveData.postValue(mediaDao.searchInTitle(type, title));
+                }
+            } catch (Exception e) {
+                printException(e);
+            }
+            return null;
         });
     }
 
-    private void loadNextSearchPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, Supplier<String> titleSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        String title = titleSupplier.get();
-        api.searchItems(title, page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-            updatedMedia.addAll(x);
-            liveData.postValue(updatedMedia);
-        });
-    }
-
-    private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
+    private void loadFirstTrendingPage(int page, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
         liveData.setValue(new ArrayList<>());
-        api.trending(year, genre, page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(x);
-            liveData.postValue(updatedMedia);
+        api.trending(year, genre, page).handle((x, throwable) -> {
+            try {
+                if (throwable == null) {
+                    List<Media> updatedMedia = new ArrayList<>(x);
+                    liveData.postValue(updatedMedia);
+                    mediaDao.insertAll(x);
+                } else {
+                    liveData.postValue(mediaDao.getAllMediaFromType(type));
+                }
+            } catch (Exception e){
+                printException(e);
+            }
+            return null;
         });
     }
 
-    private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
-        int page = pageSupplier.getAsInt();
-        api.trending(year, genre, page).thenAccept(x -> {
-            List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
-            updatedMedia.addAll(x);
-            liveData.postValue(updatedMedia);
+    private void loadNextTrendingPage(int page, MediaType type) {
+        API<Media> api = (type == MediaType.BOOK) ? oLAPI: theMovieDBAPI;
+        api.trending(year, genre, page).handle((medias, throwable) -> {
+            try{
+                if (throwable == null){
+                    addToLiveData(medias);
+                } else {
+                    liveData.postValue(mediaDao.getAllMediaFromType(type));
+                }
+            } catch (Exception e){
+                printException(e);
+            }
+            return null;
         });
     }
 
-    public MutableLiveData<List<Media>> getSearchMoviesLiveData() {
-        return searchMoviesLiveData;
+    public MutableLiveData<List<Media>> getLiveData() {
+        return liveData;
     }
 
-    public MutableLiveData<List<Media>> getTrendingMoviesLiveData() {
-        return trendingMoviesLiveData;
-    }
-
-    public MutableLiveData<List<Media>> getSearchBooksLiveData() {
-        return searchBooksLiveData;
-    }
-
-    public MutableLiveData<List<Media>> getTrendingBooksLiveData() {
-        return trendingBooksLiveData;
-    }
 
     public SearchFragment.SearchCategory getCurrentCategory() {
         return currentCategory;
@@ -157,10 +162,20 @@ public class SearchMediaViewModel extends AndroidViewModel {
         this.searchQuery = searchQuery;
     }
 
-    public String getTitleSearch() {
-        return titleSearch;
+    public void setMediaDao(MediaDao mediaDao) {
+        this.mediaDao = mediaDao;
+    }
+    private void printException(Exception e) {
+        System.out.println(e.getMessage());
+        System.out.println(Arrays.toString(e.getStackTrace()));
     }
 
+    private void addToLiveData(List<Media> medias){
+        List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
+        updatedMedia.addAll(medias);
+        liveData.postValue(updatedMedia);
+        mediaDao.insertAll(medias);
+    }
     public String getYear_filter() {
         return year_filter;
     }

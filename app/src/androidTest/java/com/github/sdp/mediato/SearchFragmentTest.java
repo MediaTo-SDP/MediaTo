@@ -1,8 +1,5 @@
 package com.github.sdp.mediato;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -20,10 +17,13 @@ import static com.adevinta.android.barista.interaction.BaristaSpinnerInteraction
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -79,6 +79,11 @@ public class SearchFragmentTest {
             .setEmail("email_test_3")
             .setRegisterDate("19/03/2023")
             .setLocation(new Location(3.14, 3.14))
+            .build();
+    AppCache cache = Room.inMemoryDatabaseBuilder(
+                    ApplicationProvider.getApplicationContext(),
+                    AppCache.class)
+            .allowMainThreadQueries()
             .build();
 
     UserDatabase.addUser(user1).get(STANDARD_USER_TIMEOUT, TimeUnit.SECONDS);
@@ -217,13 +222,10 @@ public class SearchFragmentTest {
 
     sleep(15 * WAIT_TIME);
 
-    assertDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
-    assertRecyclerViewItemCount(R.id.bookTrending_recyclerView, 100);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 100);
   }
 
   @Test
@@ -236,11 +238,8 @@ public class SearchFragmentTest {
 
     sleep(15 * WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
     assertContains("Harry Potter and the Deathly Hallows");
 
@@ -258,11 +257,8 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
     pressImeActionButton();
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
     sleep(WAIT_TIME);
 
@@ -270,11 +266,8 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
   }
 
   @Test
@@ -283,25 +276,22 @@ public class SearchFragmentTest {
 
     sleep(3* WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertDisplayed(R.id.movieTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickSpinnerItem(R.id.years_spinner, 1);
 
     sleep(3* WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickSpinnerItem(R.id.genre_spinner, 1);
 
     sleep(3 * WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickOn(R.id.reset_filter);
 
@@ -309,7 +299,7 @@ public class SearchFragmentTest {
 
     assertDisplayed("Year");
     assertDisplayed("Genre");
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
   }
 
   @Test
@@ -320,11 +310,8 @@ public class SearchFragmentTest {
     typeTo(androidx.appcompat.R.id.search_src_text, "Harry Potter");
     pressImeActionButton();
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertDisplayed(R.id.movieSearch_recyclerView);
-    assertNotDisplayed(R.id.movieTrending_recyclerView);
 
     sleep(WAIT_TIME);
 
@@ -332,11 +319,9 @@ public class SearchFragmentTest {
 
     sleep(WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertDisplayed(R.id.movieTrending_recyclerView);
+
   }
 
   @Test
@@ -355,6 +340,7 @@ public class SearchFragmentTest {
     clickOn(R.id.search_category_movie);
 
     assertContains("Harry Potter and the Half-Blood Prince");
+    assertNotDisplayed(R.id.userSearch_recyclerView);
   }
 
 }
