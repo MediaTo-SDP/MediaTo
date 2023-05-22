@@ -9,6 +9,7 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.API;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.api.themoviedb.TheMovieDBAPI;
+import com.github.sdp.mediato.data.GenreMovies;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.ui.SearchFragment;
 
@@ -28,6 +29,11 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private int trendingBooksPage = 1;
     private int searchMoviesPage = 1;
     private int trendingMoviesPage = 1;
+    private String year_filter = "Year";
+    private String genre_filter = "Genre";
+
+    private Integer year;
+    private Integer genre;
 
     private final MutableLiveData<List<Media>> searchMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<Media>> trendingMoviesLiveData = new MutableLiveData<>(new ArrayList<>());
@@ -104,7 +110,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
     private void loadFirstTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
         int page = pageSupplier.getAsInt();
         liveData.setValue(new ArrayList<>());
-        api.trending(page).thenAccept(x -> {
+        api.trending(year, genre, page).thenAccept(x -> {
             List<Media> updatedMedia = new ArrayList<>(x);
             liveData.postValue(updatedMedia);
         });
@@ -112,7 +118,7 @@ public class SearchMediaViewModel extends AndroidViewModel {
 
     private void loadNextTrendingPage(MutableLiveData<List<Media>> liveData, IntSupplier pageSupplier, API<Media> api) {
         int page = pageSupplier.getAsInt();
-        api.trending(page).thenAccept(x -> {
+        api.trending(year, genre, page).thenAccept(x -> {
             List<Media> updatedMedia = new ArrayList<>(Objects.requireNonNull(liveData.getValue()));
             updatedMedia.addAll(x);
             liveData.postValue(updatedMedia);
@@ -155,4 +161,21 @@ public class SearchMediaViewModel extends AndroidViewModel {
         return titleSearch;
     }
 
+    public String getYear_filter() {
+        return year_filter;
+    }
+
+    public void setYear_filter(String year_filter) {
+        this.year_filter = year_filter;
+        this.year = year_filter.equals("Year") ? null : Integer.parseInt(year_filter);
+    }
+
+    public String getGenre_filter() {
+        return genre_filter;
+    }
+
+    public void setGenre_filter(String genre_filter) {
+        this.genre_filter = genre_filter;
+        this.genre = genre_filter.equals("Genre") ? null : GenreMovies.getGenreId(genre_filter);
+    }
 }

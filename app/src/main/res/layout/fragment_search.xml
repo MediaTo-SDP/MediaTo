@@ -61,6 +61,41 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/top_movies_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/years_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:spinnerMode="dialog"/>
+
+        <Spinner
+            android:id="@+id/genre_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:spinnerMode="dialog"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reset_filter"
+            style="?attr/borderlessButtonStyle"
+            android:layout_weight="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="Reset"
+            android:visibility="visible"
+            android:textColor="#F44336" />
+
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
