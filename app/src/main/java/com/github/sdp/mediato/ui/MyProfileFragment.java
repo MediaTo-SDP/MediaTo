@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.sdp.mediato.R;
+import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
@@ -24,6 +25,8 @@ import com.github.sdp.mediato.ui.viewmodel.MyProfileViewModel;
 import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -66,6 +69,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Set up collections
         fetchCollectionsFromDatabaseWithRetry(0).thenAccept(collections -> {
+
             collectionlistAdapter = setupCollections(collectionListRecyclerView, collections);
             // Observe the view model's live data to update UI components
             observeCollections(collectionlistAdapter);

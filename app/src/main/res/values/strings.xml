@@ -21,6 +21,7 @@
     <string name="profile">Profile</string>
 
     <!--User Profile-->
+    <string name="default_collection">Favorite</string>
     <string name="username">Username</string>
     <string name="recently_watched">Recently watched</string>
     <string name="title">Title</string>
