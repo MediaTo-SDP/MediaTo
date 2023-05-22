@@ -47,8 +47,8 @@ public class TheMovieDBAPI implements API<Media> {
     }
 
     @Override
-    public CompletableFuture<List<Media>> trending(int page) {
-        return api.getTrendingMovies(apikey,null, null, page)
+    public CompletableFuture<List<Media>> trending(Integer year, Integer genre, int page) {
+        return api.getTrendingMovies(apikey,year, genre, page)
                 .thenApply(tmdbMoviePagedResult -> tmdbMoviePagedResult.getResults().stream()
                         .map(Movie::new)
                         .collect(Collectors.toList()));

@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -15,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

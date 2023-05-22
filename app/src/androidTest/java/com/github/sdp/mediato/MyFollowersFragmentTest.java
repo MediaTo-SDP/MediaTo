@@ -15,8 +15,8 @@ import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.MyFollowersFragment;
-import com.github.sdp.mediato.ui.MyFollowingFragment;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -93,9 +93,12 @@ public class MyFollowersFragmentTest {
 
   @Test
   public void testRecyclerViewWithTwoFollowings() {
-    UserDatabase.followUser(user1.getUsername(), user2.getUsername());
     UserDatabase.followUser(user2.getUsername(), user1.getUsername());
     UserDatabase.followUser(user3.getUsername(), user1.getUsername());
+
+    sleep(WAIT_TIME);
+
+    clickListItemChild(R.id.myFollowers_recyclerView, 0, R.id.userAdapter_followButton);
 
     sleep(WAIT_TIME);
 

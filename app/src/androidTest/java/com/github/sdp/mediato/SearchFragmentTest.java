@@ -15,6 +15,7 @@ import static com.adevinta.android.barista.interaction.BaristaKeyboardInteractio
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem;
 import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 import static com.adevinta.android.barista.interaction.BaristaSleepInteractions.sleep;
+import static com.adevinta.android.barista.interaction.BaristaSpinnerInteractions.clickSpinnerItem;
 
 import android.os.Bundle;
 
@@ -26,7 +27,7 @@ import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
-import com.github.sdp.mediato.ui.MyProfileFragment;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.ui.SearchFragment;
 
 import org.junit.AfterClass;
@@ -274,6 +275,41 @@ public class SearchFragmentTest {
     assertNotDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.media_recyclerView);
     assertNotDisplayed(R.id.media_recyclerView);
+  }
+
+  @Test
+  public void testTrendingMoviesFilter() {
+    clickOn(R.id.search_category_movie);
+
+    sleep(3* WAIT_TIME);
+
+    assertNotDisplayed(R.id.bookTrending_recyclerView);
+    assertNotDisplayed(R.id.userSearch_recyclerView);
+    assertNotDisplayed(R.id.bookSearch_recyclerView);
+    assertNotDisplayed(R.id.movieSearch_recyclerView);
+    assertDisplayed(R.id.movieTrending_recyclerView);
+
+    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+
+    clickSpinnerItem(R.id.years_spinner, 1);
+
+    sleep(3* WAIT_TIME);
+
+    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+
+    clickSpinnerItem(R.id.genre_spinner, 1);
+
+    sleep(3 * WAIT_TIME);
+
+    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+
+    clickOn(R.id.reset_filter);
+
+    sleep(3 * WAIT_TIME);
+
+    assertDisplayed("Year");
+    assertDisplayed("Genre");
+    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
   }
 
   @Test

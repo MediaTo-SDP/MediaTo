@@ -1,10 +1,13 @@
 package com.github.sdp.mediato.ui.viewmodel;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.github.sdp.mediato.MainActivity;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
@@ -15,15 +18,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public abstract class UserViewModel extends ViewModel {
-    protected final MutableLiveData<MainActivity> mainActivityLiveData = new MutableLiveData<>();
-    protected final MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
-    protected final MutableLiveData<User> userLiveData = new MutableLiveData<>();
+public class UserViewModel extends AndroidViewModel {
+
+    protected final MutableLiveData<String> watchedUsernameLiveData = new MutableLiveData<>();
+    protected final MutableLiveData<String> connectedUsernameLiveData = new MutableLiveData<>();
+    protected final MutableLiveData<User> connectedUserLiveData = new MutableLiveData<>();
     protected final MutableLiveData<List<User>> userListLiveData = new MutableLiveData<>();
 
-    public UserViewModel() {
-        userNameLiveData.setValue("None");
-        userLiveData.setValue(new User.UserBuilder("None")
+    public UserViewModel(Application application) {
+        super(application);
+        watchedUsernameLiveData.setValue("None");
+        connectedUsernameLiveData.setValue("None");
+        connectedUserLiveData.setValue(new User.UserBuilder("None")
                 .setUsername("None")
                 .setEmail("None")
                 .setRegisterDate("01/01/0001")
@@ -33,48 +39,52 @@ public abstract class UserViewModel extends ViewModel {
         userListLiveData.setValue(new ArrayList<>());
     }
 
-    public MainActivity getMainActivity() {return  mainActivityLiveData.getValue();}
-    public String getUserName() {
-        return userNameLiveData.getValue();
-    }
-
-    public void setUserName(String userName) {
-        this.userNameLiveData.setValue(userName);
+    public void setConnectedUsername(String username) {
+        this.connectedUsernameLiveData.setValue(username);
         reloadUser();
     }
 
-    public LiveData<User> getUserLiveData() {
-        return userLiveData;
+    public void reloadUser() {
+        UserDatabase.getUser(this.connectedUsernameLiveData.getValue())
+                .thenAccept(value -> {
+                    this.connectedUserLiveData.postValue(value);
+                    value.getFollowing().forEach(System.out::println);
+                });
     }
 
-    public User getUser() {
-        return userLiveData.getValue();
+    public User getConnectedUser() {
+        return connectedUserLiveData.getValue();
+    }
+
+    public LiveData<User> getConnectedUserLiveData() {
+        return connectedUserLiveData;
     }
 
     public LiveData<List<User>> getUserListLiveData() {
         return userListLiveData;
     }
 
-    public List<User> getUserList() {
-        return userListLiveData.getValue();
-    }
-
     public void setUserList(List<User> userList) {
-        this.userListLiveData.setValue(userList);
+        this.userListLiveData.postValue(userList);
     }
 
     public void clearUserList() {
-        userListLiveData.setValue(new ArrayList<>());
+        userListLiveData.postValue(new ArrayList<>());
     }
 
-    public abstract void reloadUser();
-    public void setMainActivity(MainActivity mainActivity) {mainActivityLiveData.setValue(mainActivity);}
+    public String getConnectedUsername() {
+        return this.connectedUsernameLiveData.getValue();
+    }
 
-    /**
-     * Updates the user's "following" or "followers" list by loading all their followed users
-     * from the database.
-     */
-    public void reloadFollowingFollower(List<String> listFollowingFollowerUsername) {
+    public void setWatchedUsername(String username) {
+        this.watchedUsernameLiveData.setValue(username);
+    }
+
+    public String getWatchedUsername() {
+        return watchedUsernameLiveData.getValue();
+    }
+
+    public void loadFollowingFollower(List<String> listFollowingFollowerUsername) {
         clearUserList();
         List<User> listUser = new ArrayList<>();
         CompletableFuture[] futures = new CompletableFuture[listFollowingFollowerUsername.size()];

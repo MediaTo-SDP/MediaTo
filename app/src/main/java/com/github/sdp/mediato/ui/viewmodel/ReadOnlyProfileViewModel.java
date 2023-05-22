@@ -7,7 +7,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.errorCheck.Preconditions;
+import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.media.Collection;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class ReadOnlyProfileViewModel extends ViewModel {
 
   protected MutableLiveData<List<Collection>> collectionsLiveData;
   protected MutableLiveData<String> usernameLiveData;
+  protected MutableLiveData<User> userLiveData;
   protected MutableLiveData<Bitmap> profilePicLiveData;
   protected MutableLiveData<Integer> followingLiveData;
   protected MutableLiveData<Integer> followersLiveData;
@@ -26,6 +29,7 @@ public class ReadOnlyProfileViewModel extends ViewModel {
   public ReadOnlyProfileViewModel() {
     collectionsLiveData = new MutableLiveData<>();
     usernameLiveData = new MutableLiveData<>();
+    userLiveData = new MutableLiveData<>();
     profilePicLiveData = new MutableLiveData<>();
     followingLiveData = new MutableLiveData<>();
     followersLiveData = new MutableLiveData<>();
@@ -53,6 +57,10 @@ public class ReadOnlyProfileViewModel extends ViewModel {
     return followersLiveData;
   }
 
+  public LiveData<User> getUserLiveData() { return userLiveData; }
+  public void setUser(User user) { userLiveData.setValue(user);}
+  public User getUser() { return userLiveData.getValue(); }
+
   public List<Collection> getCollections() {
     return collectionsLiveData.getValue();
   }
@@ -71,6 +79,7 @@ public class ReadOnlyProfileViewModel extends ViewModel {
 
   public void setUsername(String username) {
     usernameLiveData.setValue(username);
+    UserDatabase.getUser(username).thenAccept(user -> userLiveData.setValue(user));
   }
 
   public void setProfilePic(@NonNull Bitmap profilePic) {

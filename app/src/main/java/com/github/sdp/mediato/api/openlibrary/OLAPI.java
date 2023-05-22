@@ -53,7 +53,7 @@ public class OLAPI implements API<Media> {
     }
 
     @Override
-    public CompletableFuture<List<Media>> trending(int page) {
+    public CompletableFuture<List<Media>> trending(Integer year, Integer genre,int page) {
         return api.getTrendingBooks(page)
                 .thenApply(olTrendingBooks -> olTrendingBooks.getWorks().stream()
                         .map(Book::new)

@@ -11,6 +11,7 @@ import com.github.sdp.mediato.data.DatabaseUtils;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.post.ReviewPost;
+import com.github.sdp.mediato.ui.FeedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class FeedViewModel extends AndroidViewModel {
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
     private String username;
-
     public FeedViewModel (@NonNull Application application) {
         super(application);
         this.application = application;
@@ -31,9 +31,16 @@ public class FeedViewModel extends AndroidViewModel {
      * Sets the username of the user who is currently logged in and generates the list of posts
      * @param username the username of the user who is currently logged in
      */
-    public void setUsername(String username) {
+    public void setData(String username, FeedFragment.FeedType feedType) {
         this.username = username;
-        createFollowingsPosts();
+        switch (feedType) {
+            case MY_REVIEWS:
+                createMyPosts();
+                break;
+            case FEED:
+                createFollowingsPosts();
+                break;
+        }
     }
 
     /**
@@ -56,6 +63,15 @@ public class FeedViewModel extends AndroidViewModel {
                     }
                     return posts;
                 })
+                .thenAccept(posts::setValue);
+    }
+
+    /**
+     * Generates the list of posts from the current user
+     */
+    public void createMyPosts() {
+        UserDatabase.getUser(username)
+                .thenApply(user -> user.fetchReviewPosts())
                 .thenAccept(posts::setValue);
     }
 

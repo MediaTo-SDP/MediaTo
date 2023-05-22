@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.github.javafaker.Faker;
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.formats.Dates;
 import com.github.sdp.mediato.model.Location;
@@ -49,7 +49,7 @@ public class CreateProfileFragment extends Fragment {
   private PhotoPicker photoPicker;
   private final User.UserBuilder userBuilder;
 
-  CreateProfileFragment(String uid, String email) {
+  public CreateProfileFragment(String uid, String email) {
     userBuilder = new User.UserBuilder(uid).setEmail(email);
   }
 
@@ -65,7 +65,14 @@ public class CreateProfileFragment extends Fragment {
         R.id.profile_image_add_button);
 
     profileImage = view.findViewById(R.id.profile_image);
-    photoPicker = new PhotoPicker(this, profileImage);
+
+    PhotoPicker.OnImagePickedListener listener = new PhotoPicker.OnImagePickedListener() {
+      @Override
+      public void onImagePicked(Uri imageUri) {
+      }
+    };
+
+    photoPicker = new PhotoPicker(this, profileImage, listener);
 
     // Open a photo picker to choose the profile image
     profileImageButton.setOnClickListener(v ->
@@ -105,29 +112,33 @@ public class CreateProfileFragment extends Fragment {
     return view -> {
       String errorMsg = getUsernameErrorMsg(usernameEditText.getText());
       usernameTextInput.setError(errorMsg);
+
       if (null == errorMsg) {
-        //TODO Add navigation to Add favorite page
-        //Creating new user and adding it to the database
         String username = Objects.requireNonNull(usernameEditText.getText()).toString();
-        userBuilder.setUsername(username);
-        userBuilder.setRegisterDate(Dates.getToday());
-        //@TODO by default the location is not set - to be changed when we implement the GPS feature
-        userBuilder.setLocation(new Location());
-        User user = userBuilder.build();
-        Uri profilePicUri = photoPicker.getProfileImageUri();
-        UserDatabase.addUser(user);
-        if (photoPicker.getProfileImageUri() != null) {
-          uploadProfilePicTask = UserDatabase.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
-              switchToMainActivity(username);
-              makeToast(getString(R.string.profile_creation_success));
-          });
-
-        } else {
-          addDefaultProfilePic(username);
-        }
+        createUser(username);
       }
-
     };
+  }
+
+  private void createUser(String username){
+    // Create a new user and add it to the database
+    userBuilder.setUsername(username);
+    userBuilder.setRegisterDate(Dates.getToday());
+    userBuilder.setLocation(new Location());
+    User user = userBuilder.build();
+    UserDatabase.addUser(user);
+
+    // Set profile picture
+    Uri profilePicUri = photoPicker.getProfileImageUri();
+    if (photoPicker.getProfileImageUri() != null) {
+      uploadProfilePicTask = UserDatabase.setProfilePic(user.getUsername(), profilePicUri).addOnCompleteListener(v ->  {
+        switchToMainActivity(username);
+        makeToast(getString(R.string.profile_creation_success));
+      });
+
+    } else {
+      addDefaultProfilePic(username);
+    }
   }
 
   /**

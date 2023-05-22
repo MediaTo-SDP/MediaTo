@@ -25,6 +25,8 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.github.sdp.mediato.ui.CreateProfileFragment;
+import com.github.sdp.mediato.ui.MainActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.hamcrest.Description;

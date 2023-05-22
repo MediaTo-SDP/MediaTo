@@ -1,13 +1,16 @@
 package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,13 +19,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.github.sdp.mediato.FragmentSwitcher;
+import com.github.sdp.mediato.utility.FragmentSwitcher;
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.api.openlibrary.OLAPI;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Media;
 import com.github.sdp.mediato.model.media.MediaType;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -31,16 +33,14 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class NewItemFragment extends Fragment {
-    // The maximum allowed length for review field
-    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
-
     public final static int MAX_REVIEW_LENGTH = 100;
     public final static int MAX_SUMMARY_LENGTH = 300;
-
     public WebView webView;
+    public EditText reviewText;
+    // The maximum allowed length for review field
+    private OLAPI oLAPI = new OLAPI("https://openlibrary.org/");
     private View view;
     private Media media;
     private FragmentSwitcher fragmentSwitcher;
@@ -48,15 +48,17 @@ public class NewItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_new_item, container, false);
         this.view = view;
 
-        EditText review = view.findViewById(R.id.item_review_edittext);
+        reviewText = view.findViewById(R.id.item_review_edittext);
+        InputFilter[] filters = new InputFilter[] { new InputFilter.LengthFilter(MAX_REVIEW_LENGTH) };
+        reviewText.setFilters(filters);
+
         fragmentSwitcher = (FragmentSwitcher) getActivity();
 
         Button addButton = view.findViewById(R.id.item_button_add);
-        addButton.setOnClickListener(v -> addItem(view));
+        addButton.setOnClickListener(v -> addItem(view, reviewText));
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -64,16 +66,34 @@ public class NewItemFragment extends Fragment {
         }
 
         setItemInformation(media.getTitle(), media.getSummary(), media.getPosterUrl());
-
+        setObserverOnKeyboard(view);
         loadDescriptionIfMissing();
-
         setProgressBarIndicator();
-
         searchTrailer();
 
         webView = view.findViewById(R.id.trailer_web_view);
 
         return view;
+    }
+
+    private void setObserverOnKeyboard(View view) {
+        // Get references to the views
+        ScrollView scrollView = view.findViewById(R.id.scrollView);
+
+        // Set an OnLayoutChangeListener to the root view to detect layout changes
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // Calculate the difference between the root view's height and the visible content height
+                int heightDiff = scrollView.getRootView().getHeight() - scrollView.getHeight();
+
+                // Check if the height difference is above a certain threshold to consider it as the keyboard being open
+                int keyboardThreshold = 200;
+                if (heightDiff > keyboardThreshold) {
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                }
+            }
+        });
     }
 
     private void loadDescriptionIfMissing() {
@@ -125,14 +145,19 @@ public class NewItemFragment extends Fragment {
             SearchListResponse listResponse;
             try {
                 listResponse = search.execute();
+                if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
+                    getActivity()
+                            .runOnUiThread(() -> // we go back to ui thread (mandatory)
+                                    handleTrailerResponse(listResponse.getItems().get(0)));
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                getActivity().runOnUiThread(() -> {
+                    ImageView playButton = view.findViewById(R.id.item_play_button);
+                    playButton.setVisibility(View.GONE);
+                    webView.setVisibility(View.GONE);
+                });
             }
-            if (getActivity() != null && listResponse != null && !listResponse.getItems().isEmpty()) {
-                getActivity()
-                        .runOnUiThread(() -> // we go back to ui thread (mandatory)
-                                handleTrailerResponse(listResponse.getItems().get(0)));
-            }
+
         });
         searchThread.start();
     }
@@ -226,9 +251,8 @@ public class NewItemFragment extends Fragment {
      *
      * @param view: the activity view
      */
-    public void addItem(View view) {
+    public void addItem(View view, EditText reviewText) {
 
-        EditText reviewText = view.findViewById(R.id.item_review_edittext);
         TextView ratingIndicator = view.findViewById(R.id.item_rating_slider_progress);
 
         // Create the review to forward to the profile page

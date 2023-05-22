@@ -1,26 +1,19 @@
 package com.github.sdp.mediato.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.sdp.mediato.MainActivity;
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.data.CollectionsDatabase;
-import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.media.Collection;
 import com.github.sdp.mediato.ui.viewmodel.ReadOnlyProfileViewModel;
-import com.github.sdp.mediato.utility.SampleReviews;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import org.checkerframework.checker.units.qual.C;
 
 /**
  * A fragment to display another user's profile. It extends the basic profile fragment to also include:
@@ -31,9 +24,10 @@ public class ReadOnlyProfileFragment extends BaseProfileFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    USERNAME = getArguments().getString("username");
 
-    viewModel = ((MainActivity)getActivity()).getReadOnlyProfileViewModel();
-    USERNAME = viewModel.getUsername();
+    viewModel = new ViewModelProvider(this).get(ReadOnlyProfileViewModel.class);
+    viewModel.setUsername(USERNAME);
   }
 
   @Override

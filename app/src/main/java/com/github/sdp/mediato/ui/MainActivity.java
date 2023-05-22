@@ -1,4 +1,4 @@
-package com.github.sdp.mediato;
+package com.github.sdp.mediato.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
+import com.github.sdp.mediato.utility.FragmentSwitcher;
+import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.ActivityMainBinding;
 import com.github.sdp.mediato.ui.ExploreFragment;
@@ -33,12 +35,11 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
   ActivityMainBinding binding;
   MyProfileFragment myProfileFragment;
-  ReadOnlyProfileFragment readOnlyProfileFragment;
   SearchFragment searchFragment;
   ExploreFragment exploreFragment;
   FeedFragment feedFragment;
+  FeedFragment myReviewsFragment;
   private MyProfileViewModel myProfileViewModel;
-  private ReadOnlyProfileViewModel readOnlyProfileViewModel;
   AppCache globalCache;
 
   @Override
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
     // Initialize the ViewModels
     myProfileViewModel = new ViewModelProvider(this).get(MyProfileViewModel.class);
-    readOnlyProfileViewModel = new ViewModelProvider(this).get(ReadOnlyProfileViewModel.class);
 
     // Get the username set by the profile creation activity
     String username = getIntent().getStringExtra("username");
@@ -80,8 +80,9 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
       replaceFragment(myProfileFragment);
     } else if (itemId == R.id.explore) {
       replaceFragment(exploreFragment);
+    } else if (itemId == R.id.my_reviews) {
+      replaceFragment(myReviewsFragment);
     }
-
     return true;
   }
 
@@ -100,31 +101,38 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
    */
   private void setDefaultFragment(String username) {
     myProfileFragment = new MyProfileFragment();
-    readOnlyProfileFragment = new ReadOnlyProfileFragment();
     searchFragment = new SearchFragment();
     exploreFragment = new ExploreFragment();
     feedFragment = new FeedFragment();
+    myReviewsFragment = new FeedFragment();
 
     Bundle args = new Bundle();
+
+    Bundle argsFeed = new Bundle();
+    Bundle argsMyReviews = new Bundle();
 
     // Give the username as an argument to the profile page and switch to it
     args.putString("username", username);
     args.putString("general_search", "true");
     args.putString("collection", "Recently watched");
+
+    argsFeed.putString("username", username);
+    argsMyReviews.putString("username", username);
+
+    argsFeed.putSerializable("feedType", FeedFragment.FeedType.FEED);
+    argsMyReviews.putSerializable("feedType", FeedFragment.FeedType.MY_REVIEWS);
+
     SearchFragment.OFFLINE_CACHE = globalCache;
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
-    feedFragment.setArguments(args);
+    feedFragment.setArguments(argsFeed);
+    myReviewsFragment.setArguments(argsMyReviews);
 
     // Mark the profile item in the bottom bar as selected
     binding.bottomNavigationView.setSelectedItemId(R.id.profile);
 
     replaceFragment(myProfileFragment);
-  }
-
-  public ReadOnlyProfileViewModel getReadOnlyProfileViewModel(){
-    return readOnlyProfileViewModel;
   }
 
   public ReadOnlyProfileViewModel getMyProfileViewModel(){
@@ -133,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
 
   public MyProfileFragment getMyProfileFragment() {
     return myProfileFragment;
-  }
-
-  public ReadOnlyProfileFragment getReadOnlyProfileFragment() {
-    return readOnlyProfileFragment;
   }
 
   @Override

@@ -24,6 +24,7 @@ public class DatabaseUtils {
 
     static final String USERS_PATH = "Users/";
     static final String REVIEWS_PATH = "reviews/";
+    static final String COMMENTS_PATH = "comments/";
     static final String USER_COLLECTIONS_PATH = "/collections/";
     static final String LOCATION_PATH = "/location/";
     static final String FOLLOWING_PATH = "/following/";
