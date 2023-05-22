@@ -31,6 +31,7 @@ public class User {
         this.email = builder.email;
         this.registerDate = builder.registerDate;
         this.location = builder.location;
+        this.collections.put("Favorite", new Collection("Favorite"));
     }
 
     public String getId() {

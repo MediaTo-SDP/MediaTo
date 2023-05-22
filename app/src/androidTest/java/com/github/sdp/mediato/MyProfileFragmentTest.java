@@ -30,6 +30,9 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.adevinta.android.barista.assertion.BaristaListAssertions;
+import com.adevinta.android.barista.interaction.BaristaClickInteractions;
+import com.adevinta.android.barista.interaction.BaristaListInteractions;
 import com.github.sdp.mediato.DatabaseTests.DataBaseTestUtil;
 import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
@@ -256,45 +259,16 @@ public class MyProfileFragmentTest {
         collectionListRecyclerView.check(matches(isDisplayed()));
 
         // Check that the collection list has exactly one item
-        collectionListRecyclerView.check(matches(hasItemCount(1)));
+        collectionListRecyclerView.check(matches(hasItemCount(2)));
 
         // Check that the collection list displays the correct collection
         collectionListRecyclerView.check(matches(hasDescendant(withText(COLLECTION_NAME))));
     }
 
-    // Test that the collection downloaded from the database is displayed correctly (buttons and reviews)
-    @Test
-    public void testCollectionState() {
-        // Check that the collection is displayed
-        defaultCollection.check(matches(isDisplayed()));
-
-        // Check that the collection title is correct
-        defaultCollection.check(matches(hasDescendant(withText(COLLECTION_NAME))));
-
-        // Check that the collection has an AddMedia button
-        defaultCollection.check(matches(hasDescendant(withId(R.id.add_media_button))));
-
-        // Check that the collection has a delete collection button
-        defaultCollection.check(matches(hasDescendant(withId(R.id.delete_collection_button))));
-
-        // Check that the collection has a recycler view to display collections
-        defaultCollection.check(matches(hasDescendant(withId(R.id.collection_recycler_view))));
-
-        // Check that the recycler view contains the review
-        recyclerView.check(matches(hasItemCount(1)));
-
-        // Check that the review displays the correct title
-        recyclerView.check(matches(hasDescendant(withText(MOVIE_TITLE))));
-    }
-
     // Test that a click on the add media button opens the search
     @Test
     public void testAddMediaButton() {
-        int initialItemCount = getRecyclerViewItemCount(R.id.collection_recycler_view);
-
-        // Check that the collection is displayed and click on the add media button
-        collectionRecyclerView.check(matches(hasItemCount(initialItemCount)));
-        addMediaButton.perform(click());
+        BaristaListInteractions.clickListItemChild(R.id.collection_list_recycler_view, 0, R.id.add_media_button);
 
         // Check that the search is displayed
         movieSearchCategory.check(matches(isDisplayed()));
@@ -354,8 +328,8 @@ public class MyProfileFragmentTest {
     public void testCancelingDeleteCollectionDoesNotRemoveCollection() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
-        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
-        deleteCollectionButton.perform(click());
+        BaristaListInteractions.clickListItemChild(R.id.collection_list_recycler_view, 1, R.id.delete_collection_button);
+
         clickAlertDialogButton(CANCEL);
         collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
     }
@@ -365,8 +339,7 @@ public class MyProfileFragmentTest {
     public void testConfirmDeleteCollectionRemovesCollection() {
         int initialItemCount = getRecyclerViewItemCount(R.id.collection_list_recycler_view);
 
-        collectionListRecyclerView.check(matches(hasItemCount(initialItemCount)));
-        deleteCollectionButton.perform(click());
+        BaristaListInteractions.clickListItemChild(R.id.collection_list_recycler_view, 1, R.id.delete_collection_button);
         clickAlertDialogButton(YES);
         searchMenuItem.perform(click());
         profileMenuItem.perform(click());

@@ -59,6 +59,10 @@ public class CollectionListAdapter extends RecyclerView.Adapter<CollectionListAd
         onAddMediaButtonClickListener,
         adapter -> adapter.notifyItemInserted(adapter.getItemCount()));
 
+    if (collection.getCollectionName().equals(context.getResources().getString(R.string.default_collection))) {
+      deleteCollection.button.setVisibility(View.GONE);
+    }
+
     setUpButton(deleteCollection, collection, collectionAdapter);
     setUpButton(addMedia, collection, collectionAdapter);
   }
