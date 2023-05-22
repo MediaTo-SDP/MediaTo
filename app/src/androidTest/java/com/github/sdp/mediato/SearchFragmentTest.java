@@ -1,8 +1,5 @@
 package com.github.sdp.mediato;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertContains;
@@ -283,25 +280,25 @@ public class SearchFragmentTest {
 
     sleep(3* WAIT_TIME);
 
-    assertNotDisplayed(R.id.bookTrending_recyclerView);
-    assertNotDisplayed(R.id.userSearch_recyclerView);
-    assertNotDisplayed(R.id.bookSearch_recyclerView);
-    assertNotDisplayed(R.id.movieSearch_recyclerView);
-    assertDisplayed(R.id.movieTrending_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertNotDisplayed(R.id.media_recyclerView);
+    assertDisplayed(R.id.media_recyclerView);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickSpinnerItem(R.id.years_spinner, 1);
 
     sleep(3* WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickSpinnerItem(R.id.genre_spinner, 1);
 
     sleep(3 * WAIT_TIME);
 
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
 
     clickOn(R.id.reset_filter);
 
@@ -309,7 +306,7 @@ public class SearchFragmentTest {
 
     assertDisplayed("Year");
     assertDisplayed("Genre");
-    assertRecyclerViewItemCount(R.id.movieTrending_recyclerView, 20);
+    assertRecyclerViewItemCount(R.id.media_recyclerView, 20);
   }
 
   @Test
