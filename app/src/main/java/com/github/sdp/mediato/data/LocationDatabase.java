@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class LocationDatabase {
 
-    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static FirebaseDatabase database = DatabaseUtils.getFirebaseInstance();
 
     /**
      * Updates the user's location in the database
@@ -92,15 +92,13 @@ public class LocationDatabase {
         Preconditions.checkPositive(radius);
         CompletableFuture<List<User>> future = new CompletableFuture<>();
         List<User> users = new ArrayList<>();
-        getNearbyUsernames(username, radius).thenAccept(
-                nearbyUsernames -> {
-                    CompletableFuture.allOf(
-                            nearbyUsernames.stream()
-                                    .map(nearbyUsername -> UserDatabase.getUser(nearbyUsername)
-                                            .thenAccept(user -> users.add(user)))
-                                    .toArray(CompletableFuture[]::new)
-                    ).thenRun(() -> future.complete(users));
-                }
+        getNearbyUsernames(username, radius).thenAccept(nearbyUsernames ->
+                CompletableFuture.allOf(
+                        nearbyUsernames.stream()
+                                .map(nearbyUsername -> UserDatabase.getUser(nearbyUsername)
+                                        .thenAccept(users::add))
+                                .toArray(CompletableFuture[]::new)
+                ).thenRun(() -> future.complete(users))
         );
         return future;
     }

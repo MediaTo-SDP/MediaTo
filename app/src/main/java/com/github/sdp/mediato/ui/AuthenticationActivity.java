@@ -162,9 +162,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     FirebaseUser user = Objects.requireNonNull(authResult.getUser()); // if successful, we store the username and launch the main activity
 
                     UserDatabase.getUserByEmail(user.getEmail())
-                            .thenAccept(u -> {
-                                updatePreferencesUsername(u.getUsername());
-                            });
+                            .thenAccept(u -> updatePreferencesUsername(u.getUsername()));
 
                     launchPostActivity(user);
                 })
@@ -244,9 +242,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
                     // finally, we need to save the username, which is done by querying the database to give it using the email
                     UserDatabase.getUserByEmail(currentUser.getEmail())
-                            .thenAccept(user -> {
-                                updatePreferencesUsername(user.getUsername());
-                            });
+                            .thenAccept(user -> updatePreferencesUsername(user.getUsername()));
 
 
                     launchPostActivity(currentUser);

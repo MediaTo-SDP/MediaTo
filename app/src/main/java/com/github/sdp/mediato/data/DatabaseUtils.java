@@ -9,6 +9,7 @@ import com.github.sdp.mediato.model.post.Reaction;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
  * This is a DatabaseUtils class for the database classes
  */
 public class DatabaseUtils {
+    private static boolean persistenceIsActive = false;
 
     //-----------Constant definitions-------------
 
@@ -137,5 +139,12 @@ public class DatabaseUtils {
             }
         });
         return nearbyUsers;
+    }
+    public static FirebaseDatabase getFirebaseInstance(){
+        if (!persistenceIsActive) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            persistenceIsActive = !persistenceIsActive;
+        }
+        return  FirebaseDatabase.getInstance();
     }
 }

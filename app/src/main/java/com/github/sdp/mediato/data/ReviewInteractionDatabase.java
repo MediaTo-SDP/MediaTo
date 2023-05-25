@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class ReviewInteractionDatabase {
 
-    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static FirebaseDatabase database = DatabaseUtils.getFirebaseInstance();
 
     /**
      * Adds a comment to a review.

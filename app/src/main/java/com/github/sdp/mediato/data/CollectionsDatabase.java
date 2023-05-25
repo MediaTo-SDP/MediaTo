@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class CollectionsDatabase {
 
-    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static FirebaseDatabase database = DatabaseUtils.getFirebaseInstance();
 
     /**
      * Adds a collection to the user
@@ -68,10 +68,8 @@ public class CollectionsDatabase {
      */
     public static void addReviewToCollection(String username, String collectionName, Review review) {
         DatabaseUtils.getCollectionReference(username, collectionName).child(DatabaseUtils.REVIEWS_PATH + review.getMedia().getTitle()).setValue(review)
-                .addOnCompleteListener(
-                        task -> {
-                            System.out.println("Added review of " + review.getMedia().getTitle() + " for " + username);
-                        }
+                .addOnCompleteListener(task ->
+                        System.out.println("Added review of " + review.getMedia().getTitle() + " for " + username)
                 );
     }
 
