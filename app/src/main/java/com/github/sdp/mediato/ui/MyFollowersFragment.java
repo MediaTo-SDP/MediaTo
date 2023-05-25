@@ -2,11 +2,14 @@ package com.github.sdp.mediato.ui;
 
 import static com.github.sdp.mediato.data.UserDatabase.followUser;
 import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -59,6 +62,10 @@ public class MyFollowersFragment extends Fragment implements UserAdapter.OnUserI
     recyclerView.setAdapter(userAdapter);
 
     viewModel.reloadUser();
+
+    if (!isNetworkAvailable(view.getContext())) {
+      Toast.makeText(view.getContext(), "No internet connection: loading from the cache ...", Toast.LENGTH_SHORT).show();
+    }
 
     return view;
   }

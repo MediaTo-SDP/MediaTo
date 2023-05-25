@@ -1,10 +1,13 @@
 package com.github.sdp.mediato.ui;
 
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +57,10 @@ public class FeedFragment extends Fragment {
         binding.feedPosts.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         binding.feedPosts.setHasFixedSize(false);
         viewModel.getPosts().observe(getViewLifecycleOwner(), adapter::submitList);
+
+        if (!isNetworkAvailable(view.getContext())) {
+            Toast.makeText(view.getContext(), "No internet connection: loading from the cache ...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public enum FeedType {
