@@ -29,6 +29,9 @@
     <string name="add_collection">Add collection</string>
     <string name="signout">Sign-out</string>
     <string name="delete_collection">Are you sure you want to delete the collection:  %1$s ?</string>
+    <string name="profile_shared_preferences">sharedPreferencesProfile</string>
+    <string name="followers_shared_preferences_key">sharedPreferencesFollowersKey</string>
+    <string name="following_shared_preferences_key">sharedPreferencesFollowingKey</string>
 
 
   <!--Buttons-->
