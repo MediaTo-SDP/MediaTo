@@ -65,8 +65,6 @@ public class MyProfileFragment extends BaseProfileFragment {
         editButton = view.findViewById(R.id.edit_button);
         addCollectionButton = view.findViewById(R.id.add_collection_button);
         collectionListRecyclerView = view.findViewById(R.id.collection_list_recycler_view);
-        Button followersButton = view.findViewById(R.id.profile_followers_button);
-        Button followingsButton = view.findViewById(R.id.profile_following_button);
 
         // Initialize components
         photoPicker = setupPhotoPicker();
@@ -90,9 +88,6 @@ public class MyProfileFragment extends BaseProfileFragment {
             makeToast("No internet connection");
             addCollectionButton.setEnabled(false);
             editButton.setEnabled(false);
-
-            followersButton.setEnabled(false);
-            followingsButton.setEnabled(false);
         }
 
         return view;
