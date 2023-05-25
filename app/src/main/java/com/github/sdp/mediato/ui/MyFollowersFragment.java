@@ -1,13 +1,13 @@
 package com.github.sdp.mediato.ui;
 
 import static com.github.sdp.mediato.data.UserDatabase.followUser;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
