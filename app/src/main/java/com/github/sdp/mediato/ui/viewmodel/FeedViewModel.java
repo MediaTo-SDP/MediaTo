@@ -7,7 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.github.sdp.mediato.data.DatabaseUtils;
+import com.github.sdp.mediato.cache.AppCache;
+import com.github.sdp.mediato.cache.CacheHelper;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.model.post.ReviewPost;
@@ -15,13 +16,13 @@ import com.github.sdp.mediato.ui.FeedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public class FeedViewModel extends AndroidViewModel {
     Application application;
     private final MutableLiveData<List<ReviewPost>> posts = new MutableLiveData<>(new ArrayList<>());
     private String username;
+    private AppCache cache;
+
     public FeedViewModel (@NonNull Application application) {
         super(application);
         this.application = application;
@@ -61,9 +62,17 @@ public class FeedViewModel extends AndroidViewModel {
                     for (User user : users) {
                         posts.addAll(user.fetchReviewPosts());
                     }
+                    CacheHelper.insertAllReviewPostIn(posts, cache, false);
                     return posts;
                 })
-                .thenAccept(posts::setValue);
+                .handle( (reviews, error) -> {
+                    if (error == null){
+                        posts.setValue(reviews);
+                    } else {
+                        CacheHelper.setReviewPostFrom(cache, false, posts);
+                    }
+            return null;
+        });
     }
 
     /**
@@ -71,8 +80,22 @@ public class FeedViewModel extends AndroidViewModel {
      */
     public void createMyPosts() {
         UserDatabase.getUser(username)
-                .thenApply(user -> user.fetchReviewPosts())
-                .thenAccept(posts::setValue);
+                .thenApply(user -> {
+                    List<ReviewPost> myPosts = user.fetchReviewPosts();
+                    CacheHelper.insertAllReviewPostIn(myPosts,cache, true);
+                    return myPosts;
+                })
+                .handle((reviews, error) -> {
+                    if (error == null){
+                        posts.setValue(reviews);
+                    } else {
+                        CacheHelper.setReviewPostFrom(cache, true, posts);
+                    }
+                    return null;
+                });
     }
 
+    public void setCache(AppCache cache) {
+        this.cache = cache;
+    }
 }

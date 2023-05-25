@@ -1,12 +1,10 @@
 package com.github.sdp.mediato.data;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.github.sdp.mediato.errorCheck.Preconditions;
-import com.github.sdp.mediato.model.Location;
 import com.github.sdp.mediato.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class UserDatabase {
 
-    public static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public static FirebaseDatabase database = DatabaseUtils.firebaseDatabase;
     public static StorageReference profilePics = FirebaseStorage.getInstance().getReference()
             .child(DatabaseUtils.USER_PROFILE_PICS_PATH);
 

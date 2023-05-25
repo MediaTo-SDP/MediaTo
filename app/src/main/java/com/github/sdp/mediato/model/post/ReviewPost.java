@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
+import com.github.sdp.mediato.model.media.Media;
 
 import java.util.Map;
 
@@ -22,6 +23,9 @@ public class ReviewPost extends Post{
         this.collection = collection;
     }
 
+    public Media getMedia() {
+        return this.review.getMedia();
+    }
     public String getTitle() {
         return this.review.getMedia().getTitle();
     }

@@ -1,8 +1,6 @@
 package com.github.sdp.mediato.ui;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.os.Bundle;import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.databinding.FragmentExploreBinding;
+import com.github.sdp.mediato.cache.AppCache;
 import com.github.sdp.mediato.databinding.FragmentFeedBinding;
 import com.github.sdp.mediato.ui.viewmodel.FeedViewModel;
 import com.github.sdp.mediato.utility.adapters.ReviewPostListAdapter;
@@ -26,6 +24,7 @@ public class FeedFragment extends Fragment {
     private FragmentFeedBinding binding;
     private ReviewPostListAdapter adapter;
     private FeedType feedType;
+    private static AppCache cache;
 
 
     @Override
@@ -44,6 +43,7 @@ public class FeedFragment extends Fragment {
         binding.textFeed.setText(feedType.toString());
 
         viewModel = new ViewModelProvider(this).get(FeedViewModel.class);
+        viewModel.setCache(cache);
         viewModel.setData(USERNAME, feedType);
 
         adapter = new ReviewPostListAdapter();
@@ -71,4 +71,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
+    public static void setCache(AppCache cache) {
+        FeedFragment.cache = cache;
+    }
 }

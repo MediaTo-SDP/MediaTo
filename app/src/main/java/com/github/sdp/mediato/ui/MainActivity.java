@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements FragmentSwitcher 
     argsMyReviews.putSerializable("feedType", FeedFragment.FeedType.MY_REVIEWS);
 
     SearchFragment.OFFLINE_CACHE = globalCache;
+    FeedFragment.setCache(globalCache);
     searchFragment.setArguments(args);
     myProfileFragment.setArguments(args);
     exploreFragment.setArguments(args);
