@@ -1,7 +1,6 @@
 package com.github.sdp.mediato.ui;
 
 import static com.github.sdp.mediato.data.UserDatabase.followUser;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
