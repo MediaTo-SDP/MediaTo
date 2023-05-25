@@ -87,7 +87,6 @@ public class MyProfileFragment extends BaseProfileFragment {
         if (!isNetworkAvailable(view.getContext())) {
             makeToast("No internet connection");
             addCollectionButton.setEnabled(false);
-            editButton.setEnabled(false);
         }
 
         return view;
