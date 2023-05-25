@@ -2,7 +2,6 @@ package com.github.sdp.mediato.ui;
 
 import static com.github.sdp.mediato.data.UserDatabase.followUser;
 import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
-import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,10 +20,10 @@ import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.User;
 import com.github.sdp.mediato.ui.viewmodel.FollowerViewModel;
-import com.github.sdp.mediato.ui.viewmodel.FollowingViewModel;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
 
 import java.util.ArrayList;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 public class MyFollowersFragment extends Fragment implements UserAdapter.OnUserInteractionListener {
 
