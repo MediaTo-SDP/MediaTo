@@ -1,21 +1,19 @@
 package com.github.sdp.mediato.ui;
 
-import static com.github.sdp.mediato.data.UserDatabase.followUser;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
-
-import androidx.lifecycle.ViewModelProvider;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
@@ -61,18 +59,22 @@ public class MyFollowingFragment extends Fragment implements UserAdapter.OnUserI
 
         viewModel.reloadUser();
 
+        if (!isNetworkAvailable(view.getContext())) {
+            Toast.makeText(view.getContext(), "No internet connection: loading from the cache ...", Toast.LENGTH_SHORT).show();
+        }
+
         return view;
     }
 
     @Override
     public void onFollowClick(User user) {
-        followUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
+        UserDatabase.followUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
         viewModel.reloadUser();
     }
 
     @Override
     public void onUnfollowClick(User user) {
-        unfollowUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
+        UserDatabase.unfollowUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
         viewModel.reloadUser();
     }
 }

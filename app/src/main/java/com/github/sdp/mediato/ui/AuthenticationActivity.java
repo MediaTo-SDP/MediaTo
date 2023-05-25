@@ -1,5 +1,7 @@
 package com.github.sdp.mediato.ui;
 
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,20 +47,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     private TextView signInText;
 
     private String idToken, accessToken, username;
-
-    /**
-     * Checks if there is a network connection available.
-     *
-     * @param context: the context of the calling activity
-     * @return true if there is an active network connection, false otherwise
-     */
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

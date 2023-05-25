@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static com.github.sdp.mediato.ui.AuthenticationActivity.isNetworkAvailable;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static java.lang.Thread.sleep;

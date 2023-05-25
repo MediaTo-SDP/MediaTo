@@ -1,5 +1,8 @@
 package com.github.sdp.mediato.ui;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,11 +16,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.sdp.mediato.R;
-import com.github.sdp.mediato.data.CollectionsDatabase;
 import com.github.sdp.mediato.data.UserDatabase;
 import com.github.sdp.mediato.model.Review;
 import com.github.sdp.mediato.model.media.Collection;
@@ -26,7 +30,6 @@ import com.github.sdp.mediato.utility.PhotoPicker;
 import com.github.sdp.mediato.utility.adapters.CollectionListAdapter;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -48,7 +51,7 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // The username must be stored locally because it is used as a key to access the DB
         // For now it is passed as an argument from the profile creation.
-        viewModel = ((MainActivity)getActivity()).getMyProfileViewModel();
+        viewModel = ((MainActivity) getActivity()).getMyProfileViewModel();
         USERNAME = viewModel.getUsername();
     }
 
@@ -81,18 +84,23 @@ public class MyProfileFragment extends BaseProfileFragment {
         Button signOutButton = view.findViewById(R.id.signout_button);
         signOutButton.setOnClickListener(v -> ((MainActivity) getActivity()).signOutUser());
 
+        if (!isNetworkAvailable(view.getContext())) {
+            makeToast("No internet connection");
+            addCollectionButton.setEnabled(false);
+        }
+
         return view;
     }
 
     @Override
-    public CollectionListAdapter setupCollections(RecyclerView recyclerView,  List<Collection> collections) {
+    public CollectionListAdapter setupCollections(RecyclerView recyclerView, List<Collection> collections) {
         viewModel.setCollections(collections);
 
         Consumer<Collection> onAddMediaButtonClickListener = (collection) ->
-            openSearchAddingToCollection(collection);
+                openSearchAddingToCollection(collection);
 
         Consumer<Collection> onDeleteCollectionButtonClickListener = (collection) ->
-            showDeleteCollectionDialog(collection.getCollectionName());
+                showDeleteCollectionDialog(collection.getCollectionName());
 
         // Create an adapter to display the list of collections in a RecycleView
         CollectionListAdapter collectionsAdapter = new CollectionListAdapter(getContext(), collections,
@@ -103,7 +111,7 @@ public class MyProfileFragment extends BaseProfileFragment {
         return collectionsAdapter;
     }
 
-    private void openSearchAddingToCollection(Collection collection){
+    private void openSearchAddingToCollection(Collection collection) {
         String collectionName = collection.getCollectionName();
 
         // Pass the name of the collection to add the review to to the search fragment and switch to it
@@ -117,14 +125,14 @@ public class MyProfileFragment extends BaseProfileFragment {
         fragmentSwitcher.switchCurrentFragmentWithChildFragment(searchFragment);
     }
 
-    private void addReview(){
+    private void addReview() {
         Bundle args = getArguments();
         String reviewSerialized = args.getString("review");
         String collectionName = args.getString("collection");
         Review review = new Gson().fromJson(reviewSerialized, Review.class);
 
         if (review != null && collectionName != null) {
-            ((MyProfileViewModel)viewModel).addReviewToCollection(review, collectionName);
+            ((MyProfileViewModel) viewModel).addReviewToCollection(review, collectionName);
         }
     }
 
@@ -196,12 +204,12 @@ public class MyProfileFragment extends BaseProfileFragment {
         // Set the yes button
         String yesText = getResources().getString(R.string.yes);
         builder.setPositiveButton(yesText,
-            (dialog, which) -> ((MyProfileViewModel)viewModel).removeCollection(collectionName));
+                (dialog, which) -> ((MyProfileViewModel) viewModel).removeCollection(collectionName));
 
         // Set the cancel button
         String cancelText = getResources().getString(R.string.cancel);
         builder.setNegativeButton(cancelText,
-            (dialog, which) -> dialog.cancel());
+                (dialog, which) -> dialog.cancel());
 
         builder.show();
     }
@@ -218,8 +226,8 @@ public class MyProfileFragment extends BaseProfileFragment {
 
         // Check if the entered name is the same as an already existing collection and make a toast if yes
         try {
-            ((MyProfileViewModel)viewModel).addCollection(collectionName);
-        } catch (IllegalArgumentException exception){
+            ((MyProfileViewModel) viewModel).addCollection(collectionName);
+        } catch (IllegalArgumentException exception) {
             String toastDuplicateName = getResources().getString(R.string.collection_name_already_exists);
             makeToast(toastDuplicateName);
         }
