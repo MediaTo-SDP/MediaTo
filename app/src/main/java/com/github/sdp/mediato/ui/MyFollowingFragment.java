@@ -1,22 +1,19 @@
 package com.github.sdp.mediato.ui;
 
-import static com.github.sdp.mediato.data.UserDatabase.followUser;
-
-import androidx.lifecycle.ViewModelProvider;
+import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import static com.github.sdp.mediato.data.UserDatabase.unfollowUser;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.sdp.mediato.R;
 import com.github.sdp.mediato.data.UserDatabase;
@@ -25,7 +22,6 @@ import com.github.sdp.mediato.ui.viewmodel.FollowingViewModel;
 import com.github.sdp.mediato.utility.adapters.UserAdapter;
 
 import java.util.ArrayList;
-import static com.github.sdp.mediato.utility.Network.isNetworkAvailable;
 
 public class MyFollowingFragment extends Fragment implements UserAdapter.OnUserInteractionListener{
     private static String USERNAME;
@@ -72,13 +68,13 @@ public class MyFollowingFragment extends Fragment implements UserAdapter.OnUserI
 
     @Override
     public void onFollowClick(User user) {
-        followUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
+        UserDatabase.followUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
         viewModel.reloadUser();
     }
 
     @Override
     public void onUnfollowClick(User user) {
-        unfollowUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
+        UserDatabase.unfollowUser(viewModel.getConnectedUser().getUsername(), user.getUsername());
         viewModel.reloadUser();
     }
 }
