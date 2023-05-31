@@ -1,9 +1,9 @@
 # MediaTo
 <h1 align="center">
   <br>
-  <a href="https://github.com/MediaTo-SDP/MediaTo"><img src="https://github.com/MediaTo-SDP/MediaTo/blob/main/app/src/main/res/drawable/logo_round.png" alt="MediaTo" width="200"></a>
+  <a href="https://www.youtube.com/watch?v=2qm0iGSYLIQ"><img src="https://github.com/MediaTo-SDP/MediaTo/blob/main/app/src/main/res/drawable/logo_round.png" alt="MediaTo" width="200"></a>
   <br>
-  MediaTo
+  <a href="https://www.youtube.com/watch?v=2qm0iGSYLIQ"> Demo </a>
   <br>
 </h1>
 
@@ -15,8 +15,6 @@
   <a href="#technologies">Credits</a> •
   <a href="#contributors">Contributors</a> •
 </p>
-
-Add promo video link 
 
 ## Features
 
@@ -39,6 +37,8 @@ $ git clone https://github.com/....
 - [Java](https://www.java.com/fr/)
 
 ## Contributors
-- x
-- y
-- z
+- Mariem Baccari
+- Simone Kalbermatter
+- Stuart Gueissaz 
+- Michael Greub 
+- Pierre-Hadrien Levieil 
