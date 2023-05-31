@@ -3,7 +3,7 @@
   <br>
   <a href="https://www.youtube.com/watch?v=2qm0iGSYLIQ"><img src="https://github.com/MediaTo-SDP/MediaTo/blob/main/app/src/main/res/drawable/logo_round.png" alt="MediaTo" width="200"></a>
   <br>
-  <a href="https://www.youtube.com/watch?v=2qm0iGSYLIQ"> Demo </a>
+  <a href="https://www.youtube.com/watch?v=2qm0iGSYLIQ"> MediaTo </a>
   <br>
 </h1>
 
@@ -11,30 +11,23 @@
 
 <p align="center">
   <a href="#features">Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#technologies">Credits</a> •
   <a href="#contributors">Contributors</a> •
 </p>
 
 ## Features
 
-* Feature 1
-* Feature 2
-
-## How To Use
-
-Step by step description how to run 
-
-```bash
-# Clone this repository
-$ git clone https://github.com/....
-//add rest
-```
-
-## Technologies
-
-- [Firebase](https://firebase.google.com/)
-- [Java](https://www.java.com/fr/)
+* Login using Google account
+* Setting up your profile
+  - Profile picture
+  - Username
+* Search for books and movies
+* Add books and movies reviews to your profile
+* Create collections of reviews 
+* Follow and unfollow other users
+* See other users profiles
+* Find nearby users using the explore feed
+* Keep up with your following's activity using the feed 
+* Interact with reviews through likes / dislikes / comments
 
 ## Contributors
 - Mariem Baccari
